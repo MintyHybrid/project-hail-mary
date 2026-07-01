@@ -1,0 +1,21 @@
+{
+  "hash": "904f009d3c7572647fb4784df2d6c19d",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"The DNAzyme-like Motif Discovery\"\nsubtitle: \"A catalytic RNA motif sequence conserved across Potyviridae and matching eukaryotic genes\"\nauthor: \"chrissi m.\"\ndate: last-modified\nformat:\n  html:\n    toc: true\n    toc-depth: 3\n    code-fold: true\n    code-tools: true\nexecute:\n  echo: false\n  warning: false\n  message: false\n---\n\n<!-- SOURCE: 2025_toys/poty.qmd (last modified 2026-06-29) -->\n<!-- TODO: copy body from 2025_toys/poty.qmd and update any relative image/data paths -->\n\n## Executive Summary\n\n- A DNAzyme catalytic domain sequence matches perfectly to a region in the genomes\n  of several potyviruses (6 species, 16 isolates).\n- The flanking regions of this catalytic domain in the viral genomes match regions\n  in the genomes of several eukaryotes including plants, fungi, and animals.\n- Eukaryotic homologs span functionally diverse genes (DNA repair, transcription\n  regulation, chromatin remodeling, RNA processing, translation).\n- Cross-kingdom horizontal DNA transfer is the most parsimonious explanation.\n\n## Introduction\n\n\n::: {.cell}\n\n:::\n\n\n## Results\n\n### DNAzyme sequence match to potyvirus genomes\n\n### Eukaryotic flanking region homologs\n\n### Functional annotation of eukaryotic matches\n\n## Discussion\n\n## Methods\n\n### Sequence searches\n### BLAST parameters\n### Alignment and conservation analysis\n",
+    "supporting": [
+      "01_discovery_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {
+      "knitr": [
+        "{\"type\":\"list\",\"attributes\":{},\"value\":[]}"
+      ]
+    },
+    "preserve": null,
+    "postProcess": false
+  }
+}

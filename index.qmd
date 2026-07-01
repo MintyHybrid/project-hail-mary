@@ -1,111 +1,83 @@
 ---
-title: La Palma Earthquakes
+title: "Project Hail Mary"
+subtitle: "DNAzyme-like motifs, horizontal gene transfer, and short linear motif conservation in Potyviridae"
 author:
-  - name: Steve Purves
-    orcid: 0000-0002-0760-5497
-    corresponding: true
-    email: steve@curvenote.com
-    roles:
-      - Investigation
-      - Project administration
-      - Software
-      - Visualization
-    affiliations:
-      - Curvenote
-  - name: Rowan Cockett
-    orcid: 0000-0002-7859-8394
-    corresponding: false
-    roles: []
-    affiliations:
-      - Curvenote
-keywords:
-  - La Palma
-  - Earthquakes
-abstract: |
-  In September 2021, a significant jump in seismic activity on the island of La Palma (Canary Islands, Spain) signaled the start of a volcanic crisis that still continues at the time of writing. Earthquake data is continually collected and published by the Instituto Geográphico Nacional (IGN). ...
-plain-language-summary: |
-  Earthquake data for the island of La Palma from the September 2021 eruption is found ...
-key-points:
-  - A web scraping script was developed to pull data from the Instituto Geogràphico Nacional into a machine-readable form for analysis
-  - Earthquake events on La Palma are consistent with the presence of both mantle and crustal reservoirs.
+  - name: "chrissi m."
+    email: 70411777+MintyHybrid@users.noreply.github.com
 date: last-modified
-bibliography: references.bib
-citation:
-  container-title: Earth and Space Science
-number-sections: true
 ---
 
-## Introduction
+## Overview
 
-```{r}
-eruptions <- c(1492, 1585, 1646, 1677, 1712, 1949, 1971, 2021)
-n_eruptions <- length(eruptions)
+This compendium documents the discovery and characterisation of a DNAzyme-like
+catalytic domain sequence that maps precisely to the genomes of multiple
+Potyviridae species, with flanking regions matching eukaryotic genes across
+plant, fungal, and animal kingdoms. Cross-kingdom horizontal gene transfer is
+the most parsimonious explanation for this pattern.
+
+The work spans four interconnected research threads:
+
+| Chapter | Topic | Key tools |
+|---|---|---|
+| [1 — Discovery](notebooks/01_discovery.qmd) | DNAzyme match + eukaryotic homologs | BLAST, Biostrings |
+| [2 — Phylogenetics](notebooks/02_phylogenetics.qmd) | CI protein tree, motif mapping | MAFFT, IQ-TREE 2, ape |
+| [3 — Codon Usage](notebooks/03_codon_dnazyme.qmd) | RSCU, ENC, host adaptation, DNAzyme locus | potytools, seqinr |
+| [4 — ELM Motifs](notebooks/04_protein_motifs.qmd) | Short linear motif conservation in CI | ELM REST API, potytools |
+| [5 — HGT](notebooks/05_hgt.qmd) | Phylogenetic incongruence, sequence logos | ggseqlogo, potytools |
+| [5b — Networks](notebooks/05b_networks.qmd) | Host-virus ecological networks | igraph, BioNexus app |
+| [6 — Immunity](notebooks/06_immu_simmu.qmd) | PTI/ETI simulation under genetic perturbations | Observable JS |
+
+## Reproducibility
+
+All computationally intensive steps (alignment, phylogenetic inference, NCBI
+fetching, ELM queries) are orchestrated by a `targets` pipeline:
+
+```r
+# Install the pipeline dependencies once
+install.packages(c("targets", "tarchetypes"))
+remotes::install_local("packages/potytools")
+
+# Run the full pipeline (skips up-to-date steps automatically)
+targets::tar_make()
+
+# Visualise dependencies
+targets::tar_visnetwork()
 ```
 
-```{r}
-#| label: fig-timeline
-#| fig-cap: Timeline of recent earthquakes on La Palma
-#| fig-alt: An event plot of the years of the last 8 eruptions on La Palma.
-#| fig-height: 1.5
-#| fig-width: 6
-par(mar = c(3, 1, 1, 1) + 0.1)
-plot(eruptions, rep(0, n_eruptions), 
-  pch = "|", axes = FALSE)
-axis(1)
-box()
+External tools required on `PATH`: `mafft`, `iqtree2`, `hmmscan`.
+
+## Interactive Companion App
+
+The **BioNexus** Shiny app provides live GBIF + GLOBI biodiversity network
+exploration relevant to Chapters 5b and 6:
+
+```r
+shiny::runApp("shiny/bionexus/")
 ```
 
-```{r}
-#| output: false
-avg_years_between_eruptions <- mean(diff(eruptions[-n_eruptions]))
-avg_years_between_eruptions
-```
+## Publication Plans
 
-Based on data up to and including 1971, eruptions on La Palma happen every `{r} round(avg_years_between_eruptions, 1)` years on average.
+This material is intended for at least two separate publications:
 
-Studies of the magma systems feeding the volcano, such as @marrero2019, have proposed that there are two main magma reservoirs feeding the Cumbre Vieja volcano; one in the mantle (30-40km depth) which charges and in turn feeds a shallower crustal reservoir (10-20km depth).
+1. **Paper 1** — The DNAzyme discovery + HGT evidence (Chapters 1, 2, 5).
+   Target: *PNAS* / *eLife* / *PLoS Pathogens*.
+2. **Paper 2** — ELM short linear motif conservation in Potyviridae CI proteins
+   (Chapters 3, 4). Target: *Virus Evolution* / *Journal of Virology*.
+3. **Paper 3** (optional) — Ecological host networks and immunity modelling
+   (Chapters 5b, 6). Target: *New Phytologist* / *MPMI*.
 
-Eight eruptions have been recorded since the late 1400s (@fig-timeline).
+## Package
 
-Data and methods are discussed in @sec-data-methods.
+Analysis functions are collected in the **potytools** R package
+(`packages/potytools/`), being prepared for rOpenSci peer review.
 
-Let $x$ denote the number of eruptions in a year. Then, $x$ can be modeled by a Poisson distribution
+## Project History
 
-$$
-p(x) = \frac{e^{-\lambda} \lambda^{x}}{x !}
-$$ {#eq-poisson}
-
-where $\lambda$ is the rate of eruptions per year. Using @eq-poisson, the probability of an eruption in the next $t$ years can be calculated.
-
-| Name                 | Year   |
-| -------------------- | ------ |
-| Current              | 2021   |
-| Teneguía             | 1971   |
-| Nambroque            | 1949   |
-| El Charco            | 1712   |
-| Volcán San Antonio   | 1677   |
-| Volcán San Martin    | 1646   |
-| Tajuya near El Paso  | 1585   |
-| Montaña Quemada      | 1492   |
-
-: Recent historic eruptions on La Palma {#tbl-history}
-
-@tbl-history summarises the eruptions recorded since the colonization of the islands by Europeans in the late 1400s.
-
-![Map of La Palma](images/la-palma-map.png){#fig-map}
-
-La Palma is one of the west most islands in the Volcanic Archipelago of the Canary Islands (@fig-map). 
-
-{{< embed notebooks/explore-earthquakes.qmd#fig-spatial-plot >}}
-
-@fig-spatial-plot shows the location of recent Earthquakes on La Palma.
-
-## Data & Methods {#sec-data-methods}
-
-## Conclusion
-
-## References {.unnumbered}
-
-:::{#refs}
-
-:::
+| Date | Milestone |
+|---|---|
+| Feb 2026 | DNAzyme match first identified (`2025_toys/poty.qmd`) |
+| Mar 2026 | HGT analysis suite (`2025_toys/poty3-hgt-claude.Rmd`) |
+| Apr 2026 | Codon usage analysis iterations (`2026_claude/`, `2026_PotyTest/`) |
+| May 2026 | Cleaned codon + DNAzyme notebook (`2026_cleanPoty/`) |
+| May 2026 | Final phylogenetic pipeline (`2026_CopilotPoty/`) |
+| Jun 2026 | ELM motif & immunity notebooks; this compendium |

@@ -1,0 +1,434 @@
+---
+title: "Plant Immune Trafficking Observatory"
+subtitle: "Interactive kinetic simulation of receptor trafficking, autophagy flux, and AP-4 cargo dynamics"
+author: "chrissi m."
+date: last-modified
+format:
+  html:
+    embed-resources: true
+    theme: cosmo
+    toc: true
+    page-layout: full
+---
+
+<!-- SOURCE: 20260125_ClaudeAP4/immune_dashboard.ojs + AP4_TEPSIN_expanded_analysis.md -->
+
+## Background
+
+Potyvirus infection occurs against the backdrop of highly dynamic plant immune
+receptor trafficking. Understanding how the vesicle trafficking network responds
+to infection requires integrating three interconnected pathways:
+
+**AP-4 complex (Adaptor Protein Complex 4)** is a heterotetrameric TGN-resident
+complex (subunits AP4B, AP4E, AP4M, AP4S) that mediates clathrin-independent
+trafficking from the *trans*-Golgi network to endosomes. Unlike AP-1/2/3, AP-4
+operates without a clathrin coat. Its best-characterised cargo in plants is
+ATG9 — a lipid scramblase essential for autophagosome biogenesis — as well as
+immune master regulators NPR1 and CBP60g. AP-4 dysfunction consequently impairs
+both autophagy flux and salicylate-dependent immunity [@huang2026].
+
+**ESCRT pathway** (Endosomal Sorting Complexes Required for Transport)
+mediates ubiquitin-dependent sorting of activated immune receptors (e.g. FLS2,
+EFR) from early endosomes into intraluminal vesicles (ILVs) of multivesicular
+bodies (MVBs), ultimately targeting them for vacuolar degradation. ESCRT-I
+mutation causes FLS2 mis-sorting and attenuated PTI [@spallek2013]. Phosphoinositide
+PI(3)P on early endosomes and PI(3,5)P₂ on late endosomes/MVBs coordinate ESCRT
+recruitment and MVB maturation [@simon2016].
+
+**Selective autophagy** provides an alternative degradation route and is
+functionally connected to ESCRT via shared PI(3)P pools and NBR1-mediated
+cargo recruitment. Autophagy is required for both immune amplification (clearing
+protein aggregates, eliminating pathogens) and immune termination (receptor
+turnover) [@ustun2018; @leary2018].
+
+The simulation below models steady-state receptor pool dynamics across all three
+pathways, allowing in silico perturbation of individual components to predict
+pathological outcomes.
+
+## Interactive Simulation
+
+<!-- Rewritten as pure OJS — React/recharts version is not compatible with OJS runtime -->
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// STATIC DATA
+// ============================================================================
+
+genotype = [
+  { label: "None (WT)",                  value: "none" },
+  { label: "AP-4 knockout",              value: "ap4_knockout" },
+  { label: "ESCRT knockout",             value: "escrt_knockout" },
+  { label: "ATG5 knockout",              value: "atg5_knockout" },
+  { label: "VPS4-DN",                    value: "vps4_dominant_negative" },
+  { label: "Bafilomycin (autophagy inh)", value: "bafilomycin" },
+  { label: "PI3K inhibitor",             value: "pi3k_inhibitor" },
+  { label: "Sterol depletion",           value: "sterol_depletion" },
+  { label: "AP-4 + ESCRT double KO",     value: "ap4_escrt_double" },
+  { label: "AP-4-DN",                    value: "ap4_dominant_negative" }
+]
+
+resptype = [
+  { label: "PTI (Pattern-Triggered Immunity)", value: "pti" },
+  { label: "ETI (Effector-Triggered Immunity)", value: "eti" },
+  { label: "Mixed",                            value: "mixed" }
+]
+
+pathotype = [
+  { label: "None",                 value: "none" },
+  { label: "Magnaporthe oryzae",   value: "magnaporthe" },
+  { label: "Colletotrichum",       value: "colletotrichum" },
+  { label: "Botrytis cinerea",     value: "botrytis" },
+  { label: "Fusarium graminearum", value: "fusarium" }
+]
+```
+
+```{ojs}
+//| echo: false
+//| panel: input
+
+viewof perturbation = Inputs.select(genotype, {
+  label: "Genotypic perturbation",
+  format: x => x.label,
+  value: genotype.find(g => g.value === "none")
+})
+
+viewof response = Inputs.select(resptype, {
+  label: "Response type",
+  format: x => x.label,
+  value: resptype.find(g => g.value === "pti")
+})
+
+viewof pathogen = Inputs.select(pathotype, {
+  label: "Pathogen",
+  format: x => x.label,
+  value: pathotype.find(g => g.value === "fusarium")
+})
+
+viewof timeMax = Inputs.range([10, 600], { value: 120, step: 5, label: "Max simulation time (min)" })
+
+viewof isRunningRaw = Inputs.checkbox(["▶  Run simulation"])
+isRunning = isRunningRaw.length > 0
+```
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// PERTURBATION MODIFIERS
+// ============================================================================
+
+function getPerturbationModifiers(type) {
+  const m = {
+    endocytosis: 1, ubiquitination: 1, escrt: 1, autophagy: 1,
+    recycling: 1, fusion: 1, lipids: 1, ros: 1, cellWall: 1,
+    ap4Sorting: 1, npr1Nuclear: 1, cbp60gNuclear: 1, exosomeTopology: 0
+  };
+  switch (type) {
+    case "ap4_knockout":
+      m.ap4Sorting = 0.05; m.autophagy = 0.6; m.npr1Nuclear = 0.5; m.exosomeTopology = 0.15; break;
+    case "escrt_knockout":
+      m.escrt = 0.05; m.autophagy = 1.3; m.ros = 1.2; m.exosomeTopology = 0.12; break;
+    case "atg5_knockout":
+      m.autophagy = 0.05; m.escrt = 1.3; m.ros = 0.9; break;
+    case "vps4_dominant_negative":
+      m.escrt = 0.1; m.lipids = 0.6; m.ros = 1.4; m.exosomeTopology = 0.35; break;
+    case "bafilomycin":
+      m.autophagy = 0.05; m.escrt = 1.2; m.fusion = 0.3; break;
+    case "pi3k_inhibitor":
+      m.escrt = 0.7; m.autophagy = 0.7; m.lipids = 0.5; break;
+    case "sterol_depletion":
+      m.endocytosis = 0.7; m.escrt = 0.8; m.lipids = 0.3; m.exosomeTopology = 0.18; break;
+    case "ap4_escrt_double":
+      m.ap4Sorting = 0.05; m.escrt = 0.05; m.autophagy = 0.4; m.ros = 1.5; m.exosomeTopology = 0.45; break;
+    case "ap4_dominant_negative":
+      m.ap4Sorting = 0.3; m.autophagy = 0.7; m.npr1Nuclear = 0.7; m.exosomeTopology = 0.15; break;
+  }
+  return m;
+}
+```
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// SIMULATION GENERATOR
+// ============================================================================
+
+simulation = {
+  // Restart cleanly whenever controls change
+  const dt = 0.1;
+  let s = {
+    pm: 100, ee: 0, mvb: 0, auto: 0, vac: 0,
+    ros: 0, mapk: 0, callose: 0,
+    pi3p_ee: 2.5, pi3p_mvb: 5.0,
+    atg9_tgn: 100, npr1_nucleus: 0, cbp60g_nucleus: 0,
+    exo_normal: 0, exo_reversed: 0,
+    time: 0
+  };
+  let hist = [];
+  let t = 0;
+
+  const params = {
+    receptor_activation: 0.5, internalization: 0.3,
+    ubiquitination: 0.4, deubiquitination: 0.1, recycling: 0.2,
+    escrt_recruitment: 0.25, ilv_formation: 0.35, mvb_fusion: 0.15,
+    atg_activation: 0.1, autophagosome_formation: 0.2, autophagy_flux: 0.12,
+    pi3p_production: 0.4, pi3p_consumption: 0.2,
+    vacuolar_degradation: 0.08
+  };
+
+  while (true) {
+    if (isRunning && t < timeMax) {
+      const mo = getPerturbationModifiers(perturbation.value);
+      const rv = response.value;
+
+      const activated    = s.pm  * params.receptor_activation * dt;
+      const internalized = activated * params.internalization * dt * mo.endocytosis;
+      const ubiquitinated = internalized * params.ubiquitination * dt * mo.ubiquitination;
+      const recycled     = s.ee  * params.recycling * dt * mo.recycling;
+      const to_mvb       = ubiquitinated * params.escrt_recruitment * dt * mo.escrt;
+      const ilv_formed   = s.mvb * params.ilv_formation * dt * mo.escrt;
+      const mvb_fused    = ilv_formed * params.mvb_fusion * dt * mo.fusion;
+      const auto_formed  = s.pm  * 0.3 * params.atg_activation * dt * mo.autophagy * params.autophagosome_formation;
+      const auto_flux    = s.auto * params.autophagy_flux * dt * mo.autophagy;
+      const to_vacuole   = (mvb_fused + auto_flux) * params.vacuolar_degradation * dt;
+
+      const ros_t   = t < 5  ? Math.exp(-t / 2) * 100 * mo.ros : s.ros  * 0.95;
+      const mapk_t  = t < 10 ? (1 - Math.exp(-t / 3)) * 80 * mo.ros : s.mapk * 0.98;
+      const cal_t   = t < 20 ? ros_t * 0.3 : s.callose * 0.95;
+
+      const pi3p_ee_new  = Math.max(0.1, s.pi3p_ee  + params.pi3p_production * dt * mo.lipids
+                           - params.pi3p_consumption * ilv_formed * dt * mo.escrt);
+      const pi3p_mvb_new = Math.max(0.1, s.pi3p_mvb - params.pi3p_consumption * (ilv_formed + 0.1) * dt * mo.escrt);
+
+      const npr1_import   = rv === "eti" ? 0.2 * dt * mo.npr1Nuclear : 0.05 * dt * mo.npr1Nuclear;
+      const cbp60g_import = 0.15 * dt * mo.cbp60gNuclear;
+      const atg9_loss     = 0.1 * dt * (1 - mo.ap4Sorting);
+
+      let exo_rev_gain = 0;
+      if (pi3p_mvb_new < 1.0 && s.mvb > 30) exo_rev_gain = 0.2 * dt * mo.exosomeTopology;
+
+      s = {
+        pm:             Math.max(0, s.pm   - internalized + recycled),
+        ee:             Math.max(0, s.ee   + internalized - recycled - ubiquitinated),
+        mvb:            Math.max(0, s.mvb  + to_mvb - mvb_fused),
+        auto:           Math.max(0, s.auto + auto_formed - auto_flux),
+        vac:            s.vac + to_vacuole,
+        ros:            Math.max(0, ros_t),
+        mapk:           Math.max(0, mapk_t),
+        callose:        Math.max(0, cal_t),
+        pi3p_ee:        pi3p_ee_new,
+        pi3p_mvb:       pi3p_mvb_new,
+        atg9_tgn:       Math.max(20, s.atg9_tgn - atg9_loss),
+        npr1_nucleus:   Math.max(0, Math.min(50, s.npr1_nucleus + npr1_import)),
+        cbp60g_nucleus: Math.max(0, Math.min(30, s.cbp60g_nucleus + cbp60g_import)),
+        exo_normal:     Math.max(0, s.exo_normal  + (1 - mo.exosomeTopology) * 0.05 * dt),
+        exo_reversed:   Math.max(0, s.exo_reversed + exo_rev_gain),
+        time: t
+      };
+      t = parseFloat((t + dt).toFixed(2));
+
+      if (Math.round(t * 10) % 5 === 0) {
+        hist = [...hist.slice(-800), { ...s }];
+      }
+    }
+
+    yield { state: s, history: hist, time: t };
+    await Promises.delay(30);
+  }
+}
+
+simState   = simulation.state   ?? {}
+simHistory = simulation.history ?? []
+simTime    = simulation.time    ?? 0
+```
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// PATHOLOGY DETECTION
+// ============================================================================
+
+pathologies = {
+  const s = simState;
+  const t = simTime;
+  const alerts = [];
+  if (s.pm > 150)
+    alerts.push({ level: "warning", title: "Hyperactivation Syndrome", msg: "PM receptors not downregulated — chronic MAPK activation" });
+  if (s.mvb > 60)
+    alerts.push({ level: "warning", title: "Endosomal Stress", msg: "Excessive MVB accumulation" });
+  if (s.auto > 50 && s.mapk < 10)
+    alerts.push({ level: "warning", title: "Autophagy Flux Blockade", msg: "Autophagosomes accumulated without signalling" });
+  if (s.exo_reversed > 20)
+    alerts.push({ level: "alert", title: "⚠ MEMBRANE TOPOLOGY INVERSION", msg: "Reversed exosomes detected — potential autoimmune response" });
+  return alerts;
+}
+```
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// VISUALISATIONS
+// ============================================================================
+
+// Tidy-long helpers
+traffLong = simHistory.flatMap(d => [
+  { time: d.time, variable: "Plasma membrane", value: d.pm   },
+  { time: d.time, variable: "Early endosome",  value: d.ee   },
+  { time: d.time, variable: "MVB",             value: d.mvb  },
+  { time: d.time, variable: "Vacuole",         value: d.vac  }
+])
+
+sigLong = simHistory.flatMap(d => [
+  { time: d.time, variable: "ROS",  value: d.ros  },
+  { time: d.time, variable: "MAPK", value: d.mapk }
+])
+
+pi3pLong = simHistory.flatMap(d => [
+  { time: d.time, variable: "PI(3)P — EE",  value: d.pi3p_ee  },
+  { time: d.time, variable: "PI(3)P — MVB", value: d.pi3p_mvb }
+])
+
+ap4Long = simHistory.flatMap(d => [
+  { time: d.time, variable: "ATG9 (TGN)",     value: d.atg9_tgn       },
+  { time: d.time, variable: "NPR1 (nucleus)", value: d.npr1_nucleus    },
+  { time: d.time, variable: "CBP60g (nucleus)",value: d.cbp60g_nucleus },
+  { time: d.time, variable: "Reversed exo.",  value: d.exo_reversed   }
+])
+```
+
+```{ojs}
+//| echo: false
+
+Plot.plot({
+  title: "Trafficking Dynamics",
+  width: 900, height: 280,
+  x: { label: "Time (min)" },
+  y: { label: "Count" },
+  color: { legend: true },
+  marks: [
+    Plot.line(traffLong, { x: "time", y: "value", stroke: "variable", tip: true }),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+
+Plot.plot({
+  title: "Immune Signalling Output",
+  width: 900, height: 240,
+  x: { label: "Time (min)" },
+  y: { label: "Activation level" },
+  color: { legend: true },
+  marks: [
+    Plot.line(sigLong, { x: "time", y: "value", stroke: "variable", tip: true }),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+
+Plot.plot({
+  title: "Phosphoinositide Dynamics",
+  width: 900, height: 240,
+  x: { label: "Time (min)" },
+  y: { label: "PI(3)P concentration (μM)" },
+  color: { legend: true },
+  marks: [
+    Plot.line(pi3pLong, { x: "time", y: "value", stroke: "variable", tip: true }),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+
+Plot.plot({
+  title: "AP-4 Cargo Panel",
+  width: 900, height: 260,
+  x: { label: "Time (min)" },
+  y: { label: "Level" },
+  color: { legend: true },
+  marks: [
+    Plot.line(ap4Long, { x: "time", y: "value", stroke: "variable", tip: true }),
+    Plot.ruleY([0])
+  ]
+})
+```
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// LIVE STATUS CARDS
+// ============================================================================
+
+html`<div style="
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px; margin: 20px 0;">
+
+  ${[
+    { label: "Time (min)",     val: simTime?.toFixed(1),              color: "#6b7280", bg: "#f3f4f6" },
+    { label: "PM Receptors",   val: simState.pm?.toFixed(1),          color: "#10b981", bg: "#f0fdf4" },
+    { label: "EE Cargo",       val: simState.ee?.toFixed(1),          color: "#3b82f6", bg: "#eff6ff" },
+    { label: "MVB ILVs",       val: simState.mvb?.toFixed(1),         color: "#f59e0b", bg: "#fef3c7" },
+    { label: "Vacuole",        val: simState.vac?.toFixed(1),         color: "#ef4444", bg: "#fef2f2" },
+    { label: "ROS",            val: simState.ros?.toFixed(1),         color: "#f43f5e", bg: "#fef2f2" },
+    { label: "MAPK",           val: simState.mapk?.toFixed(1),        color: "#f43f5e", bg: "#fef2f2" },
+    { label: "ATG9 TGN",       val: simState.atg9_tgn?.toFixed(1),   color: "#14b8a6", bg: "#f0fdfa" },
+    { label: "NPR1 nucleus",   val: simState.npr1_nucleus?.toFixed(1),color: "#ec4899", bg: "#fdf2f8" },
+    { label: "Reversed exo.",  val: simState.exo_reversed?.toFixed(2),color: "#dc2626", bg: "#fef2f2" },
+  ].map(c => `
+    <div style="background:${c.bg}; padding:10px; border-radius:6px;
+                border-left:4px solid ${c.color};">
+      <div style="font-size:11px; color:#555;">${c.label}</div>
+      <div style="font-size:22px; font-weight:bold; color:${c.color};">${c.val ?? "—"}</div>
+    </div>`
+  ).join("")}
+</div>`
+```
+
+```{ojs}
+//| echo: false
+
+// Alerts panel
+html`<div style="margin: 10px 0;">
+  ${pathologies.length === 0
+    ? `<div style="color:#10b981; font-weight:500; padding:10px;">✓ No pathological states detected</div>`
+    : pathologies.map(a => `
+        <div style="
+          background:${a.level === 'alert' ? '#fef2f2' : '#fef3c7'};
+          border:2px solid ${a.level === 'alert' ? '#ef4444' : '#f59e0b'};
+          border-radius:6px; padding:12px; margin-bottom:8px;">
+          <div style="font-weight:bold; color:${a.level === 'alert' ? '#dc2626' : '#d97706'};">
+            ${a.title}
+          </div>
+          <div style="font-size:13px; color:${a.level === 'alert' ? '#b91c1c' : '#92400e'};">
+            ${a.msg}
+          </div>
+        </div>`
+      ).join("")
+  }
+</div>`
+```
+
+```{ojs}
+//| echo: false
+//| eval: false
+// ── React/recharts version (not compatible with OJS runtime) ──────────────────
+// The full React component (PlantImmuneTrafficDashboard) with recharts visualisations
+// is preserved below for reference.  To enable it, either:
+//   (a) host it as a standalone React app and embed via <iframe>, or
+//   (b) move to a Shiny app (shiny/immu_simu/) with the same simulation logic.
+// ─────────────────────────────────────────────────────────────────────────────
+```

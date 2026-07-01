@@ -1,0 +1,722 @@
+---
+title: "Codon Usage and DNAzyme-like Motif Architecture"
+subtitle: "RSCU, ENC, GC content, wobble bias and dinucleotide analysis of the DNAzyme-matching locus"
+author: "chrissi m."
+date: last-modified
+format:
+  html:
+    embed-resources: true
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    code-fold: true
+    code-tools: true
+    page-layout: full
+execute:
+  echo: false
+  warning: false
+  message: false
+---
+
+<!-- SOURCE: 2026_cleanPoty/enhanced_dashboardwphylo_extended.qmd (2026-05-12, newest) -->
+<!-- NOTE: source() calls replaced with library(potytools)                             -->
+<!-- NOTE: run_complete_analysis_optimized() may need to be renamed to                 -->
+<!--       run_complete_analysis() if not exported from potytools                      -->
+
+```{r setup}
+#| include: false
+library(Biostrings)
+library(ggplot2)
+library(plotly)
+library(DT)
+library(dplyr)
+library(tidyr)
+library(cowplot)
+library(seqinr)
+library(ggseqlogo)
+library(ape)
+library(ggtree)
+library(potytools)
+
+theme_set(theme_cowplot())
+```
+
+```{r load-data}
+#| include: false
+#| cache: true
+
+"%ni%" <- Negate("%in%")
+
+### 18nt motif (names = accessions)
+motif_seqs <- readDNAStringSet(here::here("data", "ci2cds_mafft_DNAzyme.fasta"))
+motif_seqs_99 <- subseq(motif_seqs, start = 1, width = 99)
+
+motif_tb <- tibble(
+  seqname = gsub("\\/.*", "", names(motif_seqs)),
+  start.ci = stringr::str_extract(names(motif_seqs), "(.*\\/)(.*)(\\-.*)", group = 2),
+  end.ci = as.numeric(stringr::str_extract(names(motif_seqs), "(.*\\/)(.*\\-)(.*)", group = 3)) - 5,
+  seq = as.character(motif_seqs_99))
+
+motif_seqs <- DNAStringSet(dplyr::pull(motif_tb, seq, name = seqname))
+DNAzyme_seqs <- readDNAStringSet(here::here("data", "claude_motif_18nt.fasta"))
+ci_seqs <- readDNAStringSet(here::here("data", "claude_ci2cdsaln.fasta"))
+
+ref_seqs <- readDNAStringSet(here::here("data", "claude_polyproteinDNA.fasta"))
+ref_seqs <- ref_seqs[names(motif_seqs)]
+
+metadata <- readr::read_delim(here::here("data", "2026-04-22_metadata_table.txt"), delim = "\t")
+host_classification <- create_host_classification_table(metadata$full_name[(match(names(motif_seqs), metadata$accession))])
+host_codon_tables <- create_host_specific_codon_tables(host_classification)
+names(host_codon_tables) <- gsub(" .*", "", names(host_codon_tables))
+host_classification$isolate <- gsub(" .*", "", host_classification$isolate)
+metadata$isolate <- metadata$accession
+
+metadata <- left_join(metadata, host_classification, suffix = c("", "")) %>%
+  dplyr::mutate(DNAzyme_hit = case_when(
+    stringr::str_detect(motif_seq, pattern = "GGCTAGCTACAACGA") ~ "match",
+    !stringr::str_detect(motif_seq, pattern = "GGCTAGCTACAACGA") ~ "no_match",
+    TRUE ~ NA))
+```
+
+```{r batch-analysis}
+#| include: false
+#| cache: true
+
+# NOTE: run_complete_analysis_optimized() is the function name used in the original
+# dashboard. If potytools only exports run_complete_analysis(), use that instead.
+results <- run_complete_analysis_optimized(motif_seqs, ref_seqs, host_codon_tables,
+                                           output_prefix = "new_improved")
+
+motif_char <- as.character(motif_seqs)
+ref_char   <- as.character(ref_seqs)
+
+rscu_motif <- results$motif_rscu
+rscu_ref   <- results$ref_rscu
+gc_motif   <- results$gc_motif
+gc_ref     <- results$gc_ref
+enc_motif  <- results$enc_motif[!is.na(results$enc_motif)]
+enc_ref    <- results$enc_ref[!is.na(results$enc_ref)]
+```
+
+```{r batch-analysis-dnazyme}
+#| include: false
+#| cache: true
+
+results_DNAzyme <- run_complete_analysis_optimized(DNAzyme_seqs, ci_seqs, host_codon_tables,
+                                                    output_prefix = "new_improved")
+
+DNAzyme_char <- as.character(DNAzyme_seqs)
+ci_char      <- as.character(ci_seqs)
+
+rscu_DNAzyme <- results_DNAzyme$DNAzyme_rscu
+rscu_ci      <- results_DNAzyme$ci_rscu
+gc_DNAzyme   <- results_DNAzyme$gc_DNAzyme
+gc_ci        <- results_DNAzyme$gc_ci
+enc_DNAzyme  <- results_DNAzyme$enc_DNAzyme[!is.na(results_DNAzyme$enc_DNAzyme)]
+enc_ci       <- results_DNAzyme$enc_ci[!is.na(results_DNAzyme$enc_ci)]
+```
+
+# Overview {.tabset}
+
+## Dataset Summary
+
+```{r summary-stats}
+n_isolates <- length(motif_seqs)
+n_monocot  <- sum(host_classification$host_type == "monocot", na.rm = TRUE)
+n_dicot    <- sum(host_classification$host_type == "dicot", na.rm = TRUE)
+n_unknown  <- sum(is.na(host_classification$host_type))
+n_motifnt  <- unique(width(motif_seqs))
+
+summary_table <- data.frame(
+  Metric = c("Total Isolates", "Monocot-infecting", "Dicot-infecting",
+             "Unknown Host", "Motif Length", "Mean Polyprotein Length"),
+  Value = c(n_isolates, n_monocot, n_dicot, n_unknown, n_motifnt,
+            sprintf("%.0f nt", mean(nchar(ref_char)))))
+
+datatable(summary_table, options = list(dom = "t", pageLength = 10), rownames = FALSE)
+```
+
+## Codon Bias Metrics
+
+```{r metrics-display}
+metrics_table <- data.frame(
+  Metric = c("Mean ENC (Motif)", "Mean ENC (Reference)",
+             "Mean GC (Motif)",  "Mean GC (Reference)", "Mean GC3 (Motif)"),
+  Value = c(
+    sprintf("%.2f ± %.2f", mean(enc_motif), sd(enc_motif)),
+    sprintf("%.2f ± %.2f", mean(enc_ref),   sd(enc_ref)),
+    sprintf("%.3f ± %.3f", mean(gc_motif[,"GC_overall"]), sd(gc_motif[,"GC_overall"])),
+    sprintf("%.3f ± %.3f", mean(gc_ref[,"GC_overall"]),   sd(gc_ref[,"GC_overall"])),
+    sprintf("%.3f", mean(gc_motif[,"GC3"]))),
+  Interpretation = c("Lower = more biased", "Baseline codon bias",
+                     "Overall GC content",  "Baseline GC content", "Wobble position GC"))
+
+datatable(metrics_table, options = list(dom = "t", pageLength = 10), rownames = FALSE)
+```
+
+## RSCU Validation
+
+```{r rscu-validation}
+rscu_max    <- max(results$rscu_comparison$RSCU_motif, na.rm = TRUE)
+rscu_min    <- min(results$rscu_comparison$RSCU_motif, na.rm = TRUE)
+rscu_mean   <- mean(results$rscu_comparison$RSCU_motif, na.rm = TRUE)
+rscu_issues <- results$rscu_comparison$RSCU_motif > 6.01
+
+validation_df <- data.frame(
+  Check = c("Min RSCU", "Max RSCU", "Mean RSCU",
+            "Values > 6 (invalid)", "RSCU Calculation"),
+  Result = c(
+    sprintf("%.3f", rscu_min), sprintf("%.3f", rscu_max), sprintf("%.3f", rscu_mean),
+    sprintf("%d", sum(rscu_issues, na.rm = TRUE)),
+    ifelse(rscu_max <= 6.01, "✓ CORRECT", "✗ ISSUE DETECTED")),
+  Status = c(
+    ifelse(rscu_min >= 0, "✓ Valid", "✗ Invalid"),
+    ifelse(rscu_max <= 6.01, "✓ Valid", "✗ Invalid"),
+    "Info",
+    ifelse(sum(rscu_issues, na.rm = TRUE) == 0, "✓ Valid", "✗ Invalid"),
+    ifelse(rscu_max <= 6.01, "✓ OK", "✗ ERROR")))
+
+datatable(validation_df, options = list(dom = "t"), rownames = FALSE) %>%
+  formatStyle("Status",
+    backgroundColor = styleEqual(
+      c("✓ Valid", "✓ OK", "Info", "✗ Invalid", "✗ ERROR"),
+      c("#ccffcc", "#ccffcc", "#ffffcc", "#ffcccc", "#ffcccc")))
+```
+
+# Sequence Logos {.tabset}
+
+```{r create-logos}
+#| cache: true
+#| fig.height: 10
+#| fig.width: 14
+
+logos         <- create_comprehensive_logo_analysis(dna_sequences = motif_seqs, host_classification)
+DNAzyme_logos <- create_comprehensive_logo_analysis(dna_sequences = DNAzyme_seqs, host_classification)
+```
+
+## Combined DNA & Protein
+
+```{r display-combined-logo}
+#| fig.height: 10
+#| fig.width: 14
+DNAzyme_logos$combined_logo
+logos$combined_logo
+```
+
+## DNA Only
+
+```{r dna-logo}
+#| fig.height: 5
+#| fig.width: 14
+logos$dna_logo
+```
+
+## Protein Only
+
+```{r protein-logo}
+#| fig.height: 5
+#| fig.width: 14
+logos$ic_protein
+DNAzyme_logos$ic_protein
+```
+
+## Conservation Plot
+
+```{r conservation-plot}
+#| fig.height: 6
+#| fig.width: 12
+plot_information_content(motif_seqs,   title = "Nucleotide Conservation Across and Around Motif")
+plot_information_content(DNAzyme_seqs, title = "Nucleotide Conservation Across 18nt Motif")
+```
+
+## Logo Statistics
+
+```{r logo-stats-table}
+logo_stats <- logo_statistics(motif_seqs)
+
+datatable(
+  logo_stats %>% mutate(across(c(entropy, conservation, frequency), ~round(., 3))),
+  options = list(pageLength = 18, scrollX = TRUE), rownames = FALSE) %>%
+  formatStyle("conservation",
+    background = styleColorBar(logo_stats$conservation, "lightgreen"),
+    backgroundSize = "100% 90%", backgroundRepeat = "no-repeat",
+    backgroundPosition = "center")
+```
+
+```{r DNAzyme-stats-table}
+DNAzyme_stats <- logo_statistics(DNAzyme_seqs)
+
+datatable(
+  DNAzyme_stats %>% mutate(across(c(entropy, conservation, frequency), ~round(., 3))),
+  options = list(pageLength = 18, scrollX = TRUE), rownames = FALSE) %>%
+  formatStyle("conservation",
+    background = styleColorBar(logo_stats$conservation, "lightgreen"),
+    backgroundSize = "100% 90%", backgroundRepeat = "no-repeat",
+    backgroundPosition = "center")
+```
+
+# Phylogenetic Analysis {.tabset}
+
+```{r phylogenetic-setup}
+#| cache: true
+#| include: false
+
+# Tree building requires phangorn and is computationally heavy
+# (100 bootstraps × 4 regions). It runs only when phangorn is installed AND
+# the POTY_RUN_PHYLO environment variable is set, so the default render stays
+# fast; the section degrades gracefully otherwise.
+run_phylo <- requireNamespace("phangorn", quietly = TRUE) &&
+  nzchar(Sys.getenv("POTY_RUN_PHYLO"))
+
+trees            <- NULL
+tree_comparisons <- list()
+
+if (run_phylo) {
+  pp_dna <- readDNAStringSet(here::here("data", "claude_polyproteinDNA_mafft.fasta"))
+  names(pp_dna) <- gsub(" .*", "", names(pp_dna))
+
+  ci_cds <- readDNAStringSet(here::here("data", "claude_ci2cdsaln.fasta"))
+  names(ci_cds) <- gsub(" .*", "", names(ci_cds))
+
+  regions <- list(motif = motif_seqs, ci_cds = ci_cds,
+                  pp_dna = pp_dna, DNAzyme = DNAzyme_seqs)
+
+  trees <- list()
+  for (region_name in names(regions)) {
+    cat(sprintf("\n=== Building tree for %s ===\n", region_name))
+    tree <- build_phylo_tree(regions[[region_name]],
+                             method = "TN93", tree_method = "upgma", bootstrap = 100)
+    trees[[region_name]] <- tree
+  }
+}
+```
+
+```{r tree-comparisons}
+#| include: false
+#| cache: true
+
+if (!is.null(trees) && length(trees) > 0) {
+  region_names <- names(trees)
+  for (i in 1:(length(region_names) - 1)) {
+    for (j in (i + 1):length(region_names)) {
+      region1 <- region_names[i]; region2 <- region_names[j]
+      comp    <- paste(region1, region2, sep = "_vs_")
+      cat(sprintf("\nComparing %s:\n", comp))
+      tree_comparisons[[comp]] <- compare_trees(trees[[region1]], trees[[region2]])
+    }
+  }
+}
+```
+
+## Overview
+
+```{r phylo-overview}
+if (!is.null(trees)) {
+  cat("Phylogenetic trees built for", length(trees), "genomic regions\n\n")
+  for (region in names(trees)) cat(sprintf("  - %s\n", region))
+  cat("\nTree comparisons performed:\n")
+  for (comparison in names(tree_comparisons)) cat(sprintf("  - %s\n", comparison))
+} else {
+  cat("Phylogenetic analysis not available.\n")
+}
+```
+
+## Tree Comparison
+
+```{r phylo-comparison-table}
+if (!is.null(trees) && length(tree_comparisons) > 0) {
+  comp_summary <- data.frame()
+  for (comp_name in names(tree_comparisons)) {
+    comp <- tree_comparisons[[comp_name]]
+    if (!is.null(comp)) {
+      comp_summary <- rbind(comp_summary, data.frame(
+        Comparison = comp_name, N_Taxa = comp$n_taxa,
+        RF_Distance = round(comp$RF_distance, 3),
+        Cophenetic_Correlation = round(comp$cophenetic_correlation, 3),
+        Interpretation = ifelse(comp$RF_distance < 0.3, "Similar topology",
+                         ifelse(comp$RF_distance < 0.7, "Moderately different",
+                                "Very different"))))
+    }
+  }
+  if (nrow(comp_summary) > 0) {
+    datatable(comp_summary, options = list(pageLength = 10), rownames = FALSE) %>%
+      formatStyle("RF_Distance",
+        background = styleColorBar(comp_summary$RF_Distance, "lightcoral"),
+        backgroundSize = "100% 90%", backgroundRepeat = "no-repeat",
+        backgroundPosition = "center")
+  }
+} else {
+  cat("No tree comparisons available")
+}
+```
+
+## Phylogenetic Trees
+
+```{r phylo-trees}
+#| fig.height: 10
+#| fig.width: 12
+if (!is.null(trees)) {
+  for (region_name in names(trees)) {
+    p <- ggtree(trees[[region_name]]) +
+      geom_tiplab(size = 2) +
+      geom_nodelab(aes(label = round(as.numeric(label), 0)), size = 2, hjust = -0.3, color = "blue") +
+      labs(title = paste("Phylogeny:", region_name)) +
+      theme_tree2()
+    print(p)
+  }
+} else {
+  cat("Phylogenetic trees not available")
+}
+```
+
+## Interpretation
+
+```{r phylo-interpretation}
+if (!is.null(trees) && length(tree_comparisons) > 0) {
+  comp_rf_values <- sapply(tree_comparisons, function(x) if (!is.null(x)) x$RF_distance else NA)
+  comp_rf_values <- comp_rf_values[!is.na(comp_rf_values)]
+
+  if (length(comp_rf_values) > 0) {
+    most_similar  <- names(which.min(comp_rf_values))
+    most_different <- names(which.max(comp_rf_values))
+    cat(sprintf("- **Most similar phylogenies**: %s (RF = %.3f)\n", most_similar, min(comp_rf_values)))
+    cat(sprintf("- **Most different phylogenies**: %s (RF = %.3f)\n\n", most_different, max(comp_rf_values)))
+
+    if (max(comp_rf_values) > 0.7) {
+      cat("- Very different topologies suggest:\n")
+      cat("  - **Recombination** between viral lineages\n")
+      cat("  - **Different selection pressures** on different genes\n")
+      cat("  - **Horizontal gene transfer** events\n")
+    }
+
+    motif_comps <- comp_rf_values[grepl("motif", names(comp_rf_values))]
+    if (length(motif_comps) > 0 && mean(motif_comps) > 0.5) {
+      cat("\n**18nt Motif shows distinct phylogenetic signal** - may indicate:\n")
+      cat("- Functional constraint specific to this region\n")
+      cat("- Recent recombination affecting other regions\n")
+    }
+  }
+}
+```
+
+# Codon Usage {.tabset}
+
+## motif vs. genome
+
+```{r cu-comparison}
+#| cache: true
+cu_comparison <- compare_codon_usage_fast(motif_seqs, ref_seqs)
+```
+
+### Codon usage
+
+```{r cu-comparison-table}
+datatable(
+  cu_comparison %>%
+    mutate(log2FC = log2(fold_change), nlt_padj = -log10(p_adjusted)) %>%
+    select(codon, amino_acid, log2FC, nlt_padj) %>%
+    mutate(across(where(is.numeric), ~round(., 3))),
+  options = list(pageLength = 20, scrollX = TRUE), filter = "top", rownames = FALSE)
+```
+
+### Top Differences (motif vs genomes)
+
+```{r rscu-top-diffs}
+#| fig.height: 6
+#| fig.width: 10
+top_diffs_cu <- cu_comparison %>% arrange(desc(abs(fold_change))) %>% head(20)
+
+ggplot(top_diffs_cu, aes(x = reorder(codon, fold_change), y = fold_change,
+                         fill = -log10(p_adjusted))) +
+  geom_bar(stat = "identity", alpha = 0.7) +
+  geom_hline(yintercept = 0, linetype = "solid", color = "black") +
+  labs(title = "Top 20 Codons with Largest CU Differences",
+       subtitle = "Motif vs Reference",
+       x = "Codon", y = "CU Fold Change (Motif vs Reference)") +
+  coord_flip() + theme_cowplot() + theme(legend.position = "top")
+```
+
+### Interactive CU Table
+
+```{r rscu-table}
+datatable(
+  cu_comparison %>%
+    select(codon, amino_acid, frequency_motif, frequency_ref, fold_change, p_adjusted,
+           count_motif, count_ref) %>%
+    mutate(across(where(is.numeric), ~round(., 3))),
+  options = list(pageLength = 20, scrollX = TRUE), filter = "top", rownames = FALSE) %>%
+  formatStyle("fold_change",
+    background = styleColorBar(range(-log10(cu_comparison$p_adjusted)), "lightblue"),
+    backgroundSize = "100% 90%", backgroundRepeat = "no-repeat",
+    backgroundPosition = "center")
+```
+
+## DNAzyme-match vs other
+
+```{r cu-comp-DNAzyme}
+DNAzyme_iso <- metadata$isolate[(metadata$DNAzymeseq == "DNAzyme")]
+DNAzyme_seq <- motif_seqs[(names(motif_seqs) %in% DNAzyme_iso)]
+
+other_iso <- metadata$isolate[(metadata$DNAzymeseq == "other")]
+other_seq <- motif_seqs[(names(motif_seqs) %in% other_iso)]
+
+cu_comp_DNAzyme <- compare_codon_usage_fast(DNAzyme_seq, other_seq)
+```
+
+### Top Differences
+
+```{r cu-top-diffs-DNAzyme}
+#| fig.height: 6
+#| fig.width: 10
+top_diffs_cu_DNAzyme <- cu_comp_DNAzyme %>% arrange(desc(abs(fold_change))) %>% head(20)
+
+ggplot(top_diffs_cu_DNAzyme, aes(x = reorder(codon, fold_change), y = fold_change,
+                                  fill = -log10(p_adjusted))) +
+  geom_bar(stat = "identity", alpha = 0.7) +
+  geom_hline(yintercept = 0, linetype = "solid", color = "black") +
+  labs(title = "Top 20 Codons with Largest CU Differences",
+       subtitle = "DNAzyme-matches vs. other",
+       x = "Codon", y = "CU Fold Change (DNAzyme-matches vs. other)") +
+  coord_flip() + theme_cowplot() + theme(legend.position = "top")
+```
+
+# Host-Specific Analysis {.tabset}
+
+```{r host-analysis}
+cai_results <- calculate_host_specific_cai(motif_seqs, host_codon_tables)
+```
+
+## CAI Distribution
+
+```{r cai-plot}
+#| fig.height: 6
+#| fig.width: 8
+host_classification_byacc          <- host_classification
+host_classification_byacc$full_name <- host_classification_byacc$isolate
+host_classification_byacc$isolate   <- gsub(" .*", "", host_classification_byacc$isolate)
+
+plot_cai_by_host(cai_results, host_classification_byacc)
+```
+
+## Host Comparison
+
+```{r host-comparison}
+#| fig.height: 10
+#| fig.width: 14
+groups_host <- group_sequences_by_host_type(motif_seqs, host_classification)
+monocots <- paste(groups_host$monocot, collapse = "")
+dicots   <- paste(groups_host$dicot,   collapse = "")
+
+if (nchar(dicots) %% 3 == 0 && nchar(monocots) %% 3 == 0) {
+  monocots_rscu <- calculate_rscu_correct(monocots) %>% dplyr::mutate(host_type = "monocot")
+  dicots_rscu   <- calculate_rscu_correct(dicots)   %>% dplyr::mutate(host_type = "dicot")
+
+  combined_rscu <- bind_rows(monocots_rscu, dicots_rscu)
+
+  ggplot(combined_rscu, aes(x = reorder(codon, RSCU), y = RSCU, fill = host_type)) +
+    geom_bar(stat = "identity", position = "dodge", alpha = 0.7) +
+    labs(title = "RSCU: Monocot vs Dicot-infecting Potyviruses",
+         x = "Codon", y = "RSCU") +
+    coord_flip() + theme_cowplot() + theme(legend.position = "top")
+}
+```
+
+# RSCU Analysis {.tabset}
+
+```{r rscu-setup}
+rscu_matrix <- calculate_rscu_matrix_fast(motif_seqs)
+```
+
+## RSCU Heatmap
+
+```{r rscu-heatmap}
+#| fig.height: 10
+#| fig.width: 14
+if (!is.null(rscu_matrix)) {
+  heatmap_data <- as.data.frame(rscu_matrix) %>%
+    tibble::rownames_to_column("codon") %>%
+    tidyr::pivot_longer(-codon, names_to = "isolate", values_to = "RSCU")
+
+  ggplot(heatmap_data, aes(x = isolate, y = codon, fill = RSCU)) +
+    geom_tile() +
+    scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 1) +
+    labs(title = "RSCU Heatmap — Motif Sequences") +
+    theme_minimal() +
+    theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
+}
+```
+
+# Multivariate Analysis {.tabset}
+
+```{r pca-setup}
+#| cache: true
+pca_results <- perform_rscu_pca_improved(motif_seqs, host_classification)
+```
+
+## PCA Biplot
+
+```{r pca-biplot}
+#| fig.height: 8
+#| fig.width: 10
+if (!is.null(pca_results)) {
+  plot_pca_biplot(pca_results, host_classification)
+}
+```
+
+# Advanced Metrics {.tabset}
+
+## GC Content by Codon Position
+
+```{r gc-by-position}
+#| fig.height: 6
+#| fig.width: 10
+gc_combined <- bind_rows(
+  as.data.frame(gc_motif) %>% dplyr::mutate(group = "motif"),
+  as.data.frame(gc_ref)   %>% dplyr::mutate(group = "polyprotein"))
+
+gc_long <- gc_combined %>%
+  select(GC_pos1 = GC1, GC_pos2 = GC2, GC_pos3 = GC3, group) %>%
+  tidyr::pivot_longer(-group, names_to = "position", values_to = "GC")
+
+ggplot(gc_long, aes(x = position, y = GC, fill = group)) +
+  geom_boxplot(alpha = 0.7) +
+  labs(title = "GC Content by Codon Position",
+       x = "Codon position", y = "GC fraction") +
+  theme_cowplot()
+```
+
+# Summary Report
+
+```{r summary-report}
+cat("## Potyvirus DNAzyme-like Motif Analysis — Summary\n\n")
+cat(sprintf("- Sequences analysed: %d isolates\n", n_isolates))
+cat(sprintf("- Motif length: %d nt\n", n_motifnt))
+cat(sprintf("- Mean ENC (motif): %.2f\n", mean(enc_motif)))
+cat(sprintf("- Mean ENC (polyprotein): %.2f\n", mean(enc_ref)))
+cat(sprintf("- Mean GC3 (motif): %.3f\n", mean(gc_motif[,"GC3"])))
+cat(sprintf("- DNAzyme exact matches: %d\n", sum(metadata$DNAzyme_hit == "match", na.rm = TRUE)))
+```
+
+# ICTV sequences
+
+```{r ictv-mafft}
+#| cache: true
+
+ictv_aa_aln <- readAAStringSet(here::here("data", "OPSR.Poty.Fig3.v16_align.txt"))
+
+ictv_tb <- readxl::read_xlsx(here::here("data", "VMR_MSL41.v1.20260320.xlsx"),
+                              sheet = 2, col_types = "text") %>%
+  dplyr::filter(Order == "Patatavirales") %>%
+  tidyr::separate_rows(`Virus GENBANK accession`, sep = ";\\s*") %>%
+  dplyr::mutate(genbank = stringr::str_remove(`Virus GENBANK accession`, "^.*:\\s*"))
+```
+
+```{r poty-best-polyprotein}
+poty_best_polyprotein <- function(seqs, min_len = 2000) {
+  by_acc <- split(seqs, gsub("\\..*", "", names(seqs)))
+  best <- lapply(by_acc, function(x) x[which.max(width(x))])
+  best <- do.call(c, best)
+  best[width(best) >= min_len]
+}
+```
+
+```{r genbank-reader}
+#| cache: true
+
+read_genbank_folder <- function(path, pattern = "\\.gb$") {
+  files <- list.files(path, pattern = pattern, full.names = TRUE)
+  seqs  <- DNAStringSet()
+  for (f in files) {
+    lines    <- readLines(f)
+    acc_line <- grep("^ACCESSION", lines, value = TRUE)
+    acc      <- if (length(acc_line)) gsub("ACCESSION +", "", acc_line[1]) else basename(f)
+    origin   <- grep("^ORIGIN", lines)
+    if (!length(origin)) next
+    raw  <- lines[(origin + 1):length(lines)]
+    raw  <- raw[!grepl("^//", raw)]
+    seq  <- paste(gsub("[^acgtACGT]", "", raw), collapse = "")
+    seqs <- c(seqs, setNames(DNAStringSet(seq), acc))
+  }
+  seqs
+}
+```
+
+```{r codon-align}
+codon_align_from_protein_local <- function(prot_aln, cds) {
+  out <- DNAStringSet()
+  for (id in intersect(names(prot_aln), names(cds))) {
+    prot   <- strsplit(as.character(prot_aln[[id]]), "")[[1]]
+    codons <- substring(as.character(cds[[id]]),
+                        seq(1, length(cds[[id]]), 3),
+                        seq(3, length(cds[[id]]), 3))
+    idx <- 1; seq_out <- character()
+    for (aa in prot) {
+      if (aa == "-") {
+        seq_out <- c(seq_out, "---")
+      } else {
+        seq_out <- c(seq_out, if (idx > length(codons)) "NNN" else codons[idx])
+        idx <- idx + 1
+      }
+    }
+    out[[id]] <- DNAString(paste(seq_out, collapse = ""))
+  }
+  out
+}
+```
+
+# Rolling GC analysis
+
+```{r rolling-gc-read}
+aln <- as.matrix(readDNAStringSet(here::here("data", "claude_polyproteinDNA_mafft.fasta")))
+```
+
+```{r rolling-gc-functions}
+rolling_alignment_stats <- function(aln, window = 300, step = 30,
+                                    codon_aligned = TRUE, remove_gaps = FALSE) {
+  if (!is.matrix(aln)) stop("Alignment must be a character matrix")
+  if (codon_aligned && (window %% 3 != 0 || step %% 3 != 0))
+    stop("window and step must be multiples of 3")
+  n_sites     <- ncol(aln)
+  gc_content  <- function(x) mean(x %in% c("G","C"), na.rm = TRUE)
+  cpg_oe <- function(x) {
+    x <- x[x %in% c("A","C","G","T","U")]
+    if (length(x) < 2) return(NA_real_)
+    obs <- sum(x[-length(x)] == "C" & x[-1] == "G")
+    exp <- sum(x == "C") * sum(x == "G") / length(x)
+    if (exp == 0) NA_real_ else obs / exp
+  }
+  results <- list(); win_id <- 1
+  for (start in seq(1, n_sites - window + 1, by = step)) {
+    end     <- start + window - 1
+    sub_aln <- aln[, start:end, drop = FALSE]
+    vec     <- as.vector(sub_aln)
+    if (remove_gaps) vec <- vec[vec != "-"]
+    cp <- rep(1:3, length.out = window)
+    results[[win_id]] <- data.frame(
+      window = win_id, start = start, end = end,
+      GC = gc_content(vec), GC3 = gc_content(vec[cp == 3]),
+      CpG_OE = cpg_oe(vec), gap_fraction = mean(vec == "-"),
+      GC_pos1 = gc_content(vec[cp == 1]),
+      GC_pos2 = gc_content(vec[cp == 2]),
+      GC_pos3 = gc_content(vec[cp == 3]))
+    win_id <- win_id + 1
+  }
+  do.call(rbind, results)
+}
+```
+
+```{r rolling-gc-compute}
+ras       <- rolling_alignment_stats(aln)
+ras_degap <- rolling_alignment_stats(aln, remove_gaps = TRUE)
+
+ggplot(ras, aes(start, GC)) +
+  geom_line() + theme_bw() +
+  labs(x = "Alignment position", y = "GC content")
+
+ggplot(ras, aes(start, CpG_OE)) +
+  geom_line() +
+  geom_hline(yintercept = 1, linetype = 2) +
+  theme_bw() +
+  labs(x = "Alignment position", y = "CpG O/E")
+```

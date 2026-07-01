@@ -1,0 +1,101 @@
+---
+title: "Getting started with potytools"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with potytools}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  eval = FALSE
+)
+```
+
+## Overview
+
+`potytools` provides a toolkit for analysing potyvirus genome sequences, with
+emphasis on:
+
+- GenBank file parsing (no Bioconductor/genbankr dependency)
+- Codon usage bias (RSCU, ENC, CAI, GC content, wobble bias)
+- Host classification (monocot vs. dicot)
+- Short linear motif (SLM) search via the [ELM database](http://elm.eu.org/) REST API
+- Motif-flanking region extraction for conservation analysis
+- NCBI sequence retrieval via `rentrez`
+
+## Parsing GenBank files
+
+```{r}
+library(potytools)
+
+# Parse all .gb files in a folder
+records <- load_genbank_folder("path/to/genbank_files/")
+
+# Get a flat data frame of all features
+feat_df <- features_as_df(records)
+
+# Extract all protein sequences
+proteins <- get_all_proteins(records)
+```
+
+## Codon usage analysis
+
+```{r}
+library(Biostrings)
+
+# Load CDS sequences
+cds <- readDNAStringSet("ci_region_cds.fasta")
+
+# RSCU across all sequences
+rscu <- calculate_rscu(cds)
+
+# Effective number of codons per sequence
+enc_values <- sapply(as.character(cds), calculate_enc)
+
+# GC content by codon position
+gc <- calculate_gc_content(as.character(cds[[1]]))
+
+# Compare motif region vs. full CDS
+motifs <- readDNAStringSet("motif_18nt.fasta")
+comparison <- compare_codon_usage(motifs, cds)
+```
+
+## Host classification
+
+```{r}
+seq_names <- names(cds)
+host_table <- create_host_classification_table(seq_names)
+
+# Assign host-specific codon tables (monocot or dicot)
+host_codon_tables <- create_host_specific_codon_tables(host_table)
+
+# Calculate CAI against each isolate's host
+cai_df <- calculate_host_specific_cai(cds, host_codon_tables)
+```
+
+## ELM motif search
+
+```{r}
+# Batch search of concatenated sequence fragments against ELM
+# (requires internet access; rate-limited)
+results <- elm_batch_search(
+  fasta_file = "ci_flanks_concatenated.fasta",
+  output_dir = "elm_results/"
+)
+```
+
+## Fetching custom sequences from NCBI
+
+```{r}
+coords <- data.frame(
+  seqnames = c("MN908947", "NC_038311"),
+  start    = c(1000L,      500L),
+  end      = c(1200L,      700L),
+  strand   = c("+",        "-")
+)
+fetch_custom_sequences(coords, output_file = "custom_seqs.fasta")
+```

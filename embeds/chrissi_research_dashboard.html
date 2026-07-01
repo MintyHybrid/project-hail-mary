@@ -1,0 +1,482 @@
+
+<style>
+  :root { --accent: #1D9E75; --accent2: #534AB7; --accent3: #BA7517; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  .dash { font-family: var(--font-sans); padding: 0 0 2rem; }
+
+  .hero { border-bottom: 0.5px solid var(--color-border-tertiary); padding: 1.5rem 0 1.25rem; margin-bottom: 1.5rem; }
+  .hero-tag { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: .4rem; }
+  .hero-title { font-size: 22px; font-weight: 500; color: var(--color-text-primary); line-height: 1.2; }
+  .hero-sub { font-size: 14px; color: var(--color-text-secondary); margin-top: .4rem; }
+  .hero-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-top: .75rem; }
+  .pill { font-size: 11px; padding: 3px 10px; border-radius: 99px; border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); background: var(--color-background-secondary); }
+
+  .section-label { font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--color-text-tertiary); margin-bottom: .75rem; padding-top: .25rem; }
+
+  .nav-tabs { display: flex; gap: 4px; margin-bottom: 1.25rem; border-bottom: 0.5px solid var(--color-border-tertiary); padding-bottom: 0; }
+  .tab { font-size: 13px; padding: 6px 14px 8px; color: var(--color-text-secondary); cursor: pointer; border: none; background: none; border-bottom: 2px solid transparent; margin-bottom: -1px; transition: color .15s; border-radius: 0; }
+  .tab:hover { color: var(--color-text-primary); }
+  .tab.active { color: var(--color-text-primary); border-bottom-color: var(--color-text-primary); font-weight: 500; }
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  .grid2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 1.25rem; }
+  .grid3 { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; }
+  .card-head { display: flex; align-items: center; gap: 8px; margin-bottom: .6rem; }
+  .card-icon { font-size: 16px; color: var(--color-text-secondary); }
+  .card-title { font-size: 14px; font-weight: 500; color: var(--color-text-primary); }
+  .card-desc { font-size: 13px; color: var(--color-text-secondary); line-height: 1.55; }
+  .card-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: .7rem; }
+  .tag { font-size: 11px; padding: 2px 8px; border-radius: 4px; }
+  .tag-teal { background: #E1F5EE; color: #085041; }
+  .tag-purple { background: #EEEDFE; color: #3C3489; }
+  .tag-amber { background: #FAEEDA; color: #633806; }
+  .tag-blue { background: #E6F1FB; color: #0C447C; }
+  .tag-coral { background: #FAECE7; color: #712B13; }
+  .tag-gray { background: #F1EFE8; color: #444441; }
+
+  @media (prefers-color-scheme: dark) {
+    .tag-teal { background: #085041; color: #9FE1CB; }
+    .tag-purple { background: #26215C; color: #CECBF6; }
+    .tag-amber { background: #412402; color: #FAC775; }
+    .tag-blue { background: #042C53; color: #B5D4F4; }
+    .tag-coral { background: #4A1B0C; color: #F5C4B3; }
+    .tag-gray { background: #2C2C2A; color: #D3D1C7; }
+  }
+
+  .link-btn { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; color: var(--color-text-info); border: 0.5px solid var(--color-border-info, #378ADD55); border-radius: var(--border-radius-md); padding: 4px 10px; margin-top: .75rem; cursor: pointer; background: none; transition: background .15s; text-decoration: none; }
+  .link-btn:hover { background: var(--color-background-info); }
+
+  .stat-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-bottom: 1.25rem; }
+  .stat { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .85rem 1rem; }
+  .stat-val { font-size: 22px; font-weight: 500; color: var(--color-text-primary); line-height: 1; }
+  .stat-lbl { font-size: 12px; color: var(--color-text-secondary); margin-top: 4px; }
+
+  .timeline { position: relative; padding-left: 1.5rem; }
+  .timeline::before { content:''; position:absolute; left:.35rem; top:.5rem; bottom:.5rem; width:1px; background: var(--color-border-tertiary); }
+  .tl-item { position: relative; margin-bottom: 1.1rem; }
+  .tl-dot { position:absolute; left:-1.15rem; top:.3rem; width:8px; height:8px; border-radius:50%; border:1.5px solid var(--color-border-secondary); background: var(--color-background-primary); }
+  .tl-dot.active { background: var(--accent); border-color: var(--accent); }
+  .tl-head { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .tl-body { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; line-height: 1.5; }
+
+  .tool-row { display: flex; align-items: flex-start; gap: 10px; padding: .7rem 0; border-bottom: 0.5px solid var(--color-border-tertiary); }
+  .tool-row:last-child { border-bottom: none; }
+  .tool-icon { font-size: 18px; color: var(--color-text-secondary); padding-top: 1px; min-width: 24px; }
+  .tool-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .tool-desc { font-size: 12px; color: var(--color-text-secondary); margin-top: 2px; line-height: 1.5; }
+
+  .domain-map { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; }
+  .domain-node { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: .6rem .8rem; text-align: center; cursor: pointer; transition: border-color .15s, background .15s; }
+  .domain-node:hover { background: var(--color-background-secondary); border-color: var(--color-border-secondary); }
+  .domain-node .dn-icon { font-size: 18px; margin-bottom: 4px; color: var(--color-text-secondary); }
+  .domain-node .dn-label { font-size: 12px; font-weight: 500; color: var(--color-text-primary); }
+  .domain-node .dn-count { font-size: 11px; color: var(--color-text-tertiary); margin-top: 2px; }
+
+  .search-bar { display: flex; gap: 8px; margin-bottom: 1rem; }
+  .search-bar input { flex: 1; font-size: 13px; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 6px 12px; background: var(--color-background-secondary); color: var(--color-text-primary); }
+  .filter-pills { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 1rem; }
+  .fpill { font-size: 11px; padding: 3px 10px; border-radius: 99px; border: 0.5px solid var(--color-border-secondary); color: var(--color-text-secondary); cursor: pointer; background: var(--color-background-primary); transition: .15s; }
+  .fpill.on { background: var(--color-text-primary); color: var(--color-background-primary); border-color: var(--color-text-primary); }
+  .fpill:hover:not(.on) { background: var(--color-background-secondary); }
+
+  .tool-card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: .9rem 1.1rem; display: flex; flex-direction: column; gap: 6px; }
+  .tool-card-head { display: flex; align-items: center; gap: 8px; }
+  .tool-card-icon { font-size: 16px; color: var(--color-text-secondary); }
+  .tool-card-name { font-size: 13px; font-weight: 500; color: var(--color-text-primary); }
+  .tool-card-domain { font-size: 11px; color: var(--color-text-tertiary); }
+  .tool-card-desc { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+  .tool-card-row { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+
+  .hidden { display: none !important; }
+
+  .env-block { background: var(--color-background-secondary); border-radius: var(--border-radius-md); padding: .75rem 1rem; margin-bottom: .75rem; font-size: 13px; color: var(--color-text-secondary); line-height: 1.6; }
+  .env-block code { font-family: var(--font-mono); font-size: 12px; background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: 4px; padding: 1px 5px; color: var(--color-text-primary); }
+
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 1.25rem 0; }
+</style>
+
+<div class="dash">
+  <div class="hero">
+    <div class="hero-tag">Research Lab Notebook · June 2026</div>
+    <div class="hero-title">Chrissi's Computational Research Hub</div>
+    <div class="hero-sub">Postdoctoral research · Gravitational biology · Bioinformatics · Space tech · Digital health</div>
+    <div class="hero-pills">
+      <span class="pill"><i class="ti ti-map-pin" aria-hidden="true"></i> Nuremberg, DE</span>
+      <span class="pill">9 active projects</span>
+      <span class="pill">28 tools &amp; scripts generated</span>
+      <span class="pill">R · Python · Quarto · GitHub Actions</span>
+    </div>
+  </div>
+
+  <nav class="nav-tabs" aria-label="Dashboard sections">
+    <button class="tab active" onclick="showPage('overview')"><i class="ti ti-layout-dashboard" aria-hidden="true"></i> Overview</button>
+    <button class="tab" onclick="showPage('tools')"><i class="ti ti-tools" aria-hidden="true"></i> Tools &amp; Code</button>
+    <button class="tab" onclick="showPage('projects')"><i class="ti ti-flask" aria-hidden="true"></i> Projects</button>
+    <button class="tab" onclick="showPage('env')"><i class="ti ti-server" aria-hidden="true"></i> Environments</button>
+    <button class="tab" onclick="showPage('career')"><i class="ti ti-chart-line" aria-hidden="true"></i> Career</button>
+  </nav>
+
+  <!-- OVERVIEW PAGE -->
+  <div class="page active" id="page-overview">
+    <div class="section-label">Research domains</div>
+    <div class="domain-map" style="margin-bottom:1.5rem">
+      <div class="domain-node" onclick="filterTools('virology')">
+        <div class="dn-icon"><i class="ti ti-dna" aria-hidden="true"></i></div>
+        <div class="dn-label">Potyvirus / Virology</div>
+        <div class="dn-count">~200 isolates · 9 tools</div>
+      </div>
+      <div class="domain-node" onclick="filterTools('plant')">
+        <div class="dn-icon"><i class="ti ti-plant" aria-hidden="true"></i></div>
+        <div class="dn-label">Plant biology</div>
+        <div class="dn-count">Vitis · sucrose · NDVI</div>
+      </div>
+      <div class="domain-node" onclick="filterTools('space')">
+        <div class="dn-icon"><i class="ti ti-satellite" aria-hidden="true"></i></div>
+        <div class="dn-label">Space &amp; gravitational</div>
+        <div class="dn-count">Evo sims · manuscript</div>
+      </div>
+      <div class="domain-node" onclick="filterTools('bioinformatics')">
+        <div class="dn-icon"><i class="ti ti-code" aria-hidden="true"></i></div>
+        <div class="dn-label">Bioinformatics infra</div>
+        <div class="dn-count">GenBank · BLAST · ELM</div>
+      </div>
+      <div class="domain-node" onclick="filterTools('ecology')">
+        <div class="dn-icon"><i class="ti ti-trees" aria-hidden="true"></i></div>
+        <div class="dn-label">Ecology &amp; GIS</div>
+        <div class="dn-count">GBIF · Sentinel-2 · NEXUS</div>
+      </div>
+      <div class="domain-node" onclick="filterTools('digital')">
+        <div class="dn-icon"><i class="ti ti-heart-rate-monitor" aria-hidden="true"></i></div>
+        <div class="dn-label">Digital health</div>
+        <div class="dn-count">Postdoc survey · career</div>
+      </div>
+    </div>
+
+    <div class="section-label">Key metrics</div>
+    <div class="stat-grid">
+      <div class="stat"><div class="stat-val">~200</div><div class="stat-lbl">Potyvirus isolates</div></div>
+      <div class="stat"><div class="stat-val">11</div><div class="stat-lbl">Codon usage metrics</div></div>
+      <div class="stat"><div class="stat-val">4</div><div class="stat-lbl">Major manuscripts</div></div>
+      <div class="stat"><div class="stat-val">3</div><div class="stat-lbl">Shiny / React apps</div></div>
+      <div class="stat"><div class="stat-val">5</div><div class="stat-lbl">Repos (multi-arch)</div></div>
+      <div class="stat"><div class="stat-val">9</div><div class="stat-lbl">Active R tool modules</div></div>
+    </div>
+
+    <div class="section-label">Recent activity timeline</div>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot active"></div>
+        <div class="tl-head">Quarto + pixi + renv reproducible manuscript environment</div>
+        <div class="tl-body">Multi-repo GitHub Actions rendering pipeline; deployed to GitHub Pages from WSL2 / RStudio Server. Integrates <em>Agrobacterium</em>-DNAzyme, AP-4, and HGT-bias hypotheses.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot active"></div>
+        <div class="tl-head">Potyvirus bioinformatics toolkit (modular R)</div>
+        <div class="tl-body">RCBS, SCUO, MCB, ENC, GC3, CAI sliding windows; HMMscan domain extraction; ELM motif conservation with junction-artefact flagging; Louvain codon co-occurrence networks.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot active"></div>
+        <div class="tl-head">NEXUS Shiny app v3 — ecological network explorer</div>
+        <div class="tl-body">GBIF + GloNAF query engine; species interaction graph; WSL2 spatial R library dependencies resolved.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-head">Sentinel-2 NDVI multi-tile pipeline (Python · Planetary Computer)</div>
+        <div class="tl-body">Monthly cloud-masked composites; multi-tile AOI stitching; urban tree resilience context.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-head">Fungal colony suppression simulation (React / canvas)</div>
+        <div class="tl-body">Diffusible + VOC antifungal agent model; autoinhibition; circular boundary enforcement; biological realism controls.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-head">Potyvirus CI protein coordinate recovery</div>
+        <div class="tl-body">Strand-aware re-alignment with fallback logic in Biostrings; dependency-free base-R GenBank parser.</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-head">Career &amp; postdoc network work</div>
+        <div class="tl-body">Bayesian career decision framework; Siemens Chief Scientist cover letter; postdoc trajectory survey design for German network.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOOLS PAGE -->
+  <div class="page" id="page-tools">
+    <div class="search-bar">
+      <input type="text" id="tool-search" placeholder="Search tools..." oninput="filterToolCards()">
+    </div>
+    <div class="filter-pills" id="filter-pills">
+      <span class="fpill on" data-f="all" onclick="setFilter('all',this)">All</span>
+      <span class="fpill" data-f="R" onclick="setFilter('R',this)">R</span>
+      <span class="fpill" data-f="Python" onclick="setFilter('Python',this)">Python</span>
+      <span class="fpill" data-f="Shiny" onclick="setFilter('Shiny',this)">Shiny</span>
+      <span class="fpill" data-f="React" onclick="setFilter('React',this)">React</span>
+      <span class="fpill" data-f="Quarto" onclick="setFilter('Quarto',this)">Quarto</span>
+      <span class="fpill" data-f="CLI" onclick="setFilter('CLI',this)">CLI / bash</span>
+    </div>
+    <div id="tool-cards-grid" class="grid2"></div>
+  </div>
+
+  <!-- PROJECTS PAGE -->
+  <div class="page" id="page-projects">
+    <div class="section-label">Flagship projects</div>
+    <div class="grid2">
+      <div class="card">
+        <div class="card-head"><i class="ti ti-dna card-icon" aria-hidden="true"></i><span class="card-title">Potyvirus bioinformatics suite</span></div>
+        <div class="card-desc">Comprehensive modular R toolkit covering 11 codon usage bias metrics, genome-wide sliding window analyses, HMMscan domain extraction, ELM motif conservation, and Louvain community detection on ~200 isolates.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">R</span><span class="tag tag-purple">Bioinformatics</span><span class="tag tag-amber">RCBS · SCUO · CAI</span>
+        </div>
+        <button class="link-btn" onclick="sendPrompt('Summarise the potyvirus codon usage toolkit we built together')"><i class="ti ti-arrow-right" aria-hidden="true"></i> Ask Claude to summarise</button>
+      </div>
+      <div class="card">
+        <div class="card-head"><i class="ti ti-book card-icon" aria-hidden="true"></i><span class="card-title">Quarto manuscript + CI pipeline</span></div>
+        <div class="card-desc">Reproducible multi-language environment (Quarto + pixi + renv) for a multi-repo manuscript integrating Agrobacterium-DNAzyme delivery, AP-4 complex biology, and biased HGT frequency analysis. GitHub Actions → Pages.</div>
+        <div class="card-tags">
+          <span class="tag tag-blue">Quarto</span><span class="tag tag-teal">renv</span><span class="tag tag-gray">pixi</span><span class="tag tag-purple">GitHub Actions</span>
+        </div>
+        <button class="link-btn" onclick="sendPrompt('What is the current state of the Quarto manuscript pipeline architecture?')"><i class="ti ti-arrow-right" aria-hidden="true"></i> Ask Claude about status</button>
+      </div>
+      <div class="card">
+        <div class="card-head"><i class="ti ti-trees card-icon" aria-hidden="true"></i><span class="card-title">NEXUS Shiny app v3</span></div>
+        <div class="card-desc">Network EXplorer for Uncharted Species — queries GBIF and GloNAF to render ecological interaction graphs. WSL2 spatial R library dependencies resolved.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">R · Shiny</span><span class="tag tag-amber">GBIF</span><span class="tag tag-blue">GloNAF</span>
+        </div>
+        <button class="link-btn" onclick="sendPrompt('Walk me through the NEXUS Shiny app architecture')"><i class="ti ti-arrow-right" aria-hidden="true"></i> Explain NEXUS</button>
+      </div>
+      <div class="card">
+        <div class="card-head"><i class="ti ti-satellite card-icon" aria-hidden="true"></i><span class="card-title">Sentinel-2 NDVI pipeline</span></div>
+        <div class="card-desc">Python pipeline querying Microsoft Planetary Computer for multi-tile AOIs, monthly cloud-masked compositing, and NDVI extraction for urban tree resilience assessment.</div>
+        <div class="card-tags">
+          <span class="tag tag-blue">Python</span><span class="tag tag-teal">Planetary Computer</span><span class="tag tag-amber">GIS · NDVI</span>
+        </div>
+        <button class="link-btn" onclick="sendPrompt('Remind me how the Sentinel-2 NDVI multi-tile pipeline was structured')"><i class="ti ti-arrow-right" aria-hidden="true"></i> Recap pipeline</button>
+      </div>
+      <div class="card">
+        <div class="card-head"><i class="ti ti-microscope card-icon" aria-hidden="true"></i><span class="card-title">Fungal colony simulation</span></div>
+        <div class="card-desc">React/canvas simulation of diffusible and VOC antifungal agents with biological realism: autoinhibition, circular boundary enforcement, adjustable agent parameters.</div>
+        <div class="card-tags">
+          <span class="tag tag-coral">React</span><span class="tag tag-gray">Canvas</span><span class="tag tag-teal">Antifungal modelling</span>
+        </div>
+        <button class="link-btn" onclick="sendPrompt('Reconstruct the fungal colony growth suppression simulation')"><i class="ti ti-arrow-right" aria-hidden="true"></i> Rebuild simulation</button>
+      </div>
+      <div class="card">
+        <div class="card-head"><i class="ti ti-chart-network card-icon" aria-hidden="true"></i><span class="card-title">Urban tree resilience proposal</span></div>
+        <div class="card-desc">Project integrating biodiversity assessment, citizen science contributions, and real-time sensor monitoring for urban tree resilience in a German municipal context.</div>
+        <div class="card-tags">
+          <span class="tag tag-teal">Ecology</span><span class="tag tag-blue">IoT sensors</span><span class="tag tag-amber">Citizen science</span>
+        </div>
+        <button class="link-btn" onclick="sendPrompt('Expand on the urban tree resilience citizen science project proposal')"><i class="ti ti-arrow-right" aria-hidden="true"></i> Expand proposal</button>
+      </div>
+    </div>
+
+    <hr class="divider">
+    <div class="section-label">Supporting &amp; longer-running work</div>
+    <div class="grid3">
+      <div class="card">
+        <div class="card-head"><i class="ti ti-leaf card-icon" aria-hidden="true"></i><span class="card-title">Vitis vinifera lab</span></div>
+        <div class="card-desc">Ongoing lab experiments on grapevine physiology and molecular biology.</div>
+        <div class="card-tags"><span class="tag tag-teal">Plant biology</span></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><i class="ti ti-math-function card-icon" aria-hidden="true"></i><span class="card-title">Sucrose transport model</span></div>
+        <div class="card-desc">Source-to-sink model with phloem and vacuolar components.</div>
+        <div class="card-tags"><span class="tag tag-purple">Modelling · R</span></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><i class="ti ti-photo card-icon" aria-hidden="true"></i><span class="card-title">Flower photo classifier</span></div>
+        <div class="card-desc">TensorFlow-based image classifier for flower species.</div>
+        <div class="card-tags"><span class="tag tag-blue">Python · TF</span></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><i class="ti ti-robot card-icon" aria-hidden="true"></i><span class="card-title">Metatranscriptomics</span></div>
+        <div class="card-desc">Kraken2 multi-omics analysis pipeline (early stage).</div>
+        <div class="card-tags"><span class="tag tag-coral">Bioinformatics</span></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><i class="ti ti-brand-github card-icon" aria-hidden="true"></i><span class="card-title">Hugo academic site</span></div>
+        <div class="card-desc">Personal academic website with vine-themed laser-engraved branding assets.</div>
+        <div class="card-tags"><span class="tag tag-gray">Hugo · design</span></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><i class="ti ti-planet card-icon" aria-hidden="true"></i><span class="card-title">Space evolution sim</span></div>
+        <div class="card-desc">Accelerated evolution simulation driven by space environmental parameters.</div>
+        <div class="card-tags"><span class="tag tag-purple">Space bio</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENVIRONMENTS PAGE -->
+  <div class="page" id="page-env">
+    <div class="section-label">Computational environments</div>
+
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-head"><i class="ti ti-brand-docker card-icon" aria-hidden="true"></i><span class="card-title">Quarto + pixi + renv — reproducible manuscript stack</span></div>
+      <div class="card-desc" style="margin-bottom:.75rem">Multi-language environment for manuscript rendering. Python managed by pixi (conda-lock based), R packages by renv, documents compiled by Quarto. Deployed via GitHub Actions.</div>
+      <div class="env-block">
+        <strong>Stack:</strong> <code>Quarto 1.x</code> · <code>pixi</code> (Python env mgr) · <code>renv</code> (R lockfile) · <code>GitHub Actions</code> · <code>GitHub Pages</code><br>
+        <strong>WSL2 host:</strong> RStudio Server on Ubuntu · <code>WSL2</code><br>
+        <strong>Render trigger:</strong> push to main → GHA workflow → quarto render → pages deploy
+      </div>
+      <button class="link-btn" onclick="sendPrompt('Show me the GitHub Actions workflow YAML for the Quarto + pixi + renv manuscript pipeline')"><i class="ti ti-file-code" aria-hidden="true"></i> Rebuild workflow YAML</button>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-head"><i class="ti ti-terminal card-icon" aria-hidden="true"></i><span class="card-title">WSL2 / RStudio Server — R spatial stack</span></div>
+      <div class="card-desc" style="margin-bottom:.75rem">Ubuntu on WSL2 running RStudio Server. Spatial R packages (sf, terra, etc.) required system library resolution for GDAL/PROJ/GEOS dependencies.</div>
+      <div class="env-block">
+        <strong>System libs resolved:</strong> <code>libgdal-dev</code> · <code>libproj-dev</code> · <code>libgeos-dev</code><br>
+        <strong>Key R packages:</strong> <code>sf</code> · <code>terra</code> · <code>raster</code> · <code>Biostrings</code> · <code>seqinr</code>
+      </div>
+      <button class="link-btn" onclick="sendPrompt('What were the WSL2 system library dependency issues we resolved for spatial R packages?')"><i class="ti ti-arrow-right" aria-hidden="true"></i> Recall fix details</button>
+    </div>
+
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-head"><i class="ti ti-server card-icon" aria-hidden="true"></i><span class="card-title">Python — Microsoft Planetary Computer / STAC</span></div>
+      <div class="card-desc" style="margin-bottom:.75rem">Python environment for geospatial remote sensing. Queries Planetary Computer STAC API for Sentinel-2 scenes with cloud masking and multi-tile mosaicking.</div>
+      <div class="env-block">
+        <strong>Key packages:</strong> <code>pystac-client</code> · <code>planetary-computer</code> · <code>rioxarray</code> · <code>geopandas</code> · <code>stackstac</code>
+      </div>
+      <button class="link-btn" onclick="sendPrompt('Regenerate the Sentinel-2 NDVI Python script using Planetary Computer')"><i class="ti ti-code" aria-hidden="true"></i> Regenerate script</button>
+    </div>
+
+    <div class="card">
+      <div class="card-head"><i class="ti ti-brand-react card-icon" aria-hidden="true"></i><span class="card-title">React / HTML artifact environment</span></div>
+      <div class="card-desc" style="margin-bottom:.75rem">Interactive simulation artifacts built in claude.ai as React or HTML/canvas widgets — no build step required, deployed inline in conversation.</div>
+      <div class="env-block">
+        <strong>Artefacts built:</strong> fungal colony simulation, NEXUS network explorer UI, career decision frameworks, codon usage visualisers
+      </div>
+      <button class="link-btn" onclick="sendPrompt('Rebuild the fungal colony suppression React simulation')"><i class="ti ti-arrow-right" aria-hidden="true"></i> Rebuild simulation</button>
+    </div>
+  </div>
+
+  <!-- CAREER PAGE -->
+  <div class="page" id="page-career">
+    <div class="section-label">Current career context</div>
+    <div class="grid2" style="margin-bottom:1rem">
+      <div class="card">
+        <div class="card-head"><i class="ti ti-building card-icon" aria-hidden="true"></i><span class="card-title">Role &amp; affiliation</span></div>
+        <div class="card-desc">Postdoctoral researcher in Germany. First Chair and Deputy Spokesperson of academic staff. Active in the German postdoc network, co-designing a career aspirations &amp; trajectories survey for long-term monitoring.</div>
+        <div class="card-tags"><span class="tag tag-teal">Postdoc</span><span class="tag tag-purple">Leadership</span><span class="tag tag-amber">Network</span></div>
+      </div>
+      <div class="card">
+        <div class="card-head"><i class="ti ti-circuit-diode card-icon" aria-hidden="true"></i><span class="card-title">Interdisciplinary profile</span></div>
+        <div class="card-desc">PhD 2017: gravitational biology · cell &amp; molecular biology · applied plant breeding · space technology · public health digitalization. MSc Molecular Science. Cross-domain as a strategic asset, not a liability.</div>
+        <div class="card-tags"><span class="tag tag-blue">Cross-domain</span><span class="tag tag-coral">MINT</span></div>
+      </div>
+    </div>
+
+    <div class="section-label">Decision framework — Bayesian career analysis</div>
+    <div class="card" style="margin-bottom:1rem">
+      <div class="card-desc">Applied a Bayesian decision framework to model the "eternal postdoc" trajectory vs industry transitions. Priors informed by personal utility weights across research impact, mentoring, autonomy, and stability. Siemens Chief Scientist / Fellow cover letter drafted with bold cross-disciplinary framing.</div>
+      <div class="card-tags" style="margin-top:.75rem">
+        <span class="tag tag-purple">Bayesian decision theory</span>
+        <span class="tag tag-teal">Career utility modelling</span>
+        <span class="tag tag-amber">Industry transition</span>
+      </div>
+      <button class="link-btn" onclick="sendPrompt('Rebuild the Bayesian career decision framework we discussed for the postdoc transition')"><i class="ti ti-arrow-right" aria-hidden="true"></i> Rebuild framework</button>
+    </div>
+
+    <div class="section-label">Postdoc network survey — design status</div>
+    <div class="card">
+      <div class="card-desc">Designing a career aspirations &amp; trajectories survey for German postdoc network, structured for longitudinal monitoring. Covers aspiration alignment, structural barriers, mobility, and wellbeing.</div>
+      <div class="card-tags" style="margin-top:.75rem">
+        <span class="tag tag-blue">Survey design</span>
+        <span class="tag tag-teal">Longitudinal monitoring</span>
+        <span class="tag tag-gray">German academic system</span>
+      </div>
+      <button class="link-btn" onclick="sendPrompt('Help me refine the postdoc career trajectories survey instrument')"><i class="ti ti-arrow-right" aria-hidden="true"></i> Continue survey work</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const TOOLS = [
+  { name:'Codon usage bias toolkit', domain:'Potyvirus / Virology', icon:'ti-dna', lang:['R'], desc:'RCBS, SCUO, MCB, ENC, GC3, CAI + 5 more metrics with sliding window genome-wide analysis for ~200 isolates.', prompt:'Regenerate the codon usage bias R toolkit module with all 11 metrics' },
+  { name:'HMMscan domain extractor', domain:'Potyvirus / Virology', icon:'ti-puzzle', lang:['R'], desc:'Extracts protein domains from HMMscan output; coordinate recovery with strand-aware fallback logic in Biostrings.', prompt:'Rebuild the HMMscan domain extraction R module' },
+  { name:'ELM motif conservation pipeline', domain:'Potyvirus / Virology', icon:'ti-code', lang:['R'], desc:'ELM motif conservation across isolates with junction-artefact flagging to avoid false positives at alignment joins.', prompt:'Rebuild the ELM motif conservation pipeline with junction-artefact flagging' },
+  { name:'Louvain codon co-occurrence network', domain:'Potyvirus / Virology', icon:'ti-chart-network', lang:['R'], desc:'Visualises codon co-occurrence networks with Louvain community detection and metadata-driven grouping.', prompt:'Rebuild the Louvain codon co-occurrence network visualisation in R' },
+  { name:'Base-R GenBank parser', domain:'Bioinformatics', icon:'ti-file-text', lang:['R'], desc:'Dependency-free base-R implementation for parsing GenBank flat files — no Bioconductor required.', prompt:'Show me the dependency-free base R GenBank parser we wrote' },
+  { name:'Potyvirus CI protein extractor', domain:'Potyvirus / Virology', icon:'ti-arrow-merge', lang:['R'], desc:'Recovers nucleotide coordinates for CI protein via re-alignment with strand-aware fallback in Biostrings.', prompt:'Rebuild the CI protein coordinate recovery script' },
+  { name:'NEXUS Shiny app v3', domain:'Ecology', icon:'ti-trees', lang:['R','Shiny'], desc:'GBIF + GloNAF ecological interaction network explorer — query species, visualise interaction graphs, filter by trait.', prompt:'Reconstruct the NEXUS Shiny app v3 architecture' },
+  { name:'Sentinel-2 NDVI pipeline', domain:'Ecology', icon:'ti-satellite', lang:['Python'], desc:'Monthly cloud-masked NDVI composites from Planetary Computer STAC API across multi-tile AOIs.', prompt:'Regenerate the Sentinel-2 NDVI Python pipeline for Planetary Computer' },
+  { name:'Fungal colony simulation', domain:'Plant biology', icon:'ti-microscope', lang:['React'], desc:'React/canvas model of diffusible + VOC antifungal agents with autoinhibition and circular boundary enforcement.', prompt:'Rebuild the fungal colony suppression React/canvas simulation' },
+  { name:'Quarto manuscript pipeline', domain:'Space / Gravitational', icon:'ti-book', lang:['Quarto','CLI'], desc:'Quarto + pixi + renv multi-repo environment with GitHub Actions rendering; deployed to GitHub Pages.', prompt:'Show me the full GitHub Actions YAML for the Quarto manuscript pipeline' },
+  { name:'Sucrose transport model', domain:'Plant biology', icon:'ti-math-function', lang:['R'], desc:'Source-to-sink sucrose transport with phloem and vacuolar compartments.', prompt:'Continue building the sucrose transport model in R' },
+  { name:'Flower photo classifier', domain:'Plant biology', icon:'ti-photo', lang:['Python'], desc:'TensorFlow-based CNN for flower species classification.', prompt:'Rebuild the flower photo classifier with TensorFlow' },
+  { name:'Bayesian career framework', domain:'Career / Digital health', icon:'ti-chart-bar', lang:['R'], desc:'Bayesian decision model weighing postdoc vs industry utility across research impact, mentoring, autonomy, and stability.', prompt:'Rebuild the Bayesian career decision framework dashboard' },
+  { name:'Postdoc survey instrument', domain:'Career / Digital health', icon:'ti-clipboard-list', lang:['Quarto'], desc:'Longitudinal survey for German postdoc network covering aspirations, barriers, mobility, and wellbeing.', prompt:'Help me continue designing the postdoc career trajectories survey' },
+  { name:'WSL2 spatial R env setup', domain:'Bioinformatics', icon:'ti-terminal', lang:['CLI'], desc:'Shell commands to resolve GDAL/PROJ/GEOS system library dependencies for sf, terra, raster on Ubuntu/WSL2.', prompt:'Give me the WSL2 system library setup commands for spatial R packages' },
+  { name:'Metatranscriptomics pipeline', domain:'Bioinformatics', icon:'ti-robot', lang:['Python','CLI'], desc:'Early-stage Kraken2 + multi-omics analysis framework for metatranscriptomic datasets.', prompt:'Help me continue the Kraken2 metatranscriptomics pipeline design' },
+];
+
+let activeFilter = 'all';
+
+function renderToolCards(filterLang, searchTerm) {
+  const grid = document.getElementById('tool-cards-grid');
+  grid.innerHTML = '';
+  TOOLS.filter(t => {
+    const langOk = filterLang === 'all' || t.lang.includes(filterLang);
+    const srchOk = !searchTerm || t.name.toLowerCase().includes(searchTerm.toLowerCase()) || t.desc.toLowerCase().includes(searchTerm.toLowerCase()) || t.domain.toLowerCase().includes(searchTerm.toLowerCase());
+    return langOk && srchOk;
+  }).forEach(t => {
+    const el = document.createElement('div');
+    el.className = 'tool-card';
+    el.innerHTML = `
+      <div class="tool-card-head">
+        <i class="ti ${t.icon} tool-card-icon" aria-hidden="true"></i>
+        <div>
+          <div class="tool-card-name">${t.name}</div>
+          <div class="tool-card-domain">${t.domain}</div>
+        </div>
+      </div>
+      <div class="tool-card-desc">${t.desc}</div>
+      <div class="tool-card-row">
+        <div style="display:flex;gap:4px;flex-wrap:wrap">${t.lang.map(l=>`<span class="tag tag-gray">${l}</span>`).join('')}</div>
+        <button class="link-btn" style="margin-top:0" onclick="sendPrompt('${t.prompt}')"><i class="ti ti-arrow-right" aria-hidden="true"></i> Open</button>
+      </div>`;
+    grid.appendChild(el);
+  });
+  if (!grid.children.length) grid.innerHTML = '<div style="color:var(--color-text-tertiary);font-size:13px;padding:.5rem 0">No matching tools.</div>';
+}
+
+function setFilter(f, el) {
+  activeFilter = f;
+  document.querySelectorAll('.fpill').forEach(p => p.classList.remove('on'));
+  el.classList.add('on');
+  filterToolCards();
+}
+
+function filterToolCards() {
+  const s = document.getElementById('tool-search')?.value || '';
+  renderToolCards(activeFilter, s);
+}
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('page-'+id).classList.add('active');
+  const idx = ['overview','tools','projects','env','career'].indexOf(id);
+  document.querySelectorAll('.tab')[idx].classList.add('active');
+  if (id === 'tools') renderToolCards(activeFilter, '');
+}
+
+function filterTools(domain) {
+  showPage('tools');
+  activeFilter = 'all';
+  document.querySelectorAll('.fpill').forEach(p => { p.classList.remove('on'); if(p.dataset.f==='all') p.classList.add('on'); });
+  const s = document.getElementById('tool-search');
+  if(s) s.value = domain;
+  filterToolCards();
+}
+
+renderToolCards('all','');
+</script>
