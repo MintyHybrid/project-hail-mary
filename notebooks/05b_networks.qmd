@@ -1,0 +1,207 @@
+---
+title: "Host-Virus Interaction Networks"
+subtitle: "Species interaction networks from GBIF and GLOBI; potyvirus host range in ecological context"
+author: "chrissi m."
+date: last-modified
+format:
+  html:
+    toc: true
+    code-fold: true
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+<!-- SOURCE: 2025_toys/copilot_networks1.Rmd + ecoDBs.Rmd; BioNexus app v3.0    -->
+<!-- Interactive companion app: shiny/bionexus/app.R (run with shiny::runApp())   -->
+
+```{r setup}
+#| include: false
+library(igraph)
+library(ggraph)
+library(tidyverse)
+library(visNetwork)
+library(rotl)
+```
+
+## Introduction
+
+To check whether interactions between species harbouring viral flanking sequences
+could explain the distribution of homologous loci, I built multilayer networks
+connecting:
+
+1. **Species–host plant** ecological interactions (from EPPO / GLOBI)
+2. **Shared-host** projections (species sharing a common host)
+3. **Phylogenetic** relationships (Open Tree of Life)
+
+See also the interactive [BioNexus Shiny app](../shiny/bionexus/) which queries
+GBIF and GLOBI in real time.
+
+## Part 1: Bipartite species–host network
+
+```{r species-hosts}
+species_hosts <- list(
+  "Fallopia convolvulus" = character(0),
+  "Luperina nickerlii"   = c("Elytrigia juncea", "Poaceae grasses"),
+  "Luperina testacea"    = c("Poaceae grasses", "Dactylis glomerata"),
+  "Trichiura crataegi"   = c("Prunus spinosa", "Crataegus", "Salix", "Carpinus"),
+  "Sphenella marginata"  = c("Senecio/Jacobaea ragworts")
+)
+
+edges <- enframe(species_hosts, name = "species", value = "hosts") %>%
+  unnest(hosts, keep_empty = TRUE)
+
+host_nodes <- edges$hosts[!is.na(edges$hosts)]
+
+bip_graph <- graph_from_data_frame(
+  d = edges %>% filter(!is.na(hosts)),
+  vertices = tibble(
+    name = c(names(species_hosts), unique(host_nodes)),
+    type = c(
+      rep(FALSE, length(species_hosts)),
+      rep(TRUE, length(unique(host_nodes)))
+    )
+  ),
+  directed = FALSE
+)
+
+stopifnot(!any(is.na(V(bip_graph)$type)))
+```
+
+```{r plot-bipartite}
+ggraph(bip_graph, layout = "bipartite") +
+  geom_edge_link() +
+  geom_node_point(aes(color = type), size = 6) +
+  geom_node_text(aes(label = name), repel = TRUE, size = 4) +
+  scale_color_manual(values = c("FALSE" = "steelblue", "TRUE" = "darkorange"),
+                     labels = c("species", "host plant")) +
+  theme_void() +
+  ggtitle("Species–Host Bipartite Network")
+```
+
+```{r species-projection}
+proj          <- bipartite_projection(bip_graph)
+species_graph <- proj$proj1
+
+ggraph(species_graph, layout = "fr") +
+  geom_edge_link() +
+  geom_node_point(color = "steelblue", size = 8) +
+  geom_node_text(aes(label = name), repel = TRUE, size = 4) +
+  theme_void() +
+  ggtitle("Species-only Projected Network")
+```
+
+# Part 2: Multilayer network with phylogenetic and ecological edges
+
+```{r multilayer-setup}
+species <- names(species_hosts)
+
+eco_edges <- enframe(species_hosts, name = "species", value = "hosts") %>%
+  unnest(hosts, keep_empty = TRUE)
+hosts <- unique(eco_edges$hosts[!is.na(eco_edges$hosts)])
+```
+
+```{r open-tree}
+# Match species names to OTT IDs via OpenTree taxonomy
+taxa    <- tnrs_match_names(species)
+ott_ids <- taxa$ott_id
+tree    <- tol_induced_subtree(ott_ids = ott_ids)
+
+phylo_edges <- tibble(
+  from = tree$tip.label[tree$edge[, 1]],
+  to   = tree$tip.label[tree$edge[, 2]]
+) %>%
+  filter(!is.na(from), !is.na(to)) %>%
+  mutate(type = "phylogenetic", weight = 1)
+```
+
+```{r shared-host-edges}
+pair_grid <- expand.grid(sp1 = species, sp2 = species, stringsAsFactors = FALSE)
+
+shared_host_edges <- pair_grid %>%
+  filter(sp1 < sp2) %>%
+  mutate(
+    shared = map2_int(sp1, sp2, ~ length(intersect(
+      species_hosts[[.x]], species_hosts[[.y]])))
+  ) %>%
+  filter(shared > 0) %>%
+  transmute(from = sp1, to = sp2, type = "shared_host", weight = shared)
+```
+
+```{r combine-edges}
+eco_edges2 <- eco_edges %>%
+  filter(!is.na(hosts)) %>%
+  transmute(from = species, to = hosts, type = "ecological", weight = 1)
+
+all_edges <- bind_rows(eco_edges2, phylo_edges, shared_host_edges)
+```
+
+```{r node-traits}
+traits <- tibble(
+  name = c(species, hosts),
+  trophic = case_when(
+    name %in% species ~ "herbivore",
+    name %in% hosts   ~ "plant",
+    TRUE              ~ "unknown"),
+  mobility = case_when(
+    name %in% species ~ "flying",
+    name %in% hosts   ~ "sessile",
+    TRUE              ~ "unknown"),
+  taxon = case_when(
+    name %in% species ~ "Insecta",
+    name %in% hosts   ~ "Plantae",
+    TRUE              ~ "internal")
+)
+```
+
+```{r visnetwork}
+nodes <- traits %>%
+  transmute(id = name, label = name, group = trophic,
+            mobility = mobility, taxon = taxon)
+
+edges_vis <- all_edges %>%
+  transmute(
+    from, to,
+    value = weight,
+    title = paste(type, "weight =", weight),
+    color = case_when(
+      type == "ecological"   ~ "darkorange",
+      type == "phylogenetic" ~ "forestgreen",
+      type == "shared_host"  ~ "steelblue"))
+
+visNetwork(nodes, edges_vis, height = "900px", width = "100%") %>%
+  visEdges(smooth = FALSE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visLegend() %>%
+  visPhysics(stabilization = TRUE) %>%
+  visLayout(randomSeed = 123)
+```
+
+## BioNexus Shiny App
+
+The BioNexus v3.0 Shiny application provides an interactive interface for
+querying GBIF and GLOBI interaction data for arbitrary species lists and
+constructing multilayer networks with multiplex participation coefficients.
+
+The app lives at [`shiny/bionexus/app.R`](../shiny/bionexus/app.R). To launch:
+
+```r
+shiny::runApp(here::here("shiny", "bionexus"))
+```
+
+Key features:
+
+- GBIF occurrence mapping for user-supplied species
+- GLOBI biotic interaction retrieval
+- Multilayer network construction (ecological + phylogenetic + shared-host layers)
+- Multiplex participation coefficient for identifying bridge species
+- Interactive visualisation via `visNetwork`
+
+## Summary
+
+The network analysis places the species harbouring viral-homologous loci within
+a connected ecological network. Pollinators and their host plants — including
+known potyvirus hosts — cluster together, consistent with the hypothesis that
+viral flanking sequences were transferred horizontally via a shared biological
+vector during co-infection events.

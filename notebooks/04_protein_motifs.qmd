@@ -1,0 +1,204 @@
+---
+title: "Protein Motif Analysis"
+subtitle: "Eukaryotic Linear Motifs in Potyviridae CI helicase — ELM database search and annotation"
+author: "chrissi m."
+date: last-modified
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    code-fold: true
+    code-tools: true
+    page-layout: full
+execute:
+  echo: true
+  warning: false
+  message: false
+  error: true
+---
+
+
+## Protein Motif Analysis using ELM 
+
+```{r setup}
+#| include: false
+
+# Load required libraries
+library(Biostrings)
+library(tidyverse)
+library(DECIPHER) # used mainly for removing gaps here. which is way below the package capabilities...
+
+source(here::here("R", "elm_motif_search.R"))
+source(here::here("R", "elm_motif_search_API.R"))
+```
+
+```{r}
+protaln <- Biostrings::readAAStringSet("https://ictv.global/sites/default/files/report_files/OPSR.Poty.Fig3.v16_align.txt", format = "fasta")
+```
+
+```{r}
+
+cons <- consensusString(protaln, ambiguityMap = "X")
+anchora <- start(matchPattern("VASYN", cons, max.mismatch = 1))[1]
+anchorb <- end(matchPattern("VASYN", cons, max.mismatch = 1))[1]
+
+aln <- as(protaln, "AAStringSet")
+aa <- DECIPHER::RemoveGaps(aln)
+aa
+region <- subseq(aln, anchora - 20, anchorb + 20)
+
+region
+```
+
+The sequence names indicate the virus names (abbreviated) and the sequence accessions. To sort properly by the different genera, I will create a table from the names and merge that with isolate metadata that is also available via ICTV.
+
+
+```{r}
+#| warning: false
+library(readxl)
+
+# read file
+ictv <- readxl::read_xlsx(
+  here::here("data", "VMR_MSL41.v1.20260320.xlsx"), sheet = 2) %>% 
+  # cleaning: keep only Family members of Potyviridae and select non empty columns only
+  dplyr::filter(Family == "Potyviridae") %>% 
+  dplyr::select(where(~ any(!is.na(.))))
+
+ictv
+```
+
+```{r}
+nms <- names(region)
+nms
+
+tb <- tibble(nms) %>% dplyr::mutate(virus_abbr = gsub("\\_.*", "", nms), accession = gsub(".*\\_", "", nms))
+tb
+```
+
+
+```{r}
+library(stringr)
+library(fuzzyjoin)
+
+
+result <- fuzzyjoin::fuzzy_left_join(
+  tb, ictv,
+  by = c("accession" = "Virus GENBANK accession"), 
+  match_fun = ~ stringr::str_detect(.y, regex(.x, ignore_case = TRUE)))
+
+result
+
+```
+
+
+```{r}
+conc <- build_concat(as.character(region))
+
+
+## workaround for upcoming mess : 
+# Biostrings::writeXStringSet(region, here::here("notebooks", "data", "ELM_query.fasta"))
+seq <- Biostrings::AAStringSet(conc$concat)
+# needed later
+jmap <- conc$map
+
+# Biostrings::writeXStringSet(seq, here::here("data", "ELM_query_cat.fasta"))
+
+# ce <- check_elm()
+# elms <- query_elm(sequence = conc$concat)
+```
+
+The thing with ELM is, I could submit each sequence via the API, but would have to limit to 1 request per minute. Makes 3 hours...Guess I will let that run in the background, as well. But I also run ELM on the narrower region around the motif: 
+
+http://elm.eu.org/start_search/
+
+```{r}
+
+```
+
+# 
+comment: need to integrate gget here. Did not work, takes too much time. Did it manually. 
+
+The sequence was queried in the eukaryotic linear motif database (http://elm.eu.org/; https://academic.oup.com/nar/article/52/D1/D442/7420098). 
+
+Screenshots of the output are provided in images/. 
+
+![Linear Motifs in concatenated polypeptide sequences of homologous CI fragments from different species of Potyviridae](../images/ELM_graphics.png)
+The results table was exported and is included in ../data/ELM_table.txt
+
+[Linear Motifs in concatenated polypeptide sequences of homologous CI fragments from different species of Potyviridae](http://elm.eu.org/data/QiKNoNehtR/QiKNoNehtR.png)
+
+
+
+
+```{r}
+# ELM_results.txt is the manually-exported table from http://elm.eu.org/
+# To automate: potytools::elm_batch_search("data/ELM_query_cat.fasta", output_dir = "data/")
+elm_path <- here::here("data", "ELM_results.txt")
+if (!file.exists(elm_path)) {
+  message("ELM_results.txt not found. Run potytools::elm_batch_search() to generate it.")
+  knitr::knit_exit()
+}
+elm <- readr::read_delim(elm_path, delim = "\t")
+colnames(elm) <- gsub(" ", "_", colnames(elm))
+colnames(elm) <- gsub("-", "_", colnames(elm))
+head(elm)
+
+elm <- fill(elm, c(Elm_Name, Elm_Description, Pattern, PHI_Blast_Instance_Mapping, Structural_Filter_Info, Probability), .by = NULL, .direction = "down") %>% dplyr::rename_with(tolower)
+
+head(elm) 
+
+elm <- elm %>% dplyr::filter(!is.na(elm_name))
+elm
+```
+From here I can re-use some code that claude generated for me earlier. Then I noticed, there's a python package to do the same. I got it to work, but to run it locally, I need their database and my notebook is running extremely low on storage. 
+
+So, I did it manually, but can go from the table above. If the claude-code would have retrieved the hits, the output of the function would have been a table with headers: Data frame with columns:
+#'   elm_identifier, elm_name, start, end, sequence_match,
+#'   probability, logic, phiblast_match (where available). 
+
+Already close to the copy-pasted stuff. Just need to split the coordinates - good idea to do that anyways: 
+
+```{r}
+
+# split Positions at "-"
+elm <- elm %>% separate(positions, into = c("start", "end"), sep = "-")
+# remove aa indicator "[A]" remaining in "end"
+elm$end <- gsub(" \\[A\\]", "", elm$end)
+# convert start and end to integer
+elm$start <- as.integer(elm$start)
+elm$end <- as.integer(elm$end)
+
+# cell compartment has a bit of an odd format. I will group all elm motifs first to then correct the formatting by pasting all unique entries. This will add an " NA" at the end of the adjusted column. This is removed afterwards.
+elm <- elm %>% group_by(elm_name) %>% 
+  # create new column (note the original has an additional "_" at the end)
+  mutate(cell_compartment = paste(unique(cell_compartment_), collapse = " "))
+# remove the introduced NA at the end
+elm$cell_compartment <- gsub(" NA$", "", elm$cell_compartment)
+# remove obsolete column
+elm <- elm %>% select(-cell_compartment_) %>% ungroup()
+elm
+```
+
+```{r}
+elm_result <- elm
+elmflag <- flag_junction_hits(elm, jmap)
+elmflag
+```
+
+While searching for a domain that I could retrieve systematically, I stumbled over one in which the motif is present. I checked where else I could find it... 
+
+https://rest.uniprot.org/uniprotkb/search?compressed=true&format=fasta&query=%28%28reviewed%3Atrue%29+AND+%28xref%3Aprosite-PS51194%29+AND+%28taxonomy_name%3A%22Viruses%22%29%29&size=500
+
+```{r}
+
+```
+
+-------------------------------------------
+##################################################
+
+```{r}
+elmapi <- elm_query_concatenated(conc)
+```
+

@@ -1,0 +1,593 @@
+---
+title: "Potyvirus Phylogenetics and CI Region Inference"
+subtitle: "MAFFT alignment, codon-aware tree inference, and convergent evolution testing"
+author: "chrissi m."
+date: last-modified
+format:
+  html:
+    toc: true
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+execute:
+  echo: true
+  warning: false
+  error: false
+---
+
+<!-- SOURCE: 2026_CopilotPoty/potyvirus_pipeline_nogenbankr_final.qmd (2026-05-02) -->
+<!-- NOTE: eval: false — requires rentrez and external files; remove once renv is synced -->
+<!-- NOTE: external tools required: mafft, iqtree2 (run via system() calls) -->
+
+# Introduction
+
+This chapter performs a comprehensive phylogenetic pipeline for potyviruses,
+without the Bioconductor `genbankr` package. It reads a MAFFT protein alignment,
+separates references and isolates, retrieves reference CDS via `rentrez`, parses
+CDS from plain GenBank flatfiles, projects to codon alignment, infers the CI
+region automatically, extracts a short motif of interest, visualises these motifs
+on the resulting tree, and tests for convergent evolution versus shared ancestry.
+
+# Setup and Helpers
+
+```{r setup}
+#| include: false
+library(Biostrings)
+library(rentrez)
+library(stringr)
+library(dplyr)
+library(tibble)
+library(ape)
+library(phytools)
+library(ggtree)
+library(ggseqlogo)
+```
+
+Helper functions below implement GenBank parsing, accession extraction, codon
+projection, safe translation etc.
+
+```{r helpers}
+has_genbank_id <- function(x) {
+  grepl("[A-Z]{1,2}_?[0-9]{5,8}", x)
+}
+
+extract_accessions <- function(x) {
+  unlist(stringr::str_extract_all(x,
+    "[A-Z]{1,2}_?[0-9]{5,8}(?:\\.[0-9]+)?"))
+}
+
+normalize_name <- function(x) {
+  tolower(gsub("[^a-z0-9]", "", x))
+}
+
+aa_similarity <- function(x, y) {
+  n <- min(nchar(x), nchar(y))
+  sum(strsplit(substr(x, 1, n), "")[[1]] == strsplit(substr(y, 1, n), "")[[1]]) / n
+}
+
+parse_cds_features <- function(gb_txt) {
+  feat_start <- grep("^FEATURES", gb_txt)
+  seq_start  <- grep("^ORIGIN", gb_txt)
+  if (length(feat_start) == 0 || length(seq_start) == 0) return(list())
+  feat_lines <- gb_txt[(feat_start + 1):(seq_start - 1)]
+  cds_idx <- grep("^ +CDS +", feat_lines)
+  if (length(cds_idx) == 0) return(list())
+  feats <- list()
+  for (i in cds_idx) {
+    lines <- feat_lines[i]
+    j <- i + 1
+    while (j <= length(feat_lines) && grepl("^ {21}", feat_lines[j])) {
+      lines <- c(lines, feat_lines[j]); j <- j + 1
+    }
+    loc <- sub("^ +CDS +", "", lines[1])
+    product <- NA; prot_id <- NA
+    for (l in lines) {
+      if (grepl("/product=", l)) {
+        m <- regmatches(l, regexec('"([^"]+)"', l))[[1]]
+        if (length(m) >= 2) product <- m[2]
+      }
+      if (grepl("/protein_id=", l)) {
+        m <- regmatches(l, regexec('"([^"]+)"', l))[[1]]
+        if (length(m) >= 2) prot_id <- m[2]
+      }
+    }
+    feats[[length(feats) + 1]] <- list(location = loc, product = product, protein_id = prot_id)
+  }
+  feats
+}
+
+extract_genbank_sequence <- function(gb_txt) {
+  origin_start <- grep("^ORIGIN", gb_txt)
+  if (length(origin_start) == 0) return(DNAString(""))
+  seq_lines <- gb_txt[(origin_start + 1):length(gb_txt)]
+  seq <- paste(gsub("[^acgtACGT]", "", seq_lines), collapse = "")
+  DNAString(seq)
+}
+
+parse_location <- function(loc) {
+  loc_clean <- gsub("complement\\(|join\\(|\\)", "", loc)
+  parts <- unlist(strsplit(loc_clean, ","))
+  coords <- lapply(parts, function(p) {
+    nums <- as.integer(unlist(strsplit(p, "\\.\\.")))
+    c(start = nums[1], end = nums[2])
+  })
+  do.call(rbind, coords)
+}
+
+extract_cds_sequence <- function(genome, cds_feat) {
+  coords <- parse_location(cds_feat$location)
+  seqs <- apply(coords, 1, function(x) subseq(genome, start = x["start"], end = x["end"]))
+  do.call(xscat, as.list(seqs))
+}
+
+codon_align_from_protein <- function(prot_aln, cds) {
+  out <- DNAStringSet()
+  for (id in intersect(names(prot_aln), names(cds))) {
+    prot   <- strsplit(as.character(prot_aln[[id]]), "")[[1]]
+    codons <- substring(as.character(cds[[id]]),
+                        seq(1, length(cds[[id]]), 3),
+                        seq(3, length(cds[[id]]), 3))
+    idx <- 1
+    seq_out <- character()
+    for (aa in prot) {
+      if (aa == "-") {
+        seq_out <- c(seq_out, "---")
+      } else {
+        if (idx > length(codons)) {
+          seq_out <- c(seq_out, "NNN")
+        } else {
+          seq_out <- c(seq_out, codons[idx]); idx <- idx + 1
+        }
+      }
+    }
+    out[[id]] <- DNAString(paste(seq_out, collapse = ""))
+  }
+  out
+}
+
+write_iqtree_codon_partitions <- function(codon_aln, file = "iqtree_codon_partitions.txt") {
+  aln_len <- width(codon_aln)[1]
+  lines <- c(
+    sprintf("DNA, codon1 = 1-%d\\3", aln_len),
+    sprintf("DNA, codon2 = 2-%d\\3", aln_len),
+    sprintf("DNA, codon3 = 3-%d\\3", aln_len)
+  )
+  writeLines(lines, file)
+}
+
+safe_translate <- function(seq) {
+  s <- gsub("-", "", as.character(seq))
+  trim_len <- nchar(s) - (nchar(s) %% 3)
+  s <- substr(s, 1, trim_len)
+  translate(DNAString(s))
+}
+```
+
+# Data Input
+
+```{r data-input}
+prot_file <- here::here("data", "OPSR.Poty.Fig3.v16_align_withblasthits_protmafftadd.txt")
+orf_file  <- here::here("data", "isolates_longest_orfs.fna")
+cache_dir <- here::here("cache", "genbank")
+
+prot_aln <- readAAStringSet(prot_file)
+stopifnot(length(unique(width(prot_aln))) == 1)
+cat("Protein alignment loaded: length =", width(prot_aln)[1], "aa\n")
+```
+
+# Reference and Isolate Separation
+
+```{r separation}
+ref_idx  <- has_genbank_id(names(prot_aln))
+prot_ref <- prot_aln[ref_idx]
+prot_orf <- prot_aln[!ref_idx]
+cat(length(prot_ref), "reference sequences and", length(prot_orf), "isolate sequences.\n")
+```
+
+# Retrieve Reference CDS
+
+This section downloads GenBank flatfiles for references and extracts the
+polyprotein CDS via our parser.
+
+```{r retrieve-cds}
+#| eval: false
+# Requires internet access + rentrez; run manually and cache results to data/
+dir.create(cache_dir, showWarnings = FALSE, recursive = TRUE)
+cds_ref  <- DNAStringSet()
+ref_diag <- tibble(name = names(prot_ref), status = NA_character_, note = NA_character_)
+
+for (i in seq_along(prot_ref)) {
+  nm <- names(prot_ref)[i]; accs <- extract_accessions(nm)
+  found <- FALSE
+  for (acc in accs) {
+    gb_file <- file.path(cache_dir, paste0(acc, ".gb"))
+    if (!file.exists(gb_file)) {
+      try({
+        gb_txt <- entrez_fetch("nuccore", acc, rettype = "gb", retmode = "text")
+        writeLines(gb_txt, gb_file)
+      }, silent = TRUE)
+    }
+    if (!file.exists(gb_file)) next
+    gb_txt <- readLines(gb_file)
+    feats  <- parse_cds_features(gb_txt)
+    if (length(feats) == 0) next
+    genome <- extract_genbank_sequence(gb_txt)
+    hit <- NULL
+    for (cf in feats) {
+      if (!is.na(cf$protein_id) && grepl(cf$protein_id, nm, fixed = TRUE)) { hit <- cf; break }
+    }
+    if (is.null(hit)) {
+      target <- normalize_name(nm)
+      for (cf in feats) {
+        prod <- normalize_name(cf$product)
+        if (!is.na(prod) && (prod == target || grepl(target, prod, fixed = TRUE))) { hit <- cf; break }
+      }
+    }
+    if (is.null(hit)) {
+      best <- -Inf; best_cf <- NULL
+      for (cf in feats) {
+        cds_seq_tmp <- extract_cds_sequence(genome, cf)
+        aa  <- safe_translate(cds_seq_tmp)
+        sim <- aa_similarity(as.character(aa), gsub("-", "", as.character(prot_ref[[nm]])))
+        if (sim > best) { best <- sim; best_cf <- cf }
+      }
+      if (!is.null(best_cf) && best >= 0.7) { hit <- best_cf }
+    }
+    if (is.null(hit)) next
+    cds_seq <- extract_cds_sequence(genome, hit)
+    if (length(cds_seq) %% 3 != 0)
+      cds_seq <- subseq(cds_seq, start = 1, end = length(cds_seq) - (length(cds_seq) %% 3))
+    if (length(cds_seq) == 0) next
+    cds_ref[[nm]] <- cds_seq
+    ref_diag$status[i] <- "ok"
+    ref_diag$note[i]   <- acc
+    found <- TRUE
+    break
+  }
+  if (!found) {
+    ref_diag$status[i] <- "failed"; ref_diag$note[i] <- "no CDS"
+  }
+}
+```
+
+# Read Isolate CDS
+
+```{r read-isolate-cds}
+#| eval: false
+cds_orf <- readDNAStringSet(orf_file)
+cds_orf <- DNAStringSet(lapply(cds_orf, function(x) {
+  len <- length(x)
+  if (len %% 3 != 0) x <- subseq(x, start = 1, end = len - (len %% 3))
+  x
+}))
+```
+
+# Merge and Project to Codon Alignment
+
+```{r codon-projection}
+#| eval: false
+cds_all  <- c(cds_ref, cds_orf)
+keep_ids <- intersect(names(prot_aln), names(cds_all))
+codon_aln <- codon_align_from_protein(prot_aln[keep_ids], cds_all)
+stopifnot(length(unique(width(codon_aln))) == 1)
+writeXStringSet(codon_aln, here::here("data", "potyvirus_codon_alignment.fna"))
+cat("Codon alignment constructed: length =", width(codon_aln)[1], "nt\n")
+```
+
+# Partition Files for IQ-TREE
+
+```{r partitions}
+#| eval: false
+write_iqtree_codon_partitions(codon_aln,
+  file = here::here("data", "iqtree_codon_partitions.txt"))
+
+potyvirus_subproteins <- tibble(
+  protein  = c("NIb", "CP"),
+  aa_start = c(4100, 5600),
+  aa_end   = c(5600, 6619)
+) %>% mutate(nt_start = (aa_start - 1) * 3 + 1, nt_end = aa_end * 3)
+
+lines_sub <- c()
+for (i in seq_len(nrow(potyvirus_subproteins))) {
+  p <- potyvirus_subproteins$protein[i]
+  s <- potyvirus_subproteins$nt_start[i]
+  e <- potyvirus_subproteins$nt_end[i]
+  lines_sub <- c(lines_sub,
+    sprintf("DNA, %s_codon1 = %d-%d\\3", p, s, e),
+    sprintf("DNA, %s_codon2 = %d-%d\\3", p, s + 1, e),
+    sprintf("DNA, %s_codon3 = %d-%d\\3", p, s + 2, e))
+}
+writeLines(lines_sub, here::here("data", "iqtree_subprotein_codon_partitions.txt"))
+```
+
+# Automatic CI Coordinates Inference
+
+We infer the CI region from GenBank annotations where available and provide a
+fallback region.
+
+```{r infer-ci}
+#| eval: false
+ci_start <- NA; ci_end <- NA
+for (nm in names(prot_ref)) {
+  accs <- extract_accessions(nm)
+  if (length(accs) == 0) next
+  gb_file <- file.path(cache_dir, paste0(accs[1], ".gb"))
+  if (!file.exists(gb_file)) next
+  gb_txt  <- readLines(gb_file)
+  feats   <- parse_cds_features(gb_txt)
+  ci_feats <- Filter(function(x) grepl("cylindrical inclusion|\\bci\\b", tolower(x$product)), feats)
+  if (length(ci_feats) > 0) {
+    coords   <- parse_location(ci_feats[[1]]$location)
+    ci_start <- min(coords[, "start"]) / 3
+    ci_end   <- max(coords[, "end"]) / 3
+    break
+  }
+}
+if (is.na(ci_start) || is.na(ci_end)) {
+  aa_len   <- width(prot_aln)[1]
+  ci_start <- floor(aa_len * 2 / 7)
+  ci_end   <- ceiling(aa_len * 3 / 7)
+}
+ci_nt_start <- (ceiling(ci_start) - 1) * 3 + 1
+ci_nt_end   <- ceiling(ci_end) * 3
+cat(sprintf("CI region: aa %d-%d; nt %d-%d\n", ci_start, ci_end, ci_nt_start, ci_nt_end))
+```
+
+# Extract CI Region
+
+```{r extract-ci}
+#| eval: false
+codon_CI <- subseq(codon_aln, start = ci_nt_start, end = ci_nt_end)
+writeXStringSet(codon_CI, here::here("data", "potyvirus_CI_codon_alignment.fna"))
+cat("CI alignment length =", width(codon_CI)[1], "nt\n")
+```
+
+# Motif Definition and Extraction
+
+Define your motif below and extract its presence/position.
+
+```{r motif-extraction}
+#| eval: false
+motif_nt <- "ATGGACTTCGACGTTGAA"   # 18-nt motif in CI region
+motif_aa <- as.character(translate(DNAString(motif_nt)))
+
+find_motif <- function(seq, motif) {
+  m <- matchPattern(motif, seq)
+  if (length(start(m)) == 0) NA else start(m)[1]
+}
+
+motif_pos_nt <- sapply(codon_CI, find_motif, motif = DNAString(motif_nt))
+motif_state  <- sapply(names(codon_CI), function(id) {
+  seq <- as.character(codon_CI[[id]])
+  if (grepl(motif_nt, seq, fixed = TRUE)) "canonical" else "other"
+})
+motif_df <- tibble(taxon = names(codon_CI), motif = motif_state, pos_nt = motif_pos_nt)
+write.csv(motif_df, here::here("data", "CI_motif_states.csv"), row.names = FALSE)
+```
+
+# Phylogeny on CI Region
+
+Infer the phylogeny using IQ-TREE, or read a precomputed tree.
+
+```{r tree-ci}
+# Run this command in a terminal to infer the CI tree:
+# iqtree2 -s potyvirus_CI_codon_alignment.fna -p iqtree_codon_partitions.txt -m MFP -B 1000 -T AUTO -pre potyvirus_CI
+# ci_tree <- read.tree(here::here("data", "potyvirus_CI.treefile"))
+```
+
+# Visualisation: Trait Mapping
+
+```{r plot-tree}
+#| fig-width: 7
+#| fig-height: 8
+treefile <- here::here("data", "potyvirus_CI.treefile")
+if (file.exists(treefile)) {
+  ci_tree <- read.tree(treefile)
+  p <- ggtree(ci_tree) %<+% motif_df +
+    geom_tippoint(aes(color = motif), size = 2) +
+    scale_color_manual(values = c(canonical = "red", other = "blue")) +
+    theme(legend.position = "right")
+  print(p)
+} else {
+  cat("Tree file not found. Run the IQ-TREE command first.")
+}
+```
+
+# Visualisation: Motif Sequence Logo
+
+```{r logo}
+#| eval: false
+#| fig-width: 8
+#| fig-height: 3
+seqs_with_motif <- lapply(names(codon_CI), function(id) {
+  pos    <- motif_pos_nt[id]
+  if (is.na(pos)) return(NULL)
+  seq_nt <- as.character(codon_CI[[id]])
+  as.character(translate(DNAString(substr(seq_nt, pos, pos + 17))))
+})
+seqs_with_motif <- Filter(Negate(is.null), seqs_with_motif)
+if (length(seqs_with_motif) > 0) {
+  ggseqlogo(unlist(seqs_with_motif), method = "prob")
+} else {
+  cat("No motifs found for logo plot.")
+}
+```
+
+# Test for Convergent Evolution
+
+```{r tests}
+if (exists("ci_tree")) {
+  trait      <- setNames(as.numeric(motif_df$motif == "canonical"), motif_df$taxon)
+  trait      <- trait[ci_tree$tip.label]
+  fit        <- fitDiscrete(ci_tree, trait, model = "ER")
+  print(fit)
+  phylo_sig  <- phylo.d(data.frame(species = names(trait), x = trait), ci_tree, permut = 100)
+  print(phylo_sig)
+} else {
+  cat("CI tree not available: run the tree inference first.")
+}
+```
+
+# Summary
+
+```{r summary}
+#| eval: false
+summary_tbl <- tibble(
+  step  = c("Protein entries", "Reference CDS recovered", "Isolate CDS", "Codon alignment length (nt)"),
+  value = c(length(prot_aln), sum(ref_diag$status == "ok"), length(cds_orf), width(codon_aln)[1])
+)
+print(summary_tbl)
+```
+
+# ICTV alignment — protein-to-codon pipeline
+
+Starting from the protein alignment of Potyviridae used to generate the tree on
+ICTV, I added the amino acid sequences corresponding to the longest ORFs of the
+initial DNAzyme blast hits (filtered to sequences >3000 amino acids, leaving 11 of
+the original 16 hits).
+
+```{r ictv-input}
+ictv_aa_aln <- Biostrings::readAAStringSet(here::here("data", "OPSR.Poty.Fig3.v16_align.txt"))
+
+aa_names <- tibble(seqname = names(ictv_aa_aln)) %>%
+  tidyr::separate(seqname, into = c("seqname", "acc1", "acc2"), sep = "_", remove = FALSE)
+
+ictv_tb <- readxl::read_xlsx(here::here("data", "VMR_MSL41.v1.20260320.xlsx"),
+                              sheet = 2, col_types = "text") %>%
+  dplyr::filter(Order == "Patatavirales") %>%
+  tidyr::separate_rows(`Virus GENBANK accession`, sep = ";\\s*") %>%
+  dplyr::mutate(genbank = stringr::str_remove(`Virus GENBANK accession`, "^.*:\\s*"))
+ictv_tb
+```
+
+## Rolling GC content along the alignment
+
+```{r rolling-gc-setup}
+aln <- as.matrix(readDNAStringSet(here::here("data", "claude_polyproteinDNA_mafft.fasta")))
+```
+
+```{r rolling-gc-functions}
+rolling_alignment_stats <- function(aln, window = 300, step = 30,
+                                    codon_aligned = TRUE, remove_gaps = FALSE) {
+  if (!is.matrix(aln))
+    stop("Alignment must be a character matrix")
+  if (codon_aligned && (window %% 3 != 0 || step %% 3 != 0))
+    stop("window and step must be multiples of 3")
+  n_sites    <- ncol(aln)
+  gc_content <- function(x) mean(x %in% c("G", "C"), na.rm = TRUE)
+  shannon_entropy <- function(x) {
+    p <- table(x[x %in% c("A","C","G","T","U")])
+    p <- p / sum(p)
+    -sum(p * log2(p))
+  }
+  cpg_oe <- function(x) {
+    x <- x[x %in% c("A","C","G","T","U")]
+    if (length(x) < 2) return(NA_real_)
+    obs <- sum(x[-length(x)] == "C" & x[-1] == "G")
+    exp <- sum(x == "C") * sum(x == "G") / length(x)
+    if (exp == 0) return(NA_real_)
+    obs / exp
+  }
+  results <- list(); win_id <- 1
+  for (start in seq(1, n_sites - window + 1, by = step)) {
+    end     <- start + window - 1
+    sub_aln <- aln[, start:end, drop = FALSE]
+    vec     <- as.vector(sub_aln)
+    if (remove_gaps) vec <- vec[vec != "-"]
+    codon_pos <- rep(1:3, length.out = window)
+    pos1 <- vec[codon_pos == 1]; pos2 <- vec[codon_pos == 2]; pos3 <- vec[codon_pos == 3]
+    results[[win_id]] <- data.frame(
+      window = win_id, start = start, end = end,
+      GC = gc_content(vec), GC3 = gc_content(pos3),
+      CpG_OE = cpg_oe(vec), entropy = shannon_entropy(vec),
+      gap_fraction = mean(vec == "-"),
+      GC_pos1 = gc_content(pos1), GC_pos2 = gc_content(pos2), GC_pos3 = gc_content(pos3))
+    win_id <- win_id + 1
+  }
+  do.call(rbind, results)
+}
+```
+
+```{r compute-rolling-gc}
+ras        <- rolling_alignment_stats(aln)
+ras_degap  <- rolling_alignment_stats(aln, remove_gaps = TRUE)
+```
+
+```{r plot-rolling-entropy}
+ras %>% ggplot2::ggplot(ggplot2::aes(x = start, y = entropy)) +
+  ggplot2::geom_line() +
+  ggplot2::theme_bw() +
+  ggplot2::labs(x = "Alignment position", y = "Shannon entropy")
+```
+
+```{r rolling-gc-per-sequence}
+rolling_alignment_stats_per_sequence <- function(aln, window = 300, step = 30,
+                                                  codon_aligned = TRUE, remove_gaps = FALSE) {
+  if (!is.matrix(aln)) stop("Alignment must be a character matrix")
+  if (codon_aligned && (window %% 3 != 0 || step %% 3 != 0))
+    stop("window and step must be multiples of 3")
+  n_sites    <- ncol(aln)
+  gc_content <- function(x) mean(x %in% c("G","C"), na.rm = TRUE)
+  shannon_entropy <- function(x) {
+    x <- x[x %in% c("A","C","G","T","U")]
+    if (!length(x)) return(NA_real_)
+    p <- table(x) / length(x)
+    -sum(p * log2(p))
+  }
+  cpg_oe <- function(x) {
+    x <- x[x %in% c("A","C","G","T","U")]
+    if (length(x) < 2) return(NA_real_)
+    obs <- sum(x[-length(x)] == "C" & x[-1] == "G")
+    exp <- sum(x == "C") * sum(x == "G") / length(x)
+    if (exp == 0) return(NA_real_)
+    obs / exp
+  }
+  results <- vector("list", nrow(aln)); names(results) <- rownames(aln)
+  for (i in seq_len(nrow(aln))) {
+    seq_i  <- aln[i, ]; win_id <- 1; seq_res <- list()
+    for (start in seq(1, n_sites - window + 1, by = step)) {
+      end        <- start + window - 1
+      window_seq <- seq_i[start:end]
+      gap_frac   <- mean(window_seq == "-")
+      if (remove_gaps) window_seq <- window_seq[window_seq != "-"]
+      codon_pos <- rep(1:3, length.out = window)
+      pos1 <- window_seq[codon_pos == 1]; pos2 <- window_seq[codon_pos == 2]
+      pos3 <- window_seq[codon_pos == 3]
+      seq_res[[win_id]] <- data.frame(
+        sequence = rownames(aln)[i], window = win_id, start = start, end = end,
+        GC = gc_content(window_seq), GC3 = gc_content(pos3),
+        CpG_OE = cpg_oe(window_seq), entropy = shannon_entropy(window_seq),
+        gap_fraction = gap_frac,
+        GC_pos1 = gc_content(pos1), GC_pos2 = gc_content(pos2), GC_pos3 = gc_content(pos3))
+      win_id <- win_id + 1
+    }
+    results[[i]] <- do.call(rbind, seq_res)
+  }
+  do.call(rbind, results)
+}
+
+ras_ps       <- rolling_alignment_stats_per_sequence(aln)
+ras_ps_degap <- rolling_alignment_stats_per_sequence(aln, remove_gaps = TRUE)
+```
+
+```{r plot-gc-per-seq}
+library(ggplot2)
+ggplot(ras_ps, aes(start, GC, colour = sequence)) +
+  geom_line(alpha = 0.2) +
+  theme_bw() +
+  labs(x = "Genome position", y = "GC content") +
+  theme(legend.position = "none")
+
+ggplot(ras_ps_degap, aes(start, GC, colour = sequence)) +
+  geom_line(alpha = 0.2) +
+  theme_bw() +
+  labs(x = "Genome position", y = "GC content (gaps removed)") +
+  theme(legend.position = "none")
+
+ggplot(ras_ps, aes(start, CpG_OE, colour = sequence)) +
+  geom_line(alpha = 0.2) +
+  geom_hline(yintercept = 1, linetype = 2) +
+  theme_bw() +
+  theme(legend.position = "none") +
+  labs(x = "Genome position", y = "CpG O/E")
+```

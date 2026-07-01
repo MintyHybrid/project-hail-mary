@@ -1,0 +1,43 @@
+---
+title: "Appendix: Data Sources and Accessions"
+date: last-modified
+format:
+  html:
+    toc: true
+execute:
+  eval: false
+---
+
+## Sequence Data
+
+| Source | Description | Access |
+|---|---|---|
+| ICTV OPSR alignment | Potyviridae CI protein alignment (v16) | `data/OPSR.Poty.Fig3.v16_align.txt` |
+| NCBI GenBank | CDS sequences retrieved via `rentrez` | `data/ci_cds_fetched.fasta` |
+| ELM database | Short linear motif definitions | API: `http://elm.eu.org/` |
+
+## External Databases
+
+| Database | Usage | API endpoint |
+|---|---|---|
+| GBIF | Taxonomic resolution, occurrence data | `api.gbif.org/v1/` |
+| GLOBI | Biotic interaction data | `api.globalbioticinteractions.org/` |
+| ELM | Protein short linear motifs | `elm.eu.org/api/` |
+| NCBI Entrez | Nucleotide/protein sequences | `eutils.ncbi.nlm.nih.gov/` |
+
+## Software Versions
+
+```{r}
+sessioninfo::session_info()
+```
+
+## Reproducibility
+
+All analyses can be re-run end-to-end with:
+
+```r
+targets::tar_make()
+```
+
+See `_targets.R` for the full dependency graph. Individual steps requiring
+external tools (`mafft`, `iqtree2`, `hmmscan`) are noted where they appear.

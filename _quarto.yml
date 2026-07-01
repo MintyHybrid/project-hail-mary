@@ -1,17 +1,53 @@
 project:
-  type: manuscript
+  type: book
+
+book:
+  title: "DNAzyme-like Motifs, Horizontal Gene Transfer, and Short Linear Motif Conservation in Potyviridae"
+  author:
+    - name: "chrissi m."
+      orcid: ""
+      email: peanutbutter.kitty.m@gmail.com
+  date: today
+  repo-url: https://github.com/
+  repo-actions: [edit, issue]
+  chapters:
+    - index.qmd
+    - part: "Part I — The Discovery"
+      chapters:
+        - notebooks/01_discovery.qmd
+        - notebooks/02_phylogenetics.qmd
+    - part: "Part II — Codon Usage & Motif Architecture"
+      chapters:
+        - notebooks/03_codon_dnazyme.qmd
+        - notebooks/04_protein_motifs.qmd
+    - part: "Part III — Evolutionary Mechanisms"
+      chapters:
+        - notebooks/05_hgt.qmd
+        - notebooks/05b_networks.qmd
+    - part: "Part IV — Host Immunity"
+      chapters:
+        - notebooks/06_immu_simmu.qmd
+    - part: "Appendix"
+      chapters:
+        - notebooks/A1_data_sources.qmd
+        - references.qmd
+
+bibliography: references.bib
 
 execute:
   freeze: auto
 
 format:
   html:
+    theme:
+      light: cosmo
+      dark: darkly
     toc: true
-    comments:
-      hypothesis: true
-  docx: default
-  jats: default
-  agu-pdf: default
-
-
-
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+    fig-cap-location: bottom
+  # pdf: enable after running `quarto install tinytex`
+  #   documentclass: book
+  #   geometry: margin=1in
+  #   fontsize: 11pt

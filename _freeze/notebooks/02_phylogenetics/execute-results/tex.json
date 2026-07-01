@@ -1,0 +1,21 @@
+{
+  "hash": "19d3439719895a5b104be0fec915a412",
+  "result": {
+    "engine": "knitr",
+    "markdown": "---\ntitle: \"Potyvirus Phylogenetics and CI Region Inference\"\nsubtitle: \"MAFFT alignment, codon-aware tree inference, and convergent evolution testing\"\nauthor: \"chrissi m.\"\ndate: last-modified\nformat:\n  html:\n    toc: true\n    toc-depth: 3\n    code-fold: true\n    code-tools: true\nexecute:\n  echo: true\n  eval: false\n  warning: false\n  error: false\n---\n\n<!-- SOURCE: 2026_CopilotPoty/potyvirus_pipeline_nogenbankr_final.qmd (2026-05-02) -->\n<!-- TODO: copy body and update data paths; external tools: mafft, iqtree2 -->\n<!-- Automation note: MAFFT and IQ-TREE calls are wrapped in _targets.R targets  -->\n<!--   `aligned_fasta` and `treefile` — run tar_make() instead of manually.     -->\n\n\n\n## Introduction\n\n## Setup and Helpers\n\n## Alignment\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# In pipeline: targets::tar_read(aligned_fasta)\n# Manually: run_mafft(\"data/ci_cds_fetched.fasta\", \"data/ci_aligned.fasta\")\n```\n:::\n\n\n## CI Region Detection\n\n## Motif Extraction and Visualization\n\n## Phylogenetic Inference\n\n\n::: {.cell}\n\n```{.r .cell-code}\n# In pipeline: targets::tar_read(treefile)\n# Manually: run_iqtree(\"data/ci_aligned.fasta\", prefix = \"data/phylo/ci_tree\")\n```\n:::\n\n\n## Convergent Evolution Test\n\n## Results\n\n## Discussion\n",
+    "supporting": [
+      "02_phylogenetics_files"
+    ],
+    "filters": [
+      "rmarkdown/pagebreak.lua"
+    ],
+    "includes": {},
+    "engineDependencies": {
+      "knitr": [
+        "{\"type\":\"list\",\"attributes\":{},\"value\":[]}"
+      ]
+    },
+    "preserve": null,
+    "postProcess": false
+  }
+}
