@@ -46,18 +46,43 @@ ictv <- readxl::read_xlsx(file.path(root, "data", "VMR_MSL41.v1.20260320.xlsx"),
   dplyr::filter(Family == "Potyviridae") %>%
   dplyr::select(where(~ any(!is.na(.))))
 
+# --- 4a. Primary match: isolate accession within the VMR accession field ----
 res <- fuzzyjoin::fuzzy_left_join(
   tb, ictv,
   by = c("accession" = "Virus GENBANK accession"),
   match_fun = ~ stringr::str_detect(.y, regex(.x, ignore_case = TRUE))
-)
+) %>%
+  # a VMR row may match >1 way; keep first genus per input name
+  dplyr::group_by(nms) %>% dplyr::slice(1) %>% dplyr::ungroup()
 
-genus_col <- if ("Genus" %in% names(res)) res$Genus else NA_character_
+genus_by_acc <- res$Genus[match(nms, res$nms)]
+
+# --- 4b. Fallback match: isolate abbreviation -> VMR abbreviation column -----
+# Many added isolates are not VMR species exemplars, so their accession is
+# absent; match their virus abbreviation instead. The VMR column can list
+# several abbreviations per row (separated by ; , or /).
+abbr_lookup <- ictv %>%
+  dplyr::select(Genus, abbr = `Virus name abbreviation(s)`) %>%
+  dplyr::filter(!is.na(abbr)) %>%
+  tidyr::separate_rows(abbr, sep = "\\s*[;,/]\\s*") %>%
+  dplyr::mutate(abbr = toupper(trimws(abbr))) %>%
+  dplyr::filter(nzchar(abbr)) %>%
+  dplyr::distinct(abbr, .keep_all = TRUE)
+
+genus_by_abbr <- abbr_lookup$Genus[match(toupper(tb$virus_abbr), abbr_lookup$abbr)]
+
+# Prefer accession match, fall back to abbreviation match
+genus_col <- dplyr::coalesce(genus_by_acc, genus_by_abbr)
+
 meta <- tibble(
   name          = nms,
   virus_abbr    = tb$virus_abbr,
   accession     = tb$accession,
   genus         = genus_col,
+  genus_source  = dplyr::case_when(
+    !is.na(genus_by_acc)  ~ "accession",
+    !is.na(genus_by_abbr) ~ "abbreviation",
+    TRUE                  ~ NA_character_),
   region_aligned = as.character(region_aln)
 ) %>% dplyr::filter(name %in% names(region_ungapped))
 
@@ -69,3 +94,9 @@ cat("Wrote", length(region_ungapped), "sequences to", file.path(out_dir, "region
 cat("Anchor VASYN at consensus", anchora, "-", anchorb,
     "; region cols", anchora - 20, "-", anchorb + 20, "\n")
 cat("Genera found:", paste(sort(unique(na.omit(meta$genus))), collapse = ", "), "\n")
+cat("Genus source:", paste(names(table(meta$genus_source, useNA = "ifany")),
+                           table(meta$genus_source, useNA = "ifany"),
+                           sep = "=", collapse = "  "), "\n")
+still_na <- meta$name[is.na(meta$genus)]
+if (length(still_na)) cat("Still unclassified (", length(still_na), "): ",
+                          paste(still_na, collapse = ", "), "\n", sep = "")
