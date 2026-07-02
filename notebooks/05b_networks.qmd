@@ -103,17 +103,26 @@ hosts <- unique(eco_edges$hosts[!is.na(eco_edges$hosts)])
 ```
 
 ```{r open-tree}
-# Match species names to OTT IDs via OpenTree taxonomy
-taxa    <- tnrs_match_names(species)
-ott_ids <- taxa$ott_id
-tree    <- tol_induced_subtree(ott_ids = ott_ids)
-
-phylo_edges <- tibble(
-  from = tree$tip.label[tree$edge[, 1]],
-  to   = tree$tip.label[tree$edge[, 2]]
-) %>%
-  filter(!is.na(from), !is.na(to)) %>%
-  mutate(type = "phylogenetic", weight = 1)
+# Match species names to OTT IDs via the Open Tree of Life API (network).
+# Wrapped so the chapter still renders offline / if the service is down —
+# phylo_edges then falls back to empty and the multilayer network simply
+# omits the phylogenetic layer.
+phylo_edges <- tryCatch({
+  taxa    <- rotl::tnrs_match_names(species)
+  ott_ids <- taxa$ott_id[!is.na(taxa$ott_id)]
+  tree    <- rotl::tol_induced_subtree(ott_ids = ott_ids)
+  tibble(
+    from = tree$tip.label[tree$edge[, 1]],
+    to   = tree$tip.label[tree$edge[, 2]]
+  ) %>%
+    filter(!is.na(from), !is.na(to)) %>%
+    mutate(type = "phylogenetic", weight = 1)
+}, error = function(e) {
+  message("Open Tree of Life query unavailable (", conditionMessage(e),
+          "); omitting the phylogenetic layer.")
+  tibble(from = character(), to = character(),
+         type = character(), weight = numeric())
+})
 ```
 
 ```{r shared-host-edges}
