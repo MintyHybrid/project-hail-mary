@@ -10,11 +10,12 @@ execute:
 
 ## Sequence Data
 
-| Source | Description | Access |
-|---|---|---|
-| ICTV OPSR alignment | Potyviridae CI protein alignment (v16) | `data/OPSR.Poty.Fig3.v16_align.txt` |
-| NCBI GenBank | CDS sequences retrieved via `rentrez` | `data/ci_cds_fetched.fasta` |
-| ELM database | Short linear motif definitions | API: `http://elm.eu.org/` |
+| Source | Description | Access | Citation |
+|---|---|---|---|
+| ICTV OPSR alignment | Potyviridae polyprotein/CI alignment (v16) | `data/OPSR.Poty.Fig3.v16_align.txt` | [@inouenagata2022] |
+| ICTV VMR (MSL41) | Virus metadata / genus assignment | `data/VMR_MSL41.v1.20260320.xlsx` | [@ictvvmr2024] |
+| NCBI GenBank | CDS sequences retrieved via `rentrez` | `data/ci_cds_fetched.fasta` | — |
+| ELM database | Short linear motif definitions | API / `gget elm`; `data/elm_gget/` | [@elm2024] |
 
 ## External Databases
 

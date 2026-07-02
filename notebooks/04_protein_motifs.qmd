@@ -25,8 +25,8 @@ The cylindrical inclusion (CI) helicase carries a short conserved region that,
 across Potyviridae, overlaps a number of **eukaryotic linear motifs (ELMs)** —
 short functional peptide motifs catalogued in the ELM database
 [@elm2024]. Here I extract the CI motif-flanking region from each isolate in the
-ICTV Potyviridae alignment, search it against ELM, and ask which motifs are
-**characteristic of particular genera**.
+ICTV Potyviridae alignment [@inouenagata2022], search it against ELM, and ask which
+motifs are **characteristic of particular genera**.
 
 The ELM search is run with the [`gget`](https://github.com/pachterlab/gget)
 Python package (`gget elm`), which reproduces the ELM webserver's two search
@@ -71,7 +71,7 @@ region
 ## Isolate metadata and genus assignment
 
 Each sequence name encodes a virus abbreviation and one or more accessions.
-Genus is assigned by joining to the ICTV VMR table — first by GENBANK
+Genus is assigned by joining to the ICTV VMR table [@ictvvmr2024] — first by GENBANK
 accession, then, for isolates that are not VMR species exemplars, by matching
 the virus abbreviation to the VMR *"Virus name abbreviation(s)"* column. This
 two-stage join (implemented in `scripts/prep_elm_regions.R`) leaves **no**
