@@ -1,0 +1,151 @@
+---
+title: "Potyvirus Protein Motifs and Interaction Networks"
+subtitle: "Functional signature motifs across the polyprotein and the curated CI/HC-Pro/VPg interactome"
+author: "chrissi m."
+date: last-modified
+format:
+  html:
+    theme: cosmo
+    toc: true
+    toc-depth: 3
+    toc-location: left
+    code-fold: true
+    code-tools: true
+    page-layout: full
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+## Overview
+
+The potyvirus genome is translated as a single polyprotein that is cleaved into
+**~11 mature proteins**, each carrying short functional signature motifs whose
+substitution changes transmissibility, silencing suppression, replication or
+movement [@revers2015]. This chapter (i) catalogues those motifs with their
+roles and primary references, (ii) locates the linear ones in the ICTV
+Potyviridae alignment [@inouenagata2022], and (iii) draws the curated
+protein–protein interaction network that centres on the cylindrical inclusion
+(CI) helicase — the protein carrying the DNAzyme-like locus studied in the
+earlier chapters.
+
+```{r setup}
+#| include: false
+library(Biostrings)
+library(tidyverse)
+library(igraph)
+library(visNetwork)
+library(potytools)
+```
+
+## Signature motif catalogue
+
+```{r motif-catalogue}
+motifs <- tibble::tribble(
+  ~protein,     ~motif,      ~pattern,       ~role,                                              ~ref,
+  "P1",         "protease",  "—",            "Serine protease; host-range adaptation",           "revers2015",
+  "HC-Pro",     "KITC",      "KITC",         "Aphid transmission (N-terminal)",                  "valli2018",
+  "HC-Pro",     "FRNK",      "FR[NR]K",      "RNA-silencing suppression; symptom severity",      "valli2018",
+  "P3N-PIPO",   "G2A6",      "GA{5,7}",      "Transcriptional slippage → PIPO; cell-to-cell movement", "chung2008",
+  "CI",         "Walker A",  "G.{4}GK[ST]",  "ATPase P-loop of the RNA helicase",                "sorel2014",
+  "CI",         "DECH box",  "DECH",         "Helicase motif II (Mg2+ coordination)",            "sorel2014",
+  "6K2",        "TM anchor", "—",            "ER membrane anchor; replication vesicles",         "revers2015",
+  "VPg",        "eIF4E-bind","—",            "Genome-linked protein; binds host eIF4E (recessive resistance)", "robaglia2006",
+  "NIa-Pro",    "catalytic", "H.{31,35}D.{60,70}GXCG", "Main protease catalytic triad",          "revers2015",
+  "NIb",        "GDD",       "GDD",          "RdRp catalytic motif (polymerase)",                "revers2015",
+  "CP",         "DAG",       "DAG",          "Aphid transmission determinant (N-terminal)",      "atreya1991"
+)
+
+knitr::kable(motifs, caption = "Potyvirus mature-protein signature motifs, roles and primary references.")
+```
+
+The motifs are backed by: HC-Pro KITC/FRNK [@valli2018]; the P3N-PIPO
+frameshift/movement locus [@chung2008]; the CI helicase Walker-A/DECH motifs and
+its interactome [@sorel2014]; VPg–eIF4E and recessive resistance
+[@robaglia2006]; the CP DAG aphid-transmission determinant [@atreya1991]; and the
+overall polyprotein organisation [@revers2015].
+
+## Locating linear motifs in the ICTV alignment
+
+```{r motif-scan}
+aln  <- readAAStringSet(here::here("data", "OPSR.Poty.Fig3.v16_align.txt"))
+cons <- as.character(consensusString(aln, ambiguityMap = "X", threshold = 0.4))
+cons_nogap <- gsub("-", "", cons)
+
+# Linear motifs searchable directly on the consensus (regex)
+scan_set <- dplyr::filter(motifs, pattern != "—")
+hits <- scan_set %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(
+    match_pos = list(as.integer(gregexpr(pattern, cons_nogap, perl = TRUE)[[1]])),
+    n_hits    = sum(match_pos > 0),
+    first_pos = ifelse(n_hits > 0, match_pos[1], NA_integer_)) %>%
+  dplyr::ungroup() %>%
+  dplyr::select(protein, motif, pattern, n_hits, first_pos)
+
+knitr::kable(hits,
+  caption = "Signature motifs located on the consensus of the ICTV Potyviridae alignment (gap-free coordinates).")
+```
+
+```{r motif-scan-plot}
+#| fig-width: 9
+#| fig-height: 3
+found <- dplyr::filter(hits, n_hits > 0)
+ggplot(found, aes(x = first_pos, y = reorder(paste(protein, motif), first_pos))) +
+  geom_point(size = 3, colour = "#A23B72") +
+  geom_segment(aes(xend = first_pos, yend = paste(protein, motif)), x = 0, colour = "grey80") +
+  labs(title = "Approximate motif positions along the potyvirus polyprotein consensus",
+       x = "Consensus position (aa, gap-free)", y = NULL) +
+  cowplot::theme_cowplot()
+```
+
+## Protein–protein interaction network
+
+A curated interaction network of the potyvirus proteins, centred on CI, drawn
+from the CI interactome review [@sorel2014], the HC-Pro multitasking review
+[@valli2018], the movement/PIPO literature [@chung2008] and VPg–host factor
+interactions [@robaglia2006].
+
+```{r ppi-network}
+nodes <- tibble::tibble(
+  id    = c("P1","HC-Pro","P3","P3N-PIPO","6K1","CI","6K2","VPg","NIa-Pro","NIb","CP","eIF4E"),
+  group = c(rep("viral", 11), "host"))
+nodes$label <- nodes$id
+nodes$title <- ifelse(nodes$group == "host", "Host translation factor", "Viral protein")
+
+edges <- tibble::tribble(
+  ~from,       ~to,        ~process,          ~ref,
+  "VPg",       "eIF4E",    "translation/resistance", "robaglia2006",
+  "VPg",       "NIb",      "replication",     "revers2015",
+  "NIa-Pro",   "NIb",      "replication",     "revers2015",
+  "CI",        "HC-Pro",   "movement",        "sorel2014",
+  "CI",        "CP",       "movement",        "sorel2014",
+  "CI",        "P3N-PIPO", "movement",        "chung2008",
+  "CI",        "VPg",      "replication",     "sorel2014",
+  "HC-Pro",    "HC-Pro",   "self (dimer)",    "valli2018",
+  "HC-Pro",    "CP",       "aphid transmission", "valli2018",
+  "CP",        "CP",       "encapsidation",   "revers2015")
+
+edges$color <- dplyr::recode(edges$process,
+  "movement" = "#2E86AB", "replication" = "#D62828",
+  "translation/resistance" = "#8E44AD", .default = "#7f8c8d")
+edges$title <- paste0(edges$process, " [", edges$ref, "]")
+
+visNetwork(nodes, edges, height = "600px", width = "100%") %>%
+  visGroups(groupname = "viral", color = "#f5b041") %>%
+  visGroups(groupname = "host",  color = "#82e0aa", shape = "diamond") %>%
+  visEdges(smooth = FALSE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visLegend() %>%
+  visLayout(randomSeed = 42)
+```
+
+## CI as a hub
+
+The CI helicase is the most connected viral node — bridging replication (with
+VPg/NIb) and cell-to-cell movement (with CP, HC-Pro and P3N-PIPO) [@sorel2014].
+It is also the protein carrying the conserved DNAzyme-like locus (Chapters on the
+DNAzyme motif and HGT) and the ELM-rich CI region (Protein Motif Analysis),
+making it the natural focal point where the sequence-level and network-level
+observations in this book converge.
