@@ -146,35 +146,66 @@ ggplot(found, aes(x = first_pos, y = reorder(paste(protein, motif), first_pos)))
 
 A curated interaction network of the potyvirus proteins, centred on CI, drawn
 from the CI interactome review [@sorel2014], the HC-Pro multitasking review
-[@valli2018], the movement/PIPO literature [@chung2008] and VPg–host factor
-interactions [@robaglia2006].
+[@valli2018], the movement/PIPO literature [@chung2008; @xue2023] and VPg–host
+factor interactions [@robaglia2006]. **Host targets** are added from the
+systematic TuMV–*Arabidopsis* yeast-two-hybrid interaction map [@martinez2023],
+in which **NIb (the RdRp) was the dominant host hub** (245 contacts, including
+salicylate-dependent immune regulators). Solid edges are curated viral–viral
+interactions; **dashed edges are the high-throughput Y2H host interactions**.
 
 ```{r ppi-network}
-nodes <- tibble::tibble(
-  id    = c("P1","HC-Pro","P3","P3N-PIPO","6K1","CI","6K2","VPg","NIa-Pro","NIb","CP","eIF4E"),
-  group = c(rep("viral", 11), "host"))
+viral <- c("P1","HC-Pro","P3","P3N-PIPO","6K1","CI","6K2","VPg","NIa-Pro","NIb","CP")
+host  <- tibble::tribble(
+  ~id,          ~fn,
+  "eIF4E",      "Translation initiation factor (recessive resistance)",
+  "NPR1",       "Master regulator of salicylate immunity / SAR",
+  "TGA1",       "bZIP transcription factor (SA responses)",
+  "SCE1",       "SUMO E2 conjugating enzyme",
+  "HSP70",      "Chaperone",
+  "CALNEXIN",   "ER chaperone (CNX1)",
+  "OBE1",       "OBERON1 PHD-finger transcription factor",
+  "SEC22",      "SNARE (ER–Golgi secretion)",
+  "PCaP1",      "Plasma-membrane cation-binding protein (movement)",
+  "PIP1;3",     "Plasma-membrane aquaporin")
+
+nodes <- dplyr::bind_rows(
+  tibble::tibble(id = viral, group = "viral", title = "Viral protein"),
+  tibble::tibble(id = host$id, group = "host", title = host$fn))
 nodes$label <- nodes$id
-nodes$title <- ifelse(nodes$group == "host", "Host translation factor", "Viral protein")
 
 edges <- tibble::tribble(
-  ~from,       ~to,        ~process,          ~ref,
-  "VPg",       "eIF4E",    "translation/resistance", "robaglia2006",
-  "VPg",       "NIb",      "replication",     "revers2015",
-  "NIa-Pro",   "NIb",      "replication",     "revers2015",
-  "CI",        "HC-Pro",   "movement",        "sorel2014",
-  "CI",        "CP",       "movement",        "sorel2014",
-  "CI",        "P3N-PIPO", "movement",        "chung2008",
-  "CI",        "VPg",      "replication",     "sorel2014",
-  "HC-Pro",    "HC-Pro",   "self (dimer)",    "valli2018",
-  "HC-Pro",    "CP",       "aphid transmission", "valli2018",
-  "CP",        "CP",       "encapsidation",   "revers2015")
+  ~from,     ~to,        ~process,               ~ref,          ~y2h,
+  # curated viral-viral core
+  "VPg",     "eIF4E",    "translation/resistance","robaglia2006", FALSE,
+  "VPg",     "NIb",      "replication",          "revers2015",   FALSE,
+  "NIa-Pro", "NIb",      "replication",          "revers2015",   FALSE,
+  "CI",      "HC-Pro",   "movement",             "sorel2014",    FALSE,
+  "CI",      "CP",       "movement",             "sorel2014",    FALSE,
+  "CI",      "P3N-PIPO", "movement",             "chung2008",    FALSE,
+  "CI",      "VPg",      "replication",          "sorel2014",    FALSE,
+  "HC-Pro",  "HC-Pro",   "self (dimer)",         "valli2018",    FALSE,
+  "HC-Pro",  "CP",       "aphid transmission",   "valli2018",    FALSE,
+  "CP",      "CP",       "encapsidation",        "revers2015",   FALSE,
+  # TuMV-Arabidopsis Y2H interaction map (Martinez et al. 2023)
+  "CI",      "eIF4E",    "translation/resistance","martinez2023", TRUE,
+  "VPg",     "OBE1",     "host factor",          "martinez2023", TRUE,
+  "VPg",     "CALNEXIN", "host factor",          "martinez2023", TRUE,
+  "NIb",     "NPR1",     "SA immunity",          "martinez2023", TRUE,
+  "NIb",     "TGA1",     "SA immunity",          "martinez2023", TRUE,
+  "NIb",     "SCE1",     "SUMO/host factor",     "martinez2023", TRUE,
+  "NIb",     "HSP70",    "host factor",          "martinez2023", TRUE,
+  "P3N-PIPO","PCaP1",    "movement",             "martinez2023", TRUE,
+  "P3N-PIPO","PIP1;3",   "movement",             "martinez2023", TRUE,
+  "6K2",     "SEC22",    "secretion",            "martinez2023", TRUE)
 
 edges$color <- dplyr::recode(edges$process,
   "movement" = "#2E86AB", "replication" = "#D62828",
-  "translation/resistance" = "#8E44AD", .default = "#7f8c8d")
-edges$title <- paste0(edges$process, " [", edges$ref, "]")
+  "translation/resistance" = "#8E44AD", "SA immunity" = "#e67e22",
+  "secretion" = "#16a085", .default = "#7f8c8d")
+edges$dashes <- edges$y2h
+edges$title  <- paste0(edges$process, " [", edges$ref, "]")
 
-visNetwork(nodes, edges, height = "600px", width = "100%") %>%
+visNetwork(nodes, edges, height = "640px", width = "100%") %>%
   visGroups(groupname = "viral", color = "#f5b041") %>%
   visGroups(groupname = "host",  color = "#82e0aa", shape = "diamond") %>%
   visEdges(smooth = FALSE) %>%
@@ -183,11 +214,15 @@ visNetwork(nodes, edges, height = "600px", width = "100%") %>%
   visLayout(randomSeed = 42)
 ```
 
-## CI as a hub
+## Two hubs: CI and NIb
 
-The CI helicase is the most connected viral node — bridging replication (with
-VPg/NIb) and cell-to-cell movement (with CP, HC-Pro and P3N-PIPO) [@sorel2014].
-It is also the protein carrying the conserved DNAzyme-like locus (Chapters on the
-DNAzyme motif and HGT) and the ELM-rich CI region (Protein Motif Analysis),
-making it the natural focal point where the sequence-level and network-level
-observations in this book converge.
+Two viral proteins dominate the network. **CI** bridges replication (with VPg/NIb)
+and cell-to-cell movement (with CP, HC-Pro, P3N-PIPO and, via P3N-PIPO, the
+plasmodesmatal factor PCaP1) [@sorel2014; @xue2023] — and it carries the conserved
+DNAzyme-like locus and the ELM-rich CI region studied elsewhere in this book.
+**NIb**, the RdRp, is the dominant *host* hub in the systematic interaction map
+[@martinez2023], contacting salicylate-immunity regulators (NPR1, TGA1) and the
+SUMO machinery (SCE1) — implicating replication-complex assembly in the direct
+subversion of SA-dependent defence. Together these two hubs are where the
+sequence-level (motif/DNAzyme/ELM) and network-level views of the potyvirus
+proteome converge.
