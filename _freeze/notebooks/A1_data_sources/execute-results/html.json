@@ -1,9 +1,11 @@
 {
-  "hash": "3562c8eb218fc07013704858ad1579c2",
+  "hash": "8b5ec94292dfaa0bc5c0dd6764587e28",
   "result": {
     "engine": "knitr",
-    "markdown": "---\ntitle: \"Appendix: Data Sources and Accessions\"\ndate: last-modified\nformat:\n  html:\n    toc: true\nexecute:\n  eval: false\n---\n\n## Sequence Data\n\n| Source | Description | Access |\n|---|---|---|\n| ICTV OPSR alignment | Potyviridae CI protein alignment (v16) | `data/OPSR.Poty.Fig3.v16_align.txt` |\n| NCBI GenBank | CDS sequences retrieved via `rentrez` | `data/ci_cds_fetched.fasta` |\n| ELM database | Short linear motif definitions | API: `http://elm.eu.org/` |\n\n## External Databases\n\n| Database | Usage | API endpoint |\n|---|---|---|\n| GBIF | Taxonomic resolution, occurrence data | `api.gbif.org/v1/` |\n| GLOBI | Biotic interaction data | `api.globalbioticinteractions.org/` |\n| ELM | Protein short linear motifs | `elm.eu.org/api/` |\n| NCBI Entrez | Nucleotide/protein sequences | `eutils.ncbi.nlm.nih.gov/` |\n\n## Software Versions\n\n\n::: {.cell}\n\n```{.r .cell-code}\nsessioninfo::session_info()\n```\n:::\n\n\n## Reproducibility\n\nAll analyses can be re-run end-to-end with:\n\n```r\ntargets::tar_make()\n```\n\nSee `_targets.R` for the full dependency graph. Individual steps requiring\nexternal tools (`mafft`, `iqtree2`, `hmmscan`) are noted where they appear.\n",
-    "supporting": [],
+    "markdown": "---\ntitle: \"Appendix: Data Sources and Accessions\"\ndate: last-modified\nformat:\n  html:\n    toc: true\nexecute:\n  eval: false\n---\n\n## Sequence Data\n\n| Source | Description | Access | Citation |\n|---|---|---|---|\n| ICTV OPSR alignment | Potyviridae polyprotein/CI alignment (v16) | `data/OPSR.Poty.Fig3.v16_align.txt` | [@inouenagata2022] |\n| ICTV VMR (MSL41) | Virus metadata / genus assignment | `data/VMR_MSL41.v1.20260320.xlsx` | [@ictvvmr2024] |\n| NCBI GenBank | CDS sequences retrieved via `rentrez` | `data/ci_cds_fetched.fasta` | — |\n| ELM database | Short linear motif definitions | API / `gget elm`; `data/elm_gget/` | [@elm2024] |\n\n## External Databases\n\n| Database | Usage | API endpoint |\n|---|---|---|\n| GBIF | Taxonomic resolution, occurrence data | `api.gbif.org/v1/` |\n| GLOBI | Biotic interaction data | `api.globalbioticinteractions.org/` |\n| ELM | Protein short linear motifs | `elm.eu.org/api/` |\n| NCBI Entrez | Nucleotide/protein sequences | `eutils.ncbi.nlm.nih.gov/` |\n\n## Software Versions\n\n\n::: {.cell}\n\n```{.r .cell-code}\nsessioninfo::session_info()\n```\n:::\n\n\n## Reproducibility\n\nAll analyses can be re-run end-to-end with:\n\n```r\ntargets::tar_make()\n```\n\nSee `_targets.R` for the full dependency graph. Individual steps requiring\nexternal tools (`mafft`, `iqtree2`, `hmmscan`) are noted where they appear.\n",
+    "supporting": [
+      "A1_data_sources_files"
+    ],
     "filters": [
       "rmarkdown/pagebreak.lua"
     ],
