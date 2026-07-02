@@ -39,8 +39,10 @@ library(dplyr)
 library(tibble)
 library(ape)
 library(phytools)
+library(ggplot2)
 library(ggtree)
 library(ggseqlogo)
+library(readr)
 ```
 
 Helper functions below implement GenBank parsing, accession extraction, codon
@@ -378,18 +380,43 @@ Infer the phylogeny using IQ-TREE, or read a precomputed tree.
 # Visualisation: Trait Mapping
 
 ```{r plot-tree}
-#| fig-width: 7
-#| fig-height: 8
-treefile <- here::here("data", "potyvirus_CI.treefile")
+#| fig-width: 9
+#| fig-height: 9
+# Load a precomputed CI tree. The IQ-TREE codon tree needs rentrez + IQ-TREE;
+# scripts/build_ci_tree.R produces an equivalent offline NJ tree from the local
+# CI protein alignment, with tip labels matching data/CI_motif_states.csv.
+treefile  <- here::here("data", "potyvirus_CI.treefile")
+motif_csv <- here::here("data", "CI_motif_states.csv")
+
 if (file.exists(treefile)) {
   ci_tree <- read.tree(treefile)
-  p <- ggtree(ci_tree) %<+% motif_df +
-    geom_tippoint(aes(color = motif), size = 2) +
-    scale_color_manual(values = c(canonical = "red", other = "blue")) +
-    theme(legend.position = "right")
-  print(p)
+
+  # Trait table: DNAzyme-motif state (precomputed) + genus (from ELM metadata)
+  trait <- tibble(taxon = ci_tree$tip.label)
+  if (file.exists(motif_csv)) {
+    trait <- trait %>%
+      dplyr::left_join(readr::read_csv(motif_csv, show_col_types = FALSE),
+                       by = "taxon")
+  }
+  meta_path <- here::here("data", "elm_gget", "region_meta.tsv")
+  if (file.exists(meta_path)) {
+    trait <- trait %>%
+      dplyr::left_join(
+        readr::read_tsv(meta_path, show_col_types = FALSE) %>%
+          dplyr::select(taxon = name, genus),
+        by = "taxon")
+  }
+
+  ggtree(ci_tree, layout = "circular", size = 0.25) %<+% trait +
+    geom_tippoint(aes(colour = genus), size = 1.4, na.rm = TRUE) +
+    ggplot2::scale_colour_viridis_d(option = "turbo", na.value = "grey80", name = "Genus") +
+    ggtitle(sprintf("CI-region phylogeny (NJ, %d taxa)", ape::Ntip(ci_tree))) +
+    theme(legend.position = "right", legend.key.size = unit(8, "pt"),
+          legend.text = element_text(size = 6))
 } else {
-  cat("Tree file not found. Run the IQ-TREE command first.")
+  cat("Tree file not found. Run scripts/build_ci_tree.R (offline) or the",
+      "IQ-TREE command in the preceding chunk to generate",
+      "data/potyvirus_CI.treefile.")
 }
 ```
 
@@ -416,16 +443,16 @@ if (length(seqs_with_motif) > 0) {
 # Test for Convergent Evolution
 
 ```{r tests}
-if (exists("ci_tree")) {
-  trait      <- setNames(as.numeric(motif_df$motif == "canonical"), motif_df$taxon)
-  trait      <- trait[ci_tree$tip.label]
-  fit        <- fitDiscrete(ci_tree, trait, model = "ER")
-  print(fit)
-  phylo_sig  <- phylo.d(data.frame(species = names(trait), x = trait), ci_tree, permut = 100)
-  print(phylo_sig)
-} else {
-  cat("CI tree not available: run the tree inference first.")
-}
+#| eval: false
+# Requires the codon motif states (motif_df, from the eval:false pipeline above)
+# plus geiger::fitDiscrete and caper::phylo.d. Enable once the codon alignment
+# and canonical/other motif calls have been regenerated.
+trait      <- setNames(as.numeric(motif_df$motif == "canonical"), motif_df$taxon)
+trait      <- trait[ci_tree$tip.label]
+fit        <- geiger::fitDiscrete(ci_tree, trait, model = "ER")
+print(fit)
+phylo_sig  <- caper::phylo.d(data.frame(species = names(trait), x = trait), ci_tree, permut = 100)
+print(phylo_sig)
 ```
 
 # Summary
@@ -442,7 +469,7 @@ print(summary_tbl)
 # ICTV alignment — protein-to-codon pipeline
 
 Starting from the protein alignment of Potyviridae used to generate the tree on
-ICTV, I added the amino acid sequences corresponding to the longest ORFs of the
+ICTV [@inouenagata2022], I added the amino acid sequences corresponding to the longest ORFs of the
 initial DNAzyme blast hits (filtered to sequences >3000 amino acids, leaving 11 of
 the original 16 hits).
 
@@ -474,10 +501,13 @@ rolling_alignment_stats <- function(aln, window = 300, step = 30,
   if (codon_aligned && (window %% 3 != 0 || step %% 3 != 0))
     stop("window and step must be multiples of 3")
   n_sites    <- ncol(aln)
+  nt         <- c("A", "C", "G", "T", "U")
   gc_content <- function(x) mean(x %in% c("G", "C"), na.rm = TRUE)
   shannon_entropy <- function(x) {
-    p <- table(x[x %in% c("A","C","G","T","U")])
-    p <- p / sum(p)
+    x <- x[x %in% nt]
+    n <- length(x); if (!n) return(NA_real_)
+    cnt <- tabulate(match(x, nt), nbins = length(nt))   # fast vs table()
+    p <- cnt[cnt > 0] / n
     -sum(p * log2(p))
   }
   cpg_oe <- function(x) {
@@ -527,41 +557,49 @@ rolling_alignment_stats_per_sequence <- function(aln, window = 300, step = 30,
   if (codon_aligned && (window %% 3 != 0 || step %% 3 != 0))
     stop("window and step must be multiples of 3")
   n_sites    <- ncol(aln)
-  gc_content <- function(x) mean(x %in% c("G","C"), na.rm = TRUE)
+  nt         <- c("A", "C", "G", "T", "U")
+  gc_content <- function(x) mean(x %in% c("G", "C"), na.rm = TRUE)
   shannon_entropy <- function(x) {
-    x <- x[x %in% c("A","C","G","T","U")]
-    if (!length(x)) return(NA_real_)
-    p <- table(x) / length(x)
+    x <- x[x %in% nt]
+    n <- length(x); if (!n) return(NA_real_)
+    cnt <- tabulate(match(x, nt), nbins = length(nt))   # fast vs table()
+    p <- cnt[cnt > 0] / n
     -sum(p * log2(p))
   }
   cpg_oe <- function(x) {
-    x <- x[x %in% c("A","C","G","T","U")]
+    x <- x[x %in% nt]
     if (length(x) < 2) return(NA_real_)
     obs <- sum(x[-length(x)] == "C" & x[-1] == "G")
     exp <- sum(x == "C") * sum(x == "G") / length(x)
     if (exp == 0) return(NA_real_)
     obs / exp
   }
-  results <- vector("list", nrow(aln)); names(results) <- rownames(aln)
+  # Preallocate per-window vectors and build one data frame per sequence,
+  # binding once at the end (avoids per-window data.frame() + O(n^2) rbind).
+  starts <- seq(1, n_sites - window + 1, by = step)
+  nwin   <- length(starts)
+  results <- vector("list", nrow(aln))
   for (i in seq_len(nrow(aln))) {
-    seq_i  <- aln[i, ]; win_id <- 1; seq_res <- list()
-    for (start in seq(1, n_sites - window + 1, by = step)) {
-      end        <- start + window - 1
-      window_seq <- seq_i[start:end]
-      gap_frac   <- mean(window_seq == "-")
-      if (remove_gaps) window_seq <- window_seq[window_seq != "-"]
-      codon_pos <- rep(1:3, length.out = window)
-      pos1 <- window_seq[codon_pos == 1]; pos2 <- window_seq[codon_pos == 2]
-      pos3 <- window_seq[codon_pos == 3]
-      seq_res[[win_id]] <- data.frame(
-        sequence = rownames(aln)[i], window = win_id, start = start, end = end,
-        GC = gc_content(window_seq), GC3 = gc_content(pos3),
-        CpG_OE = cpg_oe(window_seq), entropy = shannon_entropy(window_seq),
-        gap_fraction = gap_frac,
-        GC_pos1 = gc_content(pos1), GC_pos2 = gc_content(pos2), GC_pos3 = gc_content(pos3))
-      win_id <- win_id + 1
+    seq_i <- aln[i, ]
+    GC <- GC3 <- CpG <- ent <- gapf <- GC1 <- GC2 <- numeric(nwin)
+    for (w in seq_len(nwin)) {
+      st <- starts[w]; en <- st + window - 1
+      ws <- seq_i[st:en]
+      gapf[w] <- mean(ws == "-")
+      wsc <- if (remove_gaps) ws[ws != "-"] else ws
+      codon_pos <- rep(1:3, length.out = length(wsc))
+      GC[w]  <- gc_content(wsc)
+      GC3[w] <- gc_content(wsc[codon_pos == 3])
+      CpG[w] <- cpg_oe(wsc)
+      ent[w] <- shannon_entropy(wsc)
+      GC1[w] <- gc_content(wsc[codon_pos == 1])
+      GC2[w] <- gc_content(wsc[codon_pos == 2])
     }
-    results[[i]] <- do.call(rbind, seq_res)
+    results[[i]] <- data.frame(
+      sequence = rownames(aln)[i], window = seq_len(nwin),
+      start = starts, end = starts + window - 1,
+      GC = GC, GC3 = GC3, CpG_OE = CpG, entropy = ent, gap_fraction = gapf,
+      GC_pos1 = GC1, GC_pos2 = GC2, GC_pos3 = GC3, stringsAsFactors = FALSE)
   }
   do.call(rbind, results)
 }
