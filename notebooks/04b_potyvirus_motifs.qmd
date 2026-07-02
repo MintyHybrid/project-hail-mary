@@ -41,45 +41,62 @@ library(potytools)
 
 ## CI helicase 3D structure (predicted)
 
-The cylindrical inclusion is the protein carrying the DNAzyme-like locus and the
-ELM-rich CI region. No experimental potyvirus CI structure exists in the PDB and
-AlphaFold DB has no model for the viral polyprotein entries, so the CI helicase
-domain below was **predicted de novo with ESMFold** (`scripts/fold_ci_esmfold.R`)
-from a representative isolate and cached to `data/CI_esmfold.pdb`. The **motif
-region** (the CI window analysed in the ELM chapter) is highlighted in red; the
-rest of the domain is coloured by predicted-confidence (pLDDT).
+The cylindrical inclusion carries the DNAzyme-like locus and the ELM-rich CI
+region. No experimental potyvirus CI structure exists in the PDB and AlphaFold DB
+has no model for the viral polyprotein entries, so the **full 644-residue TuMV CI
+protein** (mature chain 1228–1871 of UniProt P89509) was folded with
+**AlphaFold 3** on the AlphaFold Server (pTM = 0.78, no clashes; the ESMFold
+domain in `scripts/fold_ci_esmfold.R` is retained as an offline fallback). The
+viewer highlights three functional sites: the **Walker-A P-loop** (ATPase) and
+**DECH box** (helicase motif II) in gold, and the **ELM/DNAzyme-like motif
+region** (VASYN ± 20; res 236–280) in red.
 
 ```{r ci-3d}
-#| eval: !expr file.exists(here::here("data", "CI_esmfold.pdb")) && requireNamespace("r3dmol", quietly = TRUE)
+#| eval: !expr (file.exists(here::here("data","CI_af3.pdb")) || file.exists(here::here("data","CI_esmfold.pdb"))) && requireNamespace("r3dmol", quietly = TRUE)
 library(r3dmol)
-pdb_txt <- paste(readLines(here::here("data", "CI_esmfold.pdb")), collapse = "\n")
-mot <- readLines(here::here("data", "CI_esmfold_motif.txt"))
-mval <- function(k) as.integer(sub(paste0("^", k, " "), "",
-                                   grep(paste0("^", k, " "), mot, value = TRUE)))
-ms <- mval("motif_start"); me <- mval("motif_end")
+af3 <- here::here("data", "CI_af3.pdb")   # AlphaFold3 model (CIF->PDB, pLDDT in B-factor)
+if (file.exists(af3)) {
+  struct <- paste(readLines(af3), collapse = "\n"); fmt <- "pdb"
+  ms <- 236; me <- 280            # VASYN ± 20 in TuMV CI (P89509 1228-1871)
+  walkerA <- 84:92; dech <- 175:178
+} else {
+  struct <- paste(readLines(here::here("data","CI_esmfold.pdb")), collapse = "\n")
+  fmt <- "pdb"; mot <- readLines(here::here("data","CI_esmfold_motif.txt"))
+  mval <- function(k) as.integer(sub(paste0("^",k," "), "",
+                     grep(paste0("^",k," "), mot, value = TRUE)))
+  ms <- mval("motif_start"); me <- mval("motif_end")
+  walkerA <- integer(0); dech <- integer(0)
+}
 
-r3dmol(width = "100%", height = "520px") |>
-  m_add_model(data = pdb_txt, format = "pdb") |>
-  m_set_style(style = m_style_cartoon(color = "#a9c6e8")) |>
-  m_add_style(sel = m_sel(resi = seq(ms, me)),
-              style = m_style_cartoon(color = "#c0392b")) |>
-  m_add_style(sel = m_sel(resi = seq(ms, me)),
-              style = m_style_stick(radius = 0.15)) |>
+v <- r3dmol(width = "100%", height = "540px") |>
+  m_add_model(data = struct, format = fmt) |>
+  m_set_style(style = m_style_cartoon(color = "#a9c6e8"))
+if (length(walkerA)) {
+  v <- v |>
+    m_add_style(sel = m_sel(resi = c(walkerA, dech)),
+                style = m_style_cartoon(color = "#d4ac0d")) |>
+    m_add_style(sel = m_sel(resi = c(walkerA, dech)),
+                style = m_style_stick(radius = 0.2))
+}
+v |>
+  m_add_style(sel = m_sel(resi = seq(ms, me)), style = m_style_cartoon(color = "#c0392b")) |>
+  m_add_style(sel = m_sel(resi = seq(ms, me)), style = m_style_stick(radius = 0.15)) |>
   m_zoom_to() |>
   m_spin(speed = 0.4)
 ```
 
 ```{r ci-3d-fallback}
 #| echo: false
-#| eval: !expr "!(file.exists(here::here('data','CI_esmfold.pdb')) && requireNamespace('r3dmol', quietly = TRUE))"
-cat("3D viewer unavailable: install r3dmol and run scripts/fold_ci_esmfold.R",
-    "to generate data/CI_esmfold.pdb.")
+#| eval: !expr "!((file.exists(here::here('data','CI_af3.pdb')) || file.exists(here::here('data','CI_esmfold.pdb'))) && requireNamespace('r3dmol', quietly = TRUE))"
+cat("3D viewer unavailable: provide data/CI_af3.pdb (AlphaFold) or run",
+    "scripts/fold_ci_esmfold.R (ESMFold).")
 ```
 
-The predicted fold shows the two-lobed SF2-helicase architecture; the highlighted
-motif region maps to the surface-exposed segment of the CI analysed for
-eukaryotic linear motifs and the DNAzyme-like locus. Structure predicted with
-ESMFold [@lin2023]; interactive rendering via `r3dmol`/3Dmol.js [@rego2015].
+The model shows the canonical two-lobed SF2-helicase architecture, with the
+Walker-A and DECH catalytic motifs facing the interdomain cleft and the ELM/
+DNAzyme-like motif region on a surface-exposed segment. Structure predicted with
+AlphaFold 3 [@abramson2024] (fallback ESMFold [@lin2023]); interactive rendering
+via `r3dmol`/3Dmol.js [@rego2015].
 
 ## Signature motif catalogue
 
