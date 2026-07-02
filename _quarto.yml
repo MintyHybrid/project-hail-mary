@@ -20,6 +20,7 @@ book:
       chapters:
         - notebooks/03_codon_dnazyme.qmd
         - notebooks/04_protein_motifs.qmd
+        - notebooks/04b_potyvirus_motifs.qmd
     - part: "Part III — Evolutionary Mechanisms"
       chapters:
         - notebooks/05_hgt.qmd
