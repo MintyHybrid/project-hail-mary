@@ -422,13 +422,11 @@ html`<div style="margin: 10px 0;">
 </div>`
 ```
 
-```{ojs}
-//| echo: false
-//| eval: false
-// ── React/recharts version (not compatible with OJS runtime) ──────────────────
-// The full React component (PlantImmuneTrafficDashboard) with recharts visualisations
-// is preserved below for reference.  To enable it, either:
-//   (a) host it as a standalone React app and embed via <iframe>, or
-//   (b) move to a Shiny app (shiny/immu_simu/) with the same simulation logic.
-// ─────────────────────────────────────────────────────────────────────────────
-```
+::: {.callout-note collapse="true"}
+## React/recharts version (not compatible with the OJS runtime)
+
+The full React component (`PlantImmuneTrafficDashboard`) with recharts
+visualisations is preserved in the project history for reference. To enable it,
+either (a) host it as a standalone React app and embed via `<iframe>`, or
+(b) move to a Shiny app (`shiny/immu_simu/`) with the same simulation logic.
+:::
