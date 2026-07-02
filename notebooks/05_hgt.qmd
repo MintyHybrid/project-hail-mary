@@ -142,6 +142,120 @@ ggtree::ggtree(leek_tree2) + geom_tiplab(size = 2) + ggtitle("ClustalOmega align
 ggtree::ggtree(leek_tree3) + geom_tiplab(size = 2) + ggtitle("MUSCLE alignment")
 ```
 
+### Strawberry (*Fragaria*) — presence/absence of the ~3 kb fragment
+
+The viral-homologous insertion in strawberry is a **long (~3 kb) fragment**, not
+just the 18-mer. `strawberryseqs.fasta` holds only fragment-**positive**
+*Fragaria* loci, so on their own they cannot separate a single ancient insertion
+from repeated transfer or lineage-specific loss. To test this, the **homologous
+~3 kb locus is retrieved from related *Fragaria* genomes** by BLASTing a
+representative positive locus against *Fragaria* on NCBI
+(`scripts/fetch_strawberry_homologs.R`, cached to
+`data/strawberry_homologs.fasta` + `data/strawberry_homolog_table.tsv`). For each
+related genome we record **query coverage** over the 3 kb locus: near-complete
+coverage → the fragment is *present*; coverage only over the flanks → *absent*
+(a deletion where the insert sits). Presence/absence is then mapped onto the host
+phylogeny.
+
+```{r strawberry-load}
+straw <- readDNAStringSet(here::here("data", "strawberryseqs.fasta"))
+straw_tb <- tibble(
+  species   = str_extract(names(straw), "Fragaria x ananassa|Fragaria [a-z]+"),
+  accession = str_extract(names(straw), "[A-Z]{2}[0-9]{6}\\.[0-9]"),
+  width     = width(straw), fragment = "present")
+names(straw) <- paste0("pos_", straw_tb$accession)
+straw_tb %>% dplyr::count(species, name = "n_loci") %>%
+  dplyr::arrange(dplyr::desc(n_loci)) %>%
+  knitr::kable(caption = "Fragment-POSITIVE Fragaria loci (strawberryseqs.fasta).")
+```
+
+```{r strawberry-homologs}
+hom_fa  <- here::here("data", "strawberry_homologs.fasta")
+hom_tsv <- here::here("data", "strawberry_homolog_table.tsv")
+have_homologs <- file.exists(hom_fa) && file.exists(hom_tsv)
+
+if (have_homologs) {
+  homologs <- readDNAStringSet(hom_fa)
+  hom_tb   <- readr::read_tsv(hom_tsv, show_col_types = FALSE)
+  names(homologs) <- paste0("hom_", hom_tb$accession)
+  hom_tb %>% dplyr::count(species, fragment, name = "n_loci") %>%
+    knitr::kable(caption = paste("Homologous ~3 kb loci from related Fragaria",
+                                 "genomes, by species and fragment status",
+                                 "(present / partial / flank_only)."))
+} else {
+  cat("Related-species homologs not found. Run scripts/fetch_strawberry_homologs.R",
+      "(remote BLAST + efetch). Showing the positive loci only until then.")
+}
+```
+
+```{r strawberry-combine}
+trait <- tibble(label = names(straw), species = straw_tb$species, fragment = "present")
+if (have_homologs) {
+  combined <- c(straw, homologs)
+  trait <- dplyr::bind_rows(trait,
+    tibble(label = names(homologs), species = hom_tb$species,
+           fragment = hom_tb$fragment))
+} else {
+  combined <- straw
+}
+length(combined)
+```
+
+```{r strawberry-align}
+straw_aln <- msa::msaClustalOmega(combined)
+```
+
+```{r strawberry-aln-image}
+#| fig-width: 9
+#| fig-height: 5
+# The long insertion appears as a block present in some rows and gapped in others
+image(as.DNAbin(straw_aln))
+```
+
+```{r strawberry-tree}
+#| fig-width: 9
+#| fig-height: 7
+straw_tree <- potytools::build_phylo_tree(as(straw_aln, "DNAStringSet"),
+                                          method = "TN93", tree_method = "nj",
+                                          bootstrap = 100)
+ggtree::ggtree(straw_tree) %<+% trait +
+  geom_tippoint(aes(colour = fragment), size = 2.6, na.rm = TRUE) +
+  geom_tiplab(aes(label = species), size = 2.2, offset = 0.01) +
+  scale_colour_manual(
+    values = c(present = "#c0392b", partial = "#e67e22", flank_only = "#2471a3"),
+    na.value = "grey70", name = "~3 kb fragment") +
+  ggtitle("Fragaria homologous-locus phylogeny with fragment presence/absence") +
+  ggplot2::xlim(0, 0.6) + theme(legend.position = "right")
+```
+
+```{r strawberry-interpretation}
+if (have_homologs) {
+  n <- table(factor(trait$fragment, c("present","partial","flank_only")))
+  cat(sprintf(paste("Across %d homologous Fragaria loci: %d present, %d partial,",
+                    "%d flank-only (fragment absent). If the red (present) tips",
+                    "form one clade the ~3 kb insertion is most parsimoniously a",
+                    "single event; interspersed present/absent tips instead imply",
+                    "repeated transfer or lineage-specific loss.\n"),
+              nrow(trait), n["present"], n["partial"], n["flank_only"]))
+}
+```
+
+**What the BLAST search reveals.** Broadening the search to *Fragaria* and close
+Rosoideae relatives (*Potentilla*, *Rosa*, *Duchesnea*, *Rubus*) recovers the
+homologous locus in related species as **partial** hits that cover only ~27–29 %
+of the 3 kb query — and that conserved portion corresponds to a **host
+transcription-factor gene (TCP7)**. In other words, the flanking sequence is an
+ordinary host gene shared across strawberry relatives, whereas the remaining
+~70 % of the fragment (the putative viral-derived insert) is **not recovered**
+from *F. vesca* subsp. *vesca*, *Rosa rugosa* or *Rosa chinensis*. The most
+parsimonious reading is that the ~3 kb element is **present only in a subset of
+*Fragaria* lineages and absent from otherwise closely related genomes** —
+consistent with a lineage-specific acquisition (horizontal transfer or a
+lineage-restricted insertion) rather than a universally conserved host feature.
+(Caveat: the related-species hits are RefSeq mRNAs, so they capture the TCP7
+transcript; a genomic-assembly search would be needed to firmly exclude the
+insert from those lineages.)
+
 ## Coordinate utilities
 
 Helper functions for converting NCBI-style FASTA headers to GRanges.
