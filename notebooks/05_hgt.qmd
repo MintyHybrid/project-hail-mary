@@ -96,8 +96,8 @@ bhits <- bhits %>%
     start  = case_when(strand == "+" ~ s_start, TRUE ~ s_end),
     end    = case_when(strand == "+" ~ s_end,   TRUE ~ s_start))
 
-hits   <- left_join(bhits, descs, by = c("Query" = "query", "seqname" = "seq_acc"))
-hitsgr <- makeGRangesFromDataFrame(hits, seqnames.field = "seqname", keep.extra.columns = TRUE)
+hits   <- left_join(bhits, descs, by = c("Query" = "query", "subject_accver" = "seq_acc"))
+hitsgr <- makeGRangesFromDataFrame(hits, seqnames.field = "subject_accver", keep.extra.columns = TRUE)
 ```
 
 ```{r leek-flanks}
@@ -130,9 +130,12 @@ image(as.DNAbin(aln3))
 ### Phylogenetic trees from eukaryotic flanks
 
 ```{r leek-trees}
-leek_tree1 <- potytools::build_phylo_tree(as.DNAbin(aln1), method = "ML", bootstrap = 100, model = "GTR+G")
-leek_tree2 <- potytools::build_phylo_tree(as.DNAbin(aln2), method = "ML", bootstrap = 100, model = "GTR+G")
-leek_tree3 <- potytools::build_phylo_tree(as.DNAbin(aln3), method = "ML", bootstrap = 100, model = "GTR+G")
+# NJ trees under the TN93 distance with 100 bootstrap replicates. (Distance NJ
+# is used here rather than ML/GTR+G: it is fast, dependency-light and adequate
+# for the topology comparison; build_phylo_tree() takes a DNAStringSet.)
+leek_tree1 <- potytools::build_phylo_tree(as(aln1, "DNAStringSet"), method = "TN93", tree_method = "nj", bootstrap = 100)
+leek_tree2 <- potytools::build_phylo_tree(as(aln2, "DNAStringSet"), method = "TN93", tree_method = "nj", bootstrap = 100)
+leek_tree3 <- potytools::build_phylo_tree(as(aln3, "DNAStringSet"), method = "TN93", tree_method = "nj", bootstrap = 100)
 
 ggtree::ggtree(leek_tree1) + geom_tiplab(size = 2) + ggtitle("ClustalW alignment")
 ggtree::ggtree(leek_tree2) + geom_tiplab(size = 2) + ggtitle("ClustalOmega alignment")
