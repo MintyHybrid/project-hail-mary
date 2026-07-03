@@ -18,8 +18,10 @@ CANONICAL_1023_CORE <- "GGCTAGCTACAACGA"
 # Per-position criticality weight (position 1..15), 0..1; higher = substitution
 # more strongly reduces activity. G14 (general base) = 1.0; the two thymines
 # (T4, T8) modulatory = 0.80; all other core positions highly conserved = 0.90.
-.DNAZYME_CORE_WEIGHTS <- c(0.90, 0.90, 0.90, 0.80, 0.90, 0.90, 0.90, 0.80,
-                          0.90, 0.90, 0.90, 0.90, 0.90, 1.00, 0.90)
+.DNAZYME_CORE_WEIGHTS <- c(
+  0.90, 0.90, 0.90, 0.80, 0.90, 0.90, 0.90, 0.80,
+  0.90, 0.90, 0.90, 0.90, 0.90, 1.00, 0.90
+)
 
 #' Annotated 10-23 catalytic-core criticality table
 #'
@@ -28,30 +30,38 @@ CANONICAL_1023_CORE <- "GGCTAGCTACAACGA"
 #' @export
 dnazyme_core_table <- function() {
   base <- strsplit(CANONICAL_1023_CORE, "")[[1]]
-  note <- rep("Conserved core position (substitutions reduce activity)",
-              length(base))
+  note <- rep(
+    "Conserved core position (substitutions reduce activity)",
+    length(base)
+  )
   note[c(4, 8)] <- "Core thymine; 5-substituents modulate catalysis"
-  note[14]      <- "Catalytic general base (activates 2'-OH nucleophile)"
+  note[14] <- "Catalytic general base (activates 2'-OH nucleophile)"
   data.frame(
     position = seq_along(base),
-    base     = base,
-    weight   = .DNAZYME_CORE_WEIGHTS,
-    tier     = ifelse(.DNAZYME_CORE_WEIGHTS >= 1.0, "essential",
-                      ifelse(.DNAZYME_CORE_WEIGHTS >= 0.9, "critical", "modulatory")),
-    note     = note,
+    base = base,
+    weight = .DNAZYME_CORE_WEIGHTS,
+    tier = ifelse(.DNAZYME_CORE_WEIGHTS >= 1.0, "essential",
+      ifelse(.DNAZYME_CORE_WEIGHTS >= 0.9, "critical", "modulatory")
+    ),
+    note = note,
     stringsAsFactors = FALSE
   )
 }
 
 # Best-matching core window (fewest mismatches) within one sequence.
 .best_core_window <- function(seq_chr, core) {
-  L <- nchar(core); n <- nchar(seq_chr)
+  L <- nchar(core)
+  n <- nchar(seq_chr)
   core_v <- strsplit(core, "")[[1]]
-  if (n < L) return(list(window = NA_character_, offset = NA_integer_,
-                         mism = NA_integer_))
+  if (n < L) {
+    return(list(
+      window = NA_character_, offset = NA_integer_,
+      mism = NA_integer_
+    ))
+  }
   starts <- seq_len(n - L + 1)
-  wins   <- substring(seq_chr, starts, starts + L - 1)
-  mism   <- vapply(wins, function(w) sum(strsplit(w, "")[[1]] != core_v), integer(1))
+  wins <- substring(seq_chr, starts, starts + L - 1)
+  mism <- vapply(wins, function(w) sum(strsplit(w, "")[[1]] != core_v), integer(1))
   i <- which.min(mism)
   list(window = wins[i], offset = starts[i], mism = mism[i])
 }
@@ -79,47 +89,52 @@ score_dnazyme_activity <- function(sequences,
                                    core = CANONICAL_1023_CORE,
                                    weights = .DNAZYME_CORE_WEIGHTS) {
   if (inherits(sequences, "DNAStringSet")) {
-    ids  <- names(sequences)
+    ids <- names(sequences)
     seqs <- as.character(sequences)
   } else {
     seqs <- as.character(sequences)
-    ids  <- names(sequences)
+    ids <- names(sequences)
   }
   if (is.null(ids)) ids <- paste0("seq_", seq_along(seqs))
-  seqs   <- toupper(gsub("U", "T", seqs))
-  core   <- toupper(core)
+  seqs <- toupper(gsub("U", "T", seqs))
+  core <- toupper(core)
   core_v <- strsplit(core, "")[[1]]
   stopifnot(length(weights) == nchar(core))
 
   rows <- lapply(seq_along(seqs), function(k) {
     bw <- .best_core_window(seqs[k], core)
     if (is.na(bw$window)) {
-      return(data.frame(id = ids[k], core_window = NA_character_,
-                        n_substitutions = NA_integer_, sub_positions = NA_character_,
-                        critical_substitutions = NA_character_,
-                        weighted_identity = NA_real_, activity_score = NA_real_,
-                        predicted_active = NA, stringsAsFactors = FALSE))
+      return(data.frame(
+        id = ids[k], core_window = NA_character_,
+        n_substitutions = NA_integer_, sub_positions = NA_character_,
+        critical_substitutions = NA_character_,
+        weighted_identity = NA_real_, activity_score = NA_real_,
+        predicted_active = NA, stringsAsFactors = FALSE
+      ))
     }
-    win_v   <- strsplit(bw$window, "")[[1]]
+    win_v <- strsplit(bw$window, "")[[1]]
     match_i <- win_v == core_v
     sub_pos <- which(!match_i)
 
     weighted_identity <- sum(weights[match_i]) / sum(weights)
     # retained activity = product of tolerance at substituted positions
-    activity_score <- if (length(sub_pos) == 0) 1 else
+    activity_score <- if (length(sub_pos) == 0) {
+      1
+    } else {
       prod(1 - weights[sub_pos])
+    }
     crit_pos <- sub_pos[weights[sub_pos] >= 0.9]
 
     data.frame(
-      id                    = ids[k],
-      core_window           = bw$window,
-      n_substitutions       = length(sub_pos),
-      sub_positions         = if (length(sub_pos)) paste(sub_pos, collapse = ";") else "",
+      id = ids[k],
+      core_window = bw$window,
+      n_substitutions = length(sub_pos),
+      sub_positions = if (length(sub_pos)) paste(sub_pos, collapse = ";") else "",
       critical_substitutions = if (length(crit_pos)) paste(crit_pos, collapse = ";") else "",
-      weighted_identity     = round(weighted_identity, 4),
-      activity_score        = round(activity_score, 4),
-      predicted_active      = activity_score > 0.05 & !any(weights[sub_pos] >= 1.0),
-      stringsAsFactors      = FALSE
+      weighted_identity = round(weighted_identity, 4),
+      activity_score = round(activity_score, 4),
+      predicted_active = activity_score > 0.05 & !any(weights[sub_pos] >= 1.0),
+      stringsAsFactors = FALSE
     )
   })
   do.call(rbind, rows)
