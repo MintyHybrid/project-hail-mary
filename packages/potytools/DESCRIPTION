@@ -15,7 +15,6 @@ Description: Provides functions for potyvirus genomic analysis, including
 License: MIT + file LICENSE
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
-RoxygenNote: 7.3.2
 URL: https://github.com/
 BugReports: https://github.com/issues
 Depends:
@@ -32,9 +31,11 @@ Imports:
     seqinr (>= 4.0.0),
     ape (>= 5.0),
     tidyr (>= 1.1.0),
-    ggplot2 (>= 3.3.0)
+    ggplot2 (>= 3.3.0),
+    cowplot (>= 1.1.0)
 Suggests:
     ggseqlogo,
+    plotly (>= 4.9.0),
     phangorn,
     phytools,
     testthat (>= 3.0.0),
@@ -48,3 +49,4 @@ Suggests:
 VignetteBuilder: knitr
 Config/testthat/edition: 3
 Biarch: true
+Config/roxygen2/version: 8.0.0
