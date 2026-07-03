@@ -22,16 +22,24 @@ to infection requires integrating three interconnected pathways:
 **AP-4 complex (Adaptor Protein Complex 4)** is a heterotetrameric TGN-resident
 complex (subunits AP4B, AP4E, AP4M, AP4S) that mediates clathrin-independent
 trafficking from the *trans*-Golgi network to endosomes. Unlike AP-1/2/3, AP-4
-operates without a clathrin coat. Its most conserved cargo is **ATG9**, a lipid
-scramblase essential for autophagosome biogenesis [@huang2026].
+operates without a clathrin coat. In *Arabidopsis* it is experimentally
+established to sort cargo bearing tyrosine-based (YXXΦ) motifs — including
+**VACUOLAR SORTING RECEPTOR1** and the borate transporter BOR1 — via its µ
+(AP4M) subunit [@fuji2016], and AP-4 subunit interactions have been mapped
+systematically [@wang2022ap]; AP-4 deficiency also abolishes the hypersensitive
+cell-death response to avirulent bacteria, linking it to immunity [@fuji2016].
+Its most conserved cargo is **ATG9**, a lipid scramblase essential for
+autophagosome biogenesis [@huang2026].
 
 ::: {.callout-warning appearance="simple"}
-Plant AP-4 is essentially unstudied. The assignment of the immune regulators
-**NPR1** and **CBP60g** as AP-4 cargo — and the idea of AP-4-dependent NPR1
-"endosomal processing" before nuclear import — are **predictions inferred from
-mammalian AP-4 biology and sorting-motif analysis, not established plant facts**.
-They are included here as explicit, testable hypotheses (with lower confidence
-than the ATG9 link), and are flagged as *predicted* wherever they appear.
+By contrast, the assignment of the immune regulators **NPR1** and **CBP60g** as
+AP-4 cargo — and the idea of AP-4-dependent NPR1 "endosomal processing" before
+nuclear import — are **predictions inferred from mammalian AP-4 biology and
+sorting-motif analysis, not established plant facts**. In particular, **no direct
+experimental AP-4–NPR1 interaction is documented**, so no such edge is drawn in
+the protein-interaction network (Chapter 6); these links are included here only
+as explicit, testable hypotheses (lower confidence than the ATG9/VSR1 cargo) and
+are flagged as *predicted* wherever they appear.
 :::
 
 **ESCRT pathway** (Endosomal Sorting Complexes Required for Transport)
