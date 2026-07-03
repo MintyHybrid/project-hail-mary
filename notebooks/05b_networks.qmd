@@ -207,6 +207,61 @@ Key features:
 - Multiplex participation coefficient for identifying bridge species
 - Interactive visualisation via `visNetwork`
 
+### A saved BioNexus network: *Turnip mosaic virus* host community
+
+A live Shiny app cannot be embedded in a static document (an interactive
+`shinylive`/WASM build is a future option). Instead, the network below is
+**reconstructed from a saved BioNexus session** — the GLOBI-derived biotic
+interaction network for a *Turnip mosaic virus* host list. **Hover a node** for
+its taxonomy and a **PhyloPic silhouette** of its class.
+
+```{r bionexus-session}
+#| eval: !expr file.exists(here::here("data","bionexus_turnip95.rds"))
+#| fig-width: 10
+sess <- readRDS(here::here("data", "bionexus_turnip95.rds"))
+
+# base64-embed cached PhyloPic silhouettes (by class) into hover tooltips
+phylodir <- here::here("data", "phylopic")
+sil_b64 <- function(cls) {
+  if (is.na(cls) || !nzchar(cls)) return("")
+  f <- file.path(phylodir, paste0(gsub("[^A-Za-z0-9]", "_", cls), ".png"))
+  if (!file.exists(f)) return("")
+  sprintf('<img src="data:image/png;base64,%s" height="46" style="float:right;margin-left:8px;">',
+          base64enc::base64encode(f))
+}
+
+nodes <- sess$nodes_df %>%
+  dplyr::mutate(
+    label = name,
+    group = functional_group,
+    title = mapply(function(nm, k, cl, or, fa) paste0(
+      "<div style='max-width:230px;font-size:12px'>", sil_b64(cl),
+      "<b><i>", nm, "</i></b><br><span style='color:#666'>",
+      k, " &middot; ", cl, "<br>", or, " &middot; ", fa, "</span></div>"),
+      name, kingdom, class, order, family, SIMPLIFY = TRUE))
+
+id_of <- stats::setNames(sess$nodes_df$id, sess$nodes_df$name)
+edges <- sess$edges_df %>%
+  dplyr::transmute(
+    from = id_of[from_name], to = id_of[to_name],
+    title = paste0(layer, " (", confidence, ")"),
+    color = dplyr::recode(layer, pollination = "#e67e22", herbivory = "#27ae60",
+                          parasitism = "#c0392b", .default = "#95a5a6")) %>%
+  dplyr::filter(!is.na(from), !is.na(to))
+
+visNetwork(nodes, edges, height = "620px", width = "100%") %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE,
+             selectedBy = "group") %>%
+  visEdges(smooth = FALSE) %>%
+  visLegend(main = "Functional group") %>%
+  visPhysics(stabilization = TRUE) %>%
+  visLayout(randomSeed = 7)
+```
+
+Silhouettes are fetched once with the rOpenSci `rphylopic` package
+(`scripts/fetch_phylopics.R`) and cached, so the chapter renders offline
+[@gearty2023].
+
 ## Summary
 
 The network analysis places the species harbouring viral-homologous loci within
