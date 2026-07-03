@@ -5023,6 +5023,36 @@
       "Maintainer": "Jennifer Bryan <jenny@posit.co>",
       "Repository": "CRAN"
     },
+    "grImport2": {
+      "Package": "grImport2",
+      "Version": "0.3-3",
+      "Source": "Repository",
+      "Depends": [
+        "R (>= 2.12.0)"
+      ],
+      "Imports": [
+        "methods",
+        "grDevices",
+        "grid",
+        "XML",
+        "png",
+        "jpeg",
+        "base64enc"
+      ],
+      "Suggests": [
+        "gridSVG",
+        "rsvg"
+      ],
+      "Title": "Importing 'SVG' Graphics",
+      "Authors@R": "c(person(\"Simon\", \"Potter\", role = c(\"aut\"), email = \"simon.potter@auckland.ac.nz\"), person(\"Paul\", \"Murrell\", role = c(\"aut\", \"cre\"), email = \"paul@stat.auckland.ac.nz\", comment = c(ORCID = \"0000-0002-3224-8858\")))",
+      "Description": "Functions for importing external vector images and drawing them as part of 'R' plots.  This package is different from the 'grImport' package because, where that package imports 'PostScript' format images, this package imports 'SVG' format images.  Furthermore, this package imports a specific subset of 'SVG', so external images must be preprocessed using a package like 'rsvg' to produce 'SVG' that this package can import.  'SVG' features that are not supported by 'R' graphics, e.g., gradient fills, can be imported and then exported via the 'gridSVG' package.",
+      "URL": "https://r-forge.r-project.org/projects/grimport/,https://stattech.wordpress.fos.auckland.ac.nz/2013/09/,https://stattech.wordpress.fos.auckland.ac.nz/2016/08/30/2016-11-the-butterfly-affectation/,https://stattech.wordpress.fos.auckland.ac.nz/2019/11/25/2019-02-svg-in-svg-out/",
+      "License": "GPL (>= 2)",
+      "NeedsCompilation": "no",
+      "Author": "Simon Potter [aut], Paul Murrell [aut, cre] (<https://orcid.org/0000-0002-3224-8858>)",
+      "Maintainer": "Paul Murrell <paul@stat.auckland.ac.nz>",
+      "Repository": "CRAN"
+    },
     "graphlayouts": {
       "Package": "graphlayouts",
       "Version": "1.2.4",
@@ -6945,6 +6975,34 @@
       "Author": "Thomas Lin Pedersen [cre, aut] (ORCID: <https://orcid.org/0000-0002-5147-4711>)",
       "Repository": "CRAN"
     },
+    "pbapply": {
+      "Package": "pbapply",
+      "Version": "1.7-4",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Adding Progress Bar to '*apply' Functions",
+      "Date": "2025-07-19",
+      "Authors@R": "c(person(given = \"Peter\", family = \"Solymos\", comment = c(ORCID = \"0000-0001-7337-1740\"), role = c(\"aut\", \"cre\"), email = \"psolymos@gmail.com\"), person(given = \"Zygmunt\", family = \"Zawadzki\", role = \"aut\", email = \"zygmunt@zstat.pl\"), person(given = \"Henrik\",  family = \"Bengtsson\",  role = \"ctb\", email = \"henrikb@braju.com\"), person(\"R Core Team\", role = c(\"cph\", \"ctb\")))",
+      "Maintainer": "Peter Solymos <psolymos@gmail.com>",
+      "Description": "A lightweight package that adds progress bar to vectorized R functions ('*apply'). The implementation can easily be added to functions where showing the progress is useful (e.g. bootstrap). The type and style of the progress bar (with percentages or remaining time) can be set through options. Supports several parallel processing backends including mirai and future.",
+      "Depends": [
+        "R (>= 3.2.0)"
+      ],
+      "Imports": [
+        "parallel"
+      ],
+      "Suggests": [
+        "shiny",
+        "future",
+        "future.apply"
+      ],
+      "License": "GPL (>= 2)",
+      "URL": "https://github.com/psolymos/pbapply, https://peter.solymos.org/pbapply/",
+      "BugReports": "https://github.com/psolymos/pbapply/issues",
+      "NeedsCompilation": "no",
+      "Author": "Peter Solymos [aut, cre] (ORCID: <https://orcid.org/0000-0001-7337-1740>), Zygmunt Zawadzki [aut], Henrik Bengtsson [ctb], R Core Team [cph, ctb]",
+      "Repository": "CRAN"
+    },
     "permute": {
       "Package": "permute",
       "Version": "0.9-10",
@@ -8588,6 +8646,60 @@
       "Maintainer": "Francois Michonneau <francois.michonneau@gmail.com>",
       "Repository": "CRAN"
     },
+    "rphylopic": {
+      "Package": "rphylopic",
+      "Version": "1.6.0",
+      "Source": "Repository",
+      "Title": "Get Silhouettes of Organisms from PhyloPic",
+      "Description": "Work with the PhyloPic Web Service (<http://api-docs.phylopic.org/v2/>)  to fetch silhouette images of organisms. Includes functions for adding  silhouettes to both base R plots and ggplot2 plots.",
+      "Authors@R": "c( person(given = \"William\", family = \"Gearty\", email = \"willgearty@gmail.com\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0000-0003-0076-3262\")), person(given = \"Lewis A.\", family = \"Jones\", email = \"LewisAlan.Jones@uvigo.es\", role = c(\"aut\"), comment = c(ORCID = \"0000-0003-3902-8986\")), person(given = \"Scott\", family = \"Chamberlain\", email = \"myrmecocystus@gmail.com\", role = c(\"ctb\"), comment = c(ORCID = \"0000-0003-1444-9135\")), person(given = \"Martin R.\", family = \"Smith\", email = \"martin.smith@durham.ac.uk\", role = c(\"ctb\"), comment = c(ORCID = \"0000-0001-5660-1727\")), person(given = \"David L.\", family = \"Miller\", email = \"dave@ninepointeightone.net\", role = c(\"ctb\"), comment = c(ORCID = \"0000-0002-9640-6755\")) )",
+      "License": "GPL (>= 3)",
+      "Language": "en-US",
+      "Encoding": "UTF-8",
+      "biocViews": "",
+      "RoxygenNote": "7.3.2",
+      "Depends": [
+        "R (>= 4.0)"
+      ],
+      "Imports": [
+        "ape",
+        "ggplot2",
+        "jsonlite",
+        "grid",
+        "graphics",
+        "png",
+        "grImport2 (>= 0.3.3)",
+        "rsvg (>= 2.6.0)",
+        "httr",
+        "curl",
+        "methods",
+        "lifecycle",
+        "pbapply",
+        "knitr",
+        "scales"
+      ],
+      "Suggests": [
+        "testthat (>= 3.0.0)",
+        "vdiffr (>= 1.0.0)",
+        "rmarkdown",
+        "covr",
+        "phytools",
+        "palaeoverse",
+        "ggtree",
+        "deeptime",
+        "palmerpenguins",
+        "maps",
+        "sf"
+      ],
+      "Config/testthat/edition": "3",
+      "URL": "https://rphylopic.palaeoverse.org, https://github.com/palaeoverse/rphylopic, https://palaeoverse.org",
+      "BugReports": "https://github.com/palaeoverse/rphylopic/issues",
+      "VignetteBuilder": "knitr",
+      "NeedsCompilation": "no",
+      "Author": "William Gearty [aut, cre] (ORCID: <https://orcid.org/0000-0003-0076-3262>), Lewis A. Jones [aut] (ORCID: <https://orcid.org/0000-0003-3902-8986>), Scott Chamberlain [ctb] (ORCID: <https://orcid.org/0000-0003-1444-9135>), Martin R. Smith [ctb] (ORCID: <https://orcid.org/0000-0001-5660-1727>), David L. Miller [ctb] (ORCID: <https://orcid.org/0000-0002-9640-6755>)",
+      "Maintainer": "William Gearty <willgearty@gmail.com>",
+      "Repository": "CRAN"
+    },
     "rprojroot": {
       "Package": "rprojroot",
       "Version": "2.1.1",
@@ -8695,6 +8807,39 @@
       "Config/roxygen2/version": "8.0.0",
       "NeedsCompilation": "no",
       "Author": "Kevin Ushey [aut, cre], JJ Allaire [aut], Hadley Wickham [aut], Gary Ritchie [aut], RStudio [cph]",
+      "Repository": "CRAN"
+    },
+    "rsvg": {
+      "Package": "rsvg",
+      "Version": "2.7.0",
+      "Source": "Repository",
+      "Type": "Package",
+      "Title": "Render SVG Images into PDF, PNG, (Encapsulated) PostScript, or Bitmap Arrays",
+      "Authors@R": "c( person(\"Jeroen\", \"Ooms\", , \"jeroenooms@gmail.com\", role = c(\"aut\", \"cre\"), comment = c(ORCID = \"0000-0002-4035-0289\")), person(\"Salim\", \"Brüggemann\", , \"salim-b@pm.me\", role = c(\"ctb\"), comment = c(ORCID = \"0000-0002-5329-5987\")))",
+      "Description": "Renders vector-based svg images into high-quality custom-size bitmap arrays using 'librsvg2'. The resulting bitmap can be written to e.g. png, jpeg or webp format. In addition, the package can convert images directly to various formats such as pdf or postscript.",
+      "License": "MIT + file LICENSE",
+      "URL": "https://docs.ropensci.org/rsvg/, https://github.com/ropensci/rsvg",
+      "BugReports": "https://github.com/ropensci/rsvg/issues",
+      "Suggests": [
+        "ggplot2",
+        "knitr",
+        "magick",
+        "rmarkdown",
+        "spelling",
+        "svglite",
+        "testthat (>= 3.0.0)",
+        "webp",
+        "png"
+      ],
+      "VignetteBuilder": "knitr",
+      "Encoding": "UTF-8",
+      "Language": "en-US",
+      "RoxygenNote": "7.1.2",
+      "SystemRequirements": "librsvg2 (at least version 2.52)",
+      "Config/testthat/edition": "3",
+      "NeedsCompilation": "yes",
+      "Author": "Jeroen Ooms [aut, cre] (ORCID: <https://orcid.org/0000-0002-4035-0289>), Salim Brüggemann [ctb] (ORCID: <https://orcid.org/0000-0002-5329-5987>)",
+      "Maintainer": "Jeroen Ooms <jeroenooms@gmail.com>",
       "Repository": "CRAN"
     },
     "rtracklayer": {
