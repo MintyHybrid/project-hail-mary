@@ -115,6 +115,44 @@ if (have_gget) {
 }
 ```
 
+### What the motifs are — reference table
+
+Throughout this chapter motifs are labelled by their **ELM identifier** (e.g.
+`LIG_SH2_STAT5`), which is compact but opaque. The table below unpacks every
+detected class: its **functional-site name**, ELM **type** (CLV cleavage, DEG
+degron, DOC docking, LIG ligand-binding, MOD post-translational modification,
+TRG targeting), the **canonical regular-expression pattern** that defines the
+motif, a brief functional **description**, and the number of CI-region isolates
+carrying it. Sort by *n_isolates* for the near-universal motifs; filter by
+*Type* or search the description for a functional class of interest. Each
+identifier links to its ELM database entry.
+
+```{r elm-reference-table}
+#| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_regex.tsv"))
+elm_ref <- elm %>%
+  dplyr::group_by(ELMIdentifier) %>%
+  dplyr::summarise(
+    `Functional site` = dplyr::first(FunctionalSiteName),
+    Type              = dplyr::first(ELMType),
+    `Canonical regex` = dplyr::first(Regex),
+    Description       = dplyr::first(Description),
+    n_isolates        = dplyr::n_distinct(query),
+    .groups = "drop") %>%
+  dplyr::arrange(dplyr::desc(n_isolates)) %>%
+  dplyr::mutate(ELMIdentifier = sprintf(
+    '<a href="http://elm.eu.org/elms/%s" target="_blank">%s</a>',
+    ELMIdentifier, ELMIdentifier))
+
+DT::datatable(
+  elm_ref, rownames = FALSE, escape = FALSE, filter = "top",
+  options = list(pageLength = 12, scrollX = TRUE,
+                 columnDefs = list(list(width = "320px", targets = 4))),
+  caption = paste("All ELM linear-motif classes detected in the CI motif-flanking",
+                  "region, with functional-site name, type, canonical regex,",
+                  "description and isolate count. Identifiers link to the ELM",
+                  "database."))
+```
+
 ## Motif landscape across isolates
 
 Motif presence per isolate, ELM classes on **y**, isolate fragments on **x**,
@@ -211,10 +249,19 @@ ggplot(prev_long, aes(ELMIdentifier, genus_lab, fill = prevalence)) +
         panel.grid = element_blank())
 ```
 
-The highest-confidence genus-characteristic calls (largest driving genus):
+The highest-confidence genus-characteristic calls (largest driving genus). These
+are the **data-selected "interesting" motifs** — chosen by an unbiased
+cross-genus prevalence-variance ranking rather than by hand — so each is shown
+with its functional-site name and canonical pattern:
 
 ```{r spec-table}
 #| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_motif_specificity.tsv"))
+# motif -> (name, regex) lookup from the regex hit table
+motif_meta <- elm %>%
+  dplyr::group_by(ELMIdentifier) %>%
+  dplyr::summarise(`Functional site` = dplyr::first(FunctionalSiteName),
+                   Regex = dplyr::first(Regex), .groups = "drop")
+
 spec %>%
   dplyr::arrange(dplyr::desc(spec_var)) %>%
   dplyr::transmute(ELMIdentifier, top_genus, top_n,
@@ -222,8 +269,11 @@ spec %>%
                    wilson_lwr = round(top_prev_wilson_lwr, 2),
                    confidence, spec_var = round(spec_var, 3)) %>%
   dplyr::slice_head(n = 15) %>%
+  dplyr::left_join(motif_meta, by = "ELMIdentifier") %>%
+  dplyr::relocate(`Functional site`, Regex, .after = ELMIdentifier) %>%
   knitr::kable(caption = paste("Top 15 motifs by cross-genus prevalence",
-                               "variance, with small-sample confidence."))
+                               "variance, with functional-site name, canonical",
+                               "regex and small-sample confidence."))
 ```
 
 ## Notes
