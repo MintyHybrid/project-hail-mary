@@ -339,12 +339,13 @@ if (length(core_windows) > 0) {
 #| cache: true
 #| include: false
 
-# Tree building requires phangorn and is computationally heavy
-# (100 bootstraps × 4 regions). It runs only when phangorn is installed AND
-# the POTY_RUN_PHYLO environment variable is set, so the default render stays
-# fast; the section degrades gracefully otherwise.
-run_phylo <- requireNamespace("phangorn", quietly = TRUE) &&
-  nzchar(Sys.getenv("POTY_RUN_PHYLO"))
+# Neighbour-joining trees for each region with bootstrap support. Uses the raw
+# p-distance (bounded, robust to the sequence saturation that makes corrected
+# distances like TN93 diverge to Inf on the deeper CI/polyprotein alignments)
+# and NJ (njs tolerates incomplete matrices). Requires phangorn; freeze caches
+# the result so it is computed once.
+run_phylo <- requireNamespace("phangorn", quietly = TRUE)
+n_boot    <- 30
 
 trees            <- NULL
 tree_comparisons <- list()
@@ -362,10 +363,13 @@ if (run_phylo) {
   trees <- list()
   for (region_name in names(regions)) {
     cat(sprintf("\n=== Building tree for %s ===\n", region_name))
-    tree <- build_phylo_tree(regions[[region_name]],
-                             method = "TN93", tree_method = "upgma", bootstrap = 100)
-    trees[[region_name]] <- tree
+    tree <- tryCatch(
+      build_phylo_tree(regions[[region_name]],
+                       method = "raw", tree_method = "nj", bootstrap = n_boot),
+      error = function(e) { message("  skipped ", region_name, ": ", conditionMessage(e)); NULL })
+    if (!is.null(tree)) trees[[region_name]] <- tree
   }
+  if (length(trees) == 0) trees <- NULL
 }
 ```
 
