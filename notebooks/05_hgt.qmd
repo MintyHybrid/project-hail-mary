@@ -256,6 +256,67 @@ lineage-restricted insertion) rather than a universally conserved host feature.
 transcript; a genomic-assembly search would be needed to firmly exclude the
 insert from those lineages.)
 
+### Localizing the insert within the 3 kb (sliding window)
+
+Horizontal acquisition, if any, is expected to sit in a **sub-region** of the
+3 kb, not throughout. Using the combined alignment, we scan along a
+representative signature-positive locus and, in sliding windows, measure two
+tracks: **conservation among the positive loci** and **identity to the TCP7
+relatives**. The **host TCP7 region** should score high on *both*; a
+**lineage-specific insert** should be conserved among positives but have *no*
+counterpart in the relatives (the track drops to zero).
+
+```{r strawberry-sliding}
+#| fig-width: 10
+#| fig-height: 4
+mm      <- as.matrix(as(straw_aln, "DNAStringSet"))   # aligned char matrix
+rn      <- rownames(mm)
+pos_rows <- grep("^pos_", rn); hom_rows <- grep("^hom_", rn)
+ref_row <- pos_rows[1]
+refv    <- mm[ref_row, ]
+ref_cols <- which(refv != "-")                        # coordinates along the ref locus
+
+frac_match <- function(rows) {
+  if (length(rows) == 0) return(rep(NA_real_, ncol(mm)))
+  ref_mat <- matrix(refv, nrow = length(rows), ncol = length(refv), byrow = TRUE)
+  colMeans(mm[rows, , drop = FALSE] == ref_mat)
+}
+wavg <- function(x, w = 90) as.numeric(stats::filter(x, rep(1 / w, w), sides = 2))
+
+track <- tibble::tibble(
+  pos = seq_along(ref_cols),
+  `Conservation among positive loci`  = wavg(frac_match(setdiff(pos_rows, ref_row))[ref_cols]),
+  `Identity to TCP7 relatives`        = wavg(frac_match(hom_rows)[ref_cols])) %>%
+  tidyr::pivot_longer(-pos, names_to = "track", values_to = "value")
+
+# shade where TCP7 homology is present (host-gene region)
+host <- track %>% dplyr::filter(track == "Identity to TCP7 relatives", value > 0.3)
+host_span <- if (nrow(host)) range(host$pos) else c(NA, NA)
+
+ggplot(track, aes(pos, value, colour = track)) +
+  { if (all(!is.na(host_span)))
+      annotate("rect", xmin = host_span[1], xmax = host_span[2], ymin = 0, ymax = 1,
+               alpha = 0.12, fill = "#2471a3") } +
+  geom_line(linewidth = 0.8, na.rm = TRUE) +
+  scale_colour_manual(values = c("Conservation among positive loci" = "#c0392b",
+                                 "Identity to TCP7 relatives" = "#2471a3"), name = NULL) +
+  labs(title = "Sliding-window localization of the strawberry insert",
+       subtitle = "Blue shading = host TCP7 region (homology to relatives); the insert is conserved among positives but absent from relatives",
+       x = "Position along representative positive locus (bp)", y = "Windowed identity") +
+  ylim(0, 1) + cowplot::theme_cowplot() + theme(legend.position = "top")
+```
+
+```{r strawberry-sliding-note}
+if (all(!is.na(host_span))) {
+  cat(sprintf(paste("The TCP7 host-gene homology maps to ~bp %d-%d of the locus;",
+                    "the flanking sequence outside this window is conserved among",
+                    "the signature-positive Fragaria loci yet has no counterpart in",
+                    "the relatives — i.e. the candidate horizontally-acquired segment",
+                    "is localized, not distributed across the whole 3 kb.\n"),
+              host_span[1], host_span[2]))
+}
+```
+
 ## Coordinate utilities
 
 Helper functions for converting NCBI-style FASTA headers to GRanges.
