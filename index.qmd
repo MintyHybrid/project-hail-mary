@@ -2,8 +2,8 @@
 title: "Project Hail Mary"
 subtitle: "DNAzyme-like motifs, horizontal gene transfer, and short linear motif conservation in Potyviridae"
 author:
-  - name: "chrissi m."
-    email: 70411777+MintyHybrid@users.noreply.github.com
+  - name: "Christina Muedsam"
+    affiliation: "currently none"
 date: last-modified
 ---
 
@@ -15,7 +15,7 @@ Potyviridae species, with flanking regions matching eukaryotic genes across
 plant, fungal, and animal kingdoms. Cross-kingdom horizontal gene transfer is
 the most parsimonious explanation for this pattern.
 
-The work spans four interconnected research threads:
+The work spans several interconnected research threads:
 
 | Chapter | Topic | Key tools |
 |---|---|---|
@@ -44,7 +44,7 @@ targets::tar_make()
 targets::tar_visnetwork()
 ```
 
-External tools required on `PATH`: `mafft`, `iqtree2`, `hmmscan`.
+External tools required on `PATH` for running the entire pipeline: `mafft`, `iqtree2`, `hmmscan`.
 
 ## Interactive Companion App
 

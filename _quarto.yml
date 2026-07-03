@@ -4,9 +4,7 @@ project:
 book:
   title: "DNAzyme-like Motifs, Horizontal Gene Transfer, and Short Linear Motif Conservation in Potyviridae"
   author:
-    - name: "chrissi m."
-      orcid: ""
-      email: 70411777+MintyHybrid@users.noreply.github.com
+    - name: "Christina Muedsam"
   date: today
   repo-url: https://github.com/
   repo-actions: [edit, issue]
