@@ -724,26 +724,18 @@ ggtree(df2) + geom_tiplab() +
 
 ### Some more?
 
-Cramer, E.R., Starcovic, S.A., Avey, R.M. *et al.* Structure of a 10-23
-deoxyribozyme exhibiting a homodimer conformation. *Commun Chem* **6**, 119 (2023).
-
-[![](../images/Screenshot 2026-02-14 095510.png)](https://www.nature.com/articles/s42004-023-00924-3#citeas)
+The 10-23 deoxyribozyme has been structurally characterised in a homodimer
+conformation [@cramer2023]. Its target / catalytic-core arrangement is:
 
 | | 5' | cat | 3' |
 |---|---|---|---|
 | Target | | a | |
 | DNAzyme | gcacaatg | ggctagctacaacga | atccccag |
 
-![](../images/Screenshot 2026-02-14 095423.png)
-
-Wieruszewska, J., Pawłowicz, A., Połomska, E. *et al.* The 8-17 DNAzyme can
-operate in a single active structure regardless of metal ion cofactor. *Nat
-Commun* **15**, 4218 (2024).
-
-[![8-17 DNAzyme as shown in Wieruszewska et al., 2024](../images/clipboard-988798735.png)](https://doi.org/10.1038/s41467-024-48638-x)
-
-Here, the catalytic domain corresponds to 5' GCCAGCGCCTCGAA 3'. The target seems
-to harbour an additional nucleotide between the specificity determining flanks.
+The related **8-17 DNAzyme** can operate in a single active structure regardless
+of the metal-ion cofactor [@wieruszewska2024]. There the catalytic domain
+corresponds to 5' GCCAGCGCCTCGAA 3', and the target harbours an additional
+nucleotide between the specificity-determining flanks.
 
 ## Open Questions, Outlook, Thoughts
 
@@ -763,9 +755,9 @@ Likelihoods:
 
 > "but the virus is RNA!!?"
 
-Chiba, S., Kondo, H., Tani, A., Saisho, D., Sakamoto, W., Kanematsu, S., & Suzuki, N.
-(2011). Widespread endogenization of genome sequences of non-retroviral RNA viruses
-into plant genomes. PLoS pathogens, 7(7), e1002146.
+An RNA genome is not an obstacle: genome sequences of non-retroviral RNA viruses
+are **widely endogenized into plant genomes** [@chiba2011], providing a precedent
+for the DNA-level integration of a (+)-strand RNA virus sequence proposed here.
 
 "The pattern of occurrence of NRVSs and the phylogenetic analyses of NRVSs and related
 viruses indicate that multiple independent integrations into many plant lineages may have
