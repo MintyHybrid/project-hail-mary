@@ -37,6 +37,20 @@ test_that("per-sequence variant yields sequence x window rows", {
   expect_setequal(unique(ras_ps$sequence), rownames(aln))
 })
 
+test_that("pooled and per-sequence metrics match hand-computed values", {
+  m <- rbind(
+    c("A", "T", "G", "C", "G", "C"),
+    c("A", "A", "G", "G", "T", "T"))
+  r <- rolling_alignment_stats(m, window = 6, step = 3)
+  # window 1 pools both sequences over all 6 columns: 6 GC / 12 bases
+  expect_equal(r$GC[1], 0.5)
+  # GC3 over global third positions (cols 3, 6): 3 GC / 4 third-position bases
+  expect_equal(r$GC3[1], 0.75)
+
+  rp <- rolling_alignment_stats_per_sequence(m, window = 6, step = 3)
+  expect_equal(rp$GC[rp$sequence == "1" | rp$window == 1][1], 4 / 6)
+})
+
 test_that("remove_gaps drops gap characters before metrics", {
   aln <- matrix(c(rep("-", 15), rep("G", 15)), nrow = 2, byrow = TRUE)
   # window covers all 15 sites of each row
