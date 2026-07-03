@@ -317,6 +317,56 @@ if (all(!is.na(host_span))) {
 }
 ```
 
+#### Per-homolog coverage map
+
+The sliding-window plot pools all relatives into one track. The map below breaks
+it out **one row per related-species homolog**, showing exactly which positions
+of the representative 3 kb positive locus each homolog aligns to (coloured) versus
+where it is gapped (blank). If the relatives are ordinary host *TCP7* genes, every
+homolog should cover the same host-gene block and leave the putative insert
+uncovered — making "homologs flank the insert but are absent within it" explicit.
+
+```{r strawberry-coverage-map}
+#| fig-width: 10
+#| fig-height: 4.5
+#| fig-cap: "Per-homolog alignment coverage across the representative 3 kb positive locus. Each row is a related-species homolog; coloured cells mark reference positions the homolog aligns to (non-gap), blank cells mark gaps. Blue shading marks the host TCP7 region inferred from the sliding-window analysis. Coverage confined to the TCP7 block, with the remaining ~70% uncovered, indicates the insert is absent from these relatives."
+if (have_homologs && length(hom_rows) > 0) {
+  win <- 15  # downsample columns into 15 bp bins to keep the raster light
+  bin <- ((seq_along(ref_cols) - 1) %/% win) + 1
+
+  cov_df <- purrr::map_dfr(hom_rows, function(r) {
+    covered <- as.integer(mm[r, ref_cols] != "-")
+    tibble::tibble(
+      homolog  = sub("^hom_", "", rn[r]),
+      bin      = bin,
+      covered  = covered)
+  }) %>%
+    dplyr::group_by(homolog, bin) %>%
+    dplyr::summarise(frac = mean(covered), .groups = "drop") %>%
+    dplyr::mutate(pos = bin * win)
+
+  # order homologs by total coverage (most-covered at top)
+  ord <- cov_df %>% dplyr::group_by(homolog) %>%
+    dplyr::summarise(tot = sum(frac)) %>% dplyr::arrange(tot) %>% dplyr::pull(homolog)
+  cov_df$homolog <- factor(cov_df$homolog, levels = ord)
+
+  ggplot(cov_df, aes(pos, homolog, fill = frac)) +
+    { if (all(!is.na(host_span)))
+        annotate("rect", xmin = host_span[1], xmax = host_span[2],
+                 ymin = 0.4, ymax = length(ord) + 0.6,
+                 alpha = 0, colour = "#2471a3", linewidth = 0.6, linetype = 2) } +
+    geom_tile(na.rm = TRUE) +
+    scale_fill_gradient(low = "#f2f2f2", high = "#c0392b",
+                        name = "aligned\nfraction", limits = c(0, 1)) +
+    labs(title = "Per-homolog coverage of the 3 kb locus",
+         x = "Position along representative positive locus (bp)", y = NULL) +
+    cowplot::theme_cowplot() +
+    theme(axis.text.y = element_text(size = 7))
+} else {
+  cat("Related-species homologs not available; run scripts/fetch_strawberry_homologs.R.")
+}
+```
+
 ## Coordinate utilities
 
 Helper functions for converting NCBI-style FASTA headers to GRanges.
