@@ -2,9 +2,8 @@ Package: potytools
 Title: Analysis Tools for Potyvirus Genomics and Short Linear Motifs
 Version: 0.1.0
 Authors@R:
-    person("chrissi", "m.", email = "peanutbutter.kitty.m@gmail.com",
-           role = c("aut", "cre"),
-           comment = c(ORCID = ""))
+    person("Christina", "Muedsam", email = "christina.muedsam@example.com",
+           role = c("aut", "cre"))
 Description: Provides functions for potyvirus genomic analysis, including
     GenBank file parsing (no external dependencies), codon usage bias
     calculation (RSCU, ENC, CAI, GC content), host classification for
