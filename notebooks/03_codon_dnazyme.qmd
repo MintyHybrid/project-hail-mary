@@ -5,14 +5,10 @@ author: "chrissi m."
 date: last-modified
 format:
   html:
-    embed-resources: true
-    theme: cosmo
     toc: true
     toc-depth: 3
-    toc-location: left
     code-fold: true
     code-tools: true
-    page-layout: full
 execute:
   echo: false
   warning: false
@@ -263,7 +259,7 @@ deoxyribozyme** (15 nt, `GGCTAGCTACAACGA`) [@santoro1997]. Whether a given
 homolog would retain catalytic activity depends on conservation of this core:
 it is highly intolerant to substitution [@zaborowska2002], and position **G14**
 is the catalytic general base that activates the 2'-OH nucleophile
-[@borggräfe2022; @cramer2023]. Below, each homolog's best-matching core window is
+[@borggraefe2022; @cramer2023]. Below, each homolog's best-matching core window is
 scored against the canonical core with per-position criticality weights (a
 sequence-based heuristic, not a catalytic-rate measurement).
 
@@ -850,3 +846,9 @@ ggplot(ras_ps, aes(start, GC3, group = sequence)) +
   labs(x = "Alignment position (bp)", y = "GC3") +
   theme_cowplot()
 ```
+
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

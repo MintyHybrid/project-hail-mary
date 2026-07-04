@@ -27,7 +27,7 @@ execute:
 
 ## Intro
 
-The starting point is a synthetic **10-23 deoxyribozyme** [@borggräfe2022]: a
+The starting point is a synthetic **10-23 deoxyribozyme** [@borggraefe2022]: a
 single-stranded DNA whose two substrate-binding arms base-pair a target RNA
 (Watson–Crick), positioning a 15-nt catalytic core that cleaves the RNA at an
 unpaired purine·pyrimidine junction. Redrawn from the target/DNAzyme pairing:
@@ -43,7 +43,7 @@ unpaired purine·pyrimidine junction. Redrawn from the target/DNAzyme pairing:
 The RNA is cleaved at the unpaired junction (`|`) between the two arms. The
 15-nt catalytic core `GGCTAGCTACAACGA` — the part with no base-pairing role in
 recognition — is the sequence that turns out to match the potyvirus CI coding
-region (below). *Scheme redrawn after Borggräfe et al. 2022 [@borggräfe2022];
+region (below). *Scheme redrawn after Borggräfe et al. 2022 [@borggraefe2022];
 no figure is reproduced.*
 
 ### The answer to life, the universe and everything...
@@ -60,7 +60,7 @@ even dates back to evolution prior to what we define as "the origin of life".
 So, yep. This might be the answer to life, (the universe) and everything.
 Evolution that maybe happened in a world before cells. Maybe not ... but
 everything starts from an in vitro system. To be precise: it starts from a
-DNAzyme that was published in Borggräfe et al. 2022, which is a paper about a
+DNAzyme published by @borggraefe2022, which is a paper about a
 DNAzyme that can cleave RNA in a sequence specific manner. The catalytic domain
 of the DNAzyme is 15bp long and has the sequence "GGCTAGCTACAACGA". Flanking
 this sequence is a region comprising (at least) 9 bases on both sides of the
@@ -93,11 +93,8 @@ library(ape)
 
 ## Blasting the catalytic center of a DNAzyme
 
-I had blasted the catalytic domain of the DNAzyme in Borggräfe et al. 2022.
-
-Borggräfe, J., Victor, J., Rosenbach, H., Viegas, A., Gertzen, C. G., Wuebben,
-C., ... & Etzkorn, M. (2022). Time-resolved structural analysis of an
-RNA-cleaving DNA catalyst. Nature, 601(7891), 144-149.
+I had blasted the catalytic domain of the 10-23 DNAzyme characterised by
+@borggraefe2022.
 
 I was curious, whether they (DNAzyme(s)) might exist or have existed in nature.
 That's also why I initially screened the experimental virus database (as opposed
@@ -116,10 +113,7 @@ SHEST00P014
 
 #### Blast Reference:
 
-Stephen F. Altschul, Thomas L. Madden, Alejandro A. Schäffer, Jinghui Zhang,
-Zheng Zhang, Webb Miller, and David J. Lipman (1997), "Gapped BLAST and
-PSI-BLAST: a new generation of protein database search programs", *Nucleic Acids
-Res.* 25:3389-3402.
+The BLAST algorithm and scoring are described in @altschul1997.
 
 #### Blast Database
 
@@ -781,10 +775,13 @@ Likelihoods:
 An RNA genome is not an obstacle: genome sequences of non-retroviral RNA viruses
 are **widely endogenized into plant genomes** [@chiba2011], providing a precedent
 for the DNA-level integration of a (+)-strand RNA virus sequence proposed here.
+As those authors put it:
 
-"The pattern of occurrence of NRVSs and the phylogenetic analyses of NRVSs and related
-viruses indicate that multiple independent integrations into many plant lineages may have
-occurred."
+> "The pattern of occurrence of NRVSs and the phylogenetic analyses of NRVSs and
+> related viruses indicate that multiple independent integrations into many plant
+> lineages may have occurred."
+>
+> — @chiba2011
 
 ## Multilayer Network analysis
 
@@ -811,12 +808,16 @@ taxbyvir$`Leek yellow stripe virus`
 
 ###### Additional References
 
-Foster ZSL, Sharpton TJ, Grünwald NJ (2017) Metacoder: An R package for
-visualization and manipulation of community taxonomic diversity data. PLOS
-Computational Biology 13(2): e1005404.
+Taxonomic diversity is visualised with the `metacoder` R package [@foster2017].
 
 #### Session Info
 
 ```{r}
 sessioninfo::session_info()
 ```
+
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

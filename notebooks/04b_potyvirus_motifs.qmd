@@ -5,13 +5,10 @@ author: "chrissi m."
 date: last-modified
 format:
   html:
-    theme: cosmo
     toc: true
     toc-depth: 3
-    toc-location: left
     code-fold: true
     code-tools: true
-    page-layout: full
 execute:
   echo: true
   warning: false
@@ -245,3 +242,9 @@ SUMO machinery (SCE1) — implicating replication-complex assembly in the direct
 subversion of SA-dependent defence. Together these two hubs are where the
 sequence-level (motif/DNAzyme/ELM) and network-level views of the potyvirus
 proteome converge.
+
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

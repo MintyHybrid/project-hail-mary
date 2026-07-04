@@ -5,10 +5,7 @@ author: "chrissi m."
 date: last-modified
 format:
   html:
-    embed-resources: true
-    theme: cosmo
     toc: true
-    page-layout: full
 ---
 
 <!-- SOURCE: 20260125_ClaudeAP4/immune_dashboard.ojs + AP4_TEPSIN_expanded_analysis.md -->
@@ -988,4 +985,10 @@ The full React component (`PlantImmuneTrafficDashboard`) with recharts
 visualisations is preserved in the project history for reference. To enable it,
 either (a) host it as a standalone React app and embed via `<iframe>`, or
 (b) move to a Shiny app (`shiny/immu_simu/`) with the same simulation logic.
+:::
+
+
+## References {.unnumbered}
+
+::: {#refs}
 :::
