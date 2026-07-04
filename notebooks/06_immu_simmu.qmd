@@ -233,14 +233,21 @@ simulation = {
   let hist = [];
   let t = 0;
 
+  // Single source of truth: every rate constant the model uses lives here
+  // (matches the parameter table in "Model assumptions"). Rates are min⁻¹
+  // unless noted; receptor_synthesis is a zero-order replenishment coefficient.
   const params = {
-    receptor_activation: 0.5, internalization: 0.3,
-    ubiquitination: 0.4, deubiquitination: 0.1, recycling: 0.2,
-    escrt_recruitment: 0.25, ilv_formation: 0.35, mvb_fusion: 0.15,
-    atg_activation: 0.1, autophagosome_formation: 0.2, autophagy_flux: 0.12,
-    pi3p_production: 0.4, pi3p_consumption: 0.2,
-    vacuolar_degradation: 0.08
+    internalization: 0.30, recycling: 0.20, escrt_recruitment: 0.25,
+    mvb_fusion: 0.15, atg_activation: 0.10, autophagy_flux: 0.12,
+    pi3p_prod_ee: 0.04, pi3p_prod_mvb: 0.03,
+    pi3p_cons_ee: 0.020, pi3p_cons_mvb: 0.030,
+    atg9_export: 0.04, atg9_backlog: 2.5,
+    npr1_import_pti: 0.12, npr1_import_eti: 0.30, cbp60g_import: 0.15,
+    exo_rate: 0.80, exo_normal: 0.04,
+    k_ros_decay: 0.513, k_mapk_decay: 0.202,   // exp(-k·dt) reproduces 0.95/0.98 at dt=0.1
+    receptor_synthesis: 0.15                   // homeostatic PM replenishment toward baseline
   };
+  const PM0 = 100;   // PM baseline that basal resynthesis restores toward
 
   while (true) {
     if (isRunning && t < timeMax) {
@@ -259,20 +266,21 @@ simulation = {
       const auto_induced = s.ee  * params.atg_activation     * dt * mo.autophagy * pmod.autophagy;
       const auto_flux    = s.auto * params.autophagy_flux    * dt * mo.fusion;
 
-      // --- Signalling (phenomenological, pathogen-modulated) ---
-      const ros_t   = t < 5  ? Math.exp(-t / 2) * 100 * mo.ros * pmod.ros : s.ros  * 0.95;
-      const mapk_t  = t < 10 ? (1 - Math.exp(-t / 3)) * 80 * mo.ros : s.mapk * 0.98;
-      const cal_t   = t < 20 ? ros_t * 0.3 : s.callose * 0.95;
+      // --- Signalling (phenomenological, pathogen-modulated). Decay uses
+      //     exp(-k·dt) so the rate is dt-independent (reproduces 0.95/0.98 at dt=0.1) ---
+      const ros_t   = t < 5  ? Math.exp(-t / 2) * 100 * mo.ros * pmod.ros : s.ros  * Math.exp(-params.k_ros_decay  * dt);
+      const mapk_t  = t < 10 ? (1 - Math.exp(-t / 3)) * 80 * mo.ros : s.mapk * Math.exp(-params.k_mapk_decay * dt);
+      const cal_t   = t < 20 ? ros_t * 0.3 : s.callose * Math.exp(-params.k_ros_decay * dt);
 
       // --- PI(3)P: produced on endosomes, consumed by ILV formation (ESCRT) ---
-      const pi3p_ee_new  = Math.max(0.05, s.pi3p_ee  + 0.04 * dt * mo.lipids - 0.020 * ilv_form);
-      const pi3p_mvb_new = Math.max(0.05, s.pi3p_mvb + 0.03 * dt * mo.lipids - 0.030 * ilv_form);
+      const pi3p_ee_new  = Math.max(0.05, s.pi3p_ee  + params.pi3p_prod_ee  * dt * mo.lipids - params.pi3p_cons_ee  * ilv_form);
+      const pi3p_mvb_new = Math.max(0.05, s.pi3p_mvb + params.pi3p_prod_mvb * dt * mo.lipids - params.pi3p_cons_mvb * ilv_form);
 
       // --- AP-4 cargo sorting; ATG9 backs up at the TGN when AP-4 is impaired ---
-      const atg9_sorted   = s.atg9_tgn * 0.04 * dt * mo.ap4Sorting;
-      const atg9_backlog  = (1 - mo.ap4Sorting) * 2.5 * dt;
-      const npr1_import   = (rv === "eti" ? 0.30 : 0.12) * dt * mo.npr1Nuclear * mo.ap4Sorting;
-      const cbp60g_import = 0.15 * dt * mo.cbp60gNuclear * mo.ap4Sorting;
+      const atg9_sorted   = s.atg9_tgn * params.atg9_export * dt * mo.ap4Sorting;
+      const atg9_backlog  = (1 - mo.ap4Sorting) * params.atg9_backlog * dt;
+      const npr1_import   = (rv === "eti" ? params.npr1_import_eti : params.npr1_import_pti) * dt * mo.npr1Nuclear * mo.ap4Sorting;
+      const cbp60g_import = params.cbp60g_import * dt * mo.cbp60gNuclear * mo.ap4Sorting;
 
       // --- Exosomes: reversed-topology fraction = intrinsic perturbation risk,
       //     amplified by membrane stress from CARGO BACKLOG. Keyed off accumulated
@@ -281,11 +289,14 @@ simulation = {
       //     reversed exosomes — matching the "aberrant ILV formation without
       //     functional ESCRT" mechanism. ---
       const backlog       = Math.min(2, (s.ee + s.mvb) / 40);   // 0..2 membrane stress
-      const exo_rev_gain  = mo.exosomeTopology * (0.5 + backlog) * 0.8 * dt;
-      const exo_norm_gain = (1 - mo.exosomeTopology) * s.mvb * 0.04 * dt;
+      const exo_rev_gain  = mo.exosomeTopology * (0.5 + backlog) * params.exo_rate * dt;
+      const exo_norm_gain = (1 - mo.exosomeTopology) * s.mvb * params.exo_normal * dt;
+
+      // basal receptor resynthesis toward baseline → PM reaches a nonzero steady state
+      const pm_synth      = params.receptor_synthesis * Math.max(0, PM0 - s.pm) * dt;
 
       s = {
-        pm:             Math.max(0, s.pm   - internalized + recycled),
+        pm:             Math.max(0, s.pm   - internalized + recycled + pm_synth),
         ee:             Math.max(0, s.ee   + internalized - recycled - ilv_form - auto_induced),
         mvb:            Math.max(0, s.mvb  + ilv_form - mvb_fused),
         auto:           Math.max(0, s.auto + auto_induced - auto_flux),
@@ -677,7 +688,7 @@ the core system integrated by explicit Euler ($\Delta t = 0.1$) is
 
 $$
 \begin{aligned}
-\frac{d[\mathrm{PM}]}{dt}   &= -k_{\text{int}}\,m_{\text{endo}}\,[\mathrm{PM}] + k_{\text{rec}}\,m_{\text{rec}}\,[\mathrm{EE}]\\[2pt]
+\frac{d[\mathrm{PM}]}{dt}   &= -k_{\text{int}}\,m_{\text{endo}}\,[\mathrm{PM}] + k_{\text{rec}}\,m_{\text{rec}}\,[\mathrm{EE}] + k_{\text{syn}}\,([\mathrm{PM}]_0 - [\mathrm{PM}])\\[2pt]
 \frac{d[\mathrm{EE}]}{dt}   &= k_{\text{int}}m_{\text{endo}}[\mathrm{PM}] - k_{\text{rec}}m_{\text{rec}}[\mathrm{EE}] - \underbrace{k_{\text{ILV}}m_{\text{escrt}}m_{\text{ub}}[\mathrm{EE}]}_{J_{\text{ILV}}} - k_{\text{atg}}m_{\text{auto}}p_{\text{auto}}[\mathrm{EE}]\\[2pt]
 \frac{d[\mathrm{MVB}]}{dt}  &= J_{\text{ILV}} - k_{\text{fus}}\,m_{\text{fus}}\,[\mathrm{MVB}]\\[2pt]
 \frac{d[\mathrm{Auto}]}{dt} &= k_{\text{atg}}m_{\text{auto}}p_{\text{auto}}[\mathrm{EE}] - k_{\text{flux}}\,m_{\text{fus}}\,[\mathrm{Auto}]\\[2pt]
@@ -686,13 +697,20 @@ $$
 $$
 
 ESCRT sorting into ILVs ($J_{\text{ILV}}$) requires **both** ubiquitination and
-ESCRT function, hence the product $m_{\text{escrt}}m_{\text{ub}}$. Rate constants
-($k \approx 0.1$–$0.5\ \text{min}^{-1}$; see table) are **order-of-magnitude
-estimates** from plant endomembrane/autophagy studies, **not fitted to data** —
-absolute values are illustrative and only relative trends are meaningful.
-Signalling outputs are phenomenological, e.g.
-$[\mathrm{ROS}](t) = 100\,m_{\text{ros}}p_{\text{ros}}\,e^{-t/2}$ for $t<5$ min
-and $0.95\,[\mathrm{ROS}]$ decay thereafter (MAPK, callose analogous).
+ESCRT function, hence the product $m_{\text{escrt}}m_{\text{ub}}$. The final
+$k_{\text{syn}}([\mathrm{PM}]_0-[\mathrm{PM}])$ term is **basal receptor
+resynthesis**: the plasma-membrane pool is replenished toward its baseline
+$[\mathrm{PM}]_0$, so under balanced synthesis and trafficking PM relaxes to a
+**non-zero steady state** rather than draining entirely to the vacuole;
+perturbations then shift that steady state (the read-out of interest). Rate
+constants ($k \approx 0.1$–$0.5\ \text{min}^{-1}$; see table) are
+**order-of-magnitude estimates** from plant endomembrane/autophagy studies,
+**not fitted to data** — absolute values are illustrative and only relative
+trends are meaningful. Signalling outputs are phenomenological, e.g.
+$[\mathrm{ROS}](t) = 100\,m_{\text{ros}}p_{\text{ros}}\,e^{-t/2}$ for $t<5$ min,
+decaying as $[\mathrm{ROS}]\,e^{-k_{\text{ROS}}\Delta t}$ thereafter (the
+$\Delta t$-explicit form makes the decay rate independent of the step size;
+MAPK, callose analogous).
 
 **PI(3)P coupling.** PI(3)P is produced on endosomes and **consumed in proportion
 to ILV formation**, with a floor at $0.05$:
@@ -755,6 +773,8 @@ mechanistic route to *higher* topology risk than the knockout — both are set t
 | $k_9,\ c$ | ATG9 TGN export / backlog | 0.04 / 2.5 |
 | $r_{\text{resp}}$ | NPR1 nuclear import | 0.12 (PTI) / 0.30 (ETI) |
 | $k_{\text{exo}}$ | reversed-exosome rate | 0.80 |
+| $k_{\text{syn}}$ | basal PM resynthesis (toward $[\mathrm{PM}]_0$) | 0.15 |
+| $k_{\text{ROS}},\ k_{\text{MAPK}}$ | signalling decay | 0.51 / 0.20 |
 
 **Caveats.** Parameters are illustrative; plant AP-4 cargo beyond ATG9 (NPR1,
 CBP60g) is predicted from cross-species homology (flagged *predicted*); pathogen
