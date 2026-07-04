@@ -42,3 +42,9 @@ targets::tar_make()
 
 See `_targets.R` for the full dependency graph. Individual steps requiring
 external tools (`mafft`, `iqtree2`, `hmmscan`) are noted where they appear.
+
+
+## References {.unnumbered}
+
+::: {#refs}
+:::

@@ -5,13 +5,10 @@ author: "chrissi m."
 date: last-modified
 format:
   html:
-    theme: cosmo
     toc: true
     toc-depth: 3
-    toc-location: left
     code-fold: true
     code-tools: true
-    page-layout: full
 execute:
   echo: true
   warning: false
@@ -287,3 +284,9 @@ spec %>%
 - The gget ELM database footprint is ~3 MB (ELM-curated instances/classes);
   the larger DIAMOND binary lives inside the disposable pixi env, not in the
   project.
+
+
+## References {.unnumbered}
+
+::: {#refs}
+:::
