@@ -240,21 +240,29 @@ if (have_homologs) {
 }
 ```
 
-**What the BLAST search reveals.** Broadening the search to *Fragaria* and close
-Rosoideae relatives (*Potentilla*, *Rosa*, *Duchesnea*, *Rubus*) recovers the
-homologous locus in related species as **partial** hits that cover only ~27–29 %
-of the 3 kb query — and that conserved portion corresponds to a **host
-transcription-factor gene (TCP7)**. In other words, the flanking sequence is an
-ordinary host gene shared across strawberry relatives, whereas the remaining
-~70 % of the fragment (the putative viral-derived insert) is **not recovered**
-from *F. vesca* subsp. *vesca*, *Rosa rugosa* or *Rosa chinensis*. The most
-parsimonious reading is that the ~3 kb element is **present only in a subset of
-*Fragaria* lineages and absent from otherwise closely related genomes** —
-consistent with a lineage-specific acquisition (horizontal transfer or a
-lineage-restricted insertion) rather than a universally conserved host feature.
-(Caveat: the related-species hits are RefSeq mRNAs, so they capture the TCP7
-transcript; a genomic-assembly search would be needed to firmly exclude the
-insert from those lineages.)
+**What the broadened BLAST reveals.** Searching the ~3 kb positive locus against
+the whole **Rosaceae** (`scripts/strawberry_broad_blast.R`, cached to
+`data/strawberry_broad_blast_hsps.tsv`; corroborated by a 250-HSP megablast of
+82 *Fragaria*/Rosaceae subjects in
+`data/strawberry_megablast_hittable.txt`) shows the homology is **confined to the
+two ends of the query, with a central gap** — exactly the pattern expected if a
+lineage-specific insert sits between two host-derived flanks:
+
+- **5′ flank (~bp 1–670):** conserved genomic sequence, recovered from *Malus
+  domestica* and *Fragaria* chromosomes (~82 % identity).
+- **central ~1.4 kb (~bp 670–2130):** **no Rosaceae counterpart** — the candidate
+  horizontally-acquired / lineage-specific segment.
+- **3′ flank (~bp 2130–3018):** the host **TCP7 transcription-factor gene**,
+  matching TCP7 (and its paralogues) across *Fragaria*, *Rosa*, *Prunus*,
+  *Malus*, *Pyrus* and *Potentilla*.
+
+The many partial (~28–35 % coverage) hits spread across numerous *Fragaria*
+chromosomes are TCP-family paralogues matching only the 3′ TCP7 flank, not the
+insert. The most parsimonious reading is therefore that the ~3 kb element is a
+host locus (a genomic region fused to *TCP7*) carrying an insert **present only
+in a subset of *Fragaria* lineages and absent from otherwise closely related
+genomes** — consistent with a lineage-specific acquisition rather than a
+universally conserved host feature.
 
 ### Localizing the insert within the 3 kb (sliding window)
 
@@ -317,54 +325,64 @@ if (all(!is.na(host_span))) {
 }
 ```
 
-#### Per-homolog coverage map
+#### BLAST hit distribution across the 3 kb locus
 
-The sliding-window plot pools all relatives into one track. The map below breaks
-it out **one row per related-species homolog**, showing exactly which positions
-of the representative 3 kb positive locus each homolog aligns to (coloured) versus
-where it is gapped (blank). If the relatives are ordinary host *TCP7* genes, every
-homolog should cover the same host-gene block and leave the putative insert
-uncovered — making "homologs flank the insert but are absent within it" explicit.
+The sliding window above uses only the three RefSeq TCP7 mRNAs, which align to the
+3′ flank alone. The genomic Rosaceae-wide BLAST gives the fuller picture: below,
+each row is a hit subject and each segment is one HSP placed at its **query
+coordinates**, coloured by subject type. The two homology blocks at the ends —
+and the empty central band (yellow) — localise the insert directly, reproducing
+the two-flank pattern seen in a full NCBI megablast (`data/…_megablast_hittable.txt`).
 
-```{r strawberry-coverage-map}
+```{r strawberry-blast-distribution}
 #| fig-width: 10
-#| fig-height: 4.5
-#| fig-cap: "Per-homolog alignment coverage across the representative 3 kb positive locus. Each row is a related-species homolog; coloured cells mark reference positions the homolog aligns to (non-gap), blank cells mark gaps. Blue shading marks the host TCP7 region inferred from the sliding-window analysis. Coverage confined to the TCP7 block, with the remaining ~70% uncovered, indicates the insert is absent from these relatives."
-if (have_homologs && length(hom_rows) > 0) {
-  win <- 15  # downsample columns into 15 bp bins to keep the raster light
-  bin <- ((seq_along(ref_cols) - 1) %/% win) + 1
+#| fig-height: 5.5
+#| fig-cap: "Rosaceae-wide BLAST of the 3 kb positive locus. Each segment is one HSP at its query coordinates; rows are hit subjects. The 5′ block (~1–670 bp) is conserved genomic sequence (Malus/Fragaria chromosomes), the 3′ block (~2130–3018 bp) is the host TCP7 gene across Rosaceae, and the yellow central band (~670–2130 bp) has no Rosaceae hit — the candidate insert."
+hsp <- readr::read_tsv(here::here("data", "strawberry_broad_blast_hsps.tsv"),
+                       show_col_types = FALSE)
+qlen <- 3018
+hsp <- hsp %>% dplyr::mutate(
+  kind = dplyr::case_when(
+    grepl("TCP7", title) ~ "TCP7 gene (3′ flank)",
+    grepl("chromosome|genome", title, ignore.case = TRUE) ~ "genomic (flank)",
+    TRUE ~ "other"),
+  short = sub(",.*", "", sub("PREDICTED: ", "", title)))
+ord <- hsp %>% dplyr::group_by(subject) %>%
+  dplyr::summarise(m = min(qstart), .groups = "drop") %>%
+  dplyr::arrange(m) %>% dplyr::pull(subject)
+hsp$subject <- factor(hsp$subject, levels = rev(ord))
 
-  cov_df <- purrr::map_dfr(hom_rows, function(r) {
-    covered <- as.integer(mm[r, ref_cols] != "-")
-    tibble::tibble(
-      homolog  = sub("^hom_", "", rn[r]),
-      bin      = bin,
-      covered  = covered)
-  }) %>%
-    dplyr::group_by(homolog, bin) %>%
-    dplyr::summarise(frac = mean(covered), .groups = "drop") %>%
-    dplyr::mutate(pos = bin * win)
+ggplot(hsp) +
+  annotate("rect", xmin = 670, xmax = 2130, ymin = -Inf, ymax = Inf,
+           fill = "#f9e79f", alpha = 0.45) +
+  geom_segment(aes(x = qstart, xend = qend, y = subject, yend = subject,
+                   colour = kind, linewidth = pident)) +
+  labs(subtitle = "yellow band = central insert (no Rosaceae hit)") +
+  scale_linewidth(range = c(1, 3), guide = "none") +
+  scale_colour_manual(values = c("TCP7 gene (3′ flank)" = "#2471a3",
+                                 "genomic (flank)" = "#c0392b", "other" = "grey60"),
+                      name = NULL) +
+  scale_x_continuous(limits = c(0, qlen), expand = c(0.01, 0)) +
+  labs(title = "Rosaceae BLAST of the 3 kb strawberry locus",
+       x = "Position along the 3 kb query (bp)", y = NULL) +
+  cowplot::theme_cowplot() +
+  theme(axis.text.y = element_text(size = 6), legend.position = "top")
+```
 
-  # order homologs by total coverage (most-covered at top)
-  ord <- cov_df %>% dplyr::group_by(homolog) %>%
-    dplyr::summarise(tot = sum(frac)) %>% dplyr::arrange(tot) %>% dplyr::pull(homolog)
-  cov_df$homolog <- factor(cov_df$homolog, levels = ord)
+```{r strawberry-blast-coverage}
+#| fig-width: 10
+#| fig-height: 2.6
+#| fig-cap: "Per-position BLAST hit count across the 3 kb query. Two peaks (5′ genomic flank, 3′ TCP7 gene) bracket a central trough with zero hits — the localised candidate insert."
+pos <- seq_len(qlen)
+cnt <- colSums(outer(hsp$qstart, pos, "<=") & outer(hsp$qend, pos, ">="))
+covdf <- data.frame(pos = pos, hits = cnt)
 
-  ggplot(cov_df, aes(pos, homolog, fill = frac)) +
-    { if (all(!is.na(host_span)))
-        annotate("rect", xmin = host_span[1], xmax = host_span[2],
-                 ymin = 0.4, ymax = length(ord) + 0.6,
-                 alpha = 0, colour = "#2471a3", linewidth = 0.6, linetype = 2) } +
-    geom_tile(na.rm = TRUE) +
-    scale_fill_gradient(low = "#f2f2f2", high = "#c0392b",
-                        name = "aligned\nfraction", limits = c(0, 1)) +
-    labs(title = "Per-homolog coverage of the 3 kb locus",
-         x = "Position along representative positive locus (bp)", y = NULL) +
-    cowplot::theme_cowplot() +
-    theme(axis.text.y = element_text(size = 7))
-} else {
-  cat("Related-species homologs not available; run scripts/fetch_strawberry_homologs.R.")
-}
+ggplot(covdf, aes(pos, hits)) +
+  annotate("rect", xmin = 670, xmax = 2130, ymin = -Inf, ymax = Inf,
+           fill = "#f9e79f", alpha = 0.45) +
+  geom_area(fill = "#5d6d7e", alpha = 0.8) +
+  labs(x = "Position along the 3 kb query (bp)", y = "BLAST hits") +
+  cowplot::theme_cowplot()
 ```
 
 ## Coordinate utilities
