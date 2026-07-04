@@ -150,6 +150,7 @@ knitr::kable(hits,
 ```{r motif-scan-plot}
 #| fig-width: 9
 #| fig-height: 3
+#| fig-cap: "Approximate positions of the curated mature-protein signature motifs along the potyvirus polyprotein consensus (one point per motif). Positions are approximate because they are matched on the gapped consensus; a motif absent from the consensus leaves a gap in the ladder."
 found <- dplyr::filter(hits, n_hits > 0)
 ggplot(found, aes(x = first_pos, y = reorder(paste(protein, motif), first_pos))) +
   geom_point(size = 3, colour = "#A23B72") +
@@ -171,6 +172,7 @@ salicylate-dependent immune regulators). Solid edges are curated viral–viral
 interactions; **dashed edges are the high-throughput Y2H host interactions**.
 
 ```{r ppi-network}
+#| fig-cap: "Curated potyvirus protein–protein interaction network. Solid edges are viral–viral interactions; dashed edges are experimentally supported viral–host (Y2H) interactions. Node colour distinguishes viral proteins from host factors; hover for each protein's function. The CI and NIb nodes are the two hubs discussed below."
 viral <- c("P1","HC-Pro","P3","P3N-PIPO","6K1","CI","6K2","VPg","NIa-Pro","NIb","CP")
 host  <- tibble::tribble(
   ~id,          ~fn,

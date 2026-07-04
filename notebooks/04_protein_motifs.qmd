@@ -164,6 +164,7 @@ particular lineages.
 ```{r grid}
 #| fig-width: 15
 #| fig-height: 18
+#| fig-cap: "Presence/absence of each ELM motif class (rows) across every CI-region isolate (columns), faceted and coloured by genus. Wide horizontal bands are motifs shared across essentially all Potyvirus isolates; motifs confined to a single narrow genus panel are lineage-restricted."
 #| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_regex.tsv"))
 pa <- elm %>% dplyr::distinct(query, genus, ELMIdentifier)
 
@@ -203,6 +204,7 @@ relative to one present in 166/166 *Potyvirus* isolates (lower bound ≈ 0.98).
 ```{r spec}
 #| fig-width: 12
 #| fig-height: 5.8
+#| fig-cap: "Genus-characteristic ELM motifs: tile colour is each motif's prevalence within a genus (rows = genera with ≥3 isolates, columns = the most cross-genus-variable motifs). Blue-ringed cells flag calls driven by a small genus (low confidence); † marks genera with <5 isolates."
 #| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_motif_specificity.tsv"))
 spec <- readr::read_tsv(file.path(elm_dir, "elm_motif_specificity.tsv"),
                         show_col_types = FALSE)

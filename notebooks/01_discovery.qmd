@@ -265,6 +265,7 @@ pfm <- consensusMatrix(potyseqsls$`25bp`)
 ```{r}
 #| fig-width: 12
 #| fig-height: 3
+#| fig-cap: "Sequence logo of the 25-nt DNAzyme-matching region across Potyviridae isolates; letter height is information content (bits), so tall stacks mark near-invariant positions."
 seqlogo <- ggseqlogo(pfm, seq_type = 'dna')
 seqlogo
 ```
@@ -272,6 +273,7 @@ seqlogo
 ```{r}
 #| fig-width: 12
 #| fig-height: 3
+#| fig-cap: "The same region with the 15-nt 10-23 catalytic core highlighted (grey box, positions 26-40); the core is the most conserved stretch of the alignment."
 ggplot() +
   annotate('rect', xmin = 25.5, xmax = 40.5, ymin = -0.05, ymax = 2.05,
            alpha = .5, col = 'black', fill = 'grey') +
@@ -632,6 +634,7 @@ some helicase — the sequence is part of CI, which is a helicase. Somewhat expe
 
 ```{r}
 #| fig-height: 12
+#| fig-cap: "Relative chromosomal position (hit end / accession length) of each eukaryotic BLAST hit, one point per hit, faceted by query. Consistent positioning across hosts would indicate the flanks map to defined host loci rather than dispersed repeats."
 plotdatbhits <- hits %>%
   dplyr::mutate(relative = end/acc_len) %>%
   dplyr::select(c(acc_len, start, end, seqname, name, Description, query_acc, relative))
@@ -644,6 +647,7 @@ ggplot(plotdatbhits, mapping = aes(x = relative, y = name, color = name)) +
 ```
 
 ```{r densityoverchromplot}
+#| fig-cap: "Density of the same BLAST hits along the relative chromosomal position, faceted by query — summarising where on their host chromosomes the flanking-region homologs concentrate."
 ggplot(plotdatbhits, mapping = aes(x = relative)) +
   geom_density(alpha = 0.4) +
   theme_minimal() +
@@ -682,6 +686,7 @@ uniqueflanksnewTrc <- reverseComplement(uniqueflanksnewA)
 ```
 
 ```{r}
+#| fig-cap: "Number of near-identical BLAST hits (≥99 % query coverage) per query flank, quantifying how widely each reverse-complement flank is shared across eukaryotic genomes."
 oops    <- list.files(here::here("data"), pattern = "rc_G0_Blasthits.txt", full.names = TRUE)
 oopsaln <- read_delim(oops, delim = "\t")
 
@@ -694,6 +699,7 @@ rc_G %>% ggplot(aes(y = query)) + geom_bar() + theme_minimal() +
 ```
 
 ```{r}
+#| fig-cap: "Neighbour-joining tree of the eukaryotic species bearing the flanking-region hits; internal nodes labelled with major clades (Embryophyta, Arthropoda, …) and tips coloured by the associated potyvirus, showing the cross-kingdom spread of the flanks."
 newtree  <- read.tree(here::here("data", "phyliptreeunex.phy"))
 newtreef <- fortify(newtree)
 ftdl2    <- ggtree(as.phylo(newtreef), layout = "daylight")

@@ -403,6 +403,10 @@ Plot.plot({
   ]
 })
 ```
+*Compartment pool sizes over time (arbitrary units): plasma-membrane receptors
+are internalised into the early endosome and delivered via the MVB to the
+vacuole. At steady state degradation balances production; perturbations shift the
+balance — e.g. impaired ESCRT stalls cargo in the EE/MVB.*
 
 ```{ojs}
 //| echo: false
@@ -419,6 +423,9 @@ Plot.plot({
   ]
 })
 ```
+*Phenomenological immune-signalling outputs (ROS, MAPK): a fast transient rise
+after perception followed by decay. Amplitude scales with the ROS modifier;
+blocked receptor degradation prolongs the response.*
 
 ```{ojs}
 //| echo: false
@@ -435,6 +442,9 @@ Plot.plot({
   ]
 })
 ```
+*Phosphoinositide pools on the early endosome and MVB (μM). PI(3)P is consumed by
+ILV formation; a fall below ~1 μM on the MVB flags loss of endosomal identity and
+is the precondition for the membrane-topology defects tracked below.*
 
 ```{ojs}
 //| echo: false
@@ -451,6 +461,9 @@ Plot.plot({
   ]
 })
 ```
+*AP-4-dependent cargo readouts: ATG9 at the TGN (rises when AP-4 is impaired — the
+mis-sorting signature), nuclear NPR1/CBP60g (fall when AP-4 sorting drops), and
+reversed-topology exosomes (the autoimmune-risk readout).*
 
 ```{ojs}
 //| echo: false
