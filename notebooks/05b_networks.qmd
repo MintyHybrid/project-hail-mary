@@ -70,6 +70,7 @@ stopifnot(!any(is.na(V(bip_graph)$type)))
 ```
 
 ```{r plot-bipartite}
+#| fig-cap: "Bipartite virus–host network: the two node classes (viral species, orange; host plants, blue) occupy the two rows, and an edge joins a virus to a plant it infects. Hubs are generalist viruses (or widely-infected hosts)."
 ggraph(bip_graph, layout = "bipartite") +
   geom_edge_link() +
   geom_node_point(aes(color = type), size = 6) +
@@ -81,6 +82,7 @@ ggraph(bip_graph, layout = "bipartite") +
 ```
 
 ```{r species-projection}
+#| fig-cap: "One-mode projection of the bipartite network onto the viral species: two viruses are linked if they share at least one host plant. Edges now represent ecological overlap (shared host range) rather than direct infection."
 proj          <- bipartite_projection(bip_graph)
 species_graph <- proj$proj1
 
@@ -165,6 +167,7 @@ traits <- tibble(
 ```
 
 ```{r visnetwork}
+#| fig-cap: "Interactive multilayer virus–host–interaction network. Edge colour encodes the relationship type (orange/green/blue for the layers combined above); drag nodes to explore, hover for taxonomic details. Built from GBIF/GLOBI records plus Open Tree taxonomy."
 nodes <- traits %>%
   transmute(id = name, label = name, group = trophic,
             mobility = mobility, taxon = taxon)
@@ -218,6 +221,7 @@ its taxonomy and a **PhyloPic silhouette** of its class.
 ```{r bionexus-session}
 #| eval: !expr file.exists(here::here("data","bionexus_turnip95.rds"))
 #| fig-width: 10
+#| fig-cap: "GLOBI-derived ecological interaction network for a Turnip mosaic virus host list, reconstructed from a saved BioNexus session. Nodes are taxa (hover for taxonomy + a PhyloPic silhouette of the class); edges are recorded biotic interactions."
 sess <- readRDS(here::here("data", "bionexus_turnip95.rds"))
 
 # base64-embed cached PhyloPic silhouettes (by class) into hover tooltips

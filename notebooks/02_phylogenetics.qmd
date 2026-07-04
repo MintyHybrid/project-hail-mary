@@ -382,6 +382,7 @@ Infer the phylogeny using IQ-TREE, or read a precomputed tree.
 ```{r plot-tree}
 #| fig-width: 9
 #| fig-height: 9
+#| fig-cap: "Cylindrical-inclusion (CI) protein phylogeny (circular layout), tips coloured by genus. Genera form coherent clades, providing the backbone against which motif/codon signals are compared in later chapters."
 # Load a precomputed CI tree. The IQ-TREE codon tree needs rentrez + IQ-TREE;
 # scripts/build_ci_tree.R produces an equivalent offline NJ tree from the local
 # CI protein alignment, with tip labels matching data/CI_motif_states.csv.
@@ -544,6 +545,7 @@ ras_degap  <- rolling_alignment_stats(aln, remove_gaps = TRUE)
 ```
 
 ```{r plot-rolling-entropy}
+#| fig-cap: "Sliding-window Shannon entropy along the CI alignment. Low-entropy troughs mark the most conserved segments (functional constraint); peaks mark variable regions."
 ras %>% ggplot2::ggplot(ggplot2::aes(x = start, y = entropy)) +
   ggplot2::geom_line() +
   ggplot2::theme_bw() +
@@ -608,7 +610,17 @@ ras_ps       <- rolling_alignment_stats_per_sequence(aln)
 ras_ps_degap <- rolling_alignment_stats_per_sequence(aln, remove_gaps = TRUE)
 ```
 
+Per-isolate sliding-window composition across the CI alignment: GC content (raw
+and with alignment gaps removed) and the CpG observed/expected ratio. Tight
+bundling of the lines means the compositional profile is conserved across
+isolates; CpG O/E below the dashed line (= 1) indicates CpG suppression, a
+signature linked to evasion of host nucleic-acid sensing.
+
 ```{r plot-gc-per-seq}
+#| fig-cap:
+#|   - "Per-isolate GC content along the CI alignment."
+#|   - "Per-isolate GC content with alignment gaps removed."
+#|   - "Per-isolate CpG observed/expected ratio (dashed line = 1, no suppression)."
 library(ggplot2)
 ggplot(ras_ps, aes(start, GC, colour = sequence)) +
   geom_line(alpha = 0.2) +
