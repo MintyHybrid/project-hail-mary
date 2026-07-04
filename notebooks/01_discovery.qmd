@@ -27,7 +27,24 @@ execute:
 
 ## Intro
 
-![](../images/clipboard-2613320762.png)
+The starting point is a synthetic **10-23 deoxyribozyme** [@borggräfe2022]: a
+single-stranded DNA whose two substrate-binding arms base-pair a target RNA
+(Watson–Crick), positioning a 15-nt catalytic core that cleaves the RNA at an
+unpaired purine·pyrimidine junction. Redrawn from the target/DNAzyme pairing:
+
+```default
+  target RNA   3'– A A C C C C A U U | C C A C G U A C A –5'
+                   | | | | | | | | |   | | | | | | | | |
+  DNAzyme      5'– T T G G G G T A A   G G T G C A T G T –3'
+                     binding arm       binding arm
+                 catalytic core: 5'– G G C T A G C T A C A A C G A –3'
+```
+
+The RNA is cleaved at the unpaired junction (`|`) between the two arms. The
+15-nt catalytic core `GGCTAGCTACAACGA` — the part with no base-pairing role in
+recognition — is the sequence that turns out to match the potyvirus CI coding
+region (below). *Scheme redrawn after Borggräfe et al. 2022 [@borggräfe2022];
+no figure is reproduced.*
 
 ### The answer to life, the universe and everything...
 
