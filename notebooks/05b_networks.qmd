@@ -210,56 +210,84 @@ Key features:
 - Multiplex participation coefficient for identifying bridge species
 - Interactive visualisation via `visNetwork`
 
-### A saved BioNexus network: *Turnip mosaic virus* host community
+### A saved BioNexus network: *Zucchini yellow mosaic virus* host community
 
 A live Shiny app cannot be embedded in a static document (an interactive
 `shinylive`/WASM build is a future option). Instead, the network below is
 **reconstructed from a saved BioNexus session** — the GLOBI-derived biotic
-interaction network for a *Turnip mosaic virus* host list. **Hover a node** for
-its taxonomy and a **PhyloPic silhouette** of its class.
+interaction network built around a *Zucchini yellow mosaic virus* (a cucurbit
+potyvirus) host list. **Hover a node** for its taxonomy and a **PhyloPic
+silhouette**, resolved to the most specific rank PhyloPic provides (species →
+genus → family → order → class) so the outline matches the organism rather than
+a generic class icon.
 
 ```{r bionexus-session}
-#| eval: !expr file.exists(here::here("data","bionexus_turnip95.rds"))
+#| eval: !expr file.exists(here::here("data","bionexus_zucchini95.rds"))
 #| fig-width: 10
-#| fig-cap: "GLOBI-derived ecological interaction network for a Turnip mosaic virus host list, reconstructed from a saved BioNexus session. Nodes are taxa (hover for taxonomy + a PhyloPic silhouette of the class); edges are recorded biotic interactions."
-sess <- readRDS(here::here("data", "bionexus_turnip95.rds"))
+#| column: page
+sess <- readRDS(here::here("data", "bionexus_zucchini95.rds"))
 
-# base64-embed cached PhyloPic silhouettes (by class) into hover tooltips
+# base64-embed cached PhyloPic silhouettes (per taxon, most specific rank
+# available) into hover tooltips — looked up by node name
 phylodir <- here::here("data", "phylopic")
-sil_b64 <- function(cls) {
-  if (is.na(cls) || !nzchar(cls)) return("")
-  f <- file.path(phylodir, paste0(gsub("[^A-Za-z0-9]", "_", cls), ".png"))
+sil_b64 <- function(taxon) {
+  if (is.na(taxon) || !nzchar(taxon)) return("")
+  f <- file.path(phylodir, paste0(gsub("[^A-Za-z0-9]", "_", taxon), ".png"))
   if (!file.exists(f)) return("")
   sprintf('<img src="data:image/png;base64,%s" height="46" style="float:right;margin-left:8px;">',
           base64enc::base64encode(f))
 }
 
+# Keep the meaningful biotic interaction layers; the dense "cooccurrence" layer
+# (a statistical association, ~85% of edges) is dropped so the network is not a
+# hairball. Nodes left with no biotic edge (orphans) are removed.
+biotic <- sess$edges_df %>% dplyr::filter(layer != "cooccurrence")
+keep   <- unique(c(biotic$from_name, biotic$to_name))
+
 nodes <- sess$nodes_df %>%
+  dplyr::filter(name %in% keep) %>%
   dplyr::mutate(
     label = name,
     group = functional_group,
     title = mapply(function(nm, k, cl, or, fa) paste0(
-      "<div style='max-width:230px;font-size:12px'>", sil_b64(cl),
+      "<div style='max-width:230px;font-size:12px'>", sil_b64(nm),
       "<b><i>", nm, "</i></b><br><span style='color:#666'>",
       k, " &middot; ", cl, "<br>", or, " &middot; ", fa, "</span></div>"),
       name, kingdom, class, order, family, SIMPLIFY = TRUE))
 
 id_of <- stats::setNames(sess$nodes_df$id, sess$nodes_df$name)
-edges <- sess$edges_df %>%
+edges <- biotic %>%
   dplyr::transmute(
     from = id_of[from_name], to = id_of[to_name],
     title = paste0(layer, " (", confidence, ")"),
     color = dplyr::recode(layer, pollination = "#e67e22", herbivory = "#27ae60",
-                          parasitism = "#c0392b", .default = "#95a5a6")) %>%
+                          parasitism = "#c0392b", predation = "#8e44ad",
+                          .default = "#95a5a6")) %>%
   dplyr::filter(!is.na(from), !is.na(to))
 
-visNetwork(nodes, edges, height = "620px", width = "100%") %>%
-  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE,
-             selectedBy = "group") %>%
-  visEdges(smooth = FALSE) %>%
-  visLegend(main = "Functional group") %>%
-  visPhysics(stabilization = TRUE) %>%
-  visLayout(randomSeed = 7)
+visNetwork(nodes, edges, height = "720px", width = "100%") %>%
+  visNodes(size = 12, font = list(size = 13),
+           borderWidth = 1, color = list(border = "#ffffff")) %>%
+  visEdges(smooth = FALSE, color = list(opacity = 0.45), width = 0.6) %>%
+  visIgraphLayout(layout = "layout_with_fr") %>%   # force-directed (Fruchterman–Reingold)
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 1, hover = TRUE),
+             nodesIdSelection = TRUE, selectedBy = "group") %>%
+  visLegend(main = "Functional group", width = 0.18, position = "right")
+```
+
+```{r bionexus-caption}
+#| echo: false
+#| eval: !expr file.exists(here::here("data","bionexus_zucchini95.rds"))
+lay <- sort(unique(biotic$layer))
+cat(sprintf(paste0(
+  "**Ecological interaction network of the *Zucchini yellow mosaic virus* host ",
+  "community** (Cucurbitaceae), reconstructed from a saved BioNexus session that ",
+  "queried GBIF + GLOBI. %d taxa are shown, connected by %d recorded biotic ",
+  "interactions across the %s layers (edge colour = layer). The dense ",
+  "co-occurrence layer is omitted and isolated nodes removed for legibility; ",
+  "node colour = functional group, layout = force-directed (Fruchterman–Reingold), ",
+  "hover a node for its taxonomy and a PhyloPic silhouette.\n"),
+  nrow(nodes), nrow(edges), paste(lay, collapse = "/")))
 ```
 
 Silhouettes are fetched once with the rOpenSci `rphylopic` package
