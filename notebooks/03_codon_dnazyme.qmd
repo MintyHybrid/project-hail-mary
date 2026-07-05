@@ -113,9 +113,9 @@ enc_DNAzyme  <- results_DNAzyme$enc_DNAzyme[!is.na(results_DNAzyme$enc_DNAzyme)]
 enc_ci       <- results_DNAzyme$enc_ci[!is.na(results_DNAzyme$enc_ci)]
 ```
 
-# Overview {.tabset}
+## Overview {.tabset}
 
-## Dataset Summary
+### Dataset Summary
 
 ```{r summary-stats}
 n_isolates <- length(motif_seqs)
@@ -133,7 +133,7 @@ summary_table <- data.frame(
 datatable(summary_table, options = list(dom = "t", pageLength = 10), rownames = FALSE)
 ```
 
-## Codon Bias Metrics
+### Codon Bias Metrics
 
 ```{r metrics-display}
 metrics_table <- data.frame(
@@ -151,7 +151,7 @@ metrics_table <- data.frame(
 datatable(metrics_table, options = list(dom = "t", pageLength = 10), rownames = FALSE)
 ```
 
-## RSCU Validation
+### RSCU Validation
 
 ```{r rscu-validation}
 rscu_max    <- max(results$rscu_comparison$RSCU_motif, na.rm = TRUE)
@@ -180,7 +180,7 @@ datatable(validation_df, options = list(dom = "t"), rownames = FALSE) %>%
       c("#ccffcc", "#ccffcc", "#ffffcc", "#ffcccc", "#ffcccc")))
 ```
 
-# Sequence Logos {.tabset}
+## Sequence Logos {.tabset}
 
 ```{r create-logos}
 #| cache: true
@@ -191,7 +191,7 @@ logos         <- create_comprehensive_logo_analysis(dna_sequences = motif_seqs, 
 DNAzyme_logos <- create_comprehensive_logo_analysis(dna_sequences = DNAzyme_seqs, host_classification)
 ```
 
-## Combined DNA & Protein
+### Combined DNA & Protein
 
 ```{r display-combined-logo}
 #| fig.height: 10
@@ -200,7 +200,7 @@ DNAzyme_logos$combined_logo
 logos$combined_logo
 ```
 
-## DNA Only
+### DNA Only
 
 ```{r dna-logo}
 #| fig.height: 5
@@ -208,7 +208,7 @@ logos$combined_logo
 logos$dna_logo
 ```
 
-## Protein Only
+### Protein Only
 
 ```{r protein-logo}
 #| fig.height: 5
@@ -217,7 +217,7 @@ logos$ic_protein
 DNAzyme_logos$ic_protein
 ```
 
-## Conservation Plot
+### Conservation Plot
 
 ```{r conservation-plot}
 #| fig.height: 6
@@ -226,7 +226,7 @@ plot_information_content(motif_seqs,   title = "Nucleotide Conservation Across a
 plot_information_content(DNAzyme_seqs, title = "Nucleotide Conservation Across 18nt Motif")
 ```
 
-## Logo Statistics
+### Logo Statistics
 
 ```{r logo-stats-table}
 logo_stats <- logo_statistics(motif_seqs)
@@ -252,7 +252,7 @@ datatable(
     backgroundPosition = "center")
 ```
 
-# Predicted DNAzyme Activity {.tabset}
+## Predicted DNAzyme Activity {.tabset}
 
 The DNAzyme-like locus matches the catalytic core of the **10-23 RNA-cleaving
 deoxyribozyme** (15 nt, `GGCTAGCTACAACGA`) [@santoro1997]. Whether a given
@@ -263,7 +263,7 @@ is the catalytic general base that activates the 2'-OH nucleophile
 scored against the canonical core with per-position criticality weights (a
 sequence-based heuristic, not a catalytic-rate measurement).
 
-## Catalytic-core criticality
+### Catalytic-core criticality
 
 ```{r dnazyme-core-table}
 core_tbl <- potytools::dnazyme_core_table()
@@ -276,7 +276,7 @@ datatable(core_tbl, rownames = FALSE,
     backgroundPosition = "center")
 ```
 
-## Activity scores
+### Activity scores
 
 ```{r dnazyme-activity-score}
 act <- potytools::score_dnazyme_activity(motif_seqs)
@@ -301,7 +301,7 @@ datatable(
     backgroundColor = styleEqual(c(TRUE, FALSE), c("#d5f5e3", "#fadbd8")))
 ```
 
-## Score distribution
+### Score distribution
 
 ```{r dnazyme-activity-dist}
 #| fig.height: 4
@@ -314,7 +314,7 @@ ggplot(act, aes(x = activity_score)) +
   theme_cowplot()
 ```
 
-## Core conservation logo
+### Core conservation logo
 
 ```{r dnazyme-core-conservation}
 #| fig.height: 3.5
@@ -329,7 +329,7 @@ if (length(core_windows) > 0) {
 }
 ```
 
-# Phylogenetic Analysis {.tabset}
+## Phylogenetic Analysis {.tabset}
 
 ```{r phylogenetic-setup}
 #| cache: true
@@ -386,7 +386,7 @@ if (!is.null(trees) && length(trees) > 0) {
 }
 ```
 
-## Overview
+### Overview
 
 ```{r phylo-overview}
 if (!is.null(trees)) {
@@ -399,7 +399,7 @@ if (!is.null(trees)) {
 }
 ```
 
-## Tree Comparison
+### Tree Comparison
 
 ```{r phylo-comparison-table}
 if (!is.null(trees) && length(tree_comparisons) > 0) {
@@ -428,7 +428,7 @@ if (!is.null(trees) && length(tree_comparisons) > 0) {
 }
 ```
 
-## Phylogenetic Trees
+### Phylogenetic Trees
 
 ```{r phylo-trees}
 #| fig.height: 10
@@ -447,7 +447,7 @@ if (!is.null(trees)) {
 }
 ```
 
-## Interpretation
+### Interpretation
 
 ```{r phylo-interpretation}
 if (!is.null(trees) && length(tree_comparisons) > 0) {
@@ -477,16 +477,16 @@ if (!is.null(trees) && length(tree_comparisons) > 0) {
 }
 ```
 
-# Codon Usage {.tabset}
+## Codon Usage {.tabset}
 
-## motif vs. genome
+### motif vs. genome
 
 ```{r cu-comparison}
 #| cache: true
 cu_comparison <- compare_codon_usage_fast(motif_seqs, ref_seqs)
 ```
 
-### Codon usage
+#### Codon usage
 
 ```{r cu-comparison-table}
 datatable(
@@ -497,7 +497,7 @@ datatable(
   options = list(pageLength = 20, scrollX = TRUE), filter = "top", rownames = FALSE)
 ```
 
-### Top Differences (motif vs genomes)
+#### Top Differences (motif vs genomes)
 
 ```{r rscu-top-diffs}
 #| fig.height: 6
@@ -514,7 +514,7 @@ ggplot(top_diffs_cu, aes(x = reorder(codon, fold_change), y = fold_change,
   coord_flip() + theme_cowplot() + theme(legend.position = "top")
 ```
 
-### Interactive CU Table
+#### Interactive CU Table
 
 ```{r rscu-table}
 datatable(
@@ -529,7 +529,7 @@ datatable(
     backgroundPosition = "center")
 ```
 
-## DNAzyme-match vs other
+### DNAzyme-match vs other
 
 ```{r cu-comp-DNAzyme}
 DNAzyme_iso <- metadata$isolate[(metadata$DNAzymeseq == "DNAzyme")]
@@ -541,7 +541,7 @@ other_seq <- motif_seqs[(names(motif_seqs) %in% other_iso)]
 cu_comp_DNAzyme <- compare_codon_usage_fast(DNAzyme_seq, other_seq)
 ```
 
-### Top Differences
+#### Top Differences
 
 ```{r cu-top-diffs-DNAzyme}
 #| fig.height: 6
@@ -558,13 +558,13 @@ ggplot(top_diffs_cu_DNAzyme, aes(x = reorder(codon, fold_change), y = fold_chang
   coord_flip() + theme_cowplot() + theme(legend.position = "top")
 ```
 
-# Host-Specific Analysis {.tabset}
+## Host-Specific Analysis {.tabset}
 
 ```{r host-analysis}
 cai_results <- calculate_host_specific_cai(motif_seqs, host_codon_tables)
 ```
 
-## CAI Distribution
+### CAI Distribution
 
 ```{r cai-plot}
 #| fig.height: 6
@@ -576,7 +576,7 @@ host_classification_byacc$isolate   <- gsub(" .*", "", host_classification_byacc
 plot_cai_by_host(cai_results, host_classification_byacc)
 ```
 
-## Host Comparison
+### Host Comparison
 
 ```{r host-comparison}
 #| fig.height: 10
@@ -599,13 +599,13 @@ if (nchar(dicots) %% 3 == 0 && nchar(monocots) %% 3 == 0) {
 }
 ```
 
-# RSCU Analysis {.tabset}
+## RSCU Analysis {.tabset}
 
 ```{r rscu-setup}
 rscu_matrix <- calculate_rscu_matrix_fast(motif_seqs)
 ```
 
-## RSCU Heatmap
+### RSCU Heatmap
 
 ```{r rscu-heatmap}
 #| fig.height: 10
@@ -624,7 +624,7 @@ if (!is.null(rscu_matrix)) {
 }
 ```
 
-# Multivariate Analysis {.tabset}
+## Multivariate Analysis {.tabset}
 
 ```{r pca-setup}
 #| cache: true
@@ -636,7 +636,7 @@ codon usage (RSCU) deviates from the mean. Isolates that cluster together share 
 codon-usage signature; separation by host type would indicate host-driven codon
 adaptation.
 
-## PCA Biplot
+### PCA Biplot
 
 ```{r pca-biplot}
 #| fig.height: 8
@@ -647,7 +647,7 @@ if (!is.null(pca_results)) {
 }
 ```
 
-## PCA 3D (interactive)
+### PCA 3D (interactive)
 
 ```{r pca-3d}
 #| fig.height: 8
@@ -658,9 +658,9 @@ if (!is.null(pca_results)) {
 }
 ```
 
-# Advanced Metrics {.tabset}
+## Advanced Metrics {.tabset}
 
-## GC Content by Codon Position
+### GC Content by Codon Position
 
 ```{r gc-by-position}
 #| fig.height: 6
@@ -680,7 +680,7 @@ ggplot(gc_long, aes(x = position, y = GC, fill = group)) +
   theme_cowplot()
 ```
 
-## Dinucleotide Bias (CpG suppression)
+### Dinucleotide Bias (CpG suppression)
 
 RNA viruses of plants and animals are frequently depleted in the **CpG** (and
 often **UpA**) dinucleotide relative to what their base composition predicts — a
@@ -706,7 +706,7 @@ ggplot(dinuc, aes(x = reorder(dinucleotide, rho), y = rho, fill = highlight)) +
   theme_cowplot() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
-# Summary Report
+## Summary Report
 
 ```{r summary-report}
 cat("## Potyvirus DNAzyme-like Motif Analysis — Summary\n\n")
@@ -718,7 +718,7 @@ cat(sprintf("- Mean GC3 (motif): %.3f\n", mean(gc_motif[,"GC3"])))
 cat(sprintf("- DNAzyme exact matches: %d\n", sum(metadata$DNAzyme_hit == "match", na.rm = TRUE)))
 ```
 
-# ICTV sequences
+## ICTV sequences
 
 ```{r ictv-mafft}
 #| cache: true
@@ -785,7 +785,7 @@ codon_align_from_protein_local <- function(prot_aln, cds) {
 }
 ```
 
-# Rolling genome-wide composition {.tabset}
+## Rolling genome-wide composition {.tabset}
 
 A sliding window along the polyprotein alignment maps how compositional bias
 varies from region to region, rather than as a single genome-wide average. Local
@@ -805,7 +805,7 @@ ras    <- rolling_alignment_stats(aln)
 ras_ps <- rolling_alignment_stats_per_sequence(aln)
 ```
 
-## GC, GC3 & entropy
+### GC, GC3 & entropy
 
 ```{r rolling-gc-tracks}
 #| fig.height: 8
@@ -822,7 +822,7 @@ ggplot(ras_long, aes(start, value)) +
   theme_cowplot()
 ```
 
-## CpG O/E
+### CpG O/E
 
 ```{r rolling-cpg}
 #| fig.height: 4
@@ -835,7 +835,7 @@ ggplot(ras, aes(start, CpG_OE)) +
   theme_cowplot()
 ```
 
-## Per-isolate GC3
+### Per-isolate GC3
 
 ```{r rolling-gc-per-seq}
 #| fig.height: 5
