@@ -986,9 +986,3 @@ visualisations is preserved in the project history for reference. To enable it,
 either (a) host it as a standalone React app and embed via `<iframe>`, or
 (b) move to a Shiny app (`shiny/immu_simu/`) with the same simulation logic.
 :::
-
-
-## References {.unnumbered}
-
-::: {#refs}
-:::

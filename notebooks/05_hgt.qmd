@@ -144,6 +144,18 @@ ggtree::ggtree(leek_tree3) + geom_tiplab(size = 2) + ggtitle("MUSCLE alignment")
 
 ### Strawberry (*Fragaria*) — presence/absence of the ~3 kb fragment
 
+::: {.callout-note}
+## Which virus, and is strawberry even a host?
+The strawberry loci here were recovered by BLASTing the **DNAzyme-flanking
+sequence of one specific isolate — NC_003377.1, *Maize dwarf mosaic virus*
+(MDMV)** — against plant genomes. MDMV is a **maize/grass-infecting potyvirus**,
+and **strawberry is *not* a documented host of MDMV**. So the *Fragaria* match is
+a **cross-kingdom sequence homology to the viral flank**, *not* evidence that
+MDMV infects strawberry. Read the section below as "a genomic fragment in
+strawberry happens to match the MDMV DNAzyme-flank region", with the origin of
+that match (ancient HGT vs coincidence vs a shared host gene) still open.
+:::
+
 The viral-homologous insertion in strawberry is a **long (~3 kb) fragment**, not
 just the 18-mer. `strawberryseqs.fasta` holds only fragment-**positive**
 *Fragaria* loci, so on their own they cannot separate a single ancient insertion
@@ -395,6 +407,28 @@ ggplot(covdf, aes(pos, hits)) +
   labs(x = "Position along the 3 kb query (bp)", y = "BLAST hits") +
   cowplot::theme_cowplot()
 ```
+
+::: {.callout-tip collapse="true"}
+## Proposed next steps (not yet run)
+Working hypothesis: *if* there was any cross-kingdom transfer, it is most
+parsimoniously a **single event propagated through strawberry breeding** (the
+fragment appears in several *Fragaria* accessions). To test this properly:
+
+1. **Delimit the insert precisely.** Pin down the exact boundaries of the central
+   non-*TCP7* segment (the candidate insert), rather than the ~670–2130 bp
+   estimate above.
+2. **Re-BLAST the *whole* insert against viruses.** The initial search used only
+   the 18-mer. If the fragment is genuinely MDMV-derived, the **full insert (not
+   just the 18-mer) should also match the MDMV genome**; if it does not, a
+   different (or no) viral origin is more likely.
+3. **Fragment-internal phylogeny vs breeding history.** Build a tree from the
+   large strawberry fragments alone and ask whether its topology tracks
+   documented *Fragaria* breeding/domestication — a single-introduction-then-
+   inheritance model predicts congruence.
+
+These need live NCBI BLAST and curated breeding metadata, so they are recorded
+here as next steps rather than executed.
+:::
 
 ## Coordinate utilities
 

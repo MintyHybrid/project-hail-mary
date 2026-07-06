@@ -641,9 +641,3 @@ ggplot(ras_ps, aes(start, CpG_OE, colour = sequence)) +
   theme(legend.position = "none") +
   labs(x = "Genome position", y = "CpG O/E")
 ```
-
-
-## References {.unnumbered}
-
-::: {#refs}
-:::

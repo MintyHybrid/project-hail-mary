@@ -223,8 +223,6 @@ a generic class icon.
 
 ```{r bionexus-session}
 #| eval: !expr file.exists(here::here("data","bionexus_zucchini95.rds"))
-#| fig-width: 10
-#| column: page
 sess <- readRDS(here::here("data", "bionexus_zucchini95.rds"))
 
 # base64-embed cached PhyloPic silhouettes (per taxon, most specific rank
@@ -265,13 +263,23 @@ edges <- biotic %>%
                           .default = "#95a5a6")) %>%
   dplyr::filter(!is.na(from), !is.na(to))
 
-visNetwork(nodes, edges, height = "720px", width = "100%") %>%
+visNetwork(nodes, edges, height = "620px", width = "100%") %>%
   visNodes(size = 12, font = list(size = 13),
            borderWidth = 1, color = list(border = "#ffffff")) %>%
   visEdges(smooth = FALSE, color = list(opacity = 0.45), width = 0.6) %>%
-  visIgraphLayout(layout = "layout_with_fr") %>%   # force-directed (Fruchterman–Reingold)
+  # Live force-directed physics (spring/bounce) rather than a frozen igraph layout:
+  # forceAtlas2 gives a lively but self-settling arrangement; drag a node to see it
+  # spring back into place.
+  visPhysics(solver = "forceAtlas2Based",
+             forceAtlas2Based = list(gravitationalConstant = -60,
+                                     centralGravity = 0.012,
+                                     springLength = 90, springConstant = 0.08,
+                                     damping = 0.4, avoidOverlap = 0.5),
+             stabilization = list(enabled = TRUE, iterations = 200),
+             maxVelocity = 30, minVelocity = 0.75) %>%
   visOptions(highlightNearest = list(enabled = TRUE, degree = 1, hover = TRUE),
              nodesIdSelection = TRUE, selectedBy = "group") %>%
+  visLayout(randomSeed = 7) %>%
   visLegend(main = "Functional group", width = 0.18, position = "right")
 ```
 
@@ -301,9 +309,3 @@ a connected ecological network. Pollinators and their host plants — including
 known potyvirus hosts — cluster together, consistent with the hypothesis that
 viral flanking sequences were transferred horizontally via a shared biological
 vector during co-infection events.
-
-
-## References {.unnumbered}
-
-::: {#refs}
-:::

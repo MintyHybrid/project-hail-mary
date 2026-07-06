@@ -846,9 +846,3 @@ ggplot(ras_ps, aes(start, GC3, group = sequence)) +
   labs(x = "Alignment position (bp)", y = "GC3") +
   theme_cowplot()
 ```
-
-
-## References {.unnumbered}
-
-::: {#refs}
-:::
