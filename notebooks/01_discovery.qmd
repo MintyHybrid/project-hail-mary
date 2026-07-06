@@ -854,5 +854,10 @@ Taxonomic diversity is visualised with the `metacoder` R package [@foster2017].
 #### Session Info
 
 ```{r}
-sessioninfo::session_info()
+#| echo: false
+# Session info with absolute filesystem paths redacted (privacy: the raw output
+# would otherwise print local library/tool paths containing the username).
+.si <- capture.output(sessioninfo::session_info())
+.si <- gsub("[A-Za-z]:[\\\\/][^ ]*|/(home|Users)/[^ ]*", "<path redacted>", .si)
+cat(.si, sep = "\n")
 ```

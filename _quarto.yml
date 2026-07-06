@@ -31,7 +31,9 @@ book:
         - notebooks/A1_data_sources.qmd
         - references.qmd
 
-bibliography: references.bib
+bibliography:
+  - references.bib
+  - packages.bib
 
 execute:
   freeze: auto
