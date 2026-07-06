@@ -157,6 +157,35 @@ ggplot(found, aes(x = first_pos, y = reorder(paste(protein, motif), first_pos)))
   cowplot::theme_cowplot()
 ```
 
+## Two host-type sorting signals in the CI region
+
+The stretch of CI that carries the DNAzyme-like locus (the ELM-rich region
+anchored on `VASYN` in Chapter 4) turns out to sit right next to **the two
+canonical endocytic sorting signals that adaptor-protein (AP) complexes read**:
+
+- a **tyrosine-based motif** of the **YXXΦ** type (Φ = a bulky hydrophobic
+  residue), and
+- immediately beside it, an **acidic dileucine signal**, `[DE]XXXL[LI]`.
+
+These are not incidental look-alikes. Wu et al. [@wu2022ci] showed that the
+multifunctional CI protein of *Turnip mosaic virus* contains **seven conserved
+acidic dileucine motifs**, that these motifs are **recognised by the adaptor
+complex AP-2**, and that **alanine substitutions** in them **reduce AP-2 binding,
+endosomal targeting and viral replication**. In other words, the CI's dileucine
+signals are *functional* endocytic sorting signals, not passengers. The same group
+further showed that TuMV **co-opts the vacuolar sorting receptor VSR4 to deliver
+its replication vesicles to the endosome** for genome replication [@wu2022vsr4],
+so this endosomal targeting is central to the viral life cycle.
+
+That matters for the adjacent tyrosine motif. Because a functionally-validated
+dileucine sits immediately next to it, the **YXXΦ motif is very likely surface-
+exposed and accessible** for adaptor interactions of its own — and YXXΦ is the
+classic ligand of the µ subunit of AP complexes (AP-1/2/3/**4**). Chapter 9
+develops why this is interesting: a plant immune regulator (BDA1) is sorted by
+**AP-4 through exactly this kind of tyrosine motif** [@huang2026], so a virus
+displaying host-type Y/dileucine signals on its CI is positioned to plug into —
+and potentially subvert — the same endomembrane sorting machinery.
+
 ## Protein–protein interaction network
 
 A curated interaction network of the potyvirus proteins, centred on CI, drawn

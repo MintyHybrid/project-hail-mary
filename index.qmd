@@ -7,6 +7,17 @@ author:
 date: last-modified
 ---
 
+::: {.callout-warning}
+## Preprint / work in progress — not peer reviewed
+This compendium is **under active development and has not been peer reviewed**.
+Much of it is **exploratory**, and several of the central ideas (in particular the
+DNAzyme-activity, horizontal-gene-transfer, and AP-4 / tyrosine-motif immune
+hypotheses) are presented as **explicit, testable hypotheses rather than
+established results** — they are flagged as such throughout. Analyses, figures,
+interpretations and conclusions may change; please treat everything here as a
+living draft and cite with that caveat.
+:::
+
 ## Overview
 
 This compendium documents the discovery and characterisation of a DNAzyme-like

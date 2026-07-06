@@ -21,12 +21,21 @@ complex (subunits AP4B, AP4E, AP4M, AP4S) that mediates clathrin-independent
 trafficking from the *trans*-Golgi network to endosomes. Unlike AP-1/2/3, AP-4
 operates without a clathrin coat. In *Arabidopsis* it is experimentally
 established to sort cargo bearing tyrosine-based (YXXΦ) motifs — including
-**VACUOLAR SORTING RECEPTOR1** and the borate transporter BOR1 — via its µ
+**VACUOLAR SORTING RECEPTOR1 (VSR1)** and the borate transporter BOR1 — via its µ
 (AP4M) subunit [@fuji2016], and AP-4 subunit interactions have been mapped
-systematically [@wang2022ap]; AP-4 deficiency also abolishes the hypersensitive
-cell-death response to avirulent bacteria, linking it to immunity [@fuji2016].
-Its most conserved cargo is **ATG9**, a lipid scramblase essential for
-autophagosome biogenesis [@huang2026].
+systematically [@wang2022ap]. Its most conserved cargo is **ATG9**, a lipid
+scramblase essential for autophagosome biogenesis [@huang2026].
+
+Crucially for immunity, AP-4 is required for the **fusion of the vacuolar and
+plasma membranes** that executes the hypersensitive cell-death response to
+avirulent bacteria: `ap4` mutants fail to fuse and lose resistance to effectors
+recognised at the plasma membrane [@hatsugai2018], part of the vacuole-membrane
+fusion immunity first described by @hatsugai2009 [@haranishimura2011]. And most
+directly, **AP-4 reads a tyrosine motif on an immune protein**: @huang2026 showed
+that the AP-4 µ subunit **binds the transmembrane immunity component BDA1 through
+BDA1's tyrosines Y18/Y257**, and that AP-4 is required for **SNC2**-mediated
+immunity and for basal, pattern- and effector-triggered immunity — a published
+precedent for a plant defence protein being AP-4-sorted via a YXXΦ-type signal.
 
 ::: {.callout-warning appearance="simple"}
 By contrast, the assignment of the immune regulators **NPR1** and **CBP60g** as
@@ -52,6 +61,19 @@ functionally connected to ESCRT via shared PI(3)P pools and NBR1-mediated
 cargo recruitment. Autophagy is required for both immune amplification (clearing
 protein aggregates, eliminating pathogens) and immune termination (receptor
 turnover) [@ustun2018; @leary2018].
+
+**The virus works the very same surfaces.** This is not a coincidental overlap:
+positive-strand RNA viruses — potyviruses included — **remodel the host
+endomembrane system into viral replication organelles (VROs)**, and the same
+components that run immune trafficking are co-opted to build and protect them
+[@jovanovic2023]. Potyvirus VRO membranes are **enriched in PI(3)P and PI(4)P**,
+recruit **ATG9 and other autophagy factors**, and are shaped by **ESCRT** and by
+the proteasomal/lytic pathways — exactly the nodes this model tracks
+[@jovanovic2023]. Concretely, TuMV **co-opts the vacuolar sorting receptor VSR4 to
+target its replication vesicles to the endosome** for genome replication
+[@wu2022vsr4], and its CI protein reaches endosomes via **AP-2-read dileucine
+signals** (Chapter 5) — so the viral replication machinery is delivered through
+precisely the AP-adaptor / PI-lipid / autophagy / ESCRT circuitry modelled below.
 
 The simulation below models steady-state receptor pool dynamics across all three
 pathways, allowing in silico perturbation of individual components to predict
@@ -957,6 +979,28 @@ perinuclear import upon MAMP-triggered Ca²⁺ influx, with AP-4 providing the
 sorting step; *ap4* mutants would then show delayed CBP60g nuclear accumulation
 and reduced SA after infection.
 
+::: {.callout-important appearance="simple"}
+## A published AP-4 → immunity link — and a hidden thread to NPR1
+The NPR1/CBP60g routes above remain **predictions**. But there is now a
+**concrete, published** AP-4↔immunity mechanism that makes the whole idea far
+less speculative. @huang2026 showed that the **AP-4 µ subunit binds the
+transmembrane immune protein BDA1 through BDA1's tyrosine residues (Y18, Y257)**,
+and that AP-4 is required for **SNC2-mediated immunity** (a receptor-like-protein
+pathway) as well as for basal, pattern- and effector-triggered immunity; a second
+endocytic adaptor, ECA4, tunes BDA1 levels in parallel [@wang2025eca4]. This is a
+**direct precedent for a plant defence protein being AP-4-sorted via a
+tyrosine-based motif** — precisely the motif class the viral CI displays
+(Chapter 5).
+
+The thread to **NPR1** is suggestive but **not yet fully characterised**: SNC2 is
+literally *SUPPRESSOR OF NPR1-1, CONSTITUTIVE 2* — i.e. it was isolated genetically
+in relation to NPR1 and defines an RLP-based resistance branch that runs partly
+**parallel to / independent of NPR1**. So AP-4, by gating BDA1/SNC2, sits on an
+immune axis genetically tied to NPR1, without (to my knowledge) a demonstrated
+direct AP-4–NPR1 interaction. We flag this as a **hypothesis worth pursuing**, not
+an established pathway.
+:::
+
 ## Cargo missorting as a distinct pathology
 
 The central hypothesis reframes AP-4 deficiency: the damaging consequence may be
@@ -977,6 +1021,48 @@ receptors; autophagy-deficient backgrounds that accumulate NLRs):
 These mechanisms are why the model reads out an *autoimmune-risk* signal
 (reversed-topology exosomes) rather than a simple loss-of-signal, and why the
 AP-4 arm — despite AP-4's subtle single-mutant phenotype — is worth modelling.
+
+## Synthesis: a tyrosine-motif hypothesis
+
+Pulling the threads together, the working hypothesis of this compendium is not
+about DNAzyme catalysis at all — it is about **sorting motifs**. Four propositions,
+in decreasing order of support:
+
+1. **The CI's tyrosine/dileucine motifs let the virus tap host sorting.** The
+   potyvirus CI carries functional acidic-dileucine signals read by AP-2
+   [@wu2022ci] and, beside them, an accessible **YXXΦ tyrosine motif** (Chapter 5).
+   A cytosolic pathogen protein wearing host-type endocytic signals is positioned
+   to **co-opt the AP-mediated sorting machinery** it needs for replication and
+   movement — and, potentially, to perturb the immune trafficking that runs on the
+   same adaptors.
+2. **Tyrosine-based sorting is a deeply conserved, re-used device.** YXXΦ (and the
+   related immunoreceptor tyrosine motifs, ITAM/ITIM) govern receptor sorting and
+   signalling from plants to mammals; the same motif logic is repeatedly exploited
+   by human-pathogenic viruses, including RNA viruses and oncoviruses. That AP-4
+   itself reads a tyrosine motif on the plant immune protein **BDA1** [@huang2026]
+   shows the device is active on *both* sides of the host–pathogen interface.
+3. **Membrane-topology reversal can originate only at the LE/MVB.** The
+   late-endosome / multivesicular body is the branch point where sorting,
+   recycling, autophagy and degradation segregate — and the **only** compartment
+   where vesicles are generated by membrane remodelling *away from* the cytosol
+   (ILV budding). A defect that scrambles this orchestration is therefore the only
+   plausible origin of the reversed-topology, cytoplasm-facing vesicles the
+   simulation flags as an autoimmune risk. AP-4 is implicated at exactly this hub,
+   from ATG9 delivery for autophagy to the vacuole–PM fusion that executes HR cell
+   death [@hatsugai2018].
+4. **Tyrosine motifs, modified, are read across the whole endomembrane system.**
+   The same Y/dileucine signals — and their phospho-/other modifications — feed
+   **autophagy** (the CI region's ELM hits include autophagy-related targeting
+   classes; Chapter 4), **ESCRT**-dependent ILV sorting, and **AP-complex**
+   recognition. For TuMV in particular, both **NPR1-related resistance and
+   autophagy** are established parts of the host-defence landscape [@wu2024brassica],
+   and viral replication itself runs on endomembrane co-option [@jovanovic2023]. A
+   fuller review of how these modifications switch a motif between sorting fates is
+   the natural next chapter of this story.
+
+Everything past proposition 1 is explicitly **hypothesis**; the value of the
+interactive model above is to make those hypotheses *quantitative and falsifiable*
+rather than merely narrative.
 
 ::: {.callout-note collapse="true"}
 ## React/recharts version (not compatible with the OJS runtime)
