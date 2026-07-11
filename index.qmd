@@ -4,6 +4,7 @@ subtitle: "DNAzyme-like motifs, horizontal gene transfer, and short linear motif
 author:
   - name: "Christina Muedsam"
 date: last-modified
+number-sections: false
 ---
 
 ::: {.callout-warning}
@@ -24,7 +25,14 @@ catalytic domain sequence that maps precisely to the genomes of multiple
 Potyviridae species, with flanking regions matching eukaryotic genes across
 plant, fungal, and animal kingdoms. Cross-kingdom horizontal gene transfer is
 the most parsimonious explanation for this pattern.
-Additionally, the Potyviridae CI helicase - harbouring the DNAzyme-like sequence, corresponds to a conserved protein motif likely involved in viral-host interactions associated with intracellular sorting (potentially via AP-4), viral replication, viral spread and immunity. 
+Additionally, the Potyviridae CI helicase - harbouring the DNAzyme-like sequence, corresponds to a conserved protein motif likely involved in viral-host interactions associated with intracellular sorting (potentially via AP-4), viral replication, viral spread and immunity.
+
+### Key findings at a glance
+
+- A DNAzyme catalytic domain sequence matches perfectly to a region in the genomes of several potyviruses (6 species, 16 isolates).
+- The flanking regions of those DNAzyme-matching sequences (16 isolates, 9 identical by sequence) are identical to regions in the genomes of several eukaryotes, including plants (potential viral hosts) and insects (potential viral vectors).
+- Interactions between those eukaryotic species suggest the homology might reflect cross-kingdom horizontal DNA transfer.
+- The eukaryotic genes span diverse functions — DNA repair, transcription regulation, chromatin remodelling, RNA processing, translation, and genes of unknown function — several of them essential for cell survival and development.
 
 The work spans several interconnected research threads:
 

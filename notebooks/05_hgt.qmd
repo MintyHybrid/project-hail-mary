@@ -1,7 +1,7 @@
 ---
 title: "Horizontal Gene Transfer Analysis"
 subtitle: "Phylogenetic incongruence, sequence logos, and network-based HGT detection in Potyviridae"
-author: "chrissi m."
+author: "Christina Muedsam"
 date: last-modified
 format:
   html:

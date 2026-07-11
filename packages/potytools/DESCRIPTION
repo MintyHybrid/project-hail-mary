@@ -2,7 +2,7 @@ Package: potytools
 Title: Analysis Tools for Potyvirus Genomics and Short Linear Motifs
 Version: 0.1.0
 Authors@R:
-    person("Christina", "Muedsam", email = "christina.muedsam@example.com",
+    person("Christina", "Muedsam", email = "70411777+MintyHybrid@users.noreply.github.com",
            role = c("aut", "cre"),
            comment = c(ORCID = "0000-0001-8488-3442"))
 Description: Provides functions for potyvirus genomic analysis, including

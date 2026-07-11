@@ -1,7 +1,7 @@
 ---
 title: "The DNAzyme-like Motif Discovery"
 subtitle: "A catalytic RNA motif sequence conserved across Potyviridae and matching eukaryotic genes"
-author: "chrissi m."
+author: "Christina Muedsam"
 date: "2026-02-07"
 date-modified: last-modified
 format:
@@ -17,13 +17,7 @@ execute:
 ---
 
 <!-- SOURCE: 2025_toys/poty.qmd (last modified 2026-06-29) — the core discovery document -->
-
-## Executive summary
-
-- A DNAzyme catalytic domain sequence matches perfectly to a region in the genomes of several potyviruses (6 species, 16 isolates).
-- The flanking regions of the sequences matching a DNAzyme catalytic domain in the viral genomes (16 sequences or isolates in total, among which 9 are identical by sequence) are identical to regions in the genomes of several eukaryotes, including plants (potential viral hosts) and insects (potential viral vectors).
-- Interactions between eukaryotic species indicate that homology might be based on cross-kingdom horizontal DNA transfer events.
-- The eukaryotic genes comprise genes with a wide variety of functions, including genes involved in DNA repair, transcription regulation, chromatin remodelling, RNA processing and translation, but also genes with unknown functions. Some of the genes are essential for cell survival and development.
+<!-- NOTE: the high-level "Executive summary" bullets now live in the book overview (index.qmd). -->
 
 ## Rationale and roadmap {#sec-roadmap}
 

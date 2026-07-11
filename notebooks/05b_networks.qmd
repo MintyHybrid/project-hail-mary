@@ -1,7 +1,7 @@
 ---
 title: "Host-Virus Interaction Networks"
 subtitle: "Species interaction networks from GBIF and GLOBI; potyvirus host range in ecological context"
-author: "chrissi m."
+author: "Christina Muedsam"
 date: last-modified
 format:
   html:

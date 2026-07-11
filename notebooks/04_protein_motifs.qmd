@@ -1,7 +1,7 @@
 ---
 title: "Protein Motif Analysis"
 subtitle: "Eukaryotic Linear Motifs in Potyviridae CI helicase — gget/ELM search and genus-specificity"
-author: "chrissi m."
+author: "Christina Muedsam"
 date: last-modified
 format:
   html:

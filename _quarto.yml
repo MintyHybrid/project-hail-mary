@@ -6,7 +6,7 @@ book:
   author:
     - name: "Christina Muedsam"
   date: today
-  repo-url: https://github.com/
+  repo-url: https://github.com/MintyHybrid/project-hail-mary
   repo-actions: [edit, issue]
   chapters:
     - index.qmd

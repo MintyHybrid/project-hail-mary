@@ -1,7 +1,7 @@
 ---
 title: "Codon Usage and DNAzyme-like Motif Architecture"
 subtitle: "RSCU, ENC, GC content, wobble bias and dinucleotide analysis of the DNAzyme-matching locus"
-author: "chrissi m."
+author: "Christina Muedsam"
 date: last-modified
 format:
   html:
@@ -149,6 +149,32 @@ metrics_table <- data.frame(
                      "Overall GC content",  "Baseline GC content", "Wobble position GC"))
 
 datatable(metrics_table, options = list(dom = "t", pageLength = 10), rownames = FALSE)
+```
+
+### ENC Distribution
+
+```{r enc-distribution}
+#| fig.height: 5
+#| fig.width: 8
+#| fig.cap: "Effective number of codons (ENC; Wright's Nc) per sequence — lower values indicate stronger codon-usage bias. The 99-nt motif window is compared against the polyprotein background. ENC is undefined for the 18-nt catalytic fragment itself (too few codons for Wright's estimator), so it is omitted."
+# Build only from groups with usable ENC values (short fragments yield NA).
+enc_groups <- list(
+  Motif = enc_motif,
+  Reference = enc_ref,
+  "CI region" = enc_ci)
+enc_df <- dplyr::bind_rows(lapply(names(enc_groups), function(g) {
+  v <- enc_groups[[g]]
+  if (length(v) == 0) NULL else data.frame(grp = g, ENC = v)
+}))
+enc_df$grp <- factor(enc_df$grp, levels = names(enc_groups))
+
+ggplot(enc_df, aes(grp, ENC, fill = grp)) +
+  geom_violin(alpha = 0.5, colour = NA, trim = FALSE) +
+  geom_boxplot(width = 0.18, outlier.size = 0.6, alpha = 0.9) +
+  scale_fill_manual(values = c("Motif" = "#c0392b", "Reference" = "#7f8c8d",
+                               "CI region" = "#16a085"), guide = "none") +
+  labs(x = NULL, y = "ENC (Wright's Nc)") +
+  theme_cowplot() + theme(axis.text.x = element_text(angle = 20, hjust = 1))
 ```
 
 ### RSCU Validation
@@ -497,6 +523,43 @@ datatable(
   options = list(pageLength = 20, scrollX = TRUE), filter = "top", rownames = FALSE)
 ```
 
+#### Volcano
+
+```{r cu-volcano}
+#| fig.height: 6
+#| fig.width: 8
+#| fig.cap: "Codon-usage volcano. Each point is a sense codon; the x-axis is the log2 fold-change of its usage frequency in the DNAzyme-matching motif relative to the genome background, the y-axis the significance of a Fisher test (Benjamini-Hochberg adjusted). Codons past the dashed thresholds (adjusted p < 0.05 and > 1.5-fold) are coloured by direction and labelled."
+volcano_codon <- function(cmp, title, padj_thr = 0.05, lfc_thr = log2(1.5)) {
+  d <- as.data.frame(cmp)
+  # compare_codon_usage_fast returns 1D arrays; coerce to plain columns on the
+  # single data frame we plot from (keeps row order; no case_when/ifelse).
+  d$log2FC   <- as.numeric(log2(d$fold_change))
+  d$nlt_padj <- as.numeric(-log10(d$p_adjusted))
+  # RNAseq-style category assignment by row index; NA p-values stay "n.s.".
+  pass <- !is.na(d$p_adjusted) & d$p_adjusted < padj_thr
+  d$cat <- "n.s."
+  d$cat[pass & d$log2FC >  lfc_thr] <- "Enriched in motif"
+  d$cat[pass & d$log2FC < -lfc_thr] <- "Depleted in motif"
+  d$cat <- factor(d$cat, levels = c("Enriched in motif", "Depleted in motif", "n.s."))
+  d$sig <- d$cat != "n.s."
+  ggplot(d, aes(log2FC, nlt_padj)) +
+    geom_vline(xintercept = c(-1, 1) * lfc_thr, linetype = "dashed", colour = "grey60") +
+    geom_hline(yintercept = -log10(padj_thr), linetype = "dashed", colour = "grey60") +
+    geom_point(aes(colour = cat), alpha = 0.85, size = 2.6) +
+    geom_text(data = d[d$sig, , drop = FALSE],
+              aes(label = paste0(codon, " (", amino_acid, ")")),
+              size = 3, vjust = -0.8, check_overlap = TRUE) +
+    scale_colour_manual(values = c("Enriched in motif" = "#c0392b",
+                                   "Depleted in motif" = "#2980b9",
+                                   "n.s." = "grey75"), name = NULL) +
+    labs(title = title,
+         x = expression(log[2] ~ "fold-change (motif / reference)"),
+         y = expression(-log[10] ~ "adjusted " * italic(p))) +
+    theme_cowplot() + theme(legend.position = "top")
+}
+volcano_codon(cu_comparison, "Codon usage: DNAzyme motif vs genome background")
+```
+
 #### Top Differences (motif vs genomes)
 
 ```{r rscu-top-diffs}
@@ -556,6 +619,66 @@ ggplot(top_diffs_cu_DNAzyme, aes(x = reorder(codon, fold_change), y = fold_chang
        subtitle = "DNAzyme-matches vs. other",
        x = "Codon", y = "CU Fold Change (DNAzyme-matches vs. other)") +
   coord_flip() + theme_cowplot() + theme(legend.position = "top")
+```
+
+#### Volcano
+
+```{r cu-volcano-DNAzyme}
+#| fig.height: 6
+#| fig.width: 8
+#| fig.cap: "Codon-usage volcano contrasting the isolates carrying the intact DNAzyme catalytic core against the remaining potyvirus isolates."
+volcano_codon(cu_comp_DNAzyme, "Codon usage: DNAzyme-core isolates vs other isolates")
+```
+
+## Codon Co-occurrence Network
+
+Beyond per-codon frequencies, the *architecture* of codon usage — which codons
+tend to sit next to which — carries additional signal (codon-pair bias). The
+network below treats each sense codon in the DNAzyme-locus window as a node and
+draws a weighted edge between codons that occur adjacently, pooled across all
+isolates. Node colour encodes the amino acid, node size the degree, and Louvain
+communities highlight groups of codons that recur together.
+
+```{r codon-network}
+#| fig.height: 7
+#| fig.width: 9
+#| fig.cap: "Codon co-occurrence network of the DNAzyme-locus window. Nodes are sense codons (colour = amino acid, size = degree); edges connect adjacent codons, weighted by how often the pair occurs across all isolates."
+suppressMessages({
+  library(igraph)
+  library(ggraph)
+})
+gcode <- Biostrings::GENETIC_CODE
+
+pair_tab <- table(unlist(lapply(as.character(motif_seqs), function(s) {
+  cds <- potytools::extract_codons(s)
+  if (length(cds) < 2) {
+    return(character(0))
+  }
+  vapply(seq_len(length(cds) - 1L),
+    function(i) paste(sort(c(cds[i], cds[i + 1L])), collapse = "-"),
+    character(1))
+})))
+pair_tab <- pair_tab[pair_tab >= 8]
+
+edf <- as.data.frame(do.call(rbind, strsplit(names(pair_tab), "-")),
+  stringsAsFactors = FALSE)
+names(edf) <- c("from", "to")
+edf$weight <- as.integer(pair_tab)
+
+g <- igraph::graph_from_data_frame(edf, directed = FALSE)
+igraph::V(g)$amino_acid <- unname(gcode[igraph::V(g)$name])
+igraph::V(g)$degree <- igraph::degree(g)
+igraph::V(g)$community <- as.factor(igraph::membership(igraph::cluster_louvain(g)))
+
+ggraph(g, layout = "fr") +
+  geom_edge_link(aes(width = weight), colour = "grey75", alpha = 0.5) +
+  geom_node_point(aes(size = degree, colour = amino_acid)) +
+  geom_node_text(aes(label = name), size = 2.6, repel = FALSE, vjust = -1) +
+  scale_edge_width(range = c(0.3, 2.5), guide = "none") +
+  scale_size(range = c(2, 9), guide = "none") +
+  labs(colour = "Amino acid") +
+  theme_graph(base_family = "sans") +
+  theme(legend.position = "right")
 ```
 
 ## Host-Specific Analysis {.tabset}
