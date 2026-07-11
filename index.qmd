@@ -3,7 +3,6 @@ title: "Project Hail Mary"
 subtitle: "DNAzyme-like motifs, horizontal gene transfer, and short linear motif conservation in Potyviridae"
 author:
   - name: "Christina Muedsam"
-    affiliation: "currently none"
 date: last-modified
 ---
 
@@ -25,6 +24,7 @@ catalytic domain sequence that maps precisely to the genomes of multiple
 Potyviridae species, with flanking regions matching eukaryotic genes across
 plant, fungal, and animal kingdoms. Cross-kingdom horizontal gene transfer is
 the most parsimonious explanation for this pattern.
+Additionally, the Potyviridae CI helicase - harbouring the DNAzyme-like sequence, corresponds to a conserved protein motif likely involved in viral-host interactions associated with intracellular sorting (potentially via AP-4), viral replication, viral spread and immunity. 
 
 The work spans several interconnected research threads:
 
@@ -65,7 +65,7 @@ exploration relevant to Chapters 5b and 6:
 ```r
 shiny::runApp("shiny/bionexus/")
 ```
-
+<!-- 
 ## Publication Plans
 
 This material is intended for at least two separate publications:
@@ -75,7 +75,7 @@ This material is intended for at least two separate publications:
 2. **Paper 2** — ELM short linear motif conservation in Potyviridae CI proteins
    (Chapters 3, 4). Target: *Virus Evolution* / *Journal of Virology*.
 3. **Paper 3** (optional) — Ecological host networks and immunity modelling
-   (Chapters 5b, 6). Target: *New Phytologist* / *MPMI*.
+   (Chapters 5b, 6). Target: *New Phytologist* / *MPMI*. -->
 
 ## Package
 
@@ -87,8 +87,8 @@ Analysis functions are collected in the **potytools** R package
 | Date | Milestone |
 |---|---|
 | Feb 2026 | DNAzyme match first identified (`2025_toys/poty.qmd`) |
-| Mar 2026 | HGT analysis suite (`2025_toys/poty3-hgt-claude.Rmd`) |
-| Apr 2026 | Codon usage analysis iterations (`2026_claude/`, `2026_PotyTest/`) |
-| May 2026 | Cleaned codon + DNAzyme notebook (`2026_cleanPoty/`) |
-| May 2026 | Final phylogenetic pipeline (`2026_CopilotPoty/`) |
-| Jun 2026 | ELM motif & immunity notebooks; this compendium |
+| Mar 2026 | HGT analysis suite |
+| Apr 2026 | Codon usage analysis iterations |
+| May 2026 | Cleaned codon + DNAzyme notebook |
+| May 2026 | Final phylogenetic pipeline |
+| Jun 2026 | ELM motif & immunity notebooks; this document |

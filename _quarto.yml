@@ -49,6 +49,6 @@ format:
     code-tools: true
     fig-cap-location: bottom
   # pdf: enable after running `quarto install tinytex`
-  #   documentclass: book
-  #   geometry: margin=1in
-  #   fontsize: 11pt
+    documentclass: book
+    geometry: margin=1in
+    fontsize: 11pt

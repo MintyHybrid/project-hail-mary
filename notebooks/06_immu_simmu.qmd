@@ -24,7 +24,7 @@ established to sort cargo bearing tyrosine-based (YXXΦ) motifs — including
 **VACUOLAR SORTING RECEPTOR1 (VSR1)** and the borate transporter BOR1 — via its µ
 (AP4M) subunit [@fuji2016], and AP-4 subunit interactions have been mapped
 systematically [@wang2022ap]. Its most conserved cargo is **ATG9**, a lipid
-scramblase essential for autophagosome biogenesis [@huang2026].
+scramblase essential for autophagosome biogenesis [@mattera2017, ].
 
 Crucially for immunity, AP-4 is required for the **fusion of the vacuolar and
 plasma membranes** that executes the hypersensitive cell-death response to

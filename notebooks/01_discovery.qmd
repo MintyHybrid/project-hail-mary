@@ -20,9 +20,9 @@ execute:
 
 ## Executive summary
 
-- A DNAzyme catalytic domain sequence matches perfectly to a region in the genomes of several potyviruses (6 species, 16 isolates)
-- The flanking regions of the catalytic domain sequence in the viral genomes (16 sequences or isolates in total, among which 9 are identical by sequence) match perfectly to regions in the genomes of several eukaryotes, including plants, fungi and animals (including humans)
-- Interactions between eukaryotic species indicate that homology might be based on cross-kingdom horizontal DNA transfer events
+- A DNAzyme catalytic domain sequence matches perfectly to a region in the genomes of several potyviruses (6 species, 16 isolates).
+- The flanking regions of the sequences matching a DNAzyme catalytic domain in the viral genomes (16 sequences or isolates in total, among which 9 are identical by sequence) are identical to regions in the genomes of several eukaryotes, including plants (potential viral hosts) and insects (potential viral vectors).
+- Interactions between eukaryotic species indicate that homology might be based on cross-kingdom horizontal DNA transfer events.
 - The eukaryotic genes comprise genes with a wide variety of functions, including genes involved in DNA repair, transcription regulation, chromatin remodelling, RNA processing and translation, but also genes with unknown functions. Some of the genes are essential for cell survival and development.
 
 ## Rationale and roadmap {#sec-roadmap}
@@ -54,11 +54,11 @@ versus supported — here is the actual chain of thought, step by step:
    gossypii*** (a principal aphid vector) — a nice, suggestive observation, **not**
    strong evidence.
 6. **The locus is the CI gene.** The DNAzyme-like sequence maps to the coding region
-   of the **cylindrical inclusion (CI)** protein (Chapters 2–4).
+   of the potyviral **cylindrical inclusion (CI)** protein (Chapters 2–4).
 
-**Where this goes.** Assessing potential catalytic activity (Chapter 3) shows most
-homologs carry **substitutions at activity-critical core positions**, so DNAzyme
-activity is **unlikely / rare** — and would additionally require reverse
+**Where this goes.** Assessing potential DNAzyme catalytic activity (Chapter 3) 
+shows most homologs carry **substitutions at activity-critical core positions**, 
+so DNAzyme activity is **unlikely / rare** — and would additionally require reverse
 transcription to coincide. The nucleotide-level analyses (logos, GC/CpG, codon
 usage) are therefore **exploratory context, not evidence**. The thread that *does*
 lead somewhere is the **CI protein itself** — specifically **host-type sorting
@@ -69,9 +69,9 @@ the LE/MVB** and motivates the immune-trafficking hypothesis of Chapter 9.
 ## Intro
 
 The starting point is a synthetic **10-23 deoxyribozyme** [@borggraefe2022]: a
-single-stranded DNA whose two substrate-binding arms base-pair a target RNA
-(Watson–Crick), positioning a 15-nt catalytic core that cleaves the RNA at an
-unpaired purine·pyrimidine junction. Redrawn from the target/DNAzyme pairing:
+single-stranded DNA able to cleave matching single-stranded RNA. The central catalytic domain of the DNAzyme comprises 15 nt - which are flanked by at least 9 nt 3' and 5'. The flanks, in turn represent the substrate-binding arms, i.e. they determine the specificity of the DNAzyme towards the RNA it is able to cleave. Complementary base-pairing with target RNA
+(Watson–Crick), positions the 15-nt catalytic core that cleaves the RNA at an
+unpaired purine·pyrimidine junction. 
 
 ```default
   target RNA   3'– A A C C C C A U U | C C A C G U A C A –5'
@@ -87,32 +87,12 @@ recognition — is the sequence that turns out to match the potyvirus CI coding
 region (below). *Scheme redrawn after Borggräfe et al. 2022 [@borggraefe2022];
 no figure is reproduced.*
 
-### The answer to life, the universe and everything...
-
-It's OK not to fit in any of the norm-sized boxes people like to stuff other
-people in. I am not a payload, after all. If I would, my box would be a plant
-biology box and I spend more time in one of these boxes than I should have.
-Luckily, I had mentors that supported thinking out of the box. The box that I
-have never fit in comfortably, anyways. I am not sure yet, how huge these
-findings are. It all seems to simple to never have been found by anyone else. I
-am not completely sure whether it really is another - and probably quite broad
-and certainly unusual sort of horizontal - cross-kingdom DNA transfer that maybe
-even dates back to evolution prior to what we define as "the origin of life".
-So, yep. This might be the answer to life, (the universe) and everything.
-Evolution that maybe happened in a world before cells. Maybe not ... but
-everything starts from an in vitro system. To be precise: it starts from a
-DNAzyme published by @borggraefe2022, which is a paper about a
-DNAzyme that can cleave RNA in a sequence specific manner. The catalytic domain
-of the DNAzyme is 15bp long and has the sequence "GGCTAGCTACAACGA". Flanking
-this sequence is a region comprising (at least) 9 bases on both sides of the
-active loop, which determine the specificity of the DNAzyme, i.e. the RNA it is
-able to cleave.
-
-Since I was curious whether this system might also occur in nature, I blasted
-this sequence against the viral nucleotide collection on NCBI and found that it
-matches perfectly to a region in the genomes of several potyviruses.
 
 # Origins
+
+Since I was curious whether this system might also occur in nature, I blasted
+this 15nt sequence against the viral nucleotide collection on NCBI and found that it
+matches perfectly to a region in the genomes of several potyviruses.
 
 ```{r setup}
 #| include: false
@@ -179,13 +159,13 @@ The BLAST algorithm and scoring are described in @altschul1997.
 | **Filter string**         | F      |
 | **Genetic Code**          | 1      |
 
-As my query was a 15mer and the database is far from small, I had naively
-expected that I should get some hits by chance alone already, which I suspected
-should be more or less randomly distributed over a couple of probably very
+As my query was a short sequence (15mer) and the database is far from small, I had naively expected that I should get some hits by chance alone already, which I 
+suspected could be more or less randomly distributed over a couple of possibly very
 different (i.e. not necessarily closely related) species.
 
 The search retrieved 16 isolates assigned to a total of 6 species, all belonging
-to the same family: Potyvirus.
+to the same genus: Potyvirus.
+That's where I almost cut my fingers with Occam's Razor: Potyviruses are members of the family of Potyviridae, which in turn classify as Type IV group viruses according to the Baltimore classification (i.e. they are +ssRNA viruses). DNAzyme activity therefore is nothing, that could be expected directly.
 
 ```{r}
 potydesc <- read_csv(here::here("data", "SHEST00P014-Alignment-Descriptions.csv"))
@@ -214,11 +194,9 @@ viraltax <- viral %>% dplyr::select(c(taxid, name)) %>% distinct() %>% pull(var 
 viraltax
 ```
 
-## Potyvirus
+## Potyvirus isolates with match to the DNAzyme catalytic center
 
-In the code below, I load the genomes (whole sequences, respectively). They are
-viruses - so the file is not that huge. So, here I first load all potyvirus
-isolates with a match for the catalytic domain:
+In the code below, I load the document containing the full sequences (genomes, or partial genomes, respectively) corresponding to the 16 Blast hits. I had downloaded and saved the file locally. Since we are dealing with viruses, the file is not that huge. 
 
 ```{r}
 poty <- readDNAStringSet(here::here("data", "seqdump.txt"))
@@ -273,7 +251,7 @@ potyseqlong
 
 ### Cropping flanks for BLAST
 
-Since long (25+25bp) flanks did not yield any blast hits, I crop down to 9bp
+Since long (25+25bp) flanks did not yield any perfect hits, I crop down to 9bp
 on each side (excluding the catalytic domain).
 
 ```{r}
@@ -292,7 +270,7 @@ uniqueflanks
 # writeXStringSet(uniqueflanks, filepath = here::here("data", "unique18flanks.fasta"))
 ```
 
-#### Translation (6-frame)
+#### Flank Translation (6-frame)
 
 ```{r}
 translated <- Biostrings::translate(uniqueflanks)
@@ -304,7 +282,7 @@ translatedsix <- lapply(dna_subseqs, Biostrings::translate)
 translatedsix
 ```
 
-### Sequence logo of viral flanks
+### Sequence logo of viral fragments
 
 First, I check whether there is any conservation in the viral sequences beyond
 the putative catalytic domains, using a seqlogo generated from the extended-flank
