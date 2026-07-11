@@ -1,23 +1,28 @@
 test_that("rolling_alignment_stats returns one row per window with expected cols", {
   set.seed(1)
   aln <- matrix(sample(c("A", "C", "G", "T"), 6 * 90, replace = TRUE),
-                nrow = 6)
+    nrow = 6
+  )
   rownames(aln) <- paste0("seq", 1:6)
 
   ras <- rolling_alignment_stats(aln, window = 30, step = 30)
 
   expect_s3_class(ras, "data.frame")
   expect_equal(nrow(ras), 3) # 90 sites / 30 step, non-overlapping
-  expect_true(all(c("window", "start", "end", "GC", "AT", "GC3",
-                    "CpG_OE", "gap_fraction", "entropy",
-                    "GC_pos1", "GC_pos2", "GC_pos3") %in% names(ras)))
+  expect_true(all(c(
+    "window", "start", "end", "GC", "AT", "GC3",
+    "CpG_OE", "gap_fraction", "entropy",
+    "GC_pos1", "GC_pos2", "GC_pos3"
+  ) %in% names(ras)))
   expect_true(all(ras$GC >= 0 & ras$GC <= 1))
 })
 
 test_that("rolling_alignment_stats enforces codon-multiple window/step", {
   aln <- matrix("A", nrow = 2, ncol = 60)
-  expect_error(rolling_alignment_stats(aln, window = 31, step = 30),
-               "multiples of 3")
+  expect_error(
+    rolling_alignment_stats(aln, window = 31, step = 30),
+    "multiples of 3"
+  )
 })
 
 test_that("rolling_alignment_stats rejects non-matrix input", {
@@ -27,7 +32,8 @@ test_that("rolling_alignment_stats rejects non-matrix input", {
 test_that("per-sequence variant yields sequence x window rows", {
   set.seed(2)
   aln <- matrix(sample(c("A", "C", "G", "T"), 4 * 60, replace = TRUE),
-                nrow = 4)
+    nrow = 4
+  )
   rownames(aln) <- paste0("s", 1:4)
 
   ras_ps <- rolling_alignment_stats_per_sequence(aln, window = 30, step = 30)
@@ -40,7 +46,8 @@ test_that("per-sequence variant yields sequence x window rows", {
 test_that("pooled and per-sequence metrics match hand-computed values", {
   m <- rbind(
     c("A", "T", "G", "C", "G", "C"),
-    c("A", "A", "G", "G", "T", "T"))
+    c("A", "A", "G", "G", "T", "T")
+  )
   r <- rolling_alignment_stats(m, window = 6, step = 3)
   # window 1 pools both sequences over all 6 columns: 6 GC / 12 bases
   expect_equal(r$GC[1], 0.5)
@@ -54,10 +61,14 @@ test_that("pooled and per-sequence metrics match hand-computed values", {
 test_that("remove_gaps drops gap characters before metrics", {
   aln <- matrix(c(rep("-", 15), rep("G", 15)), nrow = 2, byrow = TRUE)
   # window covers all 15 sites of each row
-  with_gaps <- rolling_alignment_stats(aln, window = 15, step = 15,
-                                       codon_aligned = FALSE)
-  no_gaps <- rolling_alignment_stats(aln, window = 15, step = 15,
-                                     codon_aligned = FALSE, remove_gaps = TRUE)
+  with_gaps <- rolling_alignment_stats(aln,
+    window = 15, step = 15,
+    codon_aligned = FALSE
+  )
+  no_gaps <- rolling_alignment_stats(aln,
+    window = 15, step = 15,
+    codon_aligned = FALSE, remove_gaps = TRUE
+  )
   expect_gt(with_gaps$gap_fraction[1], 0)
   # GC computed over non-gap only should be >= GC over all (gaps count as 0)
   expect_gte(no_gaps$GC[1], with_gaps$GC[1])

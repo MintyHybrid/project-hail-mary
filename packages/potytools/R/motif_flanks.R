@@ -1,9 +1,6 @@
 # Extract Motifs with Variable Flanking Sequences
 # For structural analysis and comparative studies
 
-library(Biostrings)
-library(dplyr)
-
 # ==============================================================================
 # MOTIF + FLANKS EXTRACTION
 # ==============================================================================
@@ -23,7 +20,6 @@ extract_motif_with_flanks <- function(sequences,
                                       flank_5prime = 0,
                                       flank_3prime = 0,
                                       extract_from = "alignment") {
-
   if (extract_from == "alignment") {
     # Extract from aligned sequences (positions are alignment coordinates)
 
@@ -47,22 +43,27 @@ extract_motif_with_flanks <- function(sequences,
 
     # Extract individual parts
     flank_5 <- if (flank_5prime > 0) {
-      subseq(sequences, start = total_start,
-        end = motif_start - 1)
+      subseq(sequences,
+        start = total_start,
+        end = motif_start - 1
+      )
     } else {
       DNAStringSet(rep("", length(sequences)))
     }
 
-    motif <- subseq(sequences, start = motif_start,
-      end = motif_start + motif_length - 1)
+    motif <- subseq(sequences,
+      start = motif_start,
+      end = motif_start + motif_length - 1
+    )
 
     flank_3 <- if (flank_3prime > 0) {
-      subseq(sequences, start = motif_start + motif_length,
-        end = total_end)
+      subseq(sequences,
+        start = motif_start + motif_length,
+        end = total_end
+      )
     } else {
       DNAStringSet(rep("", length(sequences)))
     }
-
   } else {
     # Extract from unaligned sequences
     # Assumes motif position is known for each sequence
@@ -88,16 +89,22 @@ extract_motif_with_flanks <- function(sequences,
       combined <- c(combined, subseq(seq, start = total_start, end = total_end))
 
       if (flank_5prime > 0) {
-        flank_5 <- c(flank_5, subseq(seq, start = total_start,
-          end = start_pos - 1))
+        flank_5 <- c(flank_5, subseq(seq,
+          start = total_start,
+          end = start_pos - 1
+        ))
       }
 
-      motif <- c(motif, subseq(seq, start = start_pos,
-        end = start_pos + motif_length - 1))
+      motif <- c(motif, subseq(seq,
+        start = start_pos,
+        end = start_pos + motif_length - 1
+      ))
 
       if (flank_3prime > 0) {
-        flank_3 <- c(flank_3, subseq(seq, start = start_pos + motif_length,
-          end = total_end))
+        flank_3 <- c(flank_3, subseq(seq,
+          start = start_pos + motif_length,
+          end = total_end
+        ))
       }
     }
 
@@ -111,8 +118,10 @@ extract_motif_with_flanks <- function(sequences,
   cat(sprintf("  Core motif: %d nt\n", motif_length))
   cat(sprintf("  5' flank: %d nt\n", flank_5prime))
   cat(sprintf("  3' flank: %d nt\n", flank_3prime))
-  cat(sprintf("  Total length: %d nt\n",
-    motif_length + flank_5prime + flank_3prime))
+  cat(sprintf(
+    "  Total length: %d nt\n",
+    motif_length + flank_5prime + flank_3prime
+  ))
   cat(sprintf("  Number of sequences: %d\n", length(sequences)))
 
   return(list(
@@ -140,7 +149,6 @@ generate_flank_variants <- function(sequences,
                                     motif_start,
                                     motif_length,
                                     flank_sizes = c(0, 10, 20, 30, 50)) {
-
   variants <- list()
 
   for (size in flank_sizes) {
@@ -169,21 +177,25 @@ generate_flank_variants <- function(sequences,
 save_motif_flanks <- function(extraction_result, output_prefix = "motif") {
   # Save combined
   writeXStringSet(extraction_result$combined,
-    filepath = paste0(output_prefix, "_combined.fasta"))
+    filepath = paste0(output_prefix, "_combined.fasta")
+  )
 
   # Save motif only
   writeXStringSet(extraction_result$motif,
-    filepath = paste0(output_prefix, "_core.fasta"))
+    filepath = paste0(output_prefix, "_core.fasta")
+  )
 
   # Save flanks if they exist
   if (extraction_result$config$flank_5prime > 0) {
     writeXStringSet(extraction_result$flank_5,
-      filepath = paste0(output_prefix, "_5prime_flank.fasta"))
+      filepath = paste0(output_prefix, "_5prime_flank.fasta")
+    )
   }
 
   if (extraction_result$config$flank_3prime > 0) {
     writeXStringSet(extraction_result$flank_3,
-      filepath = paste0(output_prefix, "_3prime_flank.fasta"))
+      filepath = paste0(output_prefix, "_3prime_flank.fasta")
+    )
   }
 
   cat(sprintf("Saved sequences with prefix: %s\n", output_prefix))
@@ -202,7 +214,6 @@ save_motif_flanks <- function(extraction_result, output_prefix = "motif") {
 find_motif_homologs <- function(query_motif,
                                 target_sequences,
                                 max_mismatches = 2) {
-
   if (inherits(query_motif, "DNAStringSet")) {
     query_motif <- query_motif[[1]]
   }
@@ -213,13 +224,14 @@ find_motif_homologs <- function(query_motif,
     target_sequences <- Biostrings::DNAStringSet(target_sequences)
   }
 
-  query_char   <- as.character(query_motif)
+  query_char <- as.character(query_motif)
   query_length <- length(query_motif)
 
-  # Biostrings does the fixed-mismatch sliding-window search in C — far faster
+  # Biostrings does the fixed-mismatch sliding-window search in C - far faster
   # than an R-level per-position substr()/strsplit() loop.
   hits <- Biostrings::vmatchPattern(query_motif, target_sequences,
-                                    max.mismatch = max_mismatches)
+    max.mismatch = max_mismatches
+  )
 
   seq_names <- names(target_sequences)
   if (is.null(seq_names)) seq_names <- as.character(seq_along(target_sequences))
@@ -227,21 +239,23 @@ find_motif_homologs <- function(query_motif,
   # Assemble one data frame per target, then bind once (no rbind-in-loop).
   per_seq <- lapply(seq_along(target_sequences), function(i) {
     mi <- hits[[i]]
-    if (length(mi) == 0) return(NULL)
-    starts  <- BiocGenerics::start(mi)
+    if (length(mi) == 0) {
+      return(NULL)
+    }
+    starts <- BiocGenerics::start(mi)
     windows <- as.character(Biostrings::extractAt(target_sequences[[i]], mi))
     # Exact mismatch count per window (vmatchPattern already bounded it)
-    q_chars    <- strsplit(query_char, "", fixed = TRUE)[[1]]
+    q_chars <- strsplit(query_char, "", fixed = TRUE)[[1]]
     mismatches <- vapply(windows, function(w) {
       sum(q_chars != strsplit(w, "", fixed = TRUE)[[1]])
     }, integer(1))
     data.frame(
-      sequence   = seq_names[i],
-      start      = starts,
-      end        = starts + query_length - 1L,
+      sequence = seq_names[i],
+      start = starts,
+      end = starts + query_length - 1L,
       mismatches = mismatches,
-      identity   = 1 - (mismatches / query_length),
-      match_seq  = windows,
+      identity = 1 - (mismatches / query_length),
+      match_seq = windows,
       stringsAsFactors = FALSE
     )
   })
@@ -269,7 +283,6 @@ extract_homologs_with_flanks <- function(sequences,
                                          homolog_positions,
                                          flank_5prime = 0,
                                          flank_3prime = 0) {
-
   extracted <- DNAStringSet()
 
   for (i in 1:nrow(homolog_positions)) {
@@ -284,8 +297,10 @@ extract_homologs_with_flanks <- function(sequences,
     total_end <- min(width(seq), hit$end + flank_3prime)
 
     extracted_seq <- subseq(seq, start = total_start, end = total_end)
-    names(extracted_seq) <- sprintf("%s_pos%d_id%.2f",
-      hit$sequence, hit$start, hit$identity)
+    names(extracted_seq) <- sprintf(
+      "%s_pos%d_id%.2f",
+      hit$sequence, hit$start, hit$identity
+    )
 
     extracted <- c(extracted, extracted_seq)
   }
@@ -314,7 +329,6 @@ workflow_motif_extraction <- function(sequences,
                                       flank_variants = c(0, 10, 20, 30),
                                       find_homologs = TRUE,
                                       output_dir = "motif_extraction") {
-
   cat("\n")
   cat(paste(rep("=", 70), collapse = ""), "\n")
   cat("MOTIF + FLANKS EXTRACTION WORKFLOW\n")
@@ -370,8 +384,10 @@ workflow_motif_extraction <- function(sequences,
 
         writeXStringSet(
           homolog_seqs,
-          filepath = file.path(output_dir,
-            paste0("homologs_", variant_name, ".fasta"))
+          filepath = file.path(
+            output_dir,
+            paste0("homologs_", variant_name, ".fasta")
+          )
         )
       }
 
@@ -391,12 +407,3 @@ workflow_motif_extraction <- function(sequences,
     homologs = homolog_results
   ))
 }
-
-cat("\n=== MOTIF + FLANKS EXTRACTOR ===\n\n")
-cat("USAGE:\n\n")
-cat("result <- workflow_motif_extraction(\n")
-cat("  sequences = genome_aln,\n")
-cat("  motif_start = 1500,\n")
-cat("  motif_length = 18,\n")
-cat("  flank_variants = c(0, 10, 20, 30, 50)\n")
-cat(")\n\n")

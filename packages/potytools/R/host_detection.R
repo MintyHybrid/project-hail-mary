@@ -1,10 +1,6 @@
 # Host Species Detection and Codon Table Retrieval for Potyviruses
 # Detects host from isolate names, classifies as monocot/dicot, retrieves codon tables
 
-library(Biostrings)
-library(dplyr)
-library(stringr)
-
 # ==============================================================================
 # HOST SPECIES DATABASES
 # ==============================================================================
@@ -13,7 +9,8 @@ library(stringr)
 #' Based on known potyvirus host ranges
 POTYVIRUS_HOSTS <- list(
   # Common monocots
-  monocot = c("Freesia", "Pleione", "Polygonatnum", "Polygonatum", "blue squill",
+  monocot = c(
+    "Freesia", "Pleione", "Polygonatnum", "Polygonatum", "blue squill",
     "Fritillary", "Paris", "saffron", "Zantedeschia", "Dasheen (taro)",
     "lily", "leek", "wild onion", "Narcissus", "scallion",
     "Japanese yam", "hyacinth", "konjac", "asparagus", "yam",
@@ -99,6 +96,7 @@ DICOT_CODON_TABLE <- DICOT_CODON_TABLE / sum(DICOT_CODON_TABLE)
 #'
 #' @param isolate_name Character string of isolate name
 #' @return Character string of detected host (or NA)
+#' @export
 detect_host_from_name <- function(isolate_name) {
   # Common separators
   parts <- unlist(str_split(isolate_name, "[_\\-\\.]"))
@@ -129,8 +127,11 @@ detect_host_from_name <- function(isolate_name) {
 #'
 #' @param host_name Character string of host name
 #' @return "monocot", "dicot", or NA
+#' @export
 classify_host_type <- function(host_name) {
-  if (is.na(host_name)) return(NA)
+  if (is.na(host_name)) {
+    return(NA)
+  }
 
   host_lower <- tolower(host_name)
 
@@ -156,9 +157,9 @@ classify_host_type <- function(host_name) {
 #' @param sequence_names Character vector of sequence names
 #' @param manual_hosts Optional named vector for manual host assignment
 #' @return Data frame with isolate, detected_host, host_type
+#' @export
 create_host_classification_table <- function(sequence_names,
                                              manual_hosts = NULL) {
-
   results <- data.frame(
     isolate = sequence_names,
     detected_host = NA_character_,
@@ -192,9 +193,11 @@ create_host_classification_table <- function(sequence_names,
   # Summary statistics
   cat("\nHost Classification Summary:\n")
   cat(sprintf("  Total isolates: %d\n", nrow(results)))
-  cat(sprintf("  Detected hosts: %d (%.1f%%)\n",
+  cat(sprintf(
+    "  Detected hosts: %d (%.1f%%)\n",
     sum(!is.na(results$detected_host)),
-    100 * sum(!is.na(results$detected_host)) / nrow(results)))
+    100 * sum(!is.na(results$detected_host)) / nrow(results)
+  ))
   cat(sprintf("  Monocots: %d\n", sum(results$host_type == "monocot", na.rm = TRUE)))
   cat(sprintf("  Dicots: %d\n", sum(results$host_type == "dicot", na.rm = TRUE)))
   cat(sprintf("  Unknown: %d\n", sum(is.na(results$host_type))))
@@ -210,6 +213,7 @@ create_host_classification_table <- function(sequence_names,
 #'
 #' @param host_type "monocot", "dicot", or NA
 #' @return Named vector of codon frequencies
+#' @export
 get_codon_table_for_host_type <- function(host_type) {
   if (is.na(host_type)) {
     # Return average of monocot and dicot
@@ -228,6 +232,7 @@ get_codon_table_for_host_type <- function(host_type) {
 #'
 #' @param host_classification Data frame from create_host_classification_table
 #' @return Named list of codon tables (one per isolate)
+#' @export
 create_host_specific_codon_tables <- function(host_classification) {
   codon_tables <- list()
 
@@ -250,6 +255,7 @@ create_host_specific_codon_tables <- function(host_classification) {
 #' @param sequences DNAStringSet or character vector
 #' @param host_codon_tables Named list of host-specific codon tables
 #' @return Data frame with isolate and CAI values
+#' @export
 calculate_host_specific_cai <- function(sequences, host_codon_tables) {
   if (inherits(sequences, "DNAStringSet")) {
     seq_names <- names(sequences)
@@ -261,16 +267,16 @@ calculate_host_specific_cai <- function(sequences, host_codon_tables) {
     }
   }
 
-  # Cache CAI weight vectors per host table — the weights depend only on the
+  # Cache CAI weight vectors per host table - the weights depend only on the
   # host table, so compute each one once rather than per codon occurrence.
   weight_cache <- list()
-  avg_table    <- (MONOCOT_CODON_TABLE + DICOT_CODON_TABLE) / 2
+  avg_table <- (MONOCOT_CODON_TABLE + DICOT_CODON_TABLE) / 2
 
   cai <- vapply(seq_along(sequences), function(i) {
-    isolate    <- seq_names[i]
+    isolate <- seq_names[i]
     host_table <- host_codon_tables[[isolate]]
     if (is.null(host_table)) {
-      isolate    <- ".__avg__"
+      isolate <- ".__avg__"
       host_table <- avg_table
     }
 
@@ -281,11 +287,15 @@ calculate_host_specific_cai <- function(sequences, host_codon_tables) {
     }
 
     codons <- extract_codons(sequences[i])
-    if (length(codons) == 0) return(NA_real_)
+    if (length(codons) == 0) {
+      return(NA_real_)
+    }
 
     w_seq <- w[codons]
-    w_seq <- w_seq[!is.na(w_seq)]   # drop stop codons / unknowns
-    if (length(w_seq) == 0) return(NA_real_)
+    w_seq <- w_seq[!is.na(w_seq)] # drop stop codons / unknowns
+    if (length(w_seq) == 0) {
+      return(NA_real_)
+    }
 
     # CAI is the geometric mean of the per-codon weights
     exp(mean(log(pmax(w_seq, 1e-6))))
@@ -304,19 +314,19 @@ calculate_host_specific_cai <- function(sequences, host_codon_tables) {
 #' @keywords internal
 .cai_weights <- function(host_table) {
   codons <- names(host_table)
-  aas    <- vapply(codons, function(cd) {
+  aas <- vapply(codons, function(cd) {
     aa <- GENETIC_CODE[[cd]]
     if (is.null(aa)) NA_character_ else aa
   }, character(1))
 
-  keep       <- !is.na(aas) & aas != "*"
-  codons     <- codons[keep]
-  aas        <- aas[keep]
-  freqs      <- host_table[codons]
+  keep <- !is.na(aas) & aas != "*"
+  codons <- codons[keep]
+  aas <- aas[keep]
+  freqs <- host_table[codons]
 
   # Per-amino-acid maximum frequency, then w = freq / family_max (vectorized)
-  fam_max    <- tapply(freqs, aas, max, na.rm = TRUE)
-  w          <- freqs / fam_max[aas]
+  fam_max <- tapply(freqs, aas, max, na.rm = TRUE)
+  w <- freqs / fam_max[aas]
   w[!is.finite(w)] <- 1.0
   stats::setNames(as.numeric(w), codons)
 }
@@ -326,6 +336,7 @@ calculate_host_specific_cai <- function(sequences, host_codon_tables) {
 #' @param sequences DNAStringSet or character vector
 #' @param host_classification Data frame with host classification
 #' @return List with monocot_seqs, dicot_seqs, unknown_seqs
+#' @export
 group_sequences_by_host_type <- function(sequences, host_classification) {
   if (inherits(sequences, "DNAStringSet")) {
     seq_names <- names(sequences)
@@ -370,16 +381,16 @@ analyze_host_specific_rare_codons <- function(sequences,
     seq_names <- names(sequences)
   }
 
-  avg_table         <- (MONOCOT_CODON_TABLE + DICOT_CODON_TABLE) / 2
-  optimal_cache     <- list()   # per host table: named vector aa -> optimal codon
+  avg_table <- (MONOCOT_CODON_TABLE + DICOT_CODON_TABLE) / 2
+  optimal_cache <- list() # per host table: named vector aa -> optimal codon
 
   # Accumulate per-isolate data frames in a list, bind once at the end.
   per_isolate <- lapply(seq_along(sequences), function(i) {
-    isolate   <- seq_names[i]
+    isolate <- seq_names[i]
     host_type <- host_classification$host_type[host_classification$isolate == isolate]
     host_type <- if (length(host_type) > 0) host_type[1] else NA
 
-    key        <- if (is.null(host_codon_tables[[isolate]])) ".__avg__" else isolate
+    key <- if (is.null(host_codon_tables[[isolate]])) ".__avg__" else isolate
     host_table <- if (key == ".__avg__") avg_table else host_codon_tables[[isolate]]
 
     # Precompute optimal codon per amino acid once per host table
@@ -390,23 +401,26 @@ analyze_host_specific_rare_codons <- function(sequences,
     }
 
     codons <- unique(extract_codons(sequences[i]))
-    aas    <- vapply(codons, function(cd) {
+    aas <- vapply(codons, function(cd) {
       aa <- GENETIC_CODE[[cd]]
       if (is.null(aa)) NA_character_ else aa
     }, character(1))
 
-    keep   <- !is.na(aas) & aas != "*"
-    codons <- codons[keep]; aas <- aas[keep]
-    if (length(codons) == 0) return(NULL)
+    keep <- !is.na(aas) & aas != "*"
+    codons <- codons[keep]
+    aas <- aas[keep]
+    if (length(codons) == 0) {
+      return(NULL)
+    }
 
     freqs <- host_table[codons]
     data.frame(
-      isolate       = isolate,
-      host_type     = host_type,
-      codon         = codons,
-      amino_acid    = aas,
-      host_freq     = as.numeric(freqs),
-      is_rare       = as.numeric(freqs) < 0.01,
+      isolate = isolate,
+      host_type = host_type,
+      codon = codons,
+      amino_acid = aas,
+      host_freq = as.numeric(freqs),
+      is_rare = as.numeric(freqs) < 0.01,
       optimal_codon = opt[aas],
       stringsAsFactors = FALSE
     )
@@ -422,15 +436,17 @@ analyze_host_specific_rare_codons <- function(sequences,
 #' @keywords internal
 .optimal_codons <- function(host_table) {
   codons <- names(host_table)
-  aas    <- vapply(codons, function(cd) {
+  aas <- vapply(codons, function(cd) {
     aa <- GENETIC_CODE[[cd]]
     if (is.null(aa)) NA_character_ else aa
   }, character(1))
-  keep   <- !is.na(aas) & aas != "*"
-  codons <- codons[keep]; aas <- aas[keep]; freqs <- host_table[codons]
+  keep <- !is.na(aas) & aas != "*"
+  codons <- codons[keep]
+  aas <- aas[keep]
+  freqs <- host_table[codons]
   # For each amino acid, pick the codon with the highest frequency
   split_codons <- split(codons, aas)
-  split_freqs  <- split(as.numeric(freqs), aas)
+  split_freqs <- split(as.numeric(freqs), aas)
   vapply(names(split_codons), function(a) {
     split_codons[[a]][which.max(split_freqs[[a]])]
   }, character(1))
@@ -490,6 +506,7 @@ interactive_host_assignment <- function(sequence_names, auto_classification) {
 #'
 #' @param host_classification Data frame
 #' @param filepath Output file path
+#' @export
 save_host_classification <- function(host_classification, filepath) {
   write.csv(host_classification, filepath, row.names = FALSE)
   cat(sprintf("\nSaved host classification to: %s\n", filepath))
@@ -501,14 +518,17 @@ save_host_classification <- function(host_classification, filepath) {
 #'
 #' @param filepath Path to CSV file
 #' @return Data frame with host classification
+#' @export
 load_host_classification <- function(filepath) {
   df <- read.csv(filepath, stringsAsFactors = FALSE)
 
   # Validate
   required_cols <- c("isolate", "detected_host", "host_type")
   if (!all(required_cols %in% colnames(df))) {
-    stop(sprintf("CSV must contain columns: %s",
-      paste(required_cols, collapse = ", ")))
+    stop(sprintf(
+      "CSV must contain columns: %s",
+      paste(required_cols, collapse = ", ")
+    ))
   }
 
   cat("\nLoaded host classification:\n")

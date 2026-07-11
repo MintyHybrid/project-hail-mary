@@ -49,6 +49,7 @@ AA_TO_CODONS <- get_aa_to_codons()
 #' @param seq Character string or DNAString
 #' @param frame Starting frame (0, 1, or 2)
 #' @return Character vector of codons
+#' @export
 extract_codons <- function(seq, frame = 0) {
   if (inherits(seq, "DNAString") || inherits(seq, "RNAString")) {
     seq <- as.character(seq)
@@ -63,6 +64,7 @@ extract_codons <- function(seq, frame = 0) {
 #'
 #' @param dna_set DNAStringSet object
 #' @return List of character vectors of codons
+#' @export
 extract_codons_from_set <- function(dna_set) {
   lapply(as.character(dna_set), extract_codons)
 }
@@ -86,6 +88,7 @@ get_all_codons <- function(sequences) {
 #'
 #' @param sequences Character vector or DNAStringSet
 #' @return Named vector of codon frequencies
+#' @export
 calculate_codon_frequencies <- function(sequences) {
   all_codons <- get_all_codons(sequences)
   codon_counts <- table(all_codons)
@@ -97,6 +100,7 @@ calculate_codon_frequencies <- function(sequences) {
 #'
 #' @param sequences Character vector or DNAStringSet
 #' @return Data frame with codon, amino acid, and RSCU values
+#' @export
 calculate_rscu <- function(sequences) {
   if (inherits(sequences, "DNAStringSet")) {
     sequences <- as.character(sequences)
@@ -104,7 +108,7 @@ calculate_rscu <- function(sequences) {
   ### manually checked whether width(ref_seqs) %% 3 all == 0!!! 20260423
   # Concatenate all sequences
   all_seq <- paste(sequences, collapse = "")
-  all_seq <- tolower(all_seq)  # seqinr expects lowercase
+  all_seq <- tolower(all_seq) # seqinr expects lowercase
 
   # Convert to seqinr format
   seq_vector <- s2c(all_seq)
@@ -128,6 +132,7 @@ calculate_rscu <- function(sequences) {
 #'
 #' @param sequence Single sequence (character or DNAString)
 #' @return Numeric ENC value (2-61), or NA if sequence too short
+#' @export
 calculate_enc <- function(sequence) {
   # Delegates to seqinr-based implementation in optimized_analysis.R
   calculate_enc_fast(sequence)
@@ -141,6 +146,7 @@ calculate_enc <- function(sequence) {
 #'
 #' @param sequence Character string or DNAString
 #' @return Named vector with GC_overall, GC1, GC2, GC3
+#' @export
 calculate_gc_content <- function(sequence) {
   # Delegates to seqinr-based implementation in optimized_analysis.R
   calculate_gc_fast(sequence)
@@ -155,6 +161,7 @@ calculate_gc_content <- function(sequence) {
 #' @param motif_sequences Character vector or DNAStringSet (motif sequences)
 #' @param reference_sequences Character vector or DNAStringSet (reference)
 #' @return Data frame with statistical comparison
+#' @export
 compare_codon_usage <- function(motif_sequences, reference_sequences) {
   # Delegates to vectorized seqinr-based implementation in optimized_analysis.R
   compare_codon_usage_fast(motif_sequences, reference_sequences)
@@ -168,6 +175,7 @@ compare_codon_usage <- function(motif_sequences, reference_sequences) {
 #'
 #' @param sequences Character vector or DNAStringSet
 #' @return Data frame with chi-square test results
+#' @export
 check_wobble_bias <- function(sequences) {
   wobble_bases <- c()
 
@@ -184,8 +192,10 @@ check_wobble_bias <- function(sequences) {
 
   results <- data.frame(
     base = c("A", "T", "G", "C"),
-    observed = sapply(c("A", "T", "G", "C"),
-      function(b) ifelse(b %in% names(counts), counts[[b]], 0)),
+    observed = sapply(
+      c("A", "T", "G", "C"),
+      function(b) ifelse(b %in% names(counts), counts[[b]], 0)
+    ),
     expected = expected,
     stringsAsFactors = FALSE
   )
@@ -197,7 +207,7 @@ check_wobble_bias <- function(sequences) {
   if (total >= 20) {
     chi_result <- chisq.test(results$observed)
     message("\nWobble position bias test:\n")
-    message(sprintf("  χ² = %.4f, p = %.4e\n", chi_result$statistic, chi_result$p.value))
+    message(sprintf("  chi^2 = %.4f, p = %.4e\n", chi_result$statistic, chi_result$p.value))
   }
 
   return(results)
@@ -211,6 +221,7 @@ check_wobble_bias <- function(sequences) {
 #'
 #' @param sequences Character vector or DNAStringSet
 #' @return Data frame with observed/expected ratios
+#' @export
 calculate_dinucleotide_freq <- function(sequences) {
   all_seq <- paste(as.character(sequences), collapse = "")
   all_seq <- gsub("N", "", all_seq)
@@ -241,17 +252,22 @@ calculate_dinucleotide_freq <- function(sequences) {
 
     obs_freq <- di_counts[[di]] / total_di
     exp_freq <- ifelse(base1 %in% names(mono_freq) && base2 %in% names(mono_freq),
-      mono_freq[[base1]] * mono_freq[[base2]], 0)
+      mono_freq[[base1]] * mono_freq[[base2]], 0
+    )
 
     rho <- ifelse(exp_freq > 0, obs_freq / exp_freq, NA)
 
-    results <- rbind(results,
-      data.frame(dinucleotide = di,
+    results <- rbind(
+      results,
+      data.frame(
+        dinucleotide = di,
         observed = di_counts[[di]],
         obs_freq = obs_freq,
         exp_freq = exp_freq,
         rho = rho,
-        stringsAsFactors = FALSE))
+        stringsAsFactors = FALSE
+      )
+    )
   }
 
   results <- results[order(results$rho, decreasing = TRUE), ]
@@ -267,6 +283,7 @@ calculate_dinucleotide_freq <- function(sequences) {
 #'
 #' @param motif_sequences Character vector or DNAStringSet (must be 18nt)
 #' @return Data frame with codon-by-codon variation
+#' @export
 analyze_motif_variants <- function(motif_sequences) {
   sequences <- as.character(motif_sequences)
 
@@ -322,8 +339,10 @@ analyze_motif_variants <- function(motif_sequences) {
     most_common_freq <- max(codon_counts) / length(codons_at_pos)
     most_common_aa <- names(aa_counts)[which.max(aa_counts)]
 
-    results <- rbind(results,
-      data.frame(codon_position = codon_pos,
+    results <- rbind(
+      results,
+      data.frame(
+        codon_position = codon_pos,
         nt_position = sprintf("%d-%d", start, end),
         n_codon_variants = n_unique_codons,
         n_aa_variants = n_unique_aa,
@@ -333,7 +352,9 @@ analyze_motif_variants <- function(motif_sequences) {
         most_common_codon = most_common,
         most_common_codon_freq = most_common_freq,
         most_common_aa = most_common_aa,
-        stringsAsFactors = FALSE))
+        stringsAsFactors = FALSE
+      )
+    )
   }
 
   return(results)
@@ -349,6 +370,7 @@ analyze_motif_variants <- function(motif_sequences) {
 #' @param reference_freq Named vector of reference codon frequencies
 #' @param threshold Frequency threshold for "rare" (default 0.1)
 #' @return Data frame with rare codon analysis
+#' @export
 check_rare_codons <- function(motif_sequences, reference_freq, threshold = 0.1) {
   motif_codons <- get_all_codons(motif_sequences)
   motif_counts <- table(motif_codons)
@@ -368,7 +390,8 @@ check_rare_codons <- function(motif_sequences, reference_freq, threshold = 0.1) 
   for (codon in names(motif_counts)) {
     aa <- GENETIC_CODE[[codon]]
     ref_freq <- ifelse(codon %in% names(reference_freq),
-      reference_freq[[codon]], 0)
+      reference_freq[[codon]], 0
+    )
 
     # Get synonymous codons and their frequencies
     synonymous <- AA_TO_CODONS[[aa]]
@@ -382,8 +405,10 @@ check_rare_codons <- function(motif_sequences, reference_freq, threshold = 0.1) 
     is_rare <- ref_freq < threshold
     is_suboptimal <- ref_freq < max_syn_freq * 0.5
 
-    results <- rbind(results,
-      data.frame(codon = codon,
+    results <- rbind(
+      results,
+      data.frame(
+        codon = codon,
         amino_acid = aa,
         motif_count = motif_counts[[codon]],
         ref_frequency = ref_freq,
@@ -391,7 +416,9 @@ check_rare_codons <- function(motif_sequences, reference_freq, threshold = 0.1) 
         is_suboptimal = is_suboptimal,
         optimal_codon = optimal_codon,
         optimal_freq = max_syn_freq,
-        stringsAsFactors = FALSE))
+        stringsAsFactors = FALSE
+      )
+    )
   }
 
   results <- results[order(results$ref_frequency), ]
@@ -410,11 +437,11 @@ check_rare_codons <- function(motif_sequences, reference_freq, threshold = 0.1) 
 #' @param host_codon_table Optional named vector of host codon frequencies
 #' @param output_prefix Prefix for output files
 #' @return List of analysis results
+#' @export
 run_complete_analysis <- function(motif_sequences,
                                   reference_sequences,
                                   host_codon_table = NULL,
                                   output_prefix = "viral_motif_analysis") {
-
   message("=" %s+% paste(rep("=", 80), collapse = "") %s+% "\n")
   message("VIRAL MOTIF CODON USAGE ANALYSIS\n")
   message("=" %s+% paste(rep("=", 80), collapse = "") %s+% "\n\n")
@@ -434,8 +461,10 @@ run_complete_analysis <- function(motif_sequences,
   }
 
   message(sprintf("Dataset: %d isolates\n", length(motif_seqs)))
-  message(sprintf("Motif length: %d nt (%d codons)\n",
-    nchar(motif_seqs[1]), nchar(motif_seqs[1]) / 3))
+  message(sprintf(
+    "Motif length: %d nt (%d codons)\n",
+    nchar(motif_seqs[1]), nchar(motif_seqs[1]) / 3
+  ))
 
   # 1. Motif variant analysis
   message("\n" %s+% paste(rep("=", 80), collapse = "") %s+% "\n")
@@ -446,7 +475,8 @@ run_complete_analysis <- function(motif_sequences,
   print(motif_variants)
   write.csv(motif_variants,
     paste0(output_prefix, "_motif_variants.csv"),
-    row.names = FALSE)
+    row.names = FALSE
+  )
 
   # 2. RSCU analysis
   message("\n" %s+% paste(rep("=", 80), collapse = "") %s+% "\n")
@@ -458,16 +488,19 @@ run_complete_analysis <- function(motif_sequences,
 
   rscu_comparison <- merge(motif_rscu, ref_rscu,
     by = c("codon", "amino_acid"),
-    suffixes = c("_motif", "_ref"))
+    suffixes = c("_motif", "_ref")
+  )
   rscu_comparison$RSCU_diff <- rscu_comparison$RSCU_motif - rscu_comparison$RSCU_ref
   rscu_comparison <- rscu_comparison[order(abs(rscu_comparison$RSCU_diff),
-    decreasing = TRUE), ]
+    decreasing = TRUE
+  ), ]
 
   message("Top 20 codons with largest RSCU differences:\n")
   print(head(rscu_comparison, 20))
   write.csv(rscu_comparison,
     paste0(output_prefix, "_rscu_comparison.csv"),
-    row.names = FALSE)
+    row.names = FALSE
+  )
 
   # 3. Codon usage comparison
   message("\n" %s+% paste(rep("=", 80), collapse = "") %s+% "\n")
@@ -479,8 +512,10 @@ run_complete_analysis <- function(motif_sequences,
     usage_comparison$p_adjusted < 0.05, ]
 
   if (nrow(significant) > 0) {
-    message(sprintf("%d codons show significant usage differences (FDR < 0.05):\n",
-      nrow(significant)))
+    message(sprintf(
+      "%d codons show significant usage differences (FDR < 0.05):\n",
+      nrow(significant)
+    ))
     print(significant[, c("codon", "amino_acid", "fold_change", "p_adjusted")])
   } else {
     message("No significant codon usage differences detected\n")
@@ -488,7 +523,8 @@ run_complete_analysis <- function(motif_sequences,
 
   write.csv(usage_comparison,
     paste0(output_prefix, "_codon_usage_comparison.csv"),
-    row.names = FALSE)
+    row.names = FALSE
+  )
 
   # 4. ENC calculation
   message("\n" %s+% paste(rep("=", 80), collapse = "") %s+% "\n")
@@ -502,14 +538,18 @@ run_complete_analysis <- function(motif_sequences,
   enc_ref <- enc_ref[!is.na(enc_ref)]
 
   if (length(enc_motif) > 0) {
-    message(sprintf("Motif ENC: %.2f ± %.2f\n",
-      mean(enc_motif), sd(enc_motif)))
+    message(sprintf(
+      "Motif ENC: %.2f +/- %.2f\n",
+      mean(enc_motif), sd(enc_motif)
+    ))
     message(sprintf("  Range: %.2f - %.2f\n", min(enc_motif), max(enc_motif)))
   }
 
   if (length(enc_ref) > 0) {
-    message(sprintf("\nReference ENC: %.2f ± %.2f\n",
-      mean(enc_ref), sd(enc_ref)))
+    message(sprintf(
+      "\nReference ENC: %.2f +/- %.2f\n",
+      mean(enc_ref), sd(enc_ref)
+    ))
     message(sprintf("  Range: %.2f - %.2f\n", min(enc_ref), max(enc_ref)))
   }
 
@@ -517,7 +557,7 @@ run_complete_analysis <- function(motif_sequences,
     t_result <- t.test(enc_motif, enc_ref)
     message(sprintf("\nT-test p-value: %.4e\n", t_result$p.value))
     if (t_result$p.value < 0.05) {
-      message("  → Significant difference in codon usage bias\n")
+      message("  -> Significant difference in codon usage bias\n")
     }
   }
 
@@ -564,7 +604,8 @@ run_complete_analysis <- function(motif_sequences,
 
   write.csv(dinuc_motif,
     paste0(output_prefix, "_dinucleotide_analysis.csv"),
-    row.names = FALSE)
+    row.names = FALSE
+  )
 
   # 8. Rare codon check
   message("\n" %s+% paste(rep("=", 80), collapse = "") %s+% "\n")
@@ -585,13 +626,16 @@ run_complete_analysis <- function(motif_sequences,
   suboptimal <- rare_codons[rare_codons$is_suboptimal, ]
   if (nrow(suboptimal) > 0) {
     message("\nSuboptimal codons:\n")
-    print(suboptimal[, c("codon", "amino_acid", "ref_frequency",
-      "optimal_codon", "optimal_freq")])
+    print(suboptimal[, c(
+      "codon", "amino_acid", "ref_frequency",
+      "optimal_codon", "optimal_freq"
+    )])
   }
 
   write.csv(rare_codons,
     paste0(output_prefix, "_rare_codons.csv"),
-    row.names = FALSE)
+    row.names = FALSE
+  )
 
   # 9. Host comparison (if provided)
   if (!is.null(host_codon_table)) {
@@ -611,7 +655,8 @@ run_complete_analysis <- function(motif_sequences,
 
     write.csv(host_rare,
       paste0(output_prefix, "_host_comparison.csv"),
-      row.names = FALSE)
+      row.names = FALSE
+    )
   }
 
   message("\n" %s+% paste(rep("=", 80), collapse = "") %s+% "\n")

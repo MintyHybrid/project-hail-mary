@@ -7,11 +7,11 @@ JUNCTION_MASK_AA <- 15L
 #   (a) long enough to clearly demarcate boundaries
 #   (b) not itself matching common ELM motifs
 #   (c) not a valid amino acid run (X = unknown, tolerated by ELM but flagged)
-# We use a run of X that is 2 × JUNCTION_MASK_AA so masking from both sides
+# We use a run of X that is 2 x JUNCTION_MASK_AA so masking from both sides
 # never overlaps the real sequence.
 LINKER <- strrep("X", 2L * JUNCTION_MASK_AA)
 LINKER_LEN <- nchar(LINKER)
-# ── 1. Build concatenated sequence + junction map ─────────────────────────────
+# -- 1. Build concatenated sequence + junction map -----------------------------
 
 #' Build a concatenated sequence from a named character vector of fragments.
 #'
@@ -20,8 +20,9 @@ LINKER_LEN <- nchar(LINKER)
 #' @return A list with:
 #'   $concat    : single concatenated string (fragments joined by LINKER)
 #'   $map       : data frame with one row per fragment:
-#'                  isolate, start, stop, frag_len
-#'                  (start/stop are 1-based positions in $concat)
+#'                  isolate, start, end, frag_len
+#'                  (start/end are 1-based positions in $concat)
+#' @export
 build_concat <- function(fragments) {
   stopifnot(is.character(fragments), !is.null(names(fragments)))
 
@@ -46,7 +47,7 @@ build_concat <- function(fragments) {
     map_rows[[i]] <- data.frame(
       isolate = names(fragments)[i],
       start = cursor,
-      stop = cursor + flen - 1L,
+      end = cursor + flen - 1L,
       frag_len = flen,
       stringsAsFactors = FALSE
     )

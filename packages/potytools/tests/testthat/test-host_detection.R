@@ -26,9 +26,9 @@ test_that("create_host_classification_table returns correct dimensions", {
 
 test_that("get_codon_table_for_host_type returns 64-element vector", {
   mono <- get_codon_table_for_host_type("monocot")
-  di   <- get_codon_table_for_host_type("dicot")
+  di <- get_codon_table_for_host_type("dicot")
   expect_length(mono, 64L)
-  expect_length(di,   64L)
+  expect_length(di, 64L)
   expect_equal(sum(mono), 1.0, tolerance = 1e-6)
-  expect_equal(sum(di),   1.0, tolerance = 1e-6)
+  expect_equal(sum(di), 1.0, tolerance = 1e-6)
 })

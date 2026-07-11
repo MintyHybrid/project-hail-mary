@@ -21,9 +21,6 @@ tar_option_set(
   format = "rds"
 )
 
-# ── Source analysis functions not yet in potytools ─────────────────────────────
-lapply(list.files("R", pattern = "\\.R$", full.names = TRUE), source)
-
 # ── Helper: wrap external CLI tool ────────────────────────────────────────────
 run_mafft <- function(input_fasta, output_fasta, threads = 4L) {
   cmd <- sprintf("mafft --auto --thread %d %s > %s",
@@ -71,9 +68,6 @@ list(
                                   motif_pattern = "GSGKS",
                                   flank_aa = 20L)),
 
-  tar_target(concat_fasta,
-             build_concat(ci_flanks, output_file = "data/ci_flanks_concat.fasta")),
-
   # ── 4. NCBI sequence retrieval ──────────────────────────────────────────────
   tar_target(coord_table,
              read.csv("data/ci_coords.csv")),
@@ -102,9 +96,8 @@ list(
   tar_target(cai_results,
              calculate_host_specific_cai(cds_seqs, host_codon_tables)),
 
-  # ── 7. ELM motif search ─────────────────────────────────────────────────────
-  tar_target(elm_results,
-             elm_batch_search(concat_fasta, output_dir = "data/elm_results/")),
+  # Note: ELM motif search moved to the gget-based pipeline
+  # (scripts/prep_elm_regions.R -> scripts/gget_elm_run.py); see notebook 04.
 
   # ── 8. Multiple sequence alignment (external: MAFFT) ────────────────────────
   tar_target(aligned_fasta, {

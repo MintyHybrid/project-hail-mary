@@ -73,7 +73,7 @@ dnazyme_core_table <- function() {
 #' \itemize{
 #'   \item \code{weighted_identity}: criticality-weighted fraction of core
 #'     positions matching the canonical core (0..1).
-#'   \item \code{activity_score}: multiplicative model of retained activity —
+#'   \item \code{activity_score}: multiplicative model of retained activity -
 #'     the product over substituted positions of \code{(1 - weight)}, so a
 #'     substitution at the essential general base (G14, weight 1) predicts an
 #'     inactive enzyme (score 0).

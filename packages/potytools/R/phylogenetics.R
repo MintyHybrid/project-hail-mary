@@ -12,11 +12,11 @@
 #' @param tree_method Tree building ("nj", "upgma")
 #' @param bootstrap Number of bootstrap replicates (0 = no bootstrap)
 #' @return phylo object
+#' @export
 build_phylo_tree <- function(sequences,
                              method = "K80",
                              tree_method = "nj",
                              bootstrap = 0) {
-
   if (inherits(sequences, "DNAStringSet")) {
     seq_names <- names(sequences)
   } else {
@@ -63,7 +63,8 @@ build_phylo_tree <- function(sequences,
           phangorn::upgma(phangorn::dist.ml(x))
         }
       },
-      bs = bootstrap)
+      bs = bootstrap
+    )
 
     # Add bootstrap values to tree
     tree$node.label <- ape::prop.clades(tree, bs) / bootstrap * 100
@@ -81,11 +82,11 @@ build_phylo_tree <- function(sequences,
 #' @param method Distance method
 #' @param bootstrap Number of bootstrap replicates
 #' @return Named list of phylo objects
+#' @export
 build_multi_region_trees <- function(genome_alignment,
                                      regions,
                                      method = "K80",
                                      bootstrap = 100) {
-
   trees <- list()
 
   for (region_name in names(regions)) {
@@ -102,15 +103,14 @@ build_multi_region_trees <- function(genome_alignment,
     tree <- build_phylo_tree(region_seqs,
       method = method,
       tree_method = "nj",
-      bootstrap = bootstrap)
+      bootstrap = bootstrap
+    )
 
     trees[[region_name]] <- tree
   }
 
   return(trees)
 }
-
-
 
 
 # ==============================================================================
@@ -123,8 +123,8 @@ build_multi_region_trees <- function(genome_alignment,
 #' @param tree2 Second phylo object
 #' @param labels Common tip labels (if NULL, uses intersection)
 #' @return List with comparison metrics
+#' @export
 compare_trees <- function(tree1, tree2, labels = NULL) {
-
   if (is.null(labels)) {
     # Find common labels
     labels <- intersect(tree1$tip.label, tree2$tip.label)
@@ -182,6 +182,7 @@ compare_trees <- function(tree1, tree2, labels = NULL) {
 #' @param tree2 Second phylo object
 #' @param main_title Plot title
 #' @return dendextend tanglegram object
+#' @export
 plot_tanglegram <- function(tree1, tree2,
                             main_title = "Tanglegram Comparison") {
   # Convert to dendrograms
@@ -194,13 +195,16 @@ plot_tanglegram <- function(tree1, tree2,
   # Plot tanglegram
   dendextend::tanglegram(dend1, dend2,
     main = main_title,
-    sub = sprintf("Entanglement: %.3f",
-      dendextend::entanglement(dend_list)),
+    sub = sprintf(
+      "Entanglement: %.3f",
+      dendextend::entanglement(dend_list)
+    ),
     margin_inner = 5,
     lwd = 1,
     edge.lwd = 1,
     type = "rectangle",
-    lab.cex = 0.6)
+    lab.cex = 0.6
+  )
 }
 
 # ==============================================================================
@@ -213,10 +217,10 @@ plot_tanglegram <- function(tree1, tree2,
 #' @param regions Named list of genomic regions
 #' @param bootstrap Number of bootstrap replicates
 #' @return List with all trees and comparisons
+#' @export
 phylogenetic_analysis_workflow <- function(genome_alignment,
                                            regions,
                                            bootstrap = 100) {
-
   message("\n")
   message(paste(rep("=", 80), collapse = ""), "\n")
   message("COMPREHENSIVE PHYLOGENETIC ANALYSIS\n")
@@ -247,8 +251,10 @@ phylogenetic_analysis_workflow <- function(genome_alignment,
 
       message(sprintf("\nComparing %s vs %s:\n", region1, region2))
 
-      comparison <- compare_trees(viral_trees[[region1]],
-        viral_trees[[region2]])
+      comparison <- compare_trees(
+        viral_trees[[region1]],
+        viral_trees[[region2]]
+      )
 
       tree_comparisons[[paste(region1, region2, sep = "_vs_")]] <- comparison
     }
@@ -264,4 +270,3 @@ phylogenetic_analysis_workflow <- function(genome_alignment,
     tree_comparisons = tree_comparisons
   ))
 }
-

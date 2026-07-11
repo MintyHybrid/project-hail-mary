@@ -23,8 +23,7 @@ emphasis on:
 - GenBank file parsing (no Bioconductor/genbankr dependency)
 - Codon usage bias (RSCU, ENC, CAI, GC content, wobble bias)
 - Host classification (monocot vs. dicot)
-- Short linear motif (SLM) search via the [ELM database](http://elm.eu.org/) REST API
-- Motif-flanking region extraction for conservation analysis
+- Motif-flanking region extraction and concatenation for short-linear-motif analysis
 - NCBI sequence retrieval via `rentrez`
 
 ## Parsing GenBank files
@@ -77,15 +76,17 @@ host_codon_tables <- create_host_specific_codon_tables(host_table)
 cai_df <- calculate_host_specific_cai(cds, host_codon_tables)
 ```
 
-## ELM motif search
+## Concatenating fragments for motif analysis
+
+`build_concat()` joins named sequence fragments with a masking linker and
+returns a position map, so downstream short-linear-motif hits can be traced
+back to their source isolate. (The short-linear-motif search itself is run
+externally with the `gget elm` Python tool; see the project book.)
 
 ```{r}
-# Batch search of concatenated sequence fragments against ELM
-# (requires internet access; rate-limited)
-results <- elm_batch_search(
-  fasta_file = "ci_flanks_concatenated.fasta",
-  output_dir = "elm_results/"
-)
+frags <- c(PVY = "MDFDYSKQ", TuMV = "LKPTGGVE", WMV = "AACDEFGA")
+cc <- build_concat(frags)
+cc$map
 ```
 
 ## Fetching custom sequences from NCBI

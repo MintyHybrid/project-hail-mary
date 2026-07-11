@@ -3,44 +3,43 @@ Title: Analysis Tools for Potyvirus Genomics and Short Linear Motifs
 Version: 0.1.0
 Authors@R:
     person("Christina", "Muedsam", email = "christina.muedsam@example.com",
-           role = c("aut", "cre"))
+           role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0001-8488-3442"))
 Description: Provides functions for potyvirus genomic analysis, including
     GenBank file parsing (no external dependencies), codon usage bias
     calculation (RSCU, ENC, CAI, GC content), host classification for
-    monocot/dicot-infecting isolates, short linear motif (SLM) detection
-    via the ELM database API, motif-flanking region extraction, and
-    phylogenetic utilities. Designed for reproducible analysis of
+    monocot/dicot-infecting isolates, motif-flanking region extraction
+    and concatenation for short-linear-motif analysis, and phylogenetic
+    utilities. Designed for reproducible analysis of
     Potyviridae diversity, DNAzyme-like motif conservation, and
     horizontal gene transfer detection.
 License: MIT + file LICENSE
 Encoding: UTF-8
+Language: en-US
 Roxygen: list(markdown = TRUE)
-URL: https://github.com/
-BugReports: https://github.com/issues
+URL: https://github.com/MintyHybrid/project-hail-mary
+BugReports: https://github.com/MintyHybrid/project-hail-mary/issues
 Depends:
     R (>= 4.1.0)
 Imports:
     dplyr (>= 1.0.0),
     stringr (>= 1.4.0),
     purrr (>= 0.3.0),
-    crul (>= 1.4.0),
-    jsonlite (>= 1.7.0),
-    memoise (>= 2.0.0),
     rentrez (>= 1.2.0),
     Biostrings (>= 2.60.0),
     seqinr (>= 4.0.0),
     ape (>= 5.0),
     tidyr (>= 1.1.0),
     ggplot2 (>= 3.3.0),
+    ggseqlogo,
     cowplot (>= 1.1.0)
 Suggests:
-    ggseqlogo,
     plotly (>= 4.9.0),
     phangorn,
     phytools,
+    dendextend,
+    BiocGenerics,
     testthat (>= 3.0.0),
-    vcr (>= 1.6.0),
-    webmockr (>= 1.0.0),
     pkgdown,
     covr,
     knitr,

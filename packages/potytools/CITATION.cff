@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using these metadata."
+title: "potytools: Analysis Tools for Potyvirus Genomics and Short Linear Motifs"
+version: 0.1.0
+abstract: >-
+  Functions for potyvirus genomic analysis, including GenBank file parsing,
+  codon usage bias calculation (RSCU, ENC, CAI, GC content), host classification
+  for monocot/dicot-infecting isolates, short linear motif (SLM) detection via
+  the ELM database API, motif-flanking region extraction, and phylogenetic
+  utilities.
+authors:
+  - family-names: Muedsam
+    given-names: Christina
+repository-code: "https://github.com/MintyHybrid/project-hail-mary"
+url: "https://github.com/MintyHybrid/project-hail-mary"
+license: MIT
+type: software

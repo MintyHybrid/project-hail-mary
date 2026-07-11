@@ -1,14 +1,13 @@
 # potytools
 
 <!-- badges: start -->
-[![R-CMD-check](https://github.com/badges/workflow/R-CMD-check/badge.svg)](https://github.com/actions)
 [![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://lifecycle.r-lib.org/articles/stages.html#experimental)
-[![rOpenSci peer-review](https://badges.ropensci.org/XXX_status.svg)](https://github.com/ropensci/software-review/issues/XXX)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 <!-- badges: end -->
 
 **potytools** provides a reproducible toolkit for potyvirus genomic analyses,
 built around the research in
-[Project Hail Mary](https://github.com/).
+[Project Hail Mary](https://github.com/MintyHybrid/project-hail-mary).
 
 ## What it does
 
@@ -17,15 +16,14 @@ built around the research in
 | GenBank parsing | `parse_genbank_file()`, `load_genbank_folder()`, `features_as_df()` | Parse `.gb` / `.gbk` files with no Bioconductor dependency |
 | Codon usage | `calculate_rscu()`, `calculate_enc()`, `calculate_gc_content()`, `compare_codon_usage()` | RSCU, ENC (Wright 1990), GC by codon position, Fisher-exact comparison |
 | Host detection | `detect_host_from_name()`, `classify_host_type()`, `create_host_classification_table()` | Classify potyvirus isolates as monocot- or dicot-infecting |
-| ELM motifs | `elm_batch_search()`, `elm_search_api()` | Batch query ELM REST API for short linear motif hits |
-| Motif flanks | `extract_motif_flanks()`, `build_concat()` | Extract ± N aa windows around motif hits; build concatenated fragments |
+| Motif flanks | `extract_motif_with_flanks()`, `find_motif_homologs()`, `build_concat()` | Extract ± N aa windows around motif hits; concatenate fragments (with a position map) for short-linear-motif analysis |
 | NCBI fetch | `fetch_custom_sequences()` | Retrieve sequence fragments by accession + coordinates via `rentrez` |
 
 ## Installation
 
 ```r
-# Development version from GitHub
-remotes::install_github("yourname/potytools")
+# Development version from GitHub (package lives in a repo subdirectory)
+remotes::install_github("MintyHybrid/project-hail-mary", subdir = "packages/potytools")
 
 # Or from the local packages/ directory in Project Hail Mary
 remotes::install_local("packages/potytools")
@@ -47,8 +45,8 @@ enc  <- sapply(as.character(cds), calculate_enc)
 # Host classification
 hosts <- create_host_classification_table(names(cds))
 
-# ELM motif search
-elm_results <- elm_batch_search("data/ci_flanks_concat.fasta")
+# Concatenate motif-flank fragments (with a position map) for SLM analysis
+concat <- build_concat(c(PVY = "MDFDYSKQ", TuMV = "LKPTGGVE"))
 ```
 
 ## rOpenSci
@@ -62,6 +60,13 @@ Contributions and issues welcome.
 citation("potytools")
 ```
 
+## Contributing
+
+Contributions are welcome. Please see
+[CONTRIBUTING.md](.github/CONTRIBUTING.md) and note that this project is
+released with a [Contributor Code of Conduct](CODE_OF_CONDUCT.md); by
+contributing you agree to abide by its terms.
+
 ## License
 
-MIT © chrissi m.
+MIT © Christina Muedsam

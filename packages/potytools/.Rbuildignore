@@ -1,0 +1,13 @@
+^potytools\.Rproj$
+^\.Rproj\.user$
+^\.github$
+^_pkgdown\.yml$
+^docs$
+^pkgdown$
+^codemeta\.json$
+^CITATION\.cff$
+^\.lintr$
+^LICENSE\.md$
+^\.vscode$
+^doc$
+^Meta$

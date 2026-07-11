@@ -1,0 +1,10 @@
+citHeader("To cite potytools in publications use:")
+
+bibentry(
+  bibtype  = "Manual",
+  title    = "potytools: Analysis Tools for Potyvirus Genomics and Short Linear Motifs",
+  author   = person("Christina", "Muedsam"),
+  year     = "2026",
+  note     = "R package version 0.1.0",
+  url      = "https://github.com/MintyHybrid/project-hail-mary"
+)

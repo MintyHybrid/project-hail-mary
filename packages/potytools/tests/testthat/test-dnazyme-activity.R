@@ -26,9 +26,9 @@ test_that("substitution at the essential general base (G14) predicts inactive", 
 
 test_that("a tolerated (modulatory) substitution keeps some predicted activity", {
   mut <- CANONICAL_1023_CORE
-  substr(mut, 4, 4) <- "A"   # T4 -> A, weight 0.80
+  substr(mut, 4, 4) <- "A" # T4 -> A, weight 0.80
   res <- score_dnazyme_activity(c(t4 = mut))
-  expect_gt(res$activity_score, 0)      # 1 - 0.80 = 0.20 retained
+  expect_gt(res$activity_score, 0) # 1 - 0.80 = 0.20 retained
   expect_lt(res$weighted_identity, 1)
 })
 
