@@ -43,6 +43,7 @@ library(ggplot2)
 library(ggtree)
 library(ggseqlogo)
 library(readr)
+library(potytools) # rolling_alignment_stats() and _per_sequence() live here now
 ```
 
 Helper functions below implement GenBank parsing, accession extraction, codon
@@ -494,50 +495,6 @@ ictv_tb
 aln <- as.matrix(readDNAStringSet(here::here("data", "claude_polyproteinDNA_mafft.fasta")))
 ```
 
-```{r rolling-gc-functions}
-rolling_alignment_stats <- function(aln, window = 300, step = 30,
-                                    codon_aligned = TRUE, remove_gaps = FALSE) {
-  if (!is.matrix(aln))
-    stop("Alignment must be a character matrix")
-  if (codon_aligned && (window %% 3 != 0 || step %% 3 != 0))
-    stop("window and step must be multiples of 3")
-  n_sites    <- ncol(aln)
-  nt         <- c("A", "C", "G", "T", "U")
-  gc_content <- function(x) mean(x %in% c("G", "C"), na.rm = TRUE)
-  shannon_entropy <- function(x) {
-    x <- x[x %in% nt]
-    n <- length(x); if (!n) return(NA_real_)
-    cnt <- tabulate(match(x, nt), nbins = length(nt))   # fast vs table()
-    p <- cnt[cnt > 0] / n
-    -sum(p * log2(p))
-  }
-  cpg_oe <- function(x) {
-    x <- x[x %in% c("A","C","G","T","U")]
-    if (length(x) < 2) return(NA_real_)
-    obs <- sum(x[-length(x)] == "C" & x[-1] == "G")
-    exp <- sum(x == "C") * sum(x == "G") / length(x)
-    if (exp == 0) return(NA_real_)
-    obs / exp
-  }
-  results <- list(); win_id <- 1
-  for (start in seq(1, n_sites - window + 1, by = step)) {
-    end     <- start + window - 1
-    sub_aln <- aln[, start:end, drop = FALSE]
-    vec     <- as.vector(sub_aln)
-    if (remove_gaps) vec <- vec[vec != "-"]
-    codon_pos <- rep(1:3, length.out = window)
-    pos1 <- vec[codon_pos == 1]; pos2 <- vec[codon_pos == 2]; pos3 <- vec[codon_pos == 3]
-    results[[win_id]] <- data.frame(
-      window = win_id, start = start, end = end,
-      GC = gc_content(vec), GC3 = gc_content(pos3),
-      CpG_OE = cpg_oe(vec), entropy = shannon_entropy(vec),
-      gap_fraction = mean(vec == "-"),
-      GC_pos1 = gc_content(pos1), GC_pos2 = gc_content(pos2), GC_pos3 = gc_content(pos3))
-    win_id <- win_id + 1
-  }
-  do.call(rbind, results)
-}
-```
 
 ```{r compute-rolling-gc}
 ras        <- rolling_alignment_stats(aln)
@@ -553,58 +510,6 @@ ras %>% ggplot2::ggplot(ggplot2::aes(x = start, y = entropy)) +
 ```
 
 ```{r rolling-gc-per-sequence}
-rolling_alignment_stats_per_sequence <- function(aln, window = 300, step = 30,
-                                                  codon_aligned = TRUE, remove_gaps = FALSE) {
-  if (!is.matrix(aln)) stop("Alignment must be a character matrix")
-  if (codon_aligned && (window %% 3 != 0 || step %% 3 != 0))
-    stop("window and step must be multiples of 3")
-  n_sites    <- ncol(aln)
-  nt         <- c("A", "C", "G", "T", "U")
-  gc_content <- function(x) mean(x %in% c("G", "C"), na.rm = TRUE)
-  shannon_entropy <- function(x) {
-    x <- x[x %in% nt]
-    n <- length(x); if (!n) return(NA_real_)
-    cnt <- tabulate(match(x, nt), nbins = length(nt))   # fast vs table()
-    p <- cnt[cnt > 0] / n
-    -sum(p * log2(p))
-  }
-  cpg_oe <- function(x) {
-    x <- x[x %in% nt]
-    if (length(x) < 2) return(NA_real_)
-    obs <- sum(x[-length(x)] == "C" & x[-1] == "G")
-    exp <- sum(x == "C") * sum(x == "G") / length(x)
-    if (exp == 0) return(NA_real_)
-    obs / exp
-  }
-  # Preallocate per-window vectors and build one data frame per sequence,
-  # binding once at the end (avoids per-window data.frame() + O(n^2) rbind).
-  starts <- seq(1, n_sites - window + 1, by = step)
-  nwin   <- length(starts)
-  results <- vector("list", nrow(aln))
-  for (i in seq_len(nrow(aln))) {
-    seq_i <- aln[i, ]
-    GC <- GC3 <- CpG <- ent <- gapf <- GC1 <- GC2 <- numeric(nwin)
-    for (w in seq_len(nwin)) {
-      st <- starts[w]; en <- st + window - 1
-      ws <- seq_i[st:en]
-      gapf[w] <- mean(ws == "-")
-      wsc <- if (remove_gaps) ws[ws != "-"] else ws
-      codon_pos <- rep(1:3, length.out = length(wsc))
-      GC[w]  <- gc_content(wsc)
-      GC3[w] <- gc_content(wsc[codon_pos == 3])
-      CpG[w] <- cpg_oe(wsc)
-      ent[w] <- shannon_entropy(wsc)
-      GC1[w] <- gc_content(wsc[codon_pos == 1])
-      GC2[w] <- gc_content(wsc[codon_pos == 2])
-    }
-    results[[i]] <- data.frame(
-      sequence = rownames(aln)[i], window = seq_len(nwin),
-      start = starts, end = starts + window - 1,
-      GC = GC, GC3 = GC3, CpG_OE = CpG, entropy = ent, gap_fraction = gapf,
-      GC_pos1 = GC1, GC_pos2 = GC2, GC_pos3 = GC3, stringsAsFactors = FALSE)
-  }
-  do.call(rbind, results)
-}
 
 ras_ps       <- rolling_alignment_stats_per_sequence(aln)
 ras_ps_degap <- rolling_alignment_stats_per_sequence(aln, remove_gaps = TRUE)

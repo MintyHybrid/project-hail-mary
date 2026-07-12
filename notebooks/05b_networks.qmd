@@ -236,14 +236,17 @@ sil_b64 <- function(taxon) {
           base64enc::base64encode(f))
 }
 
-# Keep the meaningful biotic interaction layers; the dense "cooccurrence" layer
-# (a statistical association, ~85% of edges) is dropped so the network is not a
-# hairball. Nodes left with no biotic edge (orphans) are removed.
-biotic <- sess$edges_df %>% dplyr::filter(layer != "cooccurrence")
-keep   <- unique(c(biotic$from_name, biotic$to_name))
+# Keep ONLY directly recorded interactions as EDGES. The saved BioNexus session
+# padded the network with heuristically inferred edges (source == "Heuristic",
+# e.g. a beetle "pollinating" every plant in the community) and a dense
+# statistical "cooccurrence" layer — neither represents an observed interaction,
+# so both are dropped as edges. Every queried species is still shown as a NODE
+# (including those with no recorded interaction) so the full community background
+# is legible at a glance; isolated nodes simply have no GLOBI-recorded biotic link.
+biotic <- sess$edges_df %>%
+  dplyr::filter(layer != "cooccurrence", source == "GLOBI")
 
 nodes <- sess$nodes_df %>%
-  dplyr::filter(name %in% keep) %>%
   dplyr::mutate(
     label = name,
     group = functional_group,
@@ -288,13 +291,17 @@ visNetwork(nodes, edges, height = "620px", width = "100%") %>%
 #| eval: !expr file.exists(here::here("data","bionexus_zucchini95.rds"))
 lay <- sort(unique(biotic$layer))
 cat(sprintf(paste0(
-  "**Ecological interaction network of the *Zucchini yellow mosaic virus* host ",
-  "community** (Cucurbitaceae), reconstructed from a saved BioNexus session that ",
-  "queried GBIF + GLOBI. %d taxa are shown, connected by %d recorded biotic ",
-  "interactions across the %s layers (edge colour = layer). The dense ",
-  "co-occurrence layer is omitted and isolated nodes removed for legibility; ",
-  "node colour = functional group, layout = force-directed (Fruchterman–Reingold), ",
-  "hover a node for its taxonomy and a PhyloPic silhouette.\n"),
+  "**Ecological interactions among taxa returned by a *Zucchini yellow mosaic ",
+  "virus*-seeded GBIF + GLOBI query** (a saved BioNexus session). All %d queried ",
+  "species are shown as nodes; only the %d **directly GLOBI-recorded** biotic ",
+  "interactions (%s layers; edge colour = layer) are drawn as edges. Heuristically ",
+  "inferred edges and the dense statistical co-occurrence layer that padded the ",
+  "original session are **excluded** as they do not represent observed interactions, ",
+  "so most species appear unconnected. That sparseness is itself informative: GLOBI ",
+  "holds only a handful of directly recorded biotic links for this community, ",
+  "consistent with the sporadic rather than continuous connectivity noted in ",
+  "Chapter 1. Node colour = functional group; hover a node for its taxonomy and a ",
+  "PhyloPic silhouette.\n"),
   nrow(nodes), nrow(edges), paste(lay, collapse = "/")))
 ```
 

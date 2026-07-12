@@ -48,7 +48,14 @@ format:
     code-fold: true
     code-tools: true
     fig-cap-location: bottom
-  # pdf: enable after running `quarto install tinytex`
-    documentclass: book
-    geometry: margin=1in
-    fontsize: 11pt
+  # PDF download — deferred. TinyTeX is installed, but this book's interactive
+  # widgets (visNetwork, plotly, r3dmol, DT, Observable) have no PDF form and
+  # currently halt the LaTeX render even with `prefer-html: true`. Enabling PDF
+  # cleanly needs per-widget static fallbacks (e.g. knitr::kable when
+  # !knitr::is_html_output()) across the chapters — tracked as follow-up work.
+  # pdf:
+  #   documentclass: scrreport
+  #   geometry: margin=1in
+  #   fontsize: 11pt
+  #   toc: true
+  #   prefer-html: true
