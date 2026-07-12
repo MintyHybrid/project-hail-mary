@@ -1,0 +1,1650 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Christina Muedsam">
+<meta name="dcterms.date" content="2026-07-13">
+
+<title>9&nbsp; AP-4 Trafficking and the Tyrosine-Motif Hypothesis – DNAzyme-like Motifs, Horizontal Gene Transfer, and Short Linear Motif Conservation in Potyviridae</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../notebooks/A1_data_sources.html" rel="next">
+<link href="../notebooks/08_immu_simmu.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-acff971833d9769290026d534105daaa.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<script src="../site_libs/quarto-diagram/mermaid.min.js"></script>
+<script src="../site_libs/quarto-diagram/mermaid-init.js"></script>
+<link href="../site_libs/quarto-diagram/mermaid.css" rel="stylesheet">
+
+
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/08_immu_simmu.html">Part IV — Host Immunity</a></li><li class="breadcrumb-item"><a href="../notebooks/09_ap4_trafficking.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">AP-4 Trafficking and the Tyrosine-Motif Hypothesis</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">DNAzyme-like Motifs, Horizontal Gene Transfer, and Short Linear Motif Conservation in Potyviridae</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/MintyHybrid/project-hail-mary" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Project Hail Mary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part I — The Discovery</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/01_discovery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The DNAzyme-like Motif Discovery</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/02_phylogenetics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Potyvirus Phylogenetics and CI Region Inference</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part II — Codon Usage &amp; Motif Architecture</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/03_codon_dnazyme.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Codon Usage and DNAzyme-like Motif Architecture</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/04_protein_motifs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Protein Motif Analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/05_potyvirus_motifs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Potyvirus Protein Motifs and Interaction Networks</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part III — Evolutionary Mechanisms</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/06_hgt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Horizontal Gene Transfer Analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/07_networks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Host-Virus Interaction Networks</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part IV — Host Immunity</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/08_immu_simmu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Plant Immune Trafficking Observatory</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/09_ap4_trafficking.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">AP-4 Trafficking and the Tyrosine-Motif Hypothesis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendix</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/A1_data_sources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Appendix: Data Sources and Accessions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Complete Bibliography</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">9.1</span> Overview</a></li>
+  <li><a href="#ap-4-the-overlooked-trafficking-pathway" id="toc-ap-4-the-overlooked-trafficking-pathway" class="nav-link" data-scroll-target="#ap-4-the-overlooked-trafficking-pathway"><span class="header-section-number">9.2</span> AP-4: the overlooked trafficking pathway</a>
+  <ul class="collapse">
+  <li><a href="#predicted-plant-ap-4-cargo" id="toc-predicted-plant-ap-4-cargo" class="nav-link" data-scroll-target="#predicted-plant-ap-4-cargo"><span class="header-section-number">9.2.1</span> Predicted plant AP-4 cargo</a></li>
+  </ul></li>
+  <li><a href="#tepsin-the-ap-4-accessory-protein" id="toc-tepsin-the-ap-4-accessory-protein" class="nav-link" data-scroll-target="#tepsin-the-ap-4-accessory-protein"><span class="header-section-number">9.3</span> TEPSIN: the AP-4 accessory protein</a></li>
+  <li><a href="#npr1-and-cbp60g-trafficking-hypotheses-for-immune-regulators" id="toc-npr1-and-cbp60g-trafficking-hypotheses-for-immune-regulators" class="nav-link" data-scroll-target="#npr1-and-cbp60g-trafficking-hypotheses-for-immune-regulators"><span class="header-section-number">9.4</span> NPR1 and CBP60g: trafficking hypotheses for immune regulators</a></li>
+  <li><a href="#cargo-missorting-as-a-distinct-pathology" id="toc-cargo-missorting-as-a-distinct-pathology" class="nav-link" data-scroll-target="#cargo-missorting-as-a-distinct-pathology"><span class="header-section-number">9.5</span> Cargo missorting as a distinct pathology</a></li>
+  <li><a href="#synthesis-a-tyrosine-motif-hypothesis" id="toc-synthesis-a-tyrosine-motif-hypothesis" class="nav-link" data-scroll-target="#synthesis-a-tyrosine-motif-hypothesis"><span class="header-section-number">9.6</span> Synthesis: a tyrosine-motif hypothesis</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/MintyHybrid/project-hail-mary/edit/main/notebooks/09_ap4_trafficking.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/MintyHybrid/project-hail-mary/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/08_immu_simmu.html">Part IV — Host Immunity</a></li><li class="breadcrumb-item"><a href="../notebooks/09_ap4_trafficking.html"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">AP-4 Trafficking and the Tyrosine-Motif Hypothesis</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">AP-4 Trafficking and the Tyrosine-Motif Hypothesis</span></h1><button type="button" class="btn code-tools-button" id="quarto-code-tools-source"><i class="bi"></i> Code</button></div></div>
+<p class="subtitle lead">Mechanistic reasoning behind the AP-4 arm of the immune trafficking model, and the tyrosine-motif hypothesis it motivates</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Christina Muedsam </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 13, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<!-- SOURCE: split out of notebooks/08_immu_simmu.qmd (originally
+"# Extended analysis: AP-4, TEPSIN and cargo missorting") when the book's
+notebooks were renumbered to match Quarto's actual chapter order. -->
+<section id="overview" class="level2" data-number="9.1">
+<h2 data-number="9.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">9.1</span> Overview</h2>
+<p>The <a href="../notebooks/08_immu_simmu.html">interactive trafficking simulation</a> foregrounds AP-4 because it is the least-studied of the four adaptor-protein complexes yet, we argue, a plausible integration point between membrane trafficking and immune signalling. This chapter sets out the mechanistic reasoning and the (largely hypothetical) cargo assignments that motivate the model’s AP-4 arm.</p>
+<div class="callout callout-style-simple callout-important">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p>Much of what follows is <strong>predictive</strong>: it extrapolates from well-characterised mammalian AP-4 biology and from sorting-motif analysis to plant proteins that have <strong>not</strong> been experimentally validated as AP-4 cargo. Established facts (ATG9A as AP-4 cargo in mammals; VSR1/BOR1 as AP-4 cargo in <em>Arabidopsis</em>; AP-4’s requirement for the hypersensitive response) are cited; predictions are labelled as such and presented as testable hypotheses, not conclusions.</p>
+</div>
+</div>
+</div>
+</section>
+<section id="ap-4-the-overlooked-trafficking-pathway" class="level2" data-number="9.2">
+<h2 data-number="9.2" class="anchored" data-anchor-id="ap-4-the-overlooked-trafficking-pathway"><span class="header-section-number">9.2</span> AP-4: the overlooked trafficking pathway</h2>
+<p>Adaptor protein complex 4 (AP-4) is a heterotetramer — subunits β4 (AP4B, At5g11490), ε (AP4E, At5g09420), μ4 (AP4M, At4g24550) and σ4 (AP4S, At3g13420) in <em>Arabidopsis</em>. Unlike AP-1/2/3, AP-4 operates <strong>without a clathrin coat</strong> and mediates export from the <em>trans</em>-Golgi network (TGN) to endosomal and autophagy-related compartments <span class="citation" data-cites="hirst2013 fuji2016">(<a href="../references.html#ref-hirst2013" role="doc-biblioref">Hirst et al. 2013</a>; <a href="../references.html#ref-fuji2016" role="doc-biblioref">Fuji et al. 2016</a>)</span>.</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+<col style="width: 20%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Complex</th>
+<th>Location</th>
+<th>Coat</th>
+<th>Function</th>
+<th>Knockout phenotype</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>AP-1</td>
+<td>TGN/endosomes</td>
+<td>Clathrin</td>
+<td>TGN–endosome, secretion</td>
+<td>Embryo-lethal (mammals)</td>
+</tr>
+<tr class="even">
+<td>AP-2</td>
+<td>Plasma membrane</td>
+<td>Clathrin</td>
+<td>Endocytosis</td>
+<td>Lethal (plants/mammals)</td>
+</tr>
+<tr class="odd">
+<td>AP-3</td>
+<td>TGN/endosomes</td>
+<td>None</td>
+<td>Vacuole/lysosome</td>
+<td>Hermansky–Pudlak (mammals)</td>
+</tr>
+<tr class="even">
+<td><strong>AP-4</strong></td>
+<td><strong>TGN</strong></td>
+<td><strong>None</strong></td>
+<td><strong>TGN → endosome/autophagy</strong></td>
+<td><strong>Neurodegeneration (mammals); subtle (plants)</strong></td>
+</tr>
+</tbody>
+</table>
+<p>The compartments AP-4 connects, and the lipid identities that mark them, are summarised below; AP-4 acts at the TGN, exporting cargo (notably ATG9) toward endosomal and autophagy compartments (dashed arrow).</p>
+<figure style="margin:1em 0;" class="figure">
+<svg viewbox="0 0 720 430" width="100%" style="max-width:720px;font-family:sans-serif;" role="img" aria-label="Plant cell trafficking compartment map">
+  <rect x="6" y="6" width="708" height="418" rx="18" fill="#fbfaf5" stroke="#8a7f5c" stroke-width="3"></rect>
+  <rect x="12" y="12" width="696" height="406" rx="14" fill="none" stroke="#f3c9c0" stroke-width="4"></rect>
+  <text x="24" y="34" font-size="13" fill="#8a7f5c" font-style="italic">plasma membrane (PC, PE, PI, PS; sterols)</text>
+  <!-- nucleus -->
+  <circle cx="150" cy="150" r="62" fill="#e8daf2" stroke="#7d5ba6" stroke-width="2"></circle>
+  <text x="150" y="155" font-size="14" text-anchor="middle" fill="#4a2f6b" font-weight="bold">Nucleus</text>
+  <!-- ER -->
+  <ellipse cx="150" cy="270" rx="70" ry="30" fill="#d6ecec" stroke="#4a9a9a" stroke-width="2"></ellipse>
+  <text x="150" y="274" font-size="12" text-anchor="middle" fill="#2e6b6b">ER · PC/PE/PI, low sterol</text>
+  <!-- Golgi/TGN -->
+  <g>
+    <rect x="330" y="120" width="120" height="12" rx="6" fill="#f4d35e"></rect>
+    <rect x="335" y="138" width="110" height="12" rx="6" fill="#f4d35e"></rect>
+    <rect x="340" y="156" width="100" height="12" rx="6" fill="#f4d35e"></rect>
+    <text x="390" y="188" font-size="12" text-anchor="middle" fill="#8a6d0a" font-weight="bold">TGN / Golgi</text>
+    <text x="390" y="203" font-size="11" text-anchor="middle" fill="#8a6d0a">PI(4)P · AP-4 acts here</text>
+  </g>
+  <!-- early endosome -->
+  <circle cx="560" cy="150" r="40" fill="#fde3cf" stroke="#d98841" stroke-width="2"></circle>
+  <text x="560" y="148" font-size="12" text-anchor="middle" fill="#9a531a">Early</text>
+  <text x="560" y="163" font-size="12" text-anchor="middle" fill="#9a531a">endosome</text>
+  <text x="560" y="205" font-size="10" text-anchor="middle" fill="#9a531a">PI(3)P</text>
+  <!-- MVB -->
+  <circle cx="580" cy="270" r="34" fill="#f5c6a5" stroke="#c0651f" stroke-width="2"></circle>
+  <circle cx="571" cy="264" r="5" fill="#c0651f"></circle><circle cx="588" cy="266" r="5" fill="#c0651f"></circle>
+  <circle cx="578" cy="280" r="5" fill="#c0651f"></circle>
+  <text x="580" y="320" font-size="11" text-anchor="middle" fill="#8a4413">MVB · PI(3,5)P₂</text>
+  <!-- autophagosome -->
+  <circle cx="440" cy="300" r="30" fill="#e2d0ee" stroke="#8e5bb5" stroke-width="2" stroke-dasharray="5 3"></circle>
+  <text x="440" y="304" font-size="10" text-anchor="middle" fill="#5a3480">Autophago-</text>
+  <text x="440" y="316" font-size="10" text-anchor="middle" fill="#5a3480">some</text>
+  <!-- vacuole -->
+  <ellipse cx="470" cy="380" rx="150" ry="34" fill="#dfe8f5" stroke="#3f6fa5" stroke-width="2"></ellipse>
+  <text x="470" y="384" font-size="13" text-anchor="middle" fill="#274a70" font-weight="bold">Vacuole (degradation)</text>
+  <!-- arrows -->
+  <defs><marker id="ah" markerwidth="9" markerheight="9" refx="7" refy="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"></path></marker>
+        <marker id="ag" markerwidth="9" markerheight="9" refx="7" refy="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#555"></path></marker></defs>
+  <!-- AP-4 TGN -> endosome (highlighted, dashed) -->
+  <path d="M452,140 Q510,120 522,140" fill="none" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#ah)"></path>
+  <text x="500" y="112" font-size="11" fill="#c0392b" font-weight="bold">AP-4 (ATG9)</text>
+  <!-- EE -> MVB -->
+  <path d="M565,190 Q575,225 578,234" fill="none" stroke="#555" stroke-width="2" marker-end="url(#ag)"></path>
+  <!-- MVB -> vacuole -->
+  <path d="M575,304 Q540,335 500,350" fill="none" stroke="#555" stroke-width="2" marker-end="url(#ag)"></path>
+  <!-- autophagosome -> vacuole -->
+  <path d="M440,330 Q450,350 460,346" fill="none" stroke="#8e5bb5" stroke-width="2" marker-end="url(#ag)"></path>
+</svg>
+<figcaption style="font-size:12px;color:#555;">Plant-cell trafficking compartments and their marker lipids. AP-4 exports cargo (notably ATG9) from the TGN toward endosomal/autophagy compartments (red dashed arrow); ESCRT-marked MVBs and autophagosomes both deliver to the vacuole for degradation.</figcaption>
+</figure>
+<p>AP-4 is understudied in plants precisely because it is <em>not</em> essential for viability and gives subtle phenotypes — yet in mammals its loss causes a hereditary spastic paraplegia (“AP-4 deficiency syndrome”) traced to missorting of its most conserved cargo, the autophagy lipid-scramblase <strong>ATG9A</strong> <span class="citation" data-cites="mattera2017 davies2018">(<a href="../references.html#ref-mattera2017" role="doc-biblioref">Mattera et al. 2017</a>; <a href="../references.html#ref-davies2018" role="doc-biblioref">Davies et al. 2018</a>)</span>. In <em>Arabidopsis</em>, AP-4 is experimentally established to sort the tyrosine-motif cargoes VACUOLAR SORTING RECEPTOR 1 and the borate transporter BOR1 via its µ subunit, and its loss abolishes the hypersensitive cell-death response to avirulent bacteria <span class="citation" data-cites="fuji2016">(<a href="../references.html#ref-fuji2016" role="doc-biblioref">Fuji et al. 2016</a>)</span>.</p>
+<section id="predicted-plant-ap-4-cargo" class="level3" data-number="9.2.1">
+<h3 data-number="9.2.1" class="anchored" data-anchor-id="predicted-plant-ap-4-cargo"><span class="header-section-number">9.2.1</span> Predicted plant AP-4 cargo</h3>
+<p>Mammalian AP-4 cargo (ATG9A, AMPA receptors, SLC17A5, SERINC1/3, δ-opioid receptor, ADAM10) are transmembrane proteins bearing <strong>[D/E]XXX[L/I/M]</strong> or <strong>YXXΦ</strong> sorting motifs and functioning in membrane remodelling, receptor localisation, autophagosome formation or lipid transport. Screening plant immune-relevant proteins for the same motifs yields a ranked set of candidate cargo — <strong>a bioinformatic prediction, not a validated interaction map</strong>:</p>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Confidence</th>
+<th>Candidate</th>
+<th>Sorting motif(s)</th>
+<th>Predicted missorting consequence</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>High</td>
+<td>ATG9 (At2g31260)</td>
+<td>multiple DXXXL/EXXXL in cytoplasmic loops</td>
+<td>ATG9 accumulates at TGN → impaired autophagosome biogenesis</td>
+</tr>
+<tr class="even">
+<td>High</td>
+<td>SYP4 SNAREs (SYP41/42/43)</td>
+<td>(VAMP7-like, by homology)</td>
+<td>ectopic TGN–endosome fusion</td>
+</tr>
+<tr class="odd">
+<td>High</td>
+<td>VTI11/VTI12</td>
+<td>(VAMP8-like)</td>
+<td>failed autophagosome–vacuole fusion</td>
+</tr>
+<tr class="even">
+<td>Medium</td>
+<td><strong>NPR1</strong> (At1g64280)</td>
+<td>DXXXL (234–238), EXXXM (456–460)</td>
+<td>mis-localised NPR1 → impaired SAR (see below)</td>
+</tr>
+<tr class="odd">
+<td>Medium</td>
+<td><strong>CBP60g</strong> (At5g26920)</td>
+<td>YXXL (189–193), DXXXL (341–345)</td>
+<td>dysregulated SA biosynthesis</td>
+</tr>
+<tr class="even">
+<td>Medium</td>
+<td>NRAMP3 (At2g23150)</td>
+<td>EIXXL (445–449)</td>
+<td>iron mislocalisation → oxidative stress</td>
+</tr>
+<tr class="odd">
+<td>Medium</td>
+<td>PUB22/23</td>
+<td>membrane-associated E3s</td>
+<td>failed NLR ubiquitination → NLR accumulation</td>
+</tr>
+<tr class="even">
+<td>Speculative</td>
+<td>RabG3, cleaved PRR tails</td>
+<td>—</td>
+<td>impaired autophagosome fusion; chronic fragment signalling</td>
+</tr>
+</tbody>
+</table>
+<p>Only the ATG9 assignment rests on strong cross-species precedent <span class="citation" data-cites="mattera2017 davies2018">(<a href="../references.html#ref-mattera2017" role="doc-biblioref">Mattera et al. 2017</a>; <a href="../references.html#ref-davies2018" role="doc-biblioref">Davies et al. 2018</a>)</span>; the immune-regulator assignments (NPR1, CBP60g, PUB22/23) are the novel, lower-confidence predictions that the callout above flags.</p>
+</section>
+</section>
+<section id="tepsin-the-ap-4-accessory-protein" class="level2" data-number="9.3">
+<h2 data-number="9.3" class="anchored" data-anchor-id="tepsin-the-ap-4-accessory-protein"><span class="header-section-number">9.3</span> TEPSIN: the AP-4 accessory protein</h2>
+<p>TEPSIN is an AP-4-interacting protein that stabilises the complex, enhances membrane curvature and concentrates cargo prior to clathrin-independent scission <span class="citation" data-cites="hirst2013">(<a href="../references.html#ref-hirst2013" role="doc-biblioref">Hirst et al. 2013</a>)</span>. A plant TEPSIN-like protein is present but uncharacterised (<em>Arabidopsis</em> candidate At5g48795). We hypothesise it stabilises AP-4 under the elevated trafficking demand of stress responses, predicting that <em>tepsin</em> mutants phenocopy mild <em>ap4</em> defects and that TEPSIN–AP-4 association is enhanced during infection. The mechanistically distinctive outcome of TEPSIN (or AP-4) loss is not a clean autophagy block but a <strong>dysfunctional</strong> one:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-tepsin-autophagy" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-tepsin-autophagy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-tepsin-autophagy">flowchart TD
+  A[TEPSIN / AP-4 loss] --&gt; B[ATG9 mis-sorted,&lt;br/&gt;accumulates at TGN]
+  B --&gt; C[Reduced ATG9 delivery to phagophore]
+  C --&gt; D[Impaired autophagosome formation]
+  D --&gt; E{ATG8 lipidation still occurs?}
+  E -- Yes --&gt; F[Aberrant autophagosomes:&lt;br/&gt;ATG8+ membranes, poor cargo recruitment]
+  F --&gt; G[Non-selective autophagy impaired]
+  F --&gt; H[Selective NBR1 autophagy compensatorily enhanced]
+  F --&gt; I[Chronic autophagy-stress response]
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-tepsin-autophagy-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.1: Hypothesised consequence of TEPSIN/AP-4 loss: ATG9 mis-sorting yields structurally aberrant, cargo-incompetent autophagosomes rather than a complete autophagy block.
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="npr1-and-cbp60g-trafficking-hypotheses-for-immune-regulators" class="level2" data-number="9.4">
+<h2 data-number="9.4" class="anchored" data-anchor-id="npr1-and-cbp60g-trafficking-hypotheses-for-immune-regulators"><span class="header-section-number">9.4</span> NPR1 and CBP60g: trafficking hypotheses for immune regulators</h2>
+<p>NPR1, the master regulator of systemic acquired resistance (SAR), is held as cytoplasmic oligomers that must be reduced to monomers — via thioredoxins and S-nitrosylation at Cys156 — before nuclear import and coactivation of <em>PR</em> genes <span class="citation" data-cites="mou2003 tada2008 kinkema2000">(<a href="../references.html#ref-mou2003" role="doc-biblioref">Mou et al. 2003</a>; <a href="../references.html#ref-tada2008" role="doc-biblioref">Tada et al. 2008</a>; <a href="../references.html#ref-kinkema2000" role="doc-biblioref">Kinkema et al. 2000</a>)</span>. The compartment in which monomerisation occurs is not fully resolved. We propose (hypothesis) that AP-4 routes NPR1 oligomers through an endosomal compartment whose reducing environment promotes monomerisation before retrograde delivery and nuclear import:</p>
+<div class="cell" data-layout-align="default">
+<div class="cell-output-display">
+<div id="fig-npr1-hypothesis" class="quarto-float quarto-figure quarto-figure-center anchored">
+<figure class="quarto-float quarto-float-fig figure">
+<div aria-describedby="fig-npr1-hypothesis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+<div>
+<pre class="mermaid mermaid-js" data-label="fig-npr1-hypothesis">flowchart LR
+  A[NPR1 oligomers&lt;br/&gt;cytoplasm] --&gt; B[AP-4-mediated&lt;br/&gt;TGN sorting]
+  B --&gt; C[Endosomal compartment&lt;br/&gt;reducing environment]
+  C --&gt; D[Monomerisation]
+  D --&gt; E[Retrograde to cytosol]
+  E --&gt; F[Nuclear import → PR genes]
+  B -. AP-4 loss .-&gt; G[Missorted / sequestered NPR1]
+  G --&gt; H[Reduced SAR&lt;br/&gt;or constitutive autoimmunity]
+</pre>
+</div>
+</div>
+<figcaption class="quarto-float-caption-bottom quarto-float-caption quarto-float-fig" id="fig-npr1-hypothesis-caption-0ceaefa1-69ba-4598-a22c-09a6ac19f8ca">
+Figure&nbsp;9.2: Hypothesised AP-4-dependent endosomal step in NPR1 activation (predicted, not established). AP-4 loss could either reduce nuclear NPR1 (loss of function) or, if the compartment normally sequesters NPR1, increase it (gain of function/autoimmunity).
+</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>This predicts that <em>ap4</em> mutants show altered NPR1 localisation and SA-response kinetics, testable by <em>ap4 npr1</em> epistasis. Analogously, CBP60g — a calcium-responsive transcription factor that activates the SA-biosynthesis gene <em>ICS1</em> <span class="citation" data-cites="wang2009cbp60g">(<a href="../references.html#ref-wang2009cbp60g" role="doc-biblioref">Wang et al. 2009</a>)</span> — may be held in a vesicular pool and released for rapid perinuclear import upon MAMP-triggered Ca²⁺ influx, with AP-4 providing the sorting step; <em>ap4</em> mutants would then show delayed CBP60g nuclear accumulation and reduced SA after infection.</p>
+<div class="callout callout-style-simple callout-important callout-titled">
+<div class="callout-header d-flex align-content-center">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Important</span>A published AP-4 → immunity link — and a hidden thread to NPR1
+</div>
+</div>
+<div class="callout-body-container callout-body">
+<p>The NPR1/CBP60g routes above remain <strong>predictions</strong>. But there is now a <strong>concrete, published</strong> AP-4↔︎immunity mechanism that makes the whole idea far less speculative. <span class="citation" data-cites="huang2026">Huang et al. (<a href="../references.html#ref-huang2026" role="doc-biblioref">2026</a>)</span> showed that the <strong>AP-4 µ subunit binds the transmembrane immune protein BDA1 through BDA1’s tyrosine residues (Y18, Y257)</strong>, and that AP-4 is required for <strong>SNC2-mediated immunity</strong> (a receptor-like-protein pathway) as well as for basal, pattern- and effector-triggered immunity; a second endocytic adaptor, ECA4, tunes BDA1 levels in parallel <span class="citation" data-cites="wang2025eca4">(<a href="../references.html#ref-wang2025eca4" role="doc-biblioref">Wang et al. 2025</a>)</span>. This is a <strong>direct precedent for a plant defence protein being AP-4-sorted via a tyrosine-based motif</strong> — precisely the motif class the viral CI displays (Chapter 5).</p>
+<p>The thread to <strong>NPR1</strong> is suggestive but <strong>not yet fully characterised</strong>: SNC2 is literally <em>SUPPRESSOR OF NPR1-1, CONSTITUTIVE 2</em> — i.e.&nbsp;it was isolated genetically in relation to NPR1 and defines an RLP-based resistance branch that runs partly <strong>parallel to / independent of NPR1</strong>. So AP-4, by gating BDA1/SNC2, sits on an immune axis genetically tied to NPR1, without (to my knowledge) a demonstrated direct AP-4–NPR1 interaction. We flag this as a <strong>hypothesis worth pursuing</strong>, not an established pathway.</p>
+</div>
+</div>
+</section>
+<section id="cargo-missorting-as-a-distinct-pathology" class="level2" data-number="9.5">
+<h2 data-number="9.5" class="anchored" data-anchor-id="cargo-missorting-as-a-distinct-pathology"><span class="header-section-number">9.5</span> Cargo missorting as a distinct pathology</h2>
+<p>The central hypothesis reframes AP-4 deficiency: the damaging consequence may be not <em>failed degradation</em> but <strong>aberrant localisation</strong>, producing a signalling imbalance. Missorting can create autophagy-resistant protein aggregates and mislocalised signalling components — a route to chronic, autoimmune-like activation that is mechanistically distinct from simple loss of function. Several independent routes converge on this outcome, paralleling known plant autoimmune mutants (e.g.&nbsp;ESCRT-defective <em>vps</em> alleles that fail to degrade activated receptors; autophagy-deficient backgrounds that accumulate NLRs):</p>
+<ul>
+<li><strong>Failed receptor degradation</strong> → receptor persistence at the PM → chronic MAPK.</li>
+<li><strong>NLR hyperaccumulation</strong> in autophagy-deficient backgrounds → ETI without effector.</li>
+<li><strong>Persistent endosomal signalling platforms</strong> when ESCRT sorting fails.</li>
+<li><strong>Lipid-identity imbalance</strong> (PI(3)P/PI(3,5)P₂ dysregulation) → trafficking paralysis and, at the extreme, the membrane-topology inversion tracked by the simulation <span class="citation" data-cites="simon2016">(<a href="../references.html#ref-simon2016" role="doc-biblioref">Simon et al. 2016</a>)</span>.</li>
+<li><strong>Cargo missorting → aggregates</strong> that resist autophagy and trigger stress signalling.</li>
+</ul>
+<p>These mechanisms are why the model reads out an <em>autoimmune-risk</em> signal (reversed-topology exosomes) rather than a simple loss-of-signal, and why the AP-4 arm — despite AP-4’s subtle single-mutant phenotype — is worth modelling.</p>
+</section>
+<section id="synthesis-a-tyrosine-motif-hypothesis" class="level2" data-number="9.6">
+<h2 data-number="9.6" class="anchored" data-anchor-id="synthesis-a-tyrosine-motif-hypothesis"><span class="header-section-number">9.6</span> Synthesis: a tyrosine-motif hypothesis</h2>
+<p>Pulling the threads together, the working hypothesis of this compendium is not about DNAzyme catalysis at all — it is about <strong>sorting motifs</strong>. Four propositions, in decreasing order of support:</p>
+<ol type="1">
+<li><strong>The CI’s tyrosine/dileucine motifs let the virus tap host sorting.</strong> The potyvirus CI carries functional acidic-dileucine signals read by AP-2 <span class="citation" data-cites="wu2022ci">(<a href="../references.html#ref-wu2022ci" role="doc-biblioref">Wu et al. 2022</a>)</span> and, beside them, an accessible <strong>YXXΦ tyrosine motif</strong> (Chapter 5). A cytosolic pathogen protein wearing host-type endocytic signals is positioned to <strong>co-opt the AP-mediated sorting machinery</strong> it needs for replication and movement — and, potentially, to perturb the immune trafficking that runs on the same adaptors.</li>
+<li><strong>Tyrosine-based sorting is a deeply conserved, re-used device.</strong> YXXΦ (and the related immunoreceptor tyrosine motifs, ITAM/ITIM) govern receptor sorting and signalling from plants to mammals; the same motif logic is repeatedly exploited by human-pathogenic viruses, including RNA viruses and oncoviruses. That AP-4 itself reads a tyrosine motif on the plant immune protein <strong>BDA1</strong> <span class="citation" data-cites="huang2026">(<a href="../references.html#ref-huang2026" role="doc-biblioref">Huang et al. 2026</a>)</span> shows the device is active on <em>both</em> sides of the host–pathogen interface.</li>
+<li><strong>Membrane-topology reversal can originate only at the LE/MVB.</strong> The late-endosome / multivesicular body is the branch point where sorting, recycling, autophagy and degradation segregate — and the <strong>only</strong> compartment where vesicles are generated by membrane remodelling <em>away from</em> the cytosol (ILV budding). A defect that scrambles this orchestration is therefore the only plausible origin of the reversed-topology, cytoplasm-facing vesicles the simulation flags as an autoimmune risk. AP-4 is implicated at exactly this hub, from ATG9 delivery for autophagy to the vacuole–PM fusion that executes HR cell death <span class="citation" data-cites="hatsugai2018">(<a href="../references.html#ref-hatsugai2018" role="doc-biblioref">Hatsugai et al. 2018</a>)</span>.</li>
+<li><strong>Tyrosine motifs, modified, are read across the whole endomembrane system.</strong> The same Y/dileucine signals — and their phospho-/other modifications — feed <strong>autophagy</strong> (the CI region’s ELM hits include autophagy-related targeting classes; Chapter 4), <strong>ESCRT</strong>-dependent ILV sorting, and <strong>AP-complex</strong> recognition. For TuMV in particular, both <strong>NPR1-related resistance and autophagy</strong> are established parts of the host-defence landscape <span class="citation" data-cites="wu2024brassica">(<a href="../references.html#ref-wu2024brassica" role="doc-biblioref">Wu et al. 2024</a>)</span>, and viral replication itself runs on endomembrane co-option <span class="citation" data-cites="jovanovic2023">(<a href="../references.html#ref-jovanovic2023" role="doc-biblioref">Jovanović et al. 2023</a>)</span>. A fuller review of how these modifications switch a motif between sorting fates is the natural next chapter of this story.</li>
+</ol>
+<p>Everything past proposition 1 is explicitly <strong>hypothesis</strong>; the value of the <a href="../notebooks/08_immu_simmu.html">interactive model</a> is to make those hypotheses <em>quantitative and falsifiable</em> rather than merely narrative.</p>
+<div class="callout callout-style-default callout-note callout-titled">
+<div class="callout-header d-flex align-content-center collapsed" data-bs-toggle="collapse" data-bs-target=".callout-2-contents" aria-controls="callout-2" aria-expanded="false" aria-label="Toggle callout">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-title-container flex-fill">
+<span class="screen-reader-only">Note</span>React/recharts version (not compatible with the OJS runtime)
+</div>
+<div class="callout-btn-toggle d-inline-block border-0 py-1 ps-1 pe-0 float-end"><i class="callout-toggle"></i></div>
+</div>
+<div id="callout-2" class="callout-2-contents callout-collapse collapse">
+<div class="callout-body-container callout-body">
+<p>The full React component (<code>PlantImmuneTrafficDashboard</code>) with recharts visualisations is preserved in the project history for reference. To enable it, either (a) host it as a standalone React app and embed via <code>&lt;iframe&gt;</code>, or (b) move to a Shiny app (<code>shiny/immu_simu/</code>) with the same simulation logic.</p>
+</div>
+</div>
+</div>
+
+
+<!-- -->
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-davies2018" class="csl-entry" role="listitem">
+Davies, Alexandra K., Daniel N. Itzhak, James R. Edgar, et al. 2018. <span>“<span>AP-4</span> Vesicles Contribute to Spatial Control of Autophagy via <span>RUSC</span>-Dependent Peripheral Delivery of <span>ATG9A</span>.”</span> <em>Nature Communications</em> 9: 3958. <a href="https://doi.org/10.1038/s41467-018-06172-7">https://doi.org/10.1038/s41467-018-06172-7</a>.
+</div>
+<div id="ref-fuji2016" class="csl-entry" role="listitem">
+Fuji, Kentaro, Makoto Shirakawa, Yoshihiro Shimono, et al. 2016. <span>“The Adaptor Complex <span>AP-4</span> Regulates Vacuolar Protein Sorting at the Trans-<span>Golgi</span> Network by Interacting with <span>VACUOLAR SORTING RECEPTOR1</span>.”</span> <em>Plant Physiology</em> 170 (1): 211–19. <a href="https://doi.org/10.1104/pp.15.00869">https://doi.org/10.1104/pp.15.00869</a>.
+</div>
+<div id="ref-hatsugai2018" class="csl-entry" role="listitem">
+Hatsugai, Noriyuki, Aya Nakatsuji, Osamu Unten, et al. 2018. <span>“Involvement of Adapter Protein Complex 4 in Hypersensitive Cell Death Induced by Avirulent Bacteria.”</span> <em>Plant Physiology</em> 176 (2): 1824–34. <a href="https://doi.org/10.1104/pp.17.01610">https://doi.org/10.1104/pp.17.01610</a>.
+</div>
+<div id="ref-hirst2013" class="csl-entry" role="listitem">
+Hirst, Jennifer, Claire Irving, and Georg H. H. Borner. 2013. <span>“Adaptor Protein Complexes <span>AP-4</span> and <span>AP-5</span>: New Players in Endosomal Trafficking and Progressive Spastic Paraplegia.”</span> <em>Traffic</em> 14 (2): 153–64. <a href="https://doi.org/10.1111/tra.12028">https://doi.org/10.1111/tra.12028</a>.
+</div>
+<div id="ref-huang2026" class="csl-entry" role="listitem">
+Huang, W., X. Liu, L. Pierdzig, et al. 2026. <span>“The Trans-<span>G</span>olgi Network Adaptor Protein 4 Complex Contributes to Basal Defense and Immunity Mediated Through Plasma Membrane and Intracellular Immune Receptors.”</span> <em>The Plant Journal</em> 125: e70758. <a href="https://doi.org/10.1111/tpj.70758">https://doi.org/10.1111/tpj.70758</a>.
+</div>
+<div id="ref-jovanovic2023" class="csl-entry" role="listitem">
+Jovanović, Ivana, Nicole Frantová, and Jan Zouhar. 2023. <span>“A Sword or a Buffet: Plant Endomembrane System in Viral Infections.”</span> <em>Frontiers in Plant Science</em> 14: 1226498. <a href="https://doi.org/10.3389/fpls.2023.1226498">https://doi.org/10.3389/fpls.2023.1226498</a>.
+</div>
+<div id="ref-kinkema2000" class="csl-entry" role="listitem">
+Kinkema, Mark, Weihua Fan, and Xinnian Dong. 2000. <span>“Nuclear Localization of <span>NPR1</span> Is Required for Activation of <span>PR</span> Gene Expression.”</span> <em>The Plant Cell</em> 12 (12): 2339–50. <a href="https://doi.org/10.1105/tpc.12.12.2339">https://doi.org/10.1105/tpc.12.12.2339</a>.
+</div>
+<div id="ref-mattera2017" class="csl-entry" role="listitem">
+Mattera, Rafael, Sang Yoon Park, Raffaella De Pace, Carlos M. Guardia, and Juan S. Bonifacino. 2017. <span>“<span>AP-4</span> Mediates Export of <span>ATG9A</span> from the <span>Trans-Golgi</span> Network to Promote Autophagosome Formation.”</span> <em>Proceedings of the National Academy of Sciences</em> 114 (50): E10697–706. <a href="https://doi.org/10.1073/pnas.1717327114">https://doi.org/10.1073/pnas.1717327114</a>.
+</div>
+<div id="ref-mou2003" class="csl-entry" role="listitem">
+Mou, Zhonglin, Weihua Fan, and Xinnian Dong. 2003. <span>“Inducers of Plant Systemic Acquired Resistance Regulate <span>NPR1</span> Function Through Redox Changes.”</span> <em>Cell</em> 113 (7): 935–44. <a href="https://doi.org/10.1016/S0092-8674(03)00429-X">https://doi.org/10.1016/S0092-8674(03)00429-X</a>.
+</div>
+<div id="ref-simon2016" class="csl-entry" role="listitem">
+Simon, M. L. A., M. P. Platre, M. M. Marquès-Bueno, et al. 2016. <span>“A <span>PtdIns(4)P</span>-Driven Electrostatic Field Controls Cell Membrane Identity and Signalling in Plants.”</span> <em>Nature Plants</em> 2: 16089. <a href="https://doi.org/10.1038/nplants.2016.89">https://doi.org/10.1038/nplants.2016.89</a>.
+</div>
+<div id="ref-tada2008" class="csl-entry" role="listitem">
+Tada, Yasuomi, Steven H. Spoel, Karolina Pajerowska-Mukhtar, et al. 2008. <span>“Plant Immunity Requires Conformational Changes of <span>NPR1</span> via <span>S</span>-Nitrosylation and Thioredoxins.”</span> <em>Science</em> 321 (5891): 952–56. <a href="https://doi.org/10.1126/science.1156970">https://doi.org/10.1126/science.1156970</a>.
+</div>
+<div id="ref-wang2009cbp60g" class="csl-entry" role="listitem">
+Wang, Lin, Kenichi Tsuda, Masanao Sato, Jerry D. Cohen, Fumiaki Katagiri, and Jane Glazebrook. 2009. <span>“<span>Arabidopsis</span> <span>CBP60g</span> and <span>SARD1</span> Are Partially Redundant Transcription Factors Required for the Establishment of Pathogen-Induced Salicylic Acid Accumulation.”</span> <em>PLoS Pathogens</em> 5 (2): e1000301. <a href="https://doi.org/10.1371/journal.ppat.1000301">https://doi.org/10.1371/journal.ppat.1000301</a>.
+</div>
+<div id="ref-wang2025eca4" class="csl-entry" role="listitem">
+Wang, Yiran, Weijie Huang, Xin Li, and Yuelin Zhang. 2025. <span>“The Clathrin Adaptor <span>ECA4</span> Negatively Regulates Plant Immunity Through Modulating <span>BDA1</span> Levels.”</span> <em>The Plant Journal</em> 122 (3): e70207. <a href="https://doi.org/10.1111/tpj.70207">https://doi.org/10.1111/tpj.70207</a>.
+</div>
+<div id="ref-wu2024brassica" class="csl-entry" role="listitem">
+Wu, Guanwei, Xiaofei Fang, Tao Yu, Jianping Chen, and Fei Yan. 2024. <span>“Turnip Mosaic Virus Pathogenesis and Host Resistance Mechanisms in <span>Brassica</span>.”</span> <em>Horticultural Plant Journal</em> 10 (4): 947–60. <a href="https://doi.org/10.1016/j.hpj.2024.03.001">https://doi.org/10.1016/j.hpj.2024.03.001</a>.
+</div>
+<div id="ref-wu2022ci" class="csl-entry" role="listitem">
+Wu, Guanwei, Zhaoxing Jia, Penghuan Rui, et al. 2022. <span>“Acidic Dileucine Motifs in the Cylindrical Inclusion Protein of Turnip Mosaic Virus Are Crucial for Endosomal Targeting and Viral Replication.”</span> <em>Molecular Plant Pathology</em> 23 (9): 1381–89. <a href="https://doi.org/10.1111/mpp.13231">https://doi.org/10.1111/mpp.13231</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../notebooks/08_immu_simmu.html" class="pagination-link" aria-label="Plant Immune Trafficking Observatory">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Plant Immune Trafficking Observatory</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../notebooks/A1_data_sources.html" class="pagination-link" aria-label="Appendix: Data Sources and Accessions">
+        <span class="nav-page-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Appendix: Data Sources and Accessions</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "AP-4 Trafficking and the Tyrosine-Motif Hypothesis"</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Mechanistic reasoning behind the AP-4 arm of the immune trafficking model, and the tyrosine-motif hypothesis it motivates"</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Christina Muedsam"</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- SOURCE: split out of notebooks/08_immu_simmu.qmd (originally</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">"# Extended analysis: AP-4, TEPSIN and cargo missorting") when the book's</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="co">notebooks were renumbered to match Quarto's actual chapter order. --&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>The <span class="co">[</span><span class="ot">interactive trafficking simulation</span><span class="co">](08_immu_simmu.qmd)</span> foregrounds AP-4</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>because it is the least-studied of the four adaptor-protein complexes yet, we</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>argue, a plausible integration point between membrane trafficking and immune</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>signalling. This chapter sets out the mechanistic reasoning and the (largely</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>hypothetical) cargo assignments that motivate the model's AP-4 arm.</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>::: {.callout-important appearance="simple"}</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>Much of what follows is **predictive**: it extrapolates from well-characterised</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>mammalian AP-4 biology and from sorting-motif analysis to plant proteins that</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>have **not** been experimentally validated as AP-4 cargo. Established facts</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>(ATG9A as AP-4 cargo in mammals; VSR1/BOR1 as AP-4 cargo in *Arabidopsis*;</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>AP-4's requirement for the hypersensitive response) are cited; predictions are</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>labelled as such and presented as testable hypotheses, not conclusions.</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a><span class="fu">## AP-4: the overlooked trafficking pathway</span></span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a>Adaptor protein complex 4 (AP-4) is a heterotetramer — subunits β4 (AP4B,</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>At5g11490), ε (AP4E, At5g09420), μ4 (AP4M, At4g24550) and σ4 (AP4S, At3g13420)</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>in *Arabidopsis*. Unlike AP-1/2/3, AP-4 operates **without a clathrin coat** and</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>mediates export from the *trans*-Golgi network (TGN) to endosomal and</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>autophagy-related compartments <span class="co">[</span><span class="ot">@hirst2013; @fuji2016</span><span class="co">]</span>.</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Complex <span class="pp">|</span> Location <span class="pp">|</span> Coat <span class="pp">|</span> Function <span class="pp">|</span> Knockout phenotype <span class="pp">|</span></span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|---|</span></span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> AP-1 <span class="pp">|</span> TGN/endosomes <span class="pp">|</span> Clathrin <span class="pp">|</span> TGN–endosome, secretion <span class="pp">|</span> Embryo-lethal (mammals) <span class="pp">|</span></span>
+<span id="cb1-40"><a href="#cb1-40" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> AP-2 <span class="pp">|</span> Plasma membrane <span class="pp">|</span> Clathrin <span class="pp">|</span> Endocytosis <span class="pp">|</span> Lethal (plants/mammals) <span class="pp">|</span></span>
+<span id="cb1-41"><a href="#cb1-41" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> AP-3 <span class="pp">|</span> TGN/endosomes <span class="pp">|</span> None <span class="pp">|</span> Vacuole/lysosome <span class="pp">|</span> Hermansky–Pudlak (mammals) <span class="pp">|</span></span>
+<span id="cb1-42"><a href="#cb1-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> **AP-4** | **TGN** | **None** | **TGN → endosome/autophagy** | **Neurodegeneration (mammals); subtle (plants)** <span class="pp">|</span></span>
+<span id="cb1-43"><a href="#cb1-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-44"><a href="#cb1-44" aria-hidden="true" tabindex="-1"></a>The compartments AP-4 connects, and the lipid identities that mark them, are</span>
+<span id="cb1-45"><a href="#cb1-45" aria-hidden="true" tabindex="-1"></a>summarised below; AP-4 acts at the TGN, exporting cargo (notably ATG9) toward</span>
+<span id="cb1-46"><a href="#cb1-46" aria-hidden="true" tabindex="-1"></a>endosomal and autophagy compartments (dashed arrow).</span>
+<span id="cb1-47"><a href="#cb1-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-48"><a href="#cb1-48" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb1-49"><a href="#cb1-49" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;figure style="margin:1em 0;"&gt;</span></span>
+<span id="cb1-50"><a href="#cb1-50" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;svg viewBox="0 0 720 430" width="100%" style="max-width:720px;font-family:sans-serif;" role="img" aria-label="Plant cell trafficking compartment map"&gt;</span></span>
+<span id="cb1-51"><a href="#cb1-51" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;rect x="6" y="6" width="708" height="418" rx="18" fill="#fbfaf5" stroke="#8a7f5c" stroke-width="3"/&gt;</span></span>
+<span id="cb1-52"><a href="#cb1-52" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;rect x="12" y="12" width="696" height="406" rx="14" fill="none" stroke="#f3c9c0" stroke-width="4"/&gt;</span></span>
+<span id="cb1-53"><a href="#cb1-53" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;text x="24" y="34" font-size="13" fill="#8a7f5c" font-style="italic"&gt;plasma membrane (PC, PE, PI, PS; sterols)&lt;/text&gt;</span></span>
+<span id="cb1-54"><a href="#cb1-54" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- nucleus --&gt;</span></span>
+<span id="cb1-55"><a href="#cb1-55" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;circle cx="150" cy="150" r="62" fill="#e8daf2" stroke="#7d5ba6" stroke-width="2"/&gt;</span></span>
+<span id="cb1-56"><a href="#cb1-56" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;text x="150" y="155" font-size="14" text-anchor="middle" fill="#4a2f6b" font-weight="bold"&gt;Nucleus&lt;/text&gt;</span></span>
+<span id="cb1-57"><a href="#cb1-57" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- ER --&gt;</span></span>
+<span id="cb1-58"><a href="#cb1-58" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;ellipse cx="150" cy="270" rx="70" ry="30" fill="#d6ecec" stroke="#4a9a9a" stroke-width="2"/&gt;</span></span>
+<span id="cb1-59"><a href="#cb1-59" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;text x="150" y="274" font-size="12" text-anchor="middle" fill="#2e6b6b"&gt;ER · PC/PE/PI, low sterol&lt;/text&gt;</span></span>
+<span id="cb1-60"><a href="#cb1-60" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- Golgi/TGN --&gt;</span></span>
+<span id="cb1-61"><a href="#cb1-61" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;g&gt;</span></span>
+<span id="cb1-62"><a href="#cb1-62" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;rect x="330" y="120" width="120" height="12" rx="6" fill="#f4d35e"/&gt;</span></span>
+<span id="cb1-63"><a href="#cb1-63" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;rect x="335" y="138" width="110" height="12" rx="6" fill="#f4d35e"/&gt;</span></span>
+<span id="cb1-64"><a href="#cb1-64" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;rect x="340" y="156" width="100" height="12" rx="6" fill="#f4d35e"/&gt;</span></span>
+<span id="cb1-65"><a href="#cb1-65" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;text x="390" y="188" font-size="12" text-anchor="middle" fill="#8a6d0a" font-weight="bold"&gt;TGN / Golgi&lt;/text&gt;</span></span>
+<span id="cb1-66"><a href="#cb1-66" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;text x="390" y="203" font-size="11" text-anchor="middle" fill="#8a6d0a"&gt;PI(4)P · AP-4 acts here&lt;/text&gt;</span></span>
+<span id="cb1-67"><a href="#cb1-67" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/g&gt;</span></span>
+<span id="cb1-68"><a href="#cb1-68" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- early endosome --&gt;</span></span>
+<span id="cb1-69"><a href="#cb1-69" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;circle cx="560" cy="150" r="40" fill="#fde3cf" stroke="#d98841" stroke-width="2"/&gt;</span></span>
+<span id="cb1-70"><a href="#cb1-70" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;text x="560" y="148" font-size="12" text-anchor="middle" fill="#9a531a"&gt;Early&lt;/text&gt;</span></span>
+<span id="cb1-71"><a href="#cb1-71" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;text x="560" y="163" font-size="12" text-anchor="middle" fill="#9a531a"&gt;endosome&lt;/text&gt;</span></span>
+<span id="cb1-72"><a href="#cb1-72" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;text x="560" y="205" font-size="10" text-anchor="middle" fill="#9a531a"&gt;PI(3)P&lt;/text&gt;</span></span>
+<span id="cb1-73"><a href="#cb1-73" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- MVB --&gt;</span></span>
+<span id="cb1-74"><a href="#cb1-74" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;circle cx="580" cy="270" r="34" fill="#f5c6a5" stroke="#c0651f" stroke-width="2"/&gt;</span></span>
+<span id="cb1-75"><a href="#cb1-75" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;circle cx="571" cy="264" r="5" fill="#c0651f"/&gt;&lt;circle cx="588" cy="266" r="5" fill="#c0651f"/&gt;</span></span>
+<span id="cb1-76"><a href="#cb1-76" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;circle cx="578" cy="280" r="5" fill="#c0651f"/&gt;</span></span>
+<span id="cb1-77"><a href="#cb1-77" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;text x="580" y="320" font-size="11" text-anchor="middle" fill="#8a4413"&gt;MVB · PI(3,5)P₂&lt;/text&gt;</span></span>
+<span id="cb1-78"><a href="#cb1-78" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- autophagosome --&gt;</span></span>
+<span id="cb1-79"><a href="#cb1-79" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;circle cx="440" cy="300" r="30" fill="#e2d0ee" stroke="#8e5bb5" stroke-width="2" stroke-dasharray="5 3"/&gt;</span></span>
+<span id="cb1-80"><a href="#cb1-80" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;text x="440" y="304" font-size="10" text-anchor="middle" fill="#5a3480"&gt;Autophago-&lt;/text&gt;</span></span>
+<span id="cb1-81"><a href="#cb1-81" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;text x="440" y="316" font-size="10" text-anchor="middle" fill="#5a3480"&gt;some&lt;/text&gt;</span></span>
+<span id="cb1-82"><a href="#cb1-82" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- vacuole --&gt;</span></span>
+<span id="cb1-83"><a href="#cb1-83" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;ellipse cx="470" cy="380" rx="150" ry="34" fill="#dfe8f5" stroke="#3f6fa5" stroke-width="2"/&gt;</span></span>
+<span id="cb1-84"><a href="#cb1-84" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;text x="470" y="384" font-size="13" text-anchor="middle" fill="#274a70" font-weight="bold"&gt;Vacuole (degradation)&lt;/text&gt;</span></span>
+<span id="cb1-85"><a href="#cb1-85" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- arrows --&gt;</span></span>
+<span id="cb1-86"><a href="#cb1-86" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;defs&gt;&lt;marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"&gt;&lt;path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/&gt;&lt;/marker&gt;</span></span>
+<span id="cb1-87"><a href="#cb1-87" aria-hidden="true" tabindex="-1"></a><span class="in">        &lt;marker id="ag" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"&gt;&lt;path d="M0,0 L7,3 L0,6 Z" fill="#555"/&gt;&lt;/marker&gt;&lt;/defs&gt;</span></span>
+<span id="cb1-88"><a href="#cb1-88" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- AP-4 TGN -&gt; endosome (highlighted, dashed) --&gt;</span></span>
+<span id="cb1-89"><a href="#cb1-89" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;path d="M452,140 Q510,120 522,140" fill="none" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#ah)"/&gt;</span></span>
+<span id="cb1-90"><a href="#cb1-90" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;text x="500" y="112" font-size="11" fill="#c0392b" font-weight="bold"&gt;AP-4 (ATG9)&lt;/text&gt;</span></span>
+<span id="cb1-91"><a href="#cb1-91" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- EE -&gt; MVB --&gt;</span></span>
+<span id="cb1-92"><a href="#cb1-92" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;path d="M565,190 Q575,225 578,234" fill="none" stroke="#555" stroke-width="2" marker-end="url(#ag)"/&gt;</span></span>
+<span id="cb1-93"><a href="#cb1-93" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- MVB -&gt; vacuole --&gt;</span></span>
+<span id="cb1-94"><a href="#cb1-94" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;path d="M575,304 Q540,335 500,350" fill="none" stroke="#555" stroke-width="2" marker-end="url(#ag)"/&gt;</span></span>
+<span id="cb1-95"><a href="#cb1-95" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;!-- autophagosome -&gt; vacuole --&gt;</span></span>
+<span id="cb1-96"><a href="#cb1-96" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;path d="M440,330 Q450,350 460,346" fill="none" stroke="#8e5bb5" stroke-width="2" marker-end="url(#ag)"/&gt;</span></span>
+<span id="cb1-97"><a href="#cb1-97" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/svg&gt;</span></span>
+<span id="cb1-98"><a href="#cb1-98" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;figcaption style="font-size:12px;color:#555;"&gt;Plant-cell trafficking compartments and their marker lipids. AP-4 exports cargo (notably ATG9) from the TGN toward endosomal/autophagy compartments (red dashed arrow); ESCRT-marked MVBs and autophagosomes both deliver to the vacuole for degradation.&lt;/figcaption&gt;</span></span>
+<span id="cb1-99"><a href="#cb1-99" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/figure&gt;</span></span>
+<span id="cb1-100"><a href="#cb1-100" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-101"><a href="#cb1-101" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-102"><a href="#cb1-102" aria-hidden="true" tabindex="-1"></a>AP-4 is understudied in plants precisely because it is *not* essential for</span>
+<span id="cb1-103"><a href="#cb1-103" aria-hidden="true" tabindex="-1"></a>viability and gives subtle phenotypes — yet in mammals its loss causes a</span>
+<span id="cb1-104"><a href="#cb1-104" aria-hidden="true" tabindex="-1"></a>hereditary spastic paraplegia ("AP-4 deficiency syndrome") traced to</span>
+<span id="cb1-105"><a href="#cb1-105" aria-hidden="true" tabindex="-1"></a>missorting of its most conserved cargo, the autophagy lipid-scramblase **ATG9A**</span>
+<span id="cb1-106"><a href="#cb1-106" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">@mattera2017; @davies2018</span><span class="co">]</span>. In *Arabidopsis*, AP-4 is experimentally</span>
+<span id="cb1-107"><a href="#cb1-107" aria-hidden="true" tabindex="-1"></a>established to sort the tyrosine-motif cargoes VACUOLAR SORTING RECEPTOR 1 and</span>
+<span id="cb1-108"><a href="#cb1-108" aria-hidden="true" tabindex="-1"></a>the borate transporter BOR1 via its µ subunit, and its loss abolishes the</span>
+<span id="cb1-109"><a href="#cb1-109" aria-hidden="true" tabindex="-1"></a>hypersensitive cell-death response to avirulent bacteria <span class="co">[</span><span class="ot">@fuji2016</span><span class="co">]</span>.</span>
+<span id="cb1-110"><a href="#cb1-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-111"><a href="#cb1-111" aria-hidden="true" tabindex="-1"></a><span class="fu">### Predicted plant AP-4 cargo</span></span>
+<span id="cb1-112"><a href="#cb1-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-113"><a href="#cb1-113" aria-hidden="true" tabindex="-1"></a>Mammalian AP-4 cargo (ATG9A, AMPA receptors, SLC17A5, SERINC1/3, δ-opioid</span>
+<span id="cb1-114"><a href="#cb1-114" aria-hidden="true" tabindex="-1"></a>receptor, ADAM10) are transmembrane proteins bearing **[D/E]XXX[L/I/M]** or</span>
+<span id="cb1-115"><a href="#cb1-115" aria-hidden="true" tabindex="-1"></a>**YXXΦ** sorting motifs and functioning in membrane remodelling, receptor</span>
+<span id="cb1-116"><a href="#cb1-116" aria-hidden="true" tabindex="-1"></a>localisation, autophagosome formation or lipid transport. Screening plant</span>
+<span id="cb1-117"><a href="#cb1-117" aria-hidden="true" tabindex="-1"></a>immune-relevant proteins for the same motifs yields a ranked set of candidate</span>
+<span id="cb1-118"><a href="#cb1-118" aria-hidden="true" tabindex="-1"></a>cargo — **a bioinformatic prediction, not a validated interaction map**:</span>
+<span id="cb1-119"><a href="#cb1-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-120"><a href="#cb1-120" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Confidence <span class="pp">|</span> Candidate <span class="pp">|</span> Sorting motif(s) <span class="pp">|</span> Predicted missorting consequence <span class="pp">|</span></span>
+<span id="cb1-121"><a href="#cb1-121" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|---|</span></span>
+<span id="cb1-122"><a href="#cb1-122" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> High <span class="pp">|</span> ATG9 (At2g31260) <span class="pp">|</span> multiple DXXXL/EXXXL in cytoplasmic loops <span class="pp">|</span> ATG9 accumulates at TGN → impaired autophagosome biogenesis <span class="pp">|</span></span>
+<span id="cb1-123"><a href="#cb1-123" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> High <span class="pp">|</span> SYP4 SNAREs (SYP41/42/43) <span class="pp">|</span> (VAMP7-like, by homology) <span class="pp">|</span> ectopic TGN–endosome fusion <span class="pp">|</span></span>
+<span id="cb1-124"><a href="#cb1-124" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> High <span class="pp">|</span> VTI11/VTI12 <span class="pp">|</span> (VAMP8-like) <span class="pp">|</span> failed autophagosome–vacuole fusion <span class="pp">|</span></span>
+<span id="cb1-125"><a href="#cb1-125" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Medium <span class="pp">|</span> **NPR1** (At1g64280) <span class="pp">|</span> DXXXL (234–238), EXXXM (456–460) <span class="pp">|</span> mis-localised NPR1 → impaired SAR (see below) <span class="pp">|</span></span>
+<span id="cb1-126"><a href="#cb1-126" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Medium <span class="pp">|</span> **CBP60g** (At5g26920) <span class="pp">|</span> YXXL (189–193), DXXXL (341–345) <span class="pp">|</span> dysregulated SA biosynthesis <span class="pp">|</span></span>
+<span id="cb1-127"><a href="#cb1-127" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Medium <span class="pp">|</span> NRAMP3 (At2g23150) <span class="pp">|</span> EIXXL (445–449) <span class="pp">|</span> iron mislocalisation → oxidative stress <span class="pp">|</span></span>
+<span id="cb1-128"><a href="#cb1-128" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Medium <span class="pp">|</span> PUB22/23 <span class="pp">|</span> membrane-associated E3s <span class="pp">|</span> failed NLR ubiquitination → NLR accumulation <span class="pp">|</span></span>
+<span id="cb1-129"><a href="#cb1-129" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Speculative <span class="pp">|</span> RabG3, cleaved PRR tails <span class="pp">|</span> — <span class="pp">|</span> impaired autophagosome fusion; chronic fragment signalling <span class="pp">|</span></span>
+<span id="cb1-130"><a href="#cb1-130" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-131"><a href="#cb1-131" aria-hidden="true" tabindex="-1"></a>Only the ATG9 assignment rests on strong cross-species precedent [@mattera2017;</span>
+<span id="cb1-132"><a href="#cb1-132" aria-hidden="true" tabindex="-1"></a>@davies2018]; the immune-regulator assignments (NPR1, CBP60g, PUB22/23) are the</span>
+<span id="cb1-133"><a href="#cb1-133" aria-hidden="true" tabindex="-1"></a>novel, lower-confidence predictions that the callout above flags.</span>
+<span id="cb1-134"><a href="#cb1-134" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-135"><a href="#cb1-135" aria-hidden="true" tabindex="-1"></a><span class="fu">## TEPSIN: the AP-4 accessory protein</span></span>
+<span id="cb1-136"><a href="#cb1-136" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-137"><a href="#cb1-137" aria-hidden="true" tabindex="-1"></a>TEPSIN is an AP-4-interacting protein that stabilises the complex, enhances</span>
+<span id="cb1-138"><a href="#cb1-138" aria-hidden="true" tabindex="-1"></a>membrane curvature and concentrates cargo prior to clathrin-independent scission</span>
+<span id="cb1-139"><a href="#cb1-139" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">@hirst2013</span><span class="co">]</span>. A plant TEPSIN-like protein is present but uncharacterised</span>
+<span id="cb1-140"><a href="#cb1-140" aria-hidden="true" tabindex="-1"></a>(*Arabidopsis* candidate At5g48795). We hypothesise it stabilises AP-4 under the</span>
+<span id="cb1-141"><a href="#cb1-141" aria-hidden="true" tabindex="-1"></a>elevated trafficking demand of stress responses, predicting that *tepsin* mutants</span>
+<span id="cb1-142"><a href="#cb1-142" aria-hidden="true" tabindex="-1"></a>phenocopy mild *ap4* defects and that TEPSIN–AP-4 association is enhanced during</span>
+<span id="cb1-143"><a href="#cb1-143" aria-hidden="true" tabindex="-1"></a>infection. The mechanistically distinctive outcome of TEPSIN (or AP-4) loss is</span>
+<span id="cb1-144"><a href="#cb1-144" aria-hidden="true" tabindex="-1"></a>not a clean autophagy block but a **dysfunctional** one:</span>
+<span id="cb1-145"><a href="#cb1-145" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-148"><a href="#cb1-148" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb1-149"><a href="#cb1-149" aria-hidden="true" tabindex="-1"></a>%%| label: fig-tepsin-autophagy</span>
+<span id="cb1-150"><a href="#cb1-150" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Hypothesised consequence of TEPSIN/AP-4 loss: ATG9 mis-sorting yields structurally aberrant, cargo-incompetent autophagosomes rather than a complete autophagy block.</span><span class="ot">"</span></span>
+<span id="cb1-151"><a href="#cb1-151" aria-hidden="true" tabindex="-1"></a>flowchart TD</span>
+<span id="cb1-152"><a href="#cb1-152" aria-hidden="true" tabindex="-1"></a>  A[TEPSIN / AP<span class="dv">-4</span> loss] --&gt; B[ATG9 mis-sorted,&lt;br/&gt;accumulates at TGN]</span>
+<span id="cb1-153"><a href="#cb1-153" aria-hidden="true" tabindex="-1"></a>  B --&gt; C[Reduced ATG9 delivery to phagophore]</span>
+<span id="cb1-154"><a href="#cb1-154" aria-hidden="true" tabindex="-1"></a>  C --&gt; D[Impaired autophagosome formation]</span>
+<span id="cb1-155"><a href="#cb1-155" aria-hidden="true" tabindex="-1"></a>  D --&gt; E{ATG8 lipidation still occurs?}</span>
+<span id="cb1-156"><a href="#cb1-156" aria-hidden="true" tabindex="-1"></a>  E -- Yes --&gt; F[Aberrant autophagosomes:&lt;br/&gt;ATG8+ membranes, poor cargo recruitment]</span>
+<span id="cb1-157"><a href="#cb1-157" aria-hidden="true" tabindex="-1"></a>  F --&gt; G[Non-selective autophagy impaired]</span>
+<span id="cb1-158"><a href="#cb1-158" aria-hidden="true" tabindex="-1"></a>  F --&gt; H[Selective NBR1 autophagy compensatorily enhanced]</span>
+<span id="cb1-159"><a href="#cb1-159" aria-hidden="true" tabindex="-1"></a>  F --&gt; I[Chronic autophagy-stress response]</span>
+<span id="cb1-160"><a href="#cb1-160" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-161"><a href="#cb1-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-162"><a href="#cb1-162" aria-hidden="true" tabindex="-1"></a><span class="fu">## NPR1 and CBP60g: trafficking hypotheses for immune regulators</span></span>
+<span id="cb1-163"><a href="#cb1-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-164"><a href="#cb1-164" aria-hidden="true" tabindex="-1"></a>NPR1, the master regulator of systemic acquired resistance (SAR), is held as</span>
+<span id="cb1-165"><a href="#cb1-165" aria-hidden="true" tabindex="-1"></a>cytoplasmic oligomers that must be reduced to monomers — via thioredoxins and</span>
+<span id="cb1-166"><a href="#cb1-166" aria-hidden="true" tabindex="-1"></a>S-nitrosylation at Cys156 — before nuclear import and coactivation of *PR* genes</span>
+<span id="cb1-167"><a href="#cb1-167" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">@mou2003; @tada2008; @kinkema2000</span><span class="co">]</span>. The compartment in which monomerisation</span>
+<span id="cb1-168"><a href="#cb1-168" aria-hidden="true" tabindex="-1"></a>occurs is not fully resolved. We propose (hypothesis) that AP-4 routes NPR1</span>
+<span id="cb1-169"><a href="#cb1-169" aria-hidden="true" tabindex="-1"></a>oligomers through an endosomal compartment whose reducing environment promotes</span>
+<span id="cb1-170"><a href="#cb1-170" aria-hidden="true" tabindex="-1"></a>monomerisation before retrograde delivery and nuclear import:</span>
+<span id="cb1-171"><a href="#cb1-171" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-174"><a href="#cb1-174" aria-hidden="true" tabindex="-1"></a><span class="in">```{mermaid}</span></span>
+<span id="cb1-175"><a href="#cb1-175" aria-hidden="true" tabindex="-1"></a>%%| label: fig-npr1-hypothesis</span>
+<span id="cb1-176"><a href="#cb1-176" aria-hidden="true" tabindex="-1"></a>%%| fig-cap: <span class="ot">"</span><span class="st">Hypothesised AP-4-dependent endosomal step in NPR1 activation (predicted, not established). AP-4 loss could either reduce nuclear NPR1 (loss of function) or, if the compartment normally sequesters NPR1, increase it (gain of function/autoimmunity).</span><span class="ot">"</span></span>
+<span id="cb1-177"><a href="#cb1-177" aria-hidden="true" tabindex="-1"></a>flowchart LR</span>
+<span id="cb1-178"><a href="#cb1-178" aria-hidden="true" tabindex="-1"></a>  A[NPR1 oligomers&lt;br/&gt;cytoplasm] --&gt; B[AP<span class="dv">-4</span>-mediated&lt;br/&gt;TGN sorting]</span>
+<span id="cb1-179"><a href="#cb1-179" aria-hidden="true" tabindex="-1"></a>  B --&gt; C[Endosomal compartment&lt;br/&gt;reducing environment]</span>
+<span id="cb1-180"><a href="#cb1-180" aria-hidden="true" tabindex="-1"></a>  C --&gt; D[Monomerisation]</span>
+<span id="cb1-181"><a href="#cb1-181" aria-hidden="true" tabindex="-1"></a>  D --&gt; E[Retrograde to cytosol]</span>
+<span id="cb1-182"><a href="#cb1-182" aria-hidden="true" tabindex="-1"></a>  E --&gt; F[Nuclear <span class="fu">import</span> → PR genes]</span>
+<span id="cb1-183"><a href="#cb1-183" aria-hidden="true" tabindex="-1"></a>  B -. AP<span class="dv">-4</span> loss .-&gt; G[Missorted / sequestered NPR1]</span>
+<span id="cb1-184"><a href="#cb1-184" aria-hidden="true" tabindex="-1"></a>  G --&gt; H[Reduced SAR&lt;br/&gt;<span class="ot">or</span> constitutive autoimmunity]</span>
+<span id="cb1-185"><a href="#cb1-185" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb1-186"><a href="#cb1-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-187"><a href="#cb1-187" aria-hidden="true" tabindex="-1"></a>This predicts that *ap4* mutants show altered NPR1 localisation and SA-response</span>
+<span id="cb1-188"><a href="#cb1-188" aria-hidden="true" tabindex="-1"></a>kinetics, testable by *ap4 npr1* epistasis. Analogously, CBP60g — a</span>
+<span id="cb1-189"><a href="#cb1-189" aria-hidden="true" tabindex="-1"></a>calcium-responsive transcription factor that activates the SA-biosynthesis gene</span>
+<span id="cb1-190"><a href="#cb1-190" aria-hidden="true" tabindex="-1"></a>*ICS1* <span class="co">[</span><span class="ot">@wang2009cbp60g</span><span class="co">]</span> — may be held in a vesicular pool and released for rapid</span>
+<span id="cb1-191"><a href="#cb1-191" aria-hidden="true" tabindex="-1"></a>perinuclear import upon MAMP-triggered Ca²⁺ influx, with AP-4 providing the</span>
+<span id="cb1-192"><a href="#cb1-192" aria-hidden="true" tabindex="-1"></a>sorting step; *ap4* mutants would then show delayed CBP60g nuclear accumulation</span>
+<span id="cb1-193"><a href="#cb1-193" aria-hidden="true" tabindex="-1"></a>and reduced SA after infection.</span>
+<span id="cb1-194"><a href="#cb1-194" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-195"><a href="#cb1-195" aria-hidden="true" tabindex="-1"></a>::: {.callout-important appearance="simple"}</span>
+<span id="cb1-196"><a href="#cb1-196" aria-hidden="true" tabindex="-1"></a><span class="fu">## A published AP-4 → immunity link — and a hidden thread to NPR1</span></span>
+<span id="cb1-197"><a href="#cb1-197" aria-hidden="true" tabindex="-1"></a>The NPR1/CBP60g routes above remain **predictions**. But there is now a</span>
+<span id="cb1-198"><a href="#cb1-198" aria-hidden="true" tabindex="-1"></a>**concrete, published** AP-4↔immunity mechanism that makes the whole idea far</span>
+<span id="cb1-199"><a href="#cb1-199" aria-hidden="true" tabindex="-1"></a>less speculative. @huang2026 showed that the **AP-4 µ subunit binds the</span>
+<span id="cb1-200"><a href="#cb1-200" aria-hidden="true" tabindex="-1"></a>transmembrane immune protein BDA1 through BDA1's tyrosine residues (Y18, Y257)**,</span>
+<span id="cb1-201"><a href="#cb1-201" aria-hidden="true" tabindex="-1"></a>and that AP-4 is required for **SNC2-mediated immunity** (a receptor-like-protein</span>
+<span id="cb1-202"><a href="#cb1-202" aria-hidden="true" tabindex="-1"></a>pathway) as well as for basal, pattern- and effector-triggered immunity; a second</span>
+<span id="cb1-203"><a href="#cb1-203" aria-hidden="true" tabindex="-1"></a>endocytic adaptor, ECA4, tunes BDA1 levels in parallel <span class="co">[</span><span class="ot">@wang2025eca4</span><span class="co">]</span>. This is a</span>
+<span id="cb1-204"><a href="#cb1-204" aria-hidden="true" tabindex="-1"></a>**direct precedent for a plant defence protein being AP-4-sorted via a</span>
+<span id="cb1-205"><a href="#cb1-205" aria-hidden="true" tabindex="-1"></a>tyrosine-based motif** — precisely the motif class the viral CI displays</span>
+<span id="cb1-206"><a href="#cb1-206" aria-hidden="true" tabindex="-1"></a>(Chapter 5).</span>
+<span id="cb1-207"><a href="#cb1-207" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-208"><a href="#cb1-208" aria-hidden="true" tabindex="-1"></a>The thread to **NPR1** is suggestive but **not yet fully characterised**: SNC2 is</span>
+<span id="cb1-209"><a href="#cb1-209" aria-hidden="true" tabindex="-1"></a>literally *SUPPRESSOR OF NPR1-1, CONSTITUTIVE 2* — i.e. it was isolated genetically</span>
+<span id="cb1-210"><a href="#cb1-210" aria-hidden="true" tabindex="-1"></a>in relation to NPR1 and defines an RLP-based resistance branch that runs partly</span>
+<span id="cb1-211"><a href="#cb1-211" aria-hidden="true" tabindex="-1"></a>**parallel to / independent of NPR1**. So AP-4, by gating BDA1/SNC2, sits on an</span>
+<span id="cb1-212"><a href="#cb1-212" aria-hidden="true" tabindex="-1"></a>immune axis genetically tied to NPR1, without (to my knowledge) a demonstrated</span>
+<span id="cb1-213"><a href="#cb1-213" aria-hidden="true" tabindex="-1"></a>direct AP-4–NPR1 interaction. We flag this as a **hypothesis worth pursuing**, not</span>
+<span id="cb1-214"><a href="#cb1-214" aria-hidden="true" tabindex="-1"></a>an established pathway.</span>
+<span id="cb1-215"><a href="#cb1-215" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-216"><a href="#cb1-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-217"><a href="#cb1-217" aria-hidden="true" tabindex="-1"></a><span class="fu">## Cargo missorting as a distinct pathology</span></span>
+<span id="cb1-218"><a href="#cb1-218" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-219"><a href="#cb1-219" aria-hidden="true" tabindex="-1"></a>The central hypothesis reframes AP-4 deficiency: the damaging consequence may be</span>
+<span id="cb1-220"><a href="#cb1-220" aria-hidden="true" tabindex="-1"></a>not *failed degradation* but **aberrant localisation**, producing a signalling</span>
+<span id="cb1-221"><a href="#cb1-221" aria-hidden="true" tabindex="-1"></a>imbalance. Missorting can create autophagy-resistant protein aggregates and</span>
+<span id="cb1-222"><a href="#cb1-222" aria-hidden="true" tabindex="-1"></a>mislocalised signalling components — a route to chronic, autoimmune-like</span>
+<span id="cb1-223"><a href="#cb1-223" aria-hidden="true" tabindex="-1"></a>activation that is mechanistically distinct from simple loss of function. Several</span>
+<span id="cb1-224"><a href="#cb1-224" aria-hidden="true" tabindex="-1"></a>independent routes converge on this outcome, paralleling known plant autoimmune</span>
+<span id="cb1-225"><a href="#cb1-225" aria-hidden="true" tabindex="-1"></a>mutants (e.g. ESCRT-defective *vps* alleles that fail to degrade activated</span>
+<span id="cb1-226"><a href="#cb1-226" aria-hidden="true" tabindex="-1"></a>receptors; autophagy-deficient backgrounds that accumulate NLRs):</span>
+<span id="cb1-227"><a href="#cb1-227" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-228"><a href="#cb1-228" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Failed receptor degradation** → receptor persistence at the PM → chronic MAPK.</span>
+<span id="cb1-229"><a href="#cb1-229" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**NLR hyperaccumulation** in autophagy-deficient backgrounds → ETI without effector.</span>
+<span id="cb1-230"><a href="#cb1-230" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Persistent endosomal signalling platforms** when ESCRT sorting fails.</span>
+<span id="cb1-231"><a href="#cb1-231" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Lipid-identity imbalance** (PI(3)P/PI(3,5)P₂ dysregulation) → trafficking paralysis and, at the extreme, the membrane-topology inversion tracked by the simulation <span class="co">[</span><span class="ot">@simon2016</span><span class="co">]</span>.</span>
+<span id="cb1-232"><a href="#cb1-232" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>**Cargo missorting → aggregates** that resist autophagy and trigger stress signalling.</span>
+<span id="cb1-233"><a href="#cb1-233" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-234"><a href="#cb1-234" aria-hidden="true" tabindex="-1"></a>These mechanisms are why the model reads out an *autoimmune-risk* signal</span>
+<span id="cb1-235"><a href="#cb1-235" aria-hidden="true" tabindex="-1"></a>(reversed-topology exosomes) rather than a simple loss-of-signal, and why the</span>
+<span id="cb1-236"><a href="#cb1-236" aria-hidden="true" tabindex="-1"></a>AP-4 arm — despite AP-4's subtle single-mutant phenotype — is worth modelling.</span>
+<span id="cb1-237"><a href="#cb1-237" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-238"><a href="#cb1-238" aria-hidden="true" tabindex="-1"></a><span class="fu">## Synthesis: a tyrosine-motif hypothesis</span></span>
+<span id="cb1-239"><a href="#cb1-239" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-240"><a href="#cb1-240" aria-hidden="true" tabindex="-1"></a>Pulling the threads together, the working hypothesis of this compendium is not</span>
+<span id="cb1-241"><a href="#cb1-241" aria-hidden="true" tabindex="-1"></a>about DNAzyme catalysis at all — it is about **sorting motifs**. Four propositions,</span>
+<span id="cb1-242"><a href="#cb1-242" aria-hidden="true" tabindex="-1"></a>in decreasing order of support:</span>
+<span id="cb1-243"><a href="#cb1-243" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-244"><a href="#cb1-244" aria-hidden="true" tabindex="-1"></a><span class="ss">1. </span>**The CI's tyrosine/dileucine motifs let the virus tap host sorting.** The</span>
+<span id="cb1-245"><a href="#cb1-245" aria-hidden="true" tabindex="-1"></a>   potyvirus CI carries functional acidic-dileucine signals read by AP-2</span>
+<span id="cb1-246"><a href="#cb1-246" aria-hidden="true" tabindex="-1"></a>   <span class="co">[</span><span class="ot">@wu2022ci</span><span class="co">]</span> and, beside them, an accessible **YXXΦ tyrosine motif** (Chapter 5).</span>
+<span id="cb1-247"><a href="#cb1-247" aria-hidden="true" tabindex="-1"></a>   A cytosolic pathogen protein wearing host-type endocytic signals is positioned</span>
+<span id="cb1-248"><a href="#cb1-248" aria-hidden="true" tabindex="-1"></a>   to **co-opt the AP-mediated sorting machinery** it needs for replication and</span>
+<span id="cb1-249"><a href="#cb1-249" aria-hidden="true" tabindex="-1"></a>   movement — and, potentially, to perturb the immune trafficking that runs on the</span>
+<span id="cb1-250"><a href="#cb1-250" aria-hidden="true" tabindex="-1"></a>   same adaptors.</span>
+<span id="cb1-251"><a href="#cb1-251" aria-hidden="true" tabindex="-1"></a><span class="ss">2. </span>**Tyrosine-based sorting is a deeply conserved, re-used device.** YXXΦ (and the</span>
+<span id="cb1-252"><a href="#cb1-252" aria-hidden="true" tabindex="-1"></a>   related immunoreceptor tyrosine motifs, ITAM/ITIM) govern receptor sorting and</span>
+<span id="cb1-253"><a href="#cb1-253" aria-hidden="true" tabindex="-1"></a>   signalling from plants to mammals; the same motif logic is repeatedly exploited</span>
+<span id="cb1-254"><a href="#cb1-254" aria-hidden="true" tabindex="-1"></a>   by human-pathogenic viruses, including RNA viruses and oncoviruses. That AP-4</span>
+<span id="cb1-255"><a href="#cb1-255" aria-hidden="true" tabindex="-1"></a>   itself reads a tyrosine motif on the plant immune protein **BDA1** <span class="co">[</span><span class="ot">@huang2026</span><span class="co">]</span></span>
+<span id="cb1-256"><a href="#cb1-256" aria-hidden="true" tabindex="-1"></a>   shows the device is active on *both* sides of the host–pathogen interface.</span>
+<span id="cb1-257"><a href="#cb1-257" aria-hidden="true" tabindex="-1"></a><span class="ss">3. </span>**Membrane-topology reversal can originate only at the LE/MVB.** The</span>
+<span id="cb1-258"><a href="#cb1-258" aria-hidden="true" tabindex="-1"></a>   late-endosome / multivesicular body is the branch point where sorting,</span>
+<span id="cb1-259"><a href="#cb1-259" aria-hidden="true" tabindex="-1"></a>   recycling, autophagy and degradation segregate — and the **only** compartment</span>
+<span id="cb1-260"><a href="#cb1-260" aria-hidden="true" tabindex="-1"></a>   where vesicles are generated by membrane remodelling *away from* the cytosol</span>
+<span id="cb1-261"><a href="#cb1-261" aria-hidden="true" tabindex="-1"></a>   (ILV budding). A defect that scrambles this orchestration is therefore the only</span>
+<span id="cb1-262"><a href="#cb1-262" aria-hidden="true" tabindex="-1"></a>   plausible origin of the reversed-topology, cytoplasm-facing vesicles the</span>
+<span id="cb1-263"><a href="#cb1-263" aria-hidden="true" tabindex="-1"></a>   simulation flags as an autoimmune risk. AP-4 is implicated at exactly this hub,</span>
+<span id="cb1-264"><a href="#cb1-264" aria-hidden="true" tabindex="-1"></a>   from ATG9 delivery for autophagy to the vacuole–PM fusion that executes HR cell</span>
+<span id="cb1-265"><a href="#cb1-265" aria-hidden="true" tabindex="-1"></a>   death <span class="co">[</span><span class="ot">@hatsugai2018</span><span class="co">]</span>.</span>
+<span id="cb1-266"><a href="#cb1-266" aria-hidden="true" tabindex="-1"></a><span class="ss">4. </span>**Tyrosine motifs, modified, are read across the whole endomembrane system.**</span>
+<span id="cb1-267"><a href="#cb1-267" aria-hidden="true" tabindex="-1"></a>   The same Y/dileucine signals — and their phospho-/other modifications — feed</span>
+<span id="cb1-268"><a href="#cb1-268" aria-hidden="true" tabindex="-1"></a>   **autophagy** (the CI region's ELM hits include autophagy-related targeting</span>
+<span id="cb1-269"><a href="#cb1-269" aria-hidden="true" tabindex="-1"></a>   classes; Chapter 4), **ESCRT**-dependent ILV sorting, and **AP-complex**</span>
+<span id="cb1-270"><a href="#cb1-270" aria-hidden="true" tabindex="-1"></a>   recognition. For TuMV in particular, both **NPR1-related resistance and</span>
+<span id="cb1-271"><a href="#cb1-271" aria-hidden="true" tabindex="-1"></a>   autophagy** are established parts of the host-defence landscape <span class="co">[</span><span class="ot">@wu2024brassica</span><span class="co">]</span>,</span>
+<span id="cb1-272"><a href="#cb1-272" aria-hidden="true" tabindex="-1"></a>   and viral replication itself runs on endomembrane co-option <span class="co">[</span><span class="ot">@jovanovic2023</span><span class="co">]</span>. A</span>
+<span id="cb1-273"><a href="#cb1-273" aria-hidden="true" tabindex="-1"></a>   fuller review of how these modifications switch a motif between sorting fates is</span>
+<span id="cb1-274"><a href="#cb1-274" aria-hidden="true" tabindex="-1"></a>   the natural next chapter of this story.</span>
+<span id="cb1-275"><a href="#cb1-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-276"><a href="#cb1-276" aria-hidden="true" tabindex="-1"></a>Everything past proposition 1 is explicitly **hypothesis**; the value of the</span>
+<span id="cb1-277"><a href="#cb1-277" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">interactive model</span><span class="co">](08_immu_simmu.qmd)</span> is to make those hypotheses *quantitative</span>
+<span id="cb1-278"><a href="#cb1-278" aria-hidden="true" tabindex="-1"></a>and falsifiable* rather than merely narrative.</span>
+<span id="cb1-279"><a href="#cb1-279" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-280"><a href="#cb1-280" aria-hidden="true" tabindex="-1"></a>::: {.callout-note collapse="true"}</span>
+<span id="cb1-281"><a href="#cb1-281" aria-hidden="true" tabindex="-1"></a><span class="fu">## React/recharts version (not compatible with the OJS runtime)</span></span>
+<span id="cb1-282"><a href="#cb1-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-283"><a href="#cb1-283" aria-hidden="true" tabindex="-1"></a>The full React component (<span class="in">`PlantImmuneTrafficDashboard`</span>) with recharts</span>
+<span id="cb1-284"><a href="#cb1-284" aria-hidden="true" tabindex="-1"></a>visualisations is preserved in the project history for reference. To enable it,</span>
+<span id="cb1-285"><a href="#cb1-285" aria-hidden="true" tabindex="-1"></a>either (a) host it as a standalone React app and embed via <span class="in">`&lt;iframe&gt;`</span>, or</span>
+<span id="cb1-286"><a href="#cb1-286" aria-hidden="true" tabindex="-1"></a>(b) move to a Shiny app (<span class="in">`shiny/immu_simu/`</span>) with the same simulation logic.</span>
+<span id="cb1-287"><a href="#cb1-287" aria-hidden="true" tabindex="-1"></a>:::</span>
+</code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/MintyHybrid/project-hail-mary/edit/main/notebooks/09_ap4_trafficking.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/MintyHybrid/project-hail-mary/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>

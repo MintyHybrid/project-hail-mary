@@ -1,0 +1,1963 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.9.38">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Christina Muedsam">
+<meta name="dcterms.date" content="2026-07-13">
+
+<title>4&nbsp; Protein Motif Analysis – DNAzyme-like Motifs, Horizontal Gene Transfer, and Short Linear Motif Conservation in Potyviridae</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+/* CSS for citations */
+div.csl-bib-body { }
+div.csl-entry {
+  clear: both;
+}
+.hanging-indent div.csl-entry {
+  margin-left:2em;
+  text-indent:-2em;
+}
+div.csl-left-margin {
+  min-width:2em;
+  float:left;
+}
+div.csl-right-inline {
+  margin-left:2em;
+  padding-left:1em;
+}
+div.csl-indent {
+  margin-left: 2em;
+}</style>
+
+
+<script src="../site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="../site_libs/quarto-nav/headroom.min.js"></script>
+<script src="../site_libs/clipboard/clipboard.min.js"></script>
+<script src="../site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="../site_libs/quarto-search/fuse.min.js"></script>
+<script src="../site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="../">
+<link href="../notebooks/05_potyvirus_motifs.html" rel="next">
+<link href="../notebooks/03_codon_dnazyme.html" rel="prev">
+<script src="../site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="../site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="../site_libs/quarto-html/popper.min.js"></script>
+<script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="../site_libs/quarto-html/anchor.min.js"></script>
+<link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-dark-0a6b7249c26820e032cb0bd839ff02b1.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-15634bcf2e68342d4ad2dfa704d543f6.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<script src="../site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-dark-acff971833d9769290026d534105daaa.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
+<link href="../site_libs/bootstrap/bootstrap-9e3e5b9121e68b3f077afb32f2c64d95.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "sidebar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "start",
+  "type": "textbox",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+<link href="../site_libs/htmltools-fill-0.5.9/fill.css" rel="stylesheet">
+
+<script src="../site_libs/htmlwidgets-1.6.4/htmlwidgets.js"></script>
+
+<link href="../site_libs/datatables-css-0.0.0/datatables-crosstalk.css" rel="stylesheet">
+
+<script src="../site_libs/datatables-binding-0.34.0/datatables.js"></script>
+
+<script src="../site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+
+<link href="../site_libs/dt-core-1.13.6/css/jquery.dataTables.min.css" rel="stylesheet">
+
+<link href="../site_libs/dt-core-1.13.6/css/jquery.dataTables.extra.css" rel="stylesheet">
+
+<script src="../site_libs/dt-core-1.13.6/js/jquery.dataTables.min.js"></script>
+
+<link href="../site_libs/nouislider-7.0.10/jquery.nouislider.min.css" rel="stylesheet">
+
+<script src="../site_libs/nouislider-7.0.10/jquery.nouislider.min.js"></script>
+
+<link href="../site_libs/selectize-0.12.0/selectize.bootstrap3.css" rel="stylesheet">
+
+<script src="../site_libs/selectize-0.12.0/selectize.min.js"></script>
+
+<link href="../site_libs/crosstalk-1.2.2/css/crosstalk.min.css" rel="stylesheet">
+
+<script src="../site_libs/crosstalk-1.2.2/js/crosstalk.min.js"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+    const toggleBodyColorMode = (bsSheetEl) => {
+      const mode = bsSheetEl.getAttribute("data-mode");
+      const bodyEl = window.document.querySelector("body");
+      if (mode === "dark") {
+        bodyEl.classList.add("quarto-dark");
+        bodyEl.classList.remove("quarto-light");
+      } else {
+        bodyEl.classList.add("quarto-light");
+        bodyEl.classList.remove("quarto-dark");
+      }
+    }
+    const toggleBodyColorPrimary = () => {
+      const bsSheetEl = window.document.querySelector("link#quarto-bootstrap:not([rel=disabled-stylesheet])");
+      if (bsSheetEl) {
+        toggleBodyColorMode(bsSheetEl);
+      }
+    }
+    const setColorSchemeToggle = (alternate) => {
+      const toggles = window.document.querySelectorAll('.quarto-color-scheme-toggle');
+      for (let i=0; i < toggles.length; i++) {
+        const toggle = toggles[i];
+        if (toggle) {
+          if (alternate) {
+            toggle.classList.add("alternate");
+          } else {
+            toggle.classList.remove("alternate");
+          }
+        }
+      }
+    };
+    const toggleColorMode = (alternate) => {
+      // Switch the stylesheets
+      const primaryStylesheets = window.document.querySelectorAll('link.quarto-color-scheme:not(.quarto-color-alternate)');
+      const alternateStylesheets = window.document.querySelectorAll('link.quarto-color-scheme.quarto-color-alternate');
+      manageTransitions('#quarto-margin-sidebar .nav-link', false);
+      if (alternate) {
+        // note: dark is layered on light, we don't disable primary!
+        enableStylesheet(alternateStylesheets);
+        for (const sheetNode of alternateStylesheets) {
+          if (sheetNode.id === "quarto-bootstrap") {
+            toggleBodyColorMode(sheetNode);
+          }
+        }
+      } else {
+        disableStylesheet(alternateStylesheets);
+        enableStylesheet(primaryStylesheets)
+        toggleBodyColorPrimary();
+      }
+      manageTransitions('#quarto-margin-sidebar .nav-link', true);
+      // Switch the toggles
+      setColorSchemeToggle(alternate)
+      // Hack to workaround the fact that safari doesn't
+      // properly recolor the scrollbar when toggling (#1455)
+      if (navigator.userAgent.indexOf('Safari') > 0 && navigator.userAgent.indexOf('Chrome') == -1) {
+        manageTransitions("body", false);
+        window.scrollTo(0, 1);
+        setTimeout(() => {
+          window.scrollTo(0, 0);
+          manageTransitions("body", true);
+        }, 40);
+      }
+    }
+    const disableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        stylesheet.rel = 'disabled-stylesheet';
+      }
+    }
+    const enableStylesheet = (stylesheets) => {
+      for (let i=0; i < stylesheets.length; i++) {
+        const stylesheet = stylesheets[i];
+        if(stylesheet.rel !== 'stylesheet') { // for Chrome, which will still FOUC without this check
+          stylesheet.rel = 'stylesheet';
+        }
+      }
+    }
+    const manageTransitions = (selector, allowTransitions) => {
+      const els = window.document.querySelectorAll(selector);
+      for (let i=0; i < els.length; i++) {
+        const el = els[i];
+        if (allowTransitions) {
+          el.classList.remove('notransition');
+        } else {
+          el.classList.add('notransition');
+        }
+      }
+    }
+    const isFileUrl = () => {
+      return window.location.protocol === 'file:';
+    }
+    const hasAlternateSentinel = () => {
+      let styleSentinel = getColorSchemeSentinel();
+      if (styleSentinel !== null) {
+        return styleSentinel === "alternate";
+      } else {
+        return false;
+      }
+    }
+    const setStyleSentinel = (alternate) => {
+      const value = alternate ? "alternate" : "default";
+      if (!isFileUrl()) {
+        window.localStorage.setItem("quarto-color-scheme", value);
+      } else {
+        localAlternateSentinel = value;
+      }
+    }
+    const getColorSchemeSentinel = () => {
+      if (!isFileUrl()) {
+        const storageValue = window.localStorage.getItem("quarto-color-scheme");
+        return storageValue != null ? storageValue : localAlternateSentinel;
+      } else {
+        return localAlternateSentinel;
+      }
+    }
+    const toggleGiscusIfUsed = (isAlternate, darkModeDefault) => {
+      const baseTheme = document.querySelector('#giscus-base-theme')?.value ?? 'light';
+      const alternateTheme = document.querySelector('#giscus-alt-theme')?.value ?? 'dark';
+      let newTheme = '';
+      if(authorPrefersDark) {
+        newTheme = isAlternate ? baseTheme : alternateTheme;
+      } else {
+        newTheme = isAlternate ? alternateTheme : baseTheme;
+      }
+      const changeGiscusTheme = () => {
+        // From: https://github.com/giscus/giscus/issues/336
+        const sendMessage = (message) => {
+          const iframe = document.querySelector('iframe.giscus-frame');
+          if (!iframe) return;
+          iframe.contentWindow.postMessage({ giscus: message }, 'https://giscus.app');
+        }
+        sendMessage({
+          setConfig: {
+            theme: newTheme
+          }
+        });
+      }
+      const isGiscussLoaded = window.document.querySelector('iframe.giscus-frame') !== null;
+      if (isGiscussLoaded) {
+        changeGiscusTheme();
+      }
+    };
+    const authorPrefersDark = false;
+    const darkModeDefault = authorPrefersDark;
+      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
+    let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
+    // Dark / light mode switch
+    window.quartoToggleColorScheme = () => {
+      // Read the current dark / light value
+      let toAlternate = !hasAlternateSentinel();
+      toggleColorMode(toAlternate);
+      setStyleSentinel(toAlternate);
+      toggleGiscusIfUsed(toAlternate, darkModeDefault);
+      window.dispatchEvent(new Event('resize'));
+    };
+    // Switch to dark mode if need be
+    if (hasAlternateSentinel()) {
+      toggleColorMode(true);
+    } else {
+      toggleColorMode(false);
+    }
+  </script>
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/03_codon_dnazyme.html">Part II — Codon Usage &amp; Motif Architecture</a></li><li class="breadcrumb-item"><a href="../notebooks/04_protein_motifs.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Protein Motif Analysis</span></a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
+        <i class="bi bi-search"></i>
+      </button>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation floating overflow-auto">
+    <div class="pt-lg-2 mt-2 text-left sidebar-header">
+    <div class="sidebar-title mb-0 py-0">
+      <a href="../">DNAzyme-like Motifs, Horizontal Gene Transfer, and Short Linear Motif Conservation in Potyviridae</a> 
+        <div class="sidebar-tools-main">
+    <a href="https://github.com/MintyHybrid/project-hail-mary" title="Source Code" class="quarto-navigation-tool px-1" aria-label="Source Code"><i class="bi bi-github"></i></a>
+  <a href="" class="quarto-color-scheme-toggle quarto-navigation-tool  px-1" onclick="window.quartoToggleColorScheme(); return false;" title="Toggle dark mode"><i class="bi"></i></a>
+</div>
+    </div>
+      </div>
+        <div class="mt-2 flex-shrink-0 align-items-center">
+        <div class="sidebar-search">
+        <div id="quarto-search" class="" title="Search"></div>
+        </div>
+        </div>
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Project Hail Mary</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part I — The Discovery</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/01_discovery.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">1</span>&nbsp; <span class="chapter-title">The DNAzyme-like Motif Discovery</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/02_phylogenetics.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">2</span>&nbsp; <span class="chapter-title">Potyvirus Phylogenetics and CI Region Inference</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part II — Codon Usage &amp; Motif Architecture</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-2" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-2" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/03_codon_dnazyme.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Codon Usage and DNAzyme-like Motif Architecture</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/04_protein_motifs.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Protein Motif Analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/05_potyvirus_motifs.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Potyvirus Protein Motifs and Interaction Networks</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part III — Evolutionary Mechanisms</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-3" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-3" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/06_hgt.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">6</span>&nbsp; <span class="chapter-title">Horizontal Gene Transfer Analysis</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/07_networks.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">7</span>&nbsp; <span class="chapter-title">Host-Virus Interaction Networks</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true">
+ <span class="menu-text">Part IV — Host Immunity</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-4" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-4" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/08_immu_simmu.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">8</span>&nbsp; <span class="chapter-title">Plant Immune Trafficking Observatory</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/09_ap4_trafficking.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">9</span>&nbsp; <span class="chapter-title">AP-4 Trafficking and the Tyrosine-Motif Hypothesis</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true">
+ <span class="menu-text">Appendix</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-5" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-5" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../notebooks/A1_data_sources.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">10</span>&nbsp; <span class="chapter-title">Appendix: Data Sources and Accessions</span></span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="../references.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Complete Bibliography</span></span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">Table of contents</h2>
+   
+  <ul>
+  <li><a href="#overview" id="toc-overview" class="nav-link active" data-scroll-target="#overview"><span class="header-section-number">4.1</span> Overview</a></li>
+  <li><a href="#ci-motif-region" id="toc-ci-motif-region" class="nav-link" data-scroll-target="#ci-motif-region"><span class="header-section-number">4.2</span> CI motif region</a></li>
+  <li><a href="#isolate-metadata-and-genus-assignment" id="toc-isolate-metadata-and-genus-assignment" class="nav-link" data-scroll-target="#isolate-metadata-and-genus-assignment"><span class="header-section-number">4.3</span> Isolate metadata and genus assignment</a></li>
+  <li><a href="#elm-search-results-gget" id="toc-elm-search-results-gget" class="nav-link" data-scroll-target="#elm-search-results-gget"><span class="header-section-number">4.4</span> ELM search results (gget)</a>
+  <ul class="collapse">
+  <li><a href="#what-the-motifs-are-reference-table" id="toc-what-the-motifs-are-reference-table" class="nav-link" data-scroll-target="#what-the-motifs-are-reference-table"><span class="header-section-number">4.4.1</span> What the motifs are — reference table</a></li>
+  </ul></li>
+  <li><a href="#motif-landscape-across-isolates" id="toc-motif-landscape-across-isolates" class="nav-link" data-scroll-target="#motif-landscape-across-isolates"><span class="header-section-number">4.5</span> Motif landscape across isolates</a></li>
+  <li><a href="#genus-characteristic-motifs" id="toc-genus-characteristic-motifs" class="nav-link" data-scroll-target="#genus-characteristic-motifs"><span class="header-section-number">4.6</span> Genus-characteristic motifs</a></li>
+  <li><a href="#notes" id="toc-notes" class="nav-link" data-scroll-target="#notes"><span class="header-section-number">4.7</span> Notes</a></li>
+  </ul>
+<div class="toc-actions"><ul><li><a href="https://github.com/MintyHybrid/project-hail-mary/edit/main/notebooks/04_protein_motifs.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/MintyHybrid/project-hail-mary/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="../notebooks/03_codon_dnazyme.html">Part II — Codon Usage &amp; Motif Architecture</a></li><li class="breadcrumb-item"><a href="../notebooks/04_protein_motifs.html"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Protein Motif Analysis</span></a></li></ol></nav>
+<div class="quarto-title">
+<div class="quarto-title-block"><div><h1 class="title"><span class="chapter-number">4</span>&nbsp; <span class="chapter-title">Protein Motif Analysis</span></h1><button type="button" class="btn code-tools-button dropdown-toggle" id="quarto-code-tools-menu" data-bs-toggle="dropdown" aria-expanded="false"><i class="bi"></i> Code</button><ul class="dropdown-menu dropdown-menu-end" aria-labelelledby="quarto-code-tools-menu"><li><a id="quarto-show-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Show All Code</a></li><li><a id="quarto-hide-all-code" class="dropdown-item" href="javascript:void(0)" role="button">Hide All Code</a></li><li><hr class="dropdown-divider"></li><li><a id="quarto-view-source" class="dropdown-item" href="javascript:void(0)" role="button">View Source</a></li></ul></div></div>
+<p class="subtitle lead">Eukaryotic Linear Motifs in Potyviridae CI helicase — gget/ELM search and genus-specificity</p>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Christina Muedsam </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">July 13, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="overview" class="level2" data-number="4.1">
+<h2 data-number="4.1" class="anchored" data-anchor-id="overview"><span class="header-section-number">4.1</span> Overview</h2>
+<p>The cylindrical inclusion (CI) helicase carries a short conserved region that, across Potyviridae, overlaps a number of <strong>eukaryotic linear motifs (ELMs)</strong> — short functional peptide motifs catalogued in the ELM database <span class="citation" data-cites="elm2024">(<a href="../references.html#ref-elm2024" role="doc-biblioref"><span class="nocase">Kumar et al.</span> 2024</a>)</span>. Here I extract the CI motif-flanking region from each isolate in the ICTV Potyviridae alignment <span class="citation" data-cites="inouenagata2022">(<a href="../references.html#ref-inouenagata2022" role="doc-biblioref">Inoue-Nagata et al. 2022</a>)</span>, search it against ELM, and ask which motifs are <strong>characteristic of particular genera</strong>.</p>
+<div class="callout callout-style-simple callout-note">
+<div class="callout-body d-flex">
+<div class="callout-icon-container">
+<i class="callout-icon"></i>
+</div>
+<div class="callout-body-container">
+<p><strong>Why a different sequence set here.</strong> Chapters 1–3 used my <strong>custom collection of the 16 potyvirus isolates</strong> that carry the DNAzyme catalytic core. From this chapter on I switch to the <strong>premade ICTV Potyviridae alignment</strong> <span class="citation" data-cites="inouenagata2022">(<a href="../references.html#ref-inouenagata2022" role="doc-biblioref">Inoue-Nagata et al. 2022</a>)</span> to extend the motif analysis to the <strong>whole family</strong>. That alignment does <strong>not</strong> contain the 16 core-carrying isolates — which is fine here, because I first <strong>confirmed the translated catalytic-core region is preserved in ICTV members</strong>, and the question now is about the <strong>CI protein and its sorting motifs across Potyviridae</strong>, not about the DNAzyme core per se.</p>
+</div>
+</div>
+</div>
+<p>The ELM search is run with the <a href="https://github.com/pachterlab/gget"><code>gget</code></a> Python package (<code>gget elm</code>), which reproduces the ELM webserver’s two search modes: an ortholog (DIAMOND) search against ELM-annotated proteins and a direct regex search. It runs in a self-contained <code>pixi</code> environment inside WSL; the per-isolate results are written to <code>data/elm_gget/</code> by <code>scripts/prep_elm_regions.R</code> → <code>scripts/gget_elm_run.py</code> → <code>scripts/viz_elm_motifs.R</code>. This chapter reads those results.</p>
+</section>
+<section id="ci-motif-region" class="level2" data-number="4.2">
+<h2 data-number="4.2" class="anchored" data-anchor-id="ci-motif-region"><span class="header-section-number">4.2</span> CI motif region</h2>
+<p>I anchor the CI region on the alignment consensus at the conserved <code>VASYN</code> motif (allowing one mismatch) and take a ±20 aa window. The alignment is read from the <strong>local</strong> ICTV file (<code>data/OPSR.Poty.Fig3.v16_align.txt</code>).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>protaln <span class="ot">&lt;-</span> <span class="fu">readAAStringSet</span>(<span class="fu">file.path</span>(data_dir, <span class="st">"OPSR.Poty.Fig3.v16_align.txt"</span>),</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>                           <span class="at">format =</span> <span class="st">"fasta"</span>)</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>cons    <span class="ot">&lt;-</span> <span class="fu">consensusString</span>(protaln, <span class="at">ambiguityMap =</span> <span class="st">"X"</span>)</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>m       <span class="ot">&lt;-</span> <span class="fu">matchPattern</span>(<span class="st">"VASYN"</span>, cons, <span class="at">max.mismatch =</span> <span class="dv">1</span>)</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>anchora <span class="ot">&lt;-</span> <span class="fu">start</span>(m)[<span class="dv">1</span>]</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>anchorb <span class="ot">&lt;-</span> <span class="fu">end</span>(m)[<span class="dv">1</span>]</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>region  <span class="ot">&lt;-</span> <span class="fu">subseq</span>(protaln, anchora <span class="sc">-</span> <span class="dv">20</span>, anchorb <span class="sc">+</span> <span class="dv">20</span>)   <span class="co"># aligned window</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"VASYN anchor at consensus %d-%d; region columns %d-%d (%d isolates)</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>            anchora, anchorb, anchora <span class="sc">-</span> <span class="dv">20</span>, anchorb <span class="sc">+</span> <span class="dv">20</span>, <span class="fu">length</span>(region)))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>VASYN anchor at consensus 3698-3702; region columns 3678-3722 (208 isolates)</code></pre>
+</div>
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>region</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>AAStringSet object of length 208:
+      width seq                                             names               
+  [1]    45 ERVQT---YAK---GGCIVFCSTQKETEESAKALKA---SGVIAL   CeLV_MH932227
+  [2]    45 GDLLD---ATKH--DSVLVFLKGRNECVKAAHAWNSAVIGEKKAF   OMV_AJ306719_AJ30...
+  [3]    45 GDLLD---ISKH--DTALVFLAGRPECIKAANAWNASVTGEKRAF   BaYMV_AJ132269_AJ...
+  [4]    45 GDILD---LTRH--DTVLVFLSGRPECVKAATLWNASITGDKRAF   WSSMV_MH645042_MH...
+  [5]    45 DDLLD---VTKY--DTVLVFLAGRPECVKAANAWNASITGEKRAF   WYMV_D86635_D86634
+  ...   ... ...
+[204]    45 GANSD---VLAKG-SNILVYVASYNEVDTLSKMLTD---KAYRVT   MVCV_MZ555807
+[205]    45 GSNID---VISKG-DNILVYVASYNEVDTLSRGLLD---KGFKVT   PKgMV_ON428226
+[206]    45 GVNYD---VITKG-DNILVYVASYNEVDMLSKLLLE---KGHKVT   JVT_KT222674
+[207]    45 GCNSD---ILKHG-VNVLVYVASYNEVDTLSKLLTD---RSFKVS   PPV_D13751
+[208]    45 GANCD---ITSYG-HNILVYVSSYNEVDSLSKMLLD---KSYKVT   RanMMV_OL742438</code></pre>
+</div>
+</div>
+</section>
+<section id="isolate-metadata-and-genus-assignment" class="level2" data-number="4.3">
+<h2 data-number="4.3" class="anchored" data-anchor-id="isolate-metadata-and-genus-assignment"><span class="header-section-number">4.3</span> Isolate metadata and genus assignment</h2>
+<p>Each sequence name encodes a virus abbreviation and one or more accessions. Genus is assigned by joining to the ICTV VMR table <span class="citation" data-cites="ictvvmr2024">(<a href="../references.html#ref-ictvvmr2024" role="doc-biblioref">International Committee on Taxonomy of Viruses (ICTV) 2024</a>)</span> — first by GENBANK accession, then, for isolates that are not VMR species exemplars, by matching the virus abbreviation to the VMR <em>“Virus name abbreviation(s)”</em> column. This two-stage join (implemented in <code>scripts/prep_elm_regions.R</code>) leaves <strong>no</strong> isolate unclassified.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="fu">file.path</span>(elm_dir, <span class="st">"region_meta.tsv"</span>),</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>meta <span class="sc">%&gt;%</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(genus, genus_source, <span class="at">name =</span> <span class="st">"n_isolates"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n_isolates)) <span class="sc">%&gt;%</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Isolates per genus and how genus was assigned."</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Isolates per genus and how genus was assigned.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">genus</th>
+<th style="text-align: left;">genus_source</th>
+<th style="text-align: right;">n_isolates</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Potyvirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">145</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Potyvirus</td>
+<td style="text-align: left;">abbreviation</td>
+<td style="text-align: right;">21</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bymovirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ipomovirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Macluravirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Tritimovirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Poacevirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Rymovirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Arepavirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Macluravirus</td>
+<td style="text-align: left;">abbreviation</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Phragmivirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Roymovirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Bevemovirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Brambyvirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Celavirus</td>
+<td style="text-align: left;">accession</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Ipomovirus</td>
+<td style="text-align: left;">abbreviation</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="elm-search-results-gget" class="level2" data-number="4.4">
+<h2 data-number="4.4" class="anchored" data-anchor-id="elm-search-results-gget"><span class="header-section-number">4.4</span> ELM search results (gget)</h2>
+<p><code>gget elm</code> was run per isolate in ortholog + regex mode. As expected for viral CI proteins, the <strong>ortholog</strong> search returns nothing (ELM’s ortholog set is eukaryotic), so the <strong>regex</strong> motif matches carry the signal — the same content the ELM webserver returns for a direct sequence query.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>regex_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(elm_dir, <span class="st">"elm_regex.tsv"</span>)</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>have_gget  <span class="ot">&lt;-</span> <span class="fu">file.exists</span>(regex_path)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (have_gget) {</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  elm <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(regex_path, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">left_join</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(meta, <span class="at">query =</span> name, virus_abbr, genus),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>                     <span class="at">by =</span> <span class="st">"query"</span>)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"%d motif hits across %d isolates and %d ELM motif classes</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>              <span class="fu">nrow</span>(elm), dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(elm<span class="sc">$</span>query),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>              dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(elm<span class="sc">$</span>ELMIdentifier)))</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  elm <span class="sc">%&gt;%</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">count</span>(ELMType, <span class="at">name =</span> <span class="st">"hits"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">arrange</span>(dplyr<span class="sc">::</span><span class="fu">desc</span>(hits)) <span class="sc">%&gt;%</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"ELM hits by motif type."</span>)</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"data/elm_gget/elm_regex.tsv not found. "</span>,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>          <span class="st">"Regenerate with scripts/prep_elm_regions.R -&gt; gget_elm_run.py."</span>)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>3989 motif hits across 208 isolates and 96 ELM motif classes</code></pre>
+</div>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>ELM hits by motif type.</caption>
+<thead>
+<tr class="header">
+<th style="text-align: left;">ELMType</th>
+<th style="text-align: right;">hits</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">LIG</td>
+<td style="text-align: right;">2209</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOD</td>
+<td style="text-align: right;">685</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">TRG</td>
+<td style="text-align: right;">536</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">DOC</td>
+<td style="text-align: right;">258</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">CLV</td>
+<td style="text-align: right;">212</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">NA</td>
+<td style="text-align: right;">76</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">DEG</td>
+<td style="text-align: right;">13</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<section id="what-the-motifs-are-reference-table" class="level3" data-number="4.4.1">
+<h3 data-number="4.4.1" class="anchored" data-anchor-id="what-the-motifs-are-reference-table"><span class="header-section-number">4.4.1</span> What the motifs are — reference table</h3>
+<p>Throughout this chapter motifs are labelled by their <strong>ELM identifier</strong> (e.g. <code>LIG_SH2_STAT5</code>), which is compact but opaque. The table below unpacks every detected class: its <strong>functional-site name</strong>, ELM <strong>type</strong> (CLV cleavage, DEG degron, DOC docking, LIG ligand-binding, MOD post-translational modification, TRG targeting), the <strong>canonical regular-expression pattern</strong> that defines the motif, a brief functional <strong>description</strong>, and the number of CI-region isolates carrying it. Sort by <em>n_isolates</em> for the near-universal motifs; filter by <em>Type</em> or search the description for a functional class of interest. Each identifier links to its ELM database entry.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>elm_ref <span class="ot">&lt;-</span> elm <span class="sc">%&gt;%</span></span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(ELMIdentifier) <span class="sc">%&gt;%</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Functional site</span><span class="st">`</span> <span class="ot">=</span> dplyr<span class="sc">::</span><span class="fu">first</span>(FunctionalSiteName),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="at">Type              =</span> dplyr<span class="sc">::</span><span class="fu">first</span>(ELMType),</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Canonical regex</span><span class="st">`</span> <span class="ot">=</span> dplyr<span class="sc">::</span><span class="fu">first</span>(Regex),</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="at">Description       =</span> dplyr<span class="sc">::</span><span class="fu">first</span>(Description),</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_isolates        =</span> dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(query),</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(dplyr<span class="sc">::</span><span class="fu">desc</span>(n_isolates)) <span class="sc">%&gt;%</span></span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">ELMIdentifier =</span> <span class="fu">sprintf</span>(</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>    <span class="st">'&lt;a href="http://elm.eu.org/elms/%s" target="_blank"&gt;%s&lt;/a&gt;'</span>,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>    ELMIdentifier, ELMIdentifier))</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a>  elm_ref, <span class="at">rownames =</span> <span class="cn">FALSE</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>, <span class="at">filter =</span> <span class="st">"top"</span>,</span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">pageLength =</span> <span class="dv">12</span>, <span class="at">scrollX =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>                 <span class="at">columnDefs =</span> <span class="fu">list</span>(<span class="fu">list</span>(<span class="at">width =</span> <span class="st">"320px"</span>, <span class="at">targets =</span> <span class="dv">4</span>))),</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="fu">paste</span>(<span class="st">"All ELM linear-motif classes detected in the CI motif-flanking"</span>,</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"region, with functional-site name, type, canonical regex,"</span>,</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"description and isolate count. Identifiers link to the ELM"</span>,</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"database."</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="datatables html-widget html-fill-item" id="htmlwidget-692d99bb933587f879b2" style="width:100%;height:auto;"></div>
+<script type="application/json" data-for="htmlwidget-692d99bb933587f879b2">{"x":{"filter":"top","vertical":false,"filterHTML":"<tr>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"character\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n  <\/td>\n  <td data-type=\"integer\" style=\"vertical-align: top;\">\n    <div class=\"form-group has-feedback\" style=\"margin-bottom: auto;\">\n      <input type=\"search\" placeholder=\"All\" class=\"form-control\" style=\"width: 100%;\"/>\n      <span class=\"glyphicon glyphicon-remove-circle form-control-feedback\"><\/span>\n    <\/div>\n    <div style=\"display: none;position: absolute;width: 200px;opacity: 1\">\n      <div data-min=\"1\" data-max=\"187\"><\/div>\n      <span style=\"float: left;\"><\/span>\n      <span style=\"float: right;\"><\/span>\n    <\/div>\n  <\/td>\n<\/tr>","caption":"<caption>All ELM linear-motif classes detected in the CI motif-flanking region, with functional-site name, type, canonical regex, description and isolate count. Identifiers link to the ELM database.<\/caption>","data":[["<a href=\"http://elm.eu.org/elms/LIG_LIR_Nem_3\" target=\"_blank\">LIG_LIR_Nem_3<\/a>","<a href=\"http://elm.eu.org/elms/TRG_ENDOCYTIC_2\" target=\"_blank\">TRG_ENDOCYTIC_2<\/a>","<a href=\"http://elm.eu.org/elms/LIG_LIR_Gen_1\" target=\"_blank\">LIG_LIR_Gen_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_SH2_SFK_2\" target=\"_blank\">LIG_SH2_SFK_2<\/a>","<a href=\"http://elm.eu.org/elms/LIG_SH2_STAT5\" target=\"_blank\">LIG_SH2_STAT5<\/a>","<a href=\"http://elm.eu.org/elms/LIG_SH2_NCK_1\" target=\"_blank\">LIG_SH2_NCK_1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_CK2_1\" target=\"_blank\">MOD_CK2_1<\/a>","<a href=\"http://elm.eu.org/elms/CLV_PCSK_SKI1_1\" target=\"_blank\">CLV_PCSK_SKI1_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_NRBOX\" target=\"_blank\">LIG_NRBOX<\/a>","<a href=\"http://elm.eu.org/elms/LIG_WD40_WDR5_VDV_2\" target=\"_blank\">LIG_WD40_WDR5_VDV_2<\/a>","<a href=\"http://elm.eu.org/elms/DOC_MAPK_MEF2A_6\" target=\"_blank\">DOC_MAPK_MEF2A_6<\/a>","<a href=\"http://elm.eu.org/elms/TRG_Pf-PMV_PEXEL_1\" target=\"_blank\">TRG_Pf-PMV_PEXEL_1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_GSK3_1\" target=\"_blank\">MOD_GSK3_1<\/a>","<a href=\"http://elm.eu.org/elms/CLV_C14_Caspase3-7\" target=\"_blank\">CLV_C14_Caspase3-7<\/a>","<a href=\"http://elm.eu.org/elms/DOC_CYCLIN_RevRxL_6\" target=\"_blank\">DOC_CYCLIN_RevRxL_6<\/a>","<a href=\"http://elm.eu.org/elms/MOD_Plk_1\" target=\"_blank\">MOD_Plk_1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_Plk_4\" target=\"_blank\">MOD_Plk_4<\/a>","<a href=\"http://elm.eu.org/elms/MOD_CK1_1\" target=\"_blank\">MOD_CK1_1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_GlcNHglycan\" target=\"_blank\">MOD_GlcNHglycan<\/a>","<a href=\"http://elm.eu.org/elms/DOC_CYCLIN_RxL_1\" target=\"_blank\">DOC_CYCLIN_RxL_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_eIF4E_1\" target=\"_blank\">LIG_eIF4E_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_14-3-3_CanoR_1\" target=\"_blank\">LIG_14-3-3_CanoR_1<\/a>","<a href=\"http://elm.eu.org/elms/DEG_Nend_UBRbox_1\" target=\"_blank\">DEG_Nend_UBRbox_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_FHA_2\" target=\"_blank\">LIG_FHA_2<\/a>","<a href=\"http://elm.eu.org/elms/DOC_MAPK_gen_1\" target=\"_blank\">DOC_MAPK_gen_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_FHA_1\" target=\"_blank\">LIG_FHA_1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_N-GLC_1\" target=\"_blank\">MOD_N-GLC_1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_NEK2_2\" target=\"_blank\">MOD_NEK2_2<\/a>","<a href=\"http://elm.eu.org/elms/MOD_PIKK_1\" target=\"_blank\">MOD_PIKK_1<\/a>","<a href=\"http://elm.eu.org/elms/TRG_DiLeu_BaEn_1\" target=\"_blank\">TRG_DiLeu_BaEn_1<\/a>","<a href=\"http://elm.eu.org/elms/CLV_NRD_NRD_1\" target=\"_blank\">CLV_NRD_NRD_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_SUMO_SIM_anti_2\" target=\"_blank\">LIG_SUMO_SIM_anti_2<\/a>","<a href=\"http://elm.eu.org/elms/LIG_BIR_II_1\" target=\"_blank\">LIG_BIR_II_1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_SUMO_rev_2\" target=\"_blank\">MOD_SUMO_rev_2<\/a>","<a href=\"http://elm.eu.org/elms/DOC_PP1_RVXF_1\" target=\"_blank\">DOC_PP1_RVXF_1<\/a>","<a href=\"http://elm.eu.org/elms/DOC_USP7_UBL2_3\" target=\"_blank\">DOC_USP7_UBL2_3<\/a>","<a href=\"http://elm.eu.org/elms/LIG_14-3-3_CterR_2\" target=\"_blank\">LIG_14-3-3_CterR_2<\/a>","<a href=\"http://elm.eu.org/elms/LIG_PTB_Apo_2\" target=\"_blank\">LIG_PTB_Apo_2<\/a>","<a href=\"http://elm.eu.org/elms/TRG_DiLeu_BaLyEn_6\" target=\"_blank\">TRG_DiLeu_BaLyEn_6<\/a>","<a href=\"http://elm.eu.org/elms/CLV_PCSK_KEX2_1\" target=\"_blank\">CLV_PCSK_KEX2_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_UBA3_1\" target=\"_blank\">LIG_UBA3_1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_Plk_2-3\" target=\"_blank\">MOD_Plk_2-3<\/a>","<a href=\"http://elm.eu.org/elms/DEG_Nend_UBRbox_3\" target=\"_blank\">DEG_Nend_UBRbox_3<\/a>","<a href=\"http://elm.eu.org/elms/DOC_USP7_MATH_1\" target=\"_blank\">DOC_USP7_MATH_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_SH2_CRK\" target=\"_blank\">LIG_SH2_CRK<\/a>","<a href=\"http://elm.eu.org/elms/LIG_SUMO_SIM_par_1\" target=\"_blank\">LIG_SUMO_SIM_par_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_WRC_WIRS_1\" target=\"_blank\">LIG_WRC_WIRS_1<\/a>","<a href=\"http://elm.eu.org/elms/TRG_ER_diLys_1\" target=\"_blank\">TRG_ER_diLys_1<\/a>","<a href=\"http://elm.eu.org/elms/CLV_PCSK_PC1ET2_1\" target=\"_blank\">CLV_PCSK_PC1ET2_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_WD40_WDR5_VDV_1\" target=\"_blank\">LIG_WD40_WDR5_VDV_1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_N-GLC_2\" target=\"_blank\">MOD_N-GLC_2<\/a>","<a href=\"http://elm.eu.org/elms/DOC_PP2A_B56_1\" target=\"_blank\">DOC_PP2A_B56_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_Pex14_2\" target=\"_blank\">LIG_Pex14_2<\/a>","<a href=\"http://elm.eu.org/elms/MOD_Cter_Amidation\" target=\"_blank\">MOD_Cter_Amidation<\/a>","<a href=\"http://elm.eu.org/elms/DEG_Nend_UBRbox_2\" target=\"_blank\">DEG_Nend_UBRbox_2<\/a>","<a href=\"http://elm.eu.org/elms/LIG_Integrin_RGD_1\" target=\"_blank\">LIG_Integrin_RGD_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_PDZ_Class_1\" target=\"_blank\">LIG_PDZ_Class_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_PTB_Phospho_1\" target=\"_blank\">LIG_PTB_Phospho_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_SH2_STAP1\" target=\"_blank\">LIG_SH2_STAP1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_NEK2_1\" target=\"_blank\">MOD_NEK2_1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_PKA_2\" target=\"_blank\">MOD_PKA_2<\/a>","<a href=\"http://elm.eu.org/elms/DEG_APCC_DBOX_1\" target=\"_blank\">DEG_APCC_DBOX_1<\/a>","<a href=\"http://elm.eu.org/elms/DEG_Nend_UBRbox_4\" target=\"_blank\">DEG_Nend_UBRbox_4<\/a>","<a href=\"http://elm.eu.org/elms/LIG_EH1_1\" target=\"_blank\">LIG_EH1_1<\/a>","<a href=\"http://elm.eu.org/elms/MOD_PKA_1\" target=\"_blank\">MOD_PKA_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_Actin_WH2_2\" target=\"_blank\">LIG_Actin_WH2_2<\/a>","<a href=\"http://elm.eu.org/elms/LIG_Arc_Nlobe_1\" target=\"_blank\">LIG_Arc_Nlobe_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_BRCT_BRCA1_1\" target=\"_blank\">LIG_BRCT_BRCA1_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_SH3_3\" target=\"_blank\">LIG_SH3_3<\/a>","<a href=\"http://elm.eu.org/elms/LIG_TYR_ITIM\" target=\"_blank\">LIG_TYR_ITIM<\/a>","<a href=\"http://elm.eu.org/elms/MOD_NMyristoyl\" target=\"_blank\">MOD_NMyristoyl<\/a>","<a href=\"http://elm.eu.org/elms/MOD_PK_1\" target=\"_blank\">MOD_PK_1<\/a>","<a href=\"http://elm.eu.org/elms/TRG_ER_diArg_1\" target=\"_blank\">TRG_ER_diArg_1<\/a>","<a href=\"http://elm.eu.org/elms/DOC_CYCLIN_yClb1_LxF_4\" target=\"_blank\">DOC_CYCLIN_yClb1_LxF_4<\/a>","<a href=\"http://elm.eu.org/elms/LIG_AP2alpha_2\" target=\"_blank\">LIG_AP2alpha_2<\/a>","<a href=\"http://elm.eu.org/elms/LIG_PDZ_Class_3\" target=\"_blank\">LIG_PDZ_Class_3<\/a>","<a href=\"http://elm.eu.org/elms/LIG_TYR_ITSM\" target=\"_blank\">LIG_TYR_ITSM<\/a>","<a href=\"http://elm.eu.org/elms/CLV_Separin_Metazoa\" target=\"_blank\">CLV_Separin_Metazoa<\/a>","<a href=\"http://elm.eu.org/elms/DEG_APCC_KENBOX_2\" target=\"_blank\">DEG_APCC_KENBOX_2<\/a>","<a href=\"http://elm.eu.org/elms/DEG_Nend_Nbox_1\" target=\"_blank\">DEG_Nend_Nbox_1<\/a>","<a href=\"http://elm.eu.org/elms/DOC_MAPK_NFAT4_5\" target=\"_blank\">DOC_MAPK_NFAT4_5<\/a>","<a href=\"http://elm.eu.org/elms/DOC_SPAK_OSR1_1\" target=\"_blank\">DOC_SPAK_OSR1_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_BIR_III_4\" target=\"_blank\">LIG_BIR_III_4<\/a>","<a href=\"http://elm.eu.org/elms/LIG_HCF-1_HBM_1\" target=\"_blank\">LIG_HCF-1_HBM_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_Integrin_isoDGR_2\" target=\"_blank\">LIG_Integrin_isoDGR_2<\/a>","<a href=\"http://elm.eu.org/elms/LIG_MYND_1\" target=\"_blank\">LIG_MYND_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_PDZ_Class_2\" target=\"_blank\">LIG_PDZ_Class_2<\/a>","<a href=\"http://elm.eu.org/elms/LIG_Pex14_1\" target=\"_blank\">LIG_Pex14_1<\/a>","<a href=\"http://elm.eu.org/elms/LIG_Sin3_3\" target=\"_blank\">LIG_Sin3_3<\/a>","<a href=\"http://elm.eu.org/elms/LIG_TRAF2like_MATH_loPxQ_2\" target=\"_blank\">LIG_TRAF2like_MATH_loPxQ_2<\/a>","<a href=\"http://elm.eu.org/elms/LIG_TRAF4_MATH_1\" target=\"_blank\">LIG_TRAF4_MATH_1<\/a>","<a href=\"http://elm.eu.org/elms/TRG_DiLeu_BaEn_2\" target=\"_blank\">TRG_DiLeu_BaEn_2<\/a>","<a href=\"http://elm.eu.org/elms/TRG_DiLeu_LyEn_5\" target=\"_blank\">TRG_DiLeu_LyEn_5<\/a>","<a href=\"http://elm.eu.org/elms/TRG_NES_CRM1_1\" target=\"_blank\">TRG_NES_CRM1_1<\/a>","<a href=\"http://elm.eu.org/elms/TRG_NESrev_CRM1_2\" target=\"_blank\">TRG_NESrev_CRM1_2<\/a>","<a href=\"http://elm.eu.org/elms/TRG_Oom_RxLR_1\" target=\"_blank\">TRG_Oom_RxLR_1<\/a>"],["Atg8 protein family ligands","Y-based sorting signal","Atg8 protein family ligands","Phosphotyrosine ligands bound by SH2 domains","Phosphotyrosine ligands bound by SH2 domains","Phosphotyrosine ligands bound by SH2 domains","Casein kinase 2 (CK2) Phosphorylation site","PCSK cleavage site","Nuclear receptor box","WDR5 WD40 repeat (blade 5,6)-binding ligand","MAPK docking motifs","Apicomplexan export motif","GSK3 phosphorylation site","Caspase cleavage motif","Cyclin N-terminal Domain Docking Motifs","Polo-like kinase phosphosites","Polo-like kinase phosphosites","Casein kinase 1 (CK1) Phosphorylation site","Glycosaminoglycan attachment site","Cyclin N-terminal Domain Docking Motifs","eIF4E binding motif","14-3-3 binding phosphopeptide motif","N-degron","FHA phosphopeptide ligands","MAPK docking motifs","FHA phosphopeptide ligands","N-glycosylation site","NEK2 phosphorylation site","PIKK phosphorylation site","Adaptin binding Endosome-Lysosome-Basolateral sorting signals","NRD cleavage site","SUMO interaction site","IAP-binding motif (IBM)","Sumoylation site","PP1-docking motif RVXF","USP7 binding motif","14-3-3 binding phosphopeptide motif","PTB ligand","Adaptin binding Endosome-Lysosome-Basolateral sorting signals","PCSK cleavage site","Binding motif for UBA3 adenylation domain","Polo-like kinase phosphosites","N-degron","USP7 binding motif","Phosphotyrosine ligands bound by SH2 domains","SUMO interaction site","WAVE regulatory complex (WRC) binding site motif","di Lysine ER retrieving signal","PCSK cleavage site","WDR5 WD40 repeat (blade 5,6)-binding ligand","N-glycosylation site","PP2A holoenzyme B56-docking site","Pex14 ligand motif","Peptide Amidation Site","N-degron","Integrin RGD-type binding sites","PDZ domain ligands","PTB ligand","Phosphotyrosine ligands bound by SH2 domains","NEK2 phosphorylation site","PKA Phosphorylation site","APCC-binding Destruction motifs","N-degron","eh1 motif","PKA Phosphorylation site","Actin-binding motifs","Arc N-lobe binding ligand","BRCT phosphopeptide ligands","SH3 domain ligands","Immunoreceptor tyrosine-based motif","N-myristoylation site","PK Phosphorylation site","di Arginine retention/retrieving signal","Cyclin N-terminal Domain Docking Motifs","AP2 alpha ligands","PDZ domain ligands","Immunoreceptor tyrosine-based motif","Separase cleavage motif","APCC-binding Destruction motifs","N-degron","MAPK docking motifs","SPAK-OSR1 docking motif","IAP-binding motif (IBM)","HCF-1 binding motif","Integrin RGD-type binding sites","MYND domain binding motif.","PDZ domain ligands","Pex14 ligand motif","SID","TRAF2 group (TRAF1,2,3,5) MATH domain binding motifs","Motif which binds to the MATH domain of the TRAF4 K63 E3 ligase","Adaptin binding Endosome-Lysosome-Basolateral sorting signals","Adaptin binding Endosome-Lysosome-Basolateral sorting signals","NES Nuclear Export Signals","NES Nuclear Export Signals","Oomycete secretory protein processing motif permissive variant"],["LIG","TRG","LIG","LIG","LIG","LIG","MOD","CLV","LIG","LIG","DOC","TRG","MOD","CLV","DOC","MOD","MOD","MOD","MOD","DOC","LIG","LIG",null,"LIG","DOC","LIG","MOD",null,"MOD","TRG","CLV","LIG",null,"MOD","DOC","DOC","LIG","LIG","TRG","CLV","LIG","MOD",null,"DOC","LIG","LIG","LIG","TRG","CLV","LIG","MOD","DOC","LIG",null,null,"LIG","LIG","LIG","LIG","MOD","MOD","DEG","DEG","LIG","MOD","LIG","LIG","LIG","LIG","LIG","MOD","MOD","TRG","DOC","LIG","LIG","LIG","CLV","DEG",null,"DOC","DOC","LIG","LIG","LIG","LIG","LIG","LIG","LIG","LIG","LIG","TRG","TRG","TRG","TRG","TRG"],["[EDST].{0,2}[WFY]..[ILVFY]","Y..[LMVIF]","[EDST].{0,2}[WFY][^RKPGWFY][^PG][ILVFM]((.{0,4}[PLAFIVMY])|($)|(.{0,3}[ED]))","[^KR][^KR](Y)([DEVYI][^KRH][ILVF]|[DEVYI][^KRH][AQPMCW]|[NQSTAFL][^KRH][ILVF])((.{0,3}[DE])|.|$)","(Y)[VLTFIC]..","([^KR][^KR](Y)[DE][^GWFY][AI][SDENQTAGYFP])|([^KR][^KR](Y)[STNA][^GWFY][PV][SDENQTAGYFP])|(..Y[DE][^GWFY][PV][SDENQTAGYFP])","...([ST])..E","[RK].[AILMFV][LTKF].","[^P]L[^P][^P]LL[^P]","[EDSTY].{0,4}[VIPLA][TSDEKR][ILVA]","[RK].{2,4}[LIVMP].[LIV].[LIVMF]","(R.[LI].[EDQ])|(R.L..[EDQ])|(K.L.E)","...([ST])...[ST]","[DSTE][^P][^DEWHFYC]D[GSAN]","[EDST].{0,3}[FL].[ILV][^D][RK][^PD][^EDWNG]((.{0,3}[KRH])|.)",".[DNE][^PG][ST](([FYILMVW]..)|([^PEDGKN][FWYLIVM]).)","..[^IRFW]([ST])[ILMVFWY][ILMVFWY].","S..([ST])...","[ED]{0,3}.(S)[GA].","(.|([KRH].{0,3}))[^EDWNSG][^D][RK][^D]L.{0,1}[FL].{0,3}[EDST]","Y....L[VILMF]","R[^DE]{0,2}[^DEPG]([ST])(([FWYLMV].)|([^PRIKGN]P)|([^PRIKGN].{2,4}[VILMFWYP]))","^M{0,1}[RK][^P].","..(T)..[DE].","[KR]{0,2}[KR].{0,2}[KR].{2,4}[ILVM].[ILVF]","..(T)..[ILV].",".(N)[^P][ST]..","[FLMW][^P][^P]([ST])[^PDEGAN][RKH].","...([ST])Q..","E..[^P]L[LIVM]","(.RK)|(RR[^KR])","[DEST]{1,10}.{0,1}[VIL][DESTVILMA][VIL][VILM].[DEST]{0,5}","^M{0,1}[AS]...","[SDE].{0,5}[DE].(K).{0,1}[AIFLMPSTV]","..[RK].{0,1}[VIL][^P][FW].","K...K","R[^DE]{0,2}[^DEPG]([ST])[^P]{0,1}$","(.[^P].NP.[FY].)|(.[ILVMFY].N..[FY].)","[^E]..[RP]L[LI]","[KR]R.","[ILM][ILMF].{1,2}[ILM].{0,4}K","[DE]..([ST])[EDILMVFWY](([DE].)|(.[DE]))","^M{0,1}([NQ]).","[PA][^P][^FYWIL]S[^P]","(Y)[^EPILVFYW][^HDEW][PLIV][^DEW]","[DEST]{0,5}.[VILPTM][VIL][DESTVILMA][VIL].{0,1}[DEST]{1,10}","[FYILMV].[TS]F(G|[^P]).","K.{0,1}K.{2,3}$","KR.","[ED].{0,3}[VIL]D[VI]","(N)[^P]C","([LMFYWIC]..I.E)|(L..[IVLWC].E).","F...[WF]","(.)G[RK][RK]","^M{0,1}([ED]).","RGD","...[ST].[ACVILF]$","(.[^P].NP.(Y))|(.[ILVMFY].N..(Y))","(Y)[DESTA][^GP][^GP][ILVFMWYA]","[FLM][^PVIED][^PVID]([ST])[MLIVF][RKH].",".R.([ST])[^P]..",".R..L..[LIVM].","^M{0,1}(C).",".[FYH].[IVM][^WFYP][^WFYP][ILM][ILMV].","[RK][RK].([ST])[^P]..","[^R]..((.[ILMVF])|([ILMVF].))[^P][^P][ILVM].{4,7}L(([KR].)|(NK))[VATIGS]","[^P][P]G{0,1}[^P][YFH][^P]",".(S)..F","...[PV]..P","[ILV].(Y)..[ILV]","^M{0,1}(G)[^EDRKHPFYW]..[STAGCN][^P]","[RK]..(S)[VI]..","([LIVMFYWPR]R[^YFWDE]{0,1}R)|(R[^YFWDE]{0,1}R[LIVMFYWPR])","(P.[KR]L.F)|(.N[KR]L.F)|(.N.L.F[LMIVFY])","DP[FW]","...[DE].[ACVILF]$","..T.(Y)..[IV]","E[IMPVL][MLVP]R.",".KEN.","^M{0,1}[FYLIW][^P]","[RK][^P][^P][LIM].L.[LIVMF].","RF[^P][IV].","DA.G.","[DE]H.Y","NGR","P.L.P","...[VLIFY].[ACVILF]$","W...[FY]","[FA].[LA][LV][LVI]..[AM]","[PM][LIVTFYHQE][QS].(([DE].)|(.[DE]))","RL[^P].R","[^E]E...F[LIVM]","[E]..[RP]L[LI]","([DEQ].{0,1}[LIM].{2,3}[LIVMF][^P]{2,3}[LMVF].[LMIV].{0,3}[DE])|([DE].{0,1}[LIM].{2,3}[LIVMF][^P]{2,3}[LMVF].[LMIV].{0,3}[DEQ])","[FLIM].[VLIMF]..[FLIMVY][^P][^P][^P][LVIM][^P][^P][LVIMA]","((R)|(K.)).LR"],["Nematode-specific variant of the canonical LIR motif that binds to Atg8 protein family members to mediate processes involved in autophagy.","Tyrosine-based sorting signal responsible for the interaction with mu subunit of AP (Adaptor Protein) complex","Canonical LIR motif that binds to Atg8/LC3 protein family members to mediate processes involved in autophagy.","Phosphotyrosine motifs bound by SH2 domains of Src family kinases (SFKs)","STAT5 Src Homology 2 (SH2) domain binding motif.","NCK Src Homology 2 (SH2) domain binding motif","Casein kinase 2 (CK2) phosphorylation site","Subtilisin/kexin isozyme-1 (SKI1) cleavage site ([RK]-X-[hydrophobic]-[LTKF]-|-X).","The nuclear receptor box motif (LXXLL) confers binding to nuclear receptors.","Fungi-specific variant of the WDR5-binding motif that binds to a cleft between blades 5 and 6 of the WD40 repeat domain of WDR5, opposite of the Win motif-binding site, to mediate assembly of histone modification complexes.","A kinase docking motif that mediates interaction towards the ERK1/2 and p38 subfamilies of MAP kinases.","Plasmodium Export Element, PEXEL, is a trafficking signal for protein cleavage by PMV protease and export from Plasmodium parasites to infected host cells.","GSK3 phosphorylation recognition site","Caspase-3 and Caspase-7 cleavage site.","The hydrophobic patch (hp) of Cyclin A2 can bind an RxL-like motif  the reverse orientation.","Ser/Thr residue phosphorylated by the Plk1 kinase","Ser/Thr residue phosphorylated by Plk4","CK1 phosphorylation site","Glycosaminoglycan attachment site","Both fungal and mammalian S-phase Cyclin/CDK complexes recognize specific RxL docking motifs in their target proteins.","Motif binding to the dorsal surface of eIF4E.","Canonical Arg-containing phospho-motif mediating a strong interaction with 14-3-3 proteins.","N-terminal motif that initiates protein degradation by binding to the UBR-box of N-recognins. This N-degron variant comprises N-terminal Arg or Lys as destabilizing residue.","Phosphothreonine motif binding a subset of FHA domains that have a preference for an acidic amino acid at the pT+3 position.","MAPK interacting molecules (e.g. MAPKKs, substrates, phosphatases) carry docking motif that help to regulate specific interaction in the MAPK cascade. The classic motif approximates (R/K)xxxx#x# where # is a hydrophobic residue.","Phosphothreonine motif binding a subset of FHA domains that show a preference for a large aliphatic amino acid at the pT+3 position.","Generic motif for N-glycosylation. It was shown that Trp, Asp, and Glu are uncommon before the Ser/Thr position. Efficient glycosylation usually occurs when ~60 residues or more separate the glycosylation acceptor site from the C-terminus.","The more tolerant version of the Nek2 phosphosite motif","(ST)Q motif which is phosphorylated by PIKK family members.","Classical adaptin sigma subunit-binding acidic dileucine motifs sorting in Endosomal-Basolateral trafficking.","N-Arg dibasic convertase (NRD/Nardilysin) cleavage site (X-|-R-K or R-|-R-X).","Motif for the antiparallel beta augmentation mode of non-covalent binding to SUMO protein.","These IBMs are found in pro-apoptotic proteins and function in the abrogation of caspase inhibition by Inhibitor of Apoptosis Proteins (IAPs) in apoptotic cells. The motif binds specifically to type II BIR domains.","Inverted version of SUMOylation motif recognized for modification by SUMO-1","Protein phosphatase 1 catalytic subunit (PP1c) interacting motif binds targeting proteins that dock to the substrate for dephosphorylation. The motif defined is [RK]{0,1}[VI][^P][FW].","The USP7 CTD domain binding motif variant based on the ICP0 and DNMT1 interactions","C-terminal Arg-containing phospho-motif mediating a strong interaction with 14-3-3 proteins.","These phosphorylation-independent motifs bind to Dab-like PTB domains. Binding is not driven by contacts at the 0 or FY position, but instead is dependent upon the large number of hydrophobic and hydrogen bond contacts between motif and domain.","Dileucine motifs lacking Glu+1 with Pro-Arg preference at +4 sorting in Endosomal-Basolateral-Lysosomal trafficking.","Yeast kexin 2 cleavage site (K-R-|-X or R-R-|-X).","UBA3 adenylation domain binding motif variant based on the UBE2M and UBE2F interactions.","Ser/Thr residue phosphorylated by Plk2 and Plk3","N-terminal motif that initiates protein degradation by binding to the UBR-box of N-recognins. This N-degron variant comprises N-terminal Asn or Gln as destabilizing residue.","The USP7 MATH domain binding motif variant based on the MDM2 and p53 interactions.","CRK family SH2 domain binding motif.","Motif for the parallel beta augmentation mode of non-covalent binding to SUMO protein.","WRC interacting receptor sequence (WIRS) is a highly conserved and widespread interaction motif that is employed by diverse membrane proteins to recruit the WRC to initiate the dynamic rearrangements of the actin cytoskeleton.","ER retention and retrieving signal found at the C-terminus of type I ER membrane proteins (cytoplasmic in this topology). Di-Lysine signal is responsible for COPI-mediated retrieval from post-ER compartments.","NEC1/NEC2 cleavage site (K-R-|-X).","This WDR5-binding motif binds to a cleft between blades 5 and 6 of the WD40 repeat domain of WDR5, opposite of the Win motif-binding site, to mediate assembly of histone modification complexes.","Atipical motif for N-glycosylation site. Examples are Human CD69, which is uniquely glycosylated at typical (Asn-X-Ser/Thr) and atypical (Asn-X-Cys) motifs, beta protein C","Docking site required for the regulatory subunit B56 of PP2A for protein dephosphorylation.","Fxxx[WF] motifs are present in Pex19 and S. cerevisiae Pex5 cytosolic receptors that bind to peroxisomal membrane docking member, Pex14","Peptide C-terminal amidation","N-terminal motif that initiates protein degradation by binding to the UBR-box of N-recognins. This N-degron variant comprises N-terminal Asp or Glu as destabilizing residue.","The RGD motif can be found in many extracellular proteins and  is recognized by different members of the integrin family. The structure of the tenth type III module of fibronectin shows that the RGD motif lies on an exposed flexible loop.","The C-terminal class 1 PDZ-binding motif is classically represented by a pattern like (ST)X(VIL)*","This phosphorylation-dependent motif binds to Shc-like and IRS-like PTB domains. The pTyr is positioned within a highly basic-charged anchoring pocket. A hydrophobic residue -5 (compared to pY) increases the affinity of the interaction.","STAP1 Src Homology 2 (SH2) domain Class 2 binding motif","Strict version of the motif targeted by NEK2 for phosphorylation","Secondary preference for PKA-type AGC kinase phosphorylation.","An RxxL-based motif that binds to the Cdh1 and Cdc20 components of APC/C thereby targeting the protein for destruction in a cell cycle dependent manner","N-terminal motif that initiates protein degradation by binding to the UBR-box of N-recognins. This N-degron variant comprises N-terminal Cys as destabilizing residue.","The engrailed homology domain 1 motif is found in homeodomain containing active repressors and other transcription families, and allows for the recruitment of Groucho/TLE corepressors.","Main preference for PKA-type AGC kinase phosphorylation.","The WH2 motif is of variable length (16-19 amino acids) binding to the hydrophobic cleft formed by actin's subdomains 1 and 3. At the N-terminus it forms an alpha-helix followed by a flexible loop stabilised upon actin binding.","Binding motif for the N-lobe part of the C-terminal domain in Arc. The N-lobe domain has structural homology with HIV virus capsid, but the binding appears to be unique to higher vertebrates.","Phosphopeptide motif which directly interacts with the BRCT (carboxy-terminal) domain  of the Breast Cancer Gene BRCA1 with low affinity","This is the motif recognized by those SH3 domains with a non-canonical class I recognition specificity","ITIM (immunoreceptor tyrosine-based inhibitory motif). Phosphorylation of the ITIM motif, found in the cytoplasmic tail of some inhibitory receptors (KIRs) that bind MHC Class I, leads to the recruitment and activation of a protein tyrosine phosphatase.","Generic motif for N-Myristoylation site.","Phosphorylase kinase phosphorylation site","The di-Arg ER retention motif is defined by two consecutive arginine residues (RR) or with a single residue insertion (RXR). The motif is completed by an adjacent hydrophobic/arginine residue which may be on either side of the Arg pair.","The LxF motif found in budding yeasts serves as a docking site for mitotic cyclin-CDK complexes (M-CDK). It is found in both regulators and mitotic phosphorylation target proteins.","DPF/W motif binds alpha and beta subunits of AP2 adaptor complex.","The C-terminal class 3 PDZ-binding motif is classically represented by a pattern such as (DE)X(VIL)*","ITSM (immunoreceptor tyrosine-based switch motif). This motif is present in the cytoplasmic region of the CD150 subfamily within the CD2 family and it enables these receptors to bind to and to be regulated by SH2 adaptor molecules, as SH2DIA.","Separase cleavage site, best known in sister chromatid separation.","Motif conserving the exact sequence KEN that binds to the APC/C subunit Cdh1 causing the protein to be targeted for  26S proteasome mediated degradation.","N-terminal motif that initiates protein degradation by binding to the N-box of N-recognins. This N-degron variant comprises N-terminal a bulky hydrophobic residue as destabilizing residue.","An extended D site specifically recognized by the JNK kinases","SPAK/OSR1 kinase binding motif acts as a docking site which aids the interaction with their binding partners including the upstream activators and the phosphorylated substrates.","These IBMs are found in the N-terminal regions of arthropodal caspase subunits where they mediate the inhibition of activated caspases by binding to conserved surface grooves on type III BIR domains of Inhibitor of Apoptosis Proteins (IAPs).","The DHxY Host Cell Factor-1 binding motif (HBM) interacts with the N-terminal kelch propeller domain of the cell cycle regulator HCF-1","NGR motif is present in proteins of extracellular matrix which upon deamidation forms a biologically active isoDGR motif that binds to various members of integrin family.","PxLxP motif is recognized by a subset of MYND domain containing proteins.","The C-terminal class 2 PDZ-binding motif is classically represented by a pattern such as (VYF)X(VIL)*","Wxxx[FY] motifs present in N-terminal half of Pex5 bind to Pex13 and Pex14 at peroxisomal and glycosomal membranes to facilitate entrance of PTS1 cargo proteins into the organellar lumen.","Motif interacts with PAH2 domain in the Sin3 scaffold protein (not mad or sp-1 like).","Long (or minor) TRAF2 binding motif. Members of the tumour necrosis factor receptor (TNFR) superfamily initiate intracellular signaling by recruiting the C-domain of the TNFR-associated factors (TRAFs) to their cytoplasmic tails.","A TRAF4 MATH domain binding motif present in some platelet receptors","Phe-containing variant adaptin sigma subunit-binding acidic dileucine motifs sorting in Endosomal-Basolateral trafficking","Acidic dileucine motifs with Arg or Pro preference at position 4 interacting with AP-3 and sorting in Endosomal-Lysosomal trafficking.","Many proteins re-exported from the nucleus contain an amphipathic often Leucine-rich nuclear export signal (NES) binding to the CRM1 exportin protein.","Reverse NES binding the CRM1 groove in the minus direction. The spacing of the initial two hydrophobic residues ΦxΦ dictates the reverse orientation","Oomycete host targeting signal"],[187,182,177,175,175,172,153,101,99,95,90,83,76,55,38,36,35,34,32,31,31,22,21,21,17,17,17,17,16,16,15,15,14,14,13,13,13,13,13,12,12,12,10,9,9,9,9,9,8,8,8,7,7,7,6,6,6,6,6,6,6,4,4,4,4,3,3,3,3,3,3,3,3,2,2,2,2,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1]],"container":"<table class=\"display\">\n  <thead>\n    <tr>\n      <th>ELMIdentifier<\/th>\n      <th>Functional site<\/th>\n      <th>Type<\/th>\n      <th>Canonical regex<\/th>\n      <th>Description<\/th>\n      <th>n_isolates<\/th>\n    <\/tr>\n  <\/thead>\n<\/table>","options":{"pageLength":12,"scrollX":true,"columnDefs":[{"width":"320px","targets":4},{"className":"dt-right","targets":5},{"name":"ELMIdentifier","targets":0},{"name":"Functional site","targets":1},{"name":"Type","targets":2},{"name":"Canonical regex","targets":3},{"name":"Description","targets":4},{"name":"n_isolates","targets":5}],"order":[],"autoWidth":false,"orderClasses":false,"orderCellsTop":true,"lengthMenu":[10,12,25,50,100]}},"evals":[],"jsHooks":[]}</script>
+</div>
+</div>
+</section>
+</section>
+<section id="motif-landscape-across-isolates" class="level2" data-number="4.5">
+<h2 data-number="4.5" class="anchored" data-anchor-id="motif-landscape-across-isolates"><span class="header-section-number">4.5</span> Motif landscape across isolates</h2>
+<p>Motif presence per isolate, ELM classes on <strong>y</strong>, isolate fragments on <strong>x</strong>, faceted and coloured by genus (each panel is one genus, width proportional to isolate count). The wide bands are motifs shared across essentially all <em>Potyvirus</em> isolates; the narrow genus panels reveal motifs restricted to particular lineages.</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> elm <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">distinct</span>(query, genus, ELMIdentifier)</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>genus_sizes <span class="ot">&lt;-</span> meta <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(genus, <span class="at">name =</span> <span class="st">"n_iso"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(dplyr<span class="sc">::</span><span class="fu">desc</span>(n_iso))</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>isolate_order <span class="ot">&lt;-</span> meta <span class="sc">%&gt;%</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">genus =</span> <span class="fu">factor</span>(genus, <span class="at">levels =</span> genus_sizes<span class="sc">$</span>genus)) <span class="sc">%&gt;%</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(genus, virus_abbr) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(name)</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> pa <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  <span class="at">query         =</span> <span class="fu">factor</span>(query, <span class="at">levels =</span> isolate_order),</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  <span class="at">ELMIdentifier =</span> forcats<span class="sc">::</span><span class="fu">fct_rev</span>(<span class="fu">factor</span>(ELMIdentifier)),</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  <span class="at">genus         =</span> <span class="fu">factor</span>(genus, <span class="at">levels =</span> genus_sizes<span class="sc">$</span>genus))</span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pa, <span class="fu">aes</span>(query, ELMIdentifier, <span class="at">fill =</span> genus)) <span class="sc">+</span></span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">cols =</span> <span class="fu">vars</span>(genus), <span class="at">scales =</span> <span class="st">"free_x"</span>, <span class="at">space =</span> <span class="st">"free_x"</span>) <span class="sc">+</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">"turbo"</span>, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ELM linear motifs across Potyviridae CI region fragments"</span>,</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Isolate fragment (grouped by genus)"</span>, <span class="at">y =</span> <span class="st">"ELM motif class"</span>) <span class="sc">+</span></span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(), <span class="at">panel.spacing.x =</span> <span class="fu">unit</span>(<span class="fl">1.5</span>, <span class="st">"pt"</span>),</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"grey95"</span>, <span class="at">colour =</span> <span class="cn">NA</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="04_protein_motifs_files/figure-html/grid-1.png" class="img-fluid figure-img" width="1440"></p>
+<figcaption>Presence/absence of each ELM motif class (rows) across every CI-region isolate (columns), faceted and coloured by genus. Wide horizontal bands are motifs shared across essentially all Potyvirus isolates; motifs confined to a single narrow genus panel are lineage-restricted.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="genus-characteristic-motifs" class="level2" data-number="4.6">
+<h2 data-number="4.6" class="anchored" data-anchor-id="genus-characteristic-motifs"><span class="header-section-number">4.6</span> Genus-characteristic motifs</h2>
+<p>Motifs ranked by how much their prevalence varies across genera (restricted to genera with ≥3 isolates). Because genus sizes are very unequal, each call carries a <strong>confidence</strong> based on the size of the genus driving it, and a <strong>Wilson lower bound</strong> on the prevalence — so a motif present in 3/3 isolates of a small genus (point prevalence 1.0, lower bound ≈ 0.44) is not overstated relative to one present in 166/166 <em>Potyvirus</em> isolates (lower bound ≈ 0.98).</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>spec <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="fu">file.path</span>(elm_dir, <span class="st">"elm_motif_specificity.tsv"</span>),</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>                        <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>MIN_N <span class="ot">&lt;-</span> <span class="dv">3</span>; CONF_LOW <span class="ot">&lt;-</span> <span class="dv">5</span>; TOP_M <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>big_genera <span class="ot">&lt;-</span> genus_sizes <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(n_iso <span class="sc">&gt;=</span> MIN_N) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(genus)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>top_motifs <span class="ot">&lt;-</span> spec <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">slice_max</span>(spec_var, <span class="at">n =</span> TOP_M) <span class="sc">%&gt;%</span></span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">pull</span>(ELMIdentifier)</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>prev_long <span class="ot">&lt;-</span> spec <span class="sc">%&gt;%</span></span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(ELMIdentifier <span class="sc">%in%</span> top_motifs) <span class="sc">%&gt;%</span></span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ELMIdentifier, dplyr<span class="sc">::</span><span class="fu">all_of</span>(<span class="fu">as.character</span>(big_genera))) <span class="sc">%&gt;%</span></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="sc">-</span>ELMIdentifier, <span class="at">names_to =</span> <span class="st">"genus"</span>, <span class="at">values_to =</span> <span class="st">"prevalence"</span>)</span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>lab_map <span class="ot">&lt;-</span> genus_sizes <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(genus <span class="sc">%in%</span> big_genera) <span class="sc">%&gt;%</span></span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%s (n=%d)%s"</span>, genus, n_iso,</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">ifelse</span>(n_iso <span class="sc">&lt;</span> CONF_LOW, <span class="st">" †"</span>, <span class="st">""</span>)))</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>lm <span class="ot">&lt;-</span> <span class="fu">setNames</span>(lab_map<span class="sc">$</span>label, lab_map<span class="sc">$</span>genus)</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>prev_long <span class="ot">&lt;-</span> prev_long <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a>  <span class="at">genus_lab =</span> <span class="fu">factor</span>(lm[genus], <span class="at">levels =</span> <span class="fu">rev</span>(lm[<span class="fu">as.character</span>(big_genera)])),</span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>  <span class="at">ELMIdentifier =</span> <span class="fu">factor</span>(ELMIdentifier,</span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    <span class="at">levels =</span> spec<span class="sc">$</span>ELMIdentifier[spec<span class="sc">$</span>ELMIdentifier <span class="sc">%in%</span> top_motifs]))</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a>lowconf <span class="ot">&lt;-</span> spec<span class="sc">$</span>ELMIdentifier[spec<span class="sc">$</span>confidence <span class="sc">==</span> <span class="st">"low"</span>]</span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>prev_long <span class="ot">&lt;-</span> prev_long <span class="sc">%&gt;%</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">lowconf =</span> ELMIdentifier <span class="sc">%in%</span> lowconf <span class="sc">&amp;</span> prevalence <span class="sc">&gt;</span> <span class="fl">0.5</span>)</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prev_long, <span class="fu">aes</span>(ELMIdentifier, genus_lab, <span class="at">fill =</span> prevalence)) <span class="sc">+</span></span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">colour =</span> <span class="st">"grey92"</span>) <span class="sc">+</span></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(prev_long, lowconf),</span>
+<span id="cb10-32"><a href="#cb10-32" aria-hidden="true" tabindex="-1"></a>            <span class="at">colour =</span> <span class="st">"#2b8cbe"</span>, <span class="at">linewidth =</span> <span class="fl">0.7</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb10-33"><a href="#cb10-33" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">"magma"</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb10-34"><a href="#cb10-34" aria-hidden="true" tabindex="-1"></a>                       <span class="at">name =</span> <span class="st">"Prevalence"</span>) <span class="sc">+</span></span>
+<span id="cb10-35"><a href="#cb10-35" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Genus-characteristic ELM motifs"</span>,</span>
+<span id="cb10-36"><a href="#cb10-36" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="fu">paste0</span>(<span class="st">"† genus with &lt;"</span>, CONF_LOW,</span>
+<span id="cb10-37"><a href="#cb10-37" aria-hidden="true" tabindex="-1"></a>                        <span class="st">" isolates (low-confidence); blue-ringed cells: "</span>,</span>
+<span id="cb10-38"><a href="#cb10-38" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"characteristic call from a small genus."</span>),</span>
+<span id="cb10-39"><a href="#cb10-39" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"ELM motif class"</span>, <span class="at">y =</span> <span class="st">"Genus"</span>) <span class="sc">+</span></span>
+<span id="cb10-40"><a href="#cb10-40" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">9</span>) <span class="sc">+</span></span>
+<span id="cb10-41"><a href="#cb10-41" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb10-42"><a href="#cb10-42" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">7</span>, <span class="at">colour =</span> <span class="st">"grey30"</span>),</span>
+<span id="cb10-43"><a href="#cb10-43" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="04_protein_motifs_files/figure-html/spec-1.png" class="img-fluid figure-img" width="1152"></p>
+<figcaption>Genus-characteristic ELM motifs: tile colour is each motif’s prevalence within a genus (rows = genera with ≥3 isolates, columns = the most cross-genus-variable motifs). Blue-ringed cells flag calls driven by a small genus (low confidence); † marks genera with &lt;5 isolates.</figcaption>
+</figure>
+</div>
+</div>
+</div>
+<p>The highest-confidence genus-characteristic calls (largest driving genus). These are the <strong>data-selected “interesting” motifs</strong> — chosen by an unbiased cross-genus prevalence-variance ranking rather than by hand — so each is shown with its functional-site name and canonical pattern:</p>
+<div class="cell">
+<details class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="co"># motif -&gt; (name, regex) lookup from the regex hit table</span></span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>motif_meta <span class="ot">&lt;-</span> elm <span class="sc">%&gt;%</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(ELMIdentifier) <span class="sc">%&gt;%</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="st">`</span><span class="at">Functional site</span><span class="st">`</span> <span class="ot">=</span> dplyr<span class="sc">::</span><span class="fu">first</span>(FunctionalSiteName),</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a>                   <span class="at">Regex =</span> dplyr<span class="sc">::</span><span class="fu">first</span>(Regex), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb11-6"><a href="#cb11-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-7"><a href="#cb11-7" aria-hidden="true" tabindex="-1"></a>spec <span class="sc">%&gt;%</span></span>
+<span id="cb11-8"><a href="#cb11-8" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(dplyr<span class="sc">::</span><span class="fu">desc</span>(spec_var)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-9"><a href="#cb11-9" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(ELMIdentifier, top_genus, top_n,</span>
+<span id="cb11-10"><a href="#cb11-10" aria-hidden="true" tabindex="-1"></a>                   <span class="at">top_prev =</span> <span class="fu">round</span>(top_prev, <span class="dv">2</span>),</span>
+<span id="cb11-11"><a href="#cb11-11" aria-hidden="true" tabindex="-1"></a>                   <span class="at">wilson_lwr =</span> <span class="fu">round</span>(top_prev_wilson_lwr, <span class="dv">2</span>),</span>
+<span id="cb11-12"><a href="#cb11-12" aria-hidden="true" tabindex="-1"></a>                   confidence, <span class="at">spec_var =</span> <span class="fu">round</span>(spec_var, <span class="dv">3</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb11-13"><a href="#cb11-13" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-14"><a href="#cb11-14" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(motif_meta, <span class="at">by =</span> <span class="st">"ELMIdentifier"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb11-15"><a href="#cb11-15" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">relocate</span>(<span class="st">`</span><span class="at">Functional site</span><span class="st">`</span>, Regex, <span class="at">.after =</span> ELMIdentifier) <span class="sc">%&gt;%</span></span>
+<span id="cb11-16"><a href="#cb11-16" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="fu">paste</span>(<span class="st">"Top 15 motifs by cross-genus prevalence"</span>,</span>
+<span id="cb11-17"><a href="#cb11-17" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"variance, with functional-site name, canonical"</span>,</span>
+<span id="cb11-18"><a href="#cb11-18" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"regex and small-sample confidence."</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small">
+<caption>Top 15 motifs by cross-genus prevalence variance, with functional-site name, canonical regex and small-sample confidence.</caption>
+<colgroup>
+<col style="width: 7%">
+<col style="width: 19%">
+<col style="width: 49%">
+<col style="width: 5%">
+<col style="width: 2%">
+<col style="width: 3%">
+<col style="width: 4%">
+<col style="width: 4%">
+<col style="width: 3%">
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: left;">ELMIdentifier</th>
+<th style="text-align: left;">Functional site</th>
+<th style="text-align: left;">Regex</th>
+<th style="text-align: left;">top_genus</th>
+<th style="text-align: right;">top_n</th>
+<th style="text-align: right;">top_prev</th>
+<th style="text-align: right;">wilson_lwr</th>
+<th style="text-align: left;">confidence</th>
+<th style="text-align: right;">spec_var</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">DOC_PP1_RVXF_1</td>
+<td style="text-align: left;">PP1-docking motif RVXF</td>
+<td style="text-align: left;">..[RK].{0,1}[VIL][^P][FW].</td>
+<td style="text-align: left;">Macluravirus</td>
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.68</td>
+<td style="text-align: left;">moderate</td>
+<td style="text-align: right;">0.238</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LIG_SH2_NCK_1</td>
+<td style="text-align: left;">Phosphotyrosine ligands bound by SH2 domains</td>
+<td style="text-align: left;">([^KR][^KR](Y)[DE][^GWFY][AI][SDENQTAGYFP])|([^KR][^KR](Y)[STNA][^GWFY][PV][SDENQTAGYFP])|(..Y[DE][^GWFY][PV][SDENQTAGYFP])</td>
+<td style="text-align: left;">Rymovirus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: left;">low</td>
+<td style="text-align: right;">0.223</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LIG_LIR_Nem_3</td>
+<td style="text-align: left;">Atg8 protein family ligands</td>
+<td style="text-align: left;">[EDST].{0,2}[WFY]..[ILVFY]</td>
+<td style="text-align: left;">Rymovirus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: left;">low</td>
+<td style="text-align: right;">0.222</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TRG_ENDOCYTIC_2</td>
+<td style="text-align: left;">Y-based sorting signal</td>
+<td style="text-align: left;">Y..[LMVIF]</td>
+<td style="text-align: left;">Rymovirus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: left;">low</td>
+<td style="text-align: right;">0.210</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LIG_SH2_STAT5</td>
+<td style="text-align: left;">Phosphotyrosine ligands bound by SH2 domains</td>
+<td style="text-align: left;">(Y)[VLTFIC]..</td>
+<td style="text-align: left;">Potyvirus</td>
+<td style="text-align: right;">166</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.98</td>
+<td style="text-align: left;">high</td>
+<td style="text-align: right;">0.201</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LIG_SH2_SFK_2</td>
+<td style="text-align: left;">Phosphotyrosine ligands bound by SH2 domains</td>
+<td style="text-align: left;">[^KR][^KR](Y)([DEVYI][^KRH][ILVF]|[DEVYI][^KRH][AQPMCW]|[NQSTAFL][^KRH][ILVF])((.{0,3}[DE])|.|<span class="math inline">\()        |Rymovirus    |     3|     1.00|       0.44|low        |    0.200|
+|LIG_LIR_Gen_1      |Atg8 protein family ligands                      |[EDST].{0,2}[WFY][^RKPGWFY][^PG][ILVFM]((.{0,4}[PLAFIVMY])&amp;#124;(\)</span>)|(.{0,3}[ED]))</td>
+<td style="text-align: left;">Rymovirus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: left;">low</td>
+<td style="text-align: right;">0.179</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOD_Plk_4</td>
+<td style="text-align: left;">Polo-like kinase phosphosites</td>
+<td style="text-align: left;">..[^IRFW]([ST])[ILMVFWY][ILMVFWY].</td>
+<td style="text-align: left;">Poacevirus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: left;">low</td>
+<td style="text-align: right;">0.157</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOD_CK2_1</td>
+<td style="text-align: left;">Casein kinase 2 (CK2) Phosphorylation site</td>
+<td style="text-align: left;">…([ST])..E</td>
+<td style="text-align: left;">Rymovirus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: left;">low</td>
+<td style="text-align: right;">0.155</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOD_NEK2_2</td>
+<td style="text-align: left;">NEK2 phosphorylation site</td>
+<td style="text-align: left;">[FLMW][^P][^P]([ST])[^PDEGAN][RKH].</td>
+<td style="text-align: left;">Tritimovirus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.61</td>
+<td style="text-align: left;">moderate</td>
+<td style="text-align: right;">0.148</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">MOD_NEK2_1</td>
+<td style="text-align: left;">NEK2 phosphorylation site</td>
+<td style="text-align: left;">[FLM][^PVIED][^PVID]([ST])[MLIVF][RKH].</td>
+<td style="text-align: left;">Tritimovirus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.61</td>
+<td style="text-align: left;">moderate</td>
+<td style="text-align: right;">0.143</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">LIG_Pex14_2</td>
+<td style="text-align: left;">Pex14 ligand motif</td>
+<td style="text-align: left;">F…[WF]</td>
+<td style="text-align: left;">Tritimovirus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.61</td>
+<td style="text-align: left;">moderate</td>
+<td style="text-align: right;">0.139</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">LIG_WRC_WIRS_1</td>
+<td style="text-align: left;">WAVE regulatory complex (WRC) binding site motif</td>
+<td style="text-align: left;">[FYILMV].[TS]F(G|[^P]).</td>
+<td style="text-align: left;">Tritimovirus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.61</td>
+<td style="text-align: left;">moderate</td>
+<td style="text-align: right;">0.139</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">MOD_CK1_1</td>
+<td style="text-align: left;">Casein kinase 1 (CK1) Phosphorylation site</td>
+<td style="text-align: left;">S..([ST])…</td>
+<td style="text-align: left;">Poacevirus</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1.00</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: left;">low</td>
+<td style="text-align: right;">0.122</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">TRG_Pf-PMV_PEXEL_1</td>
+<td style="text-align: left;">Apicomplexan export motif</td>
+<td style="text-align: left;">(R.[LI].[EDQ])|(R.L..[EDQ])|(K.L.E)</td>
+<td style="text-align: left;">Tritimovirus</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">0.83</td>
+<td style="text-align: right;">0.44</td>
+<td style="text-align: left;">moderate</td>
+<td style="text-align: right;">0.112</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+</section>
+<section id="notes" class="level2" data-number="4.7">
+<h2 data-number="4.7" class="anchored" data-anchor-id="notes"><span class="header-section-number">4.7</span> Notes</h2>
+<ul>
+<li>The concatenated-submission workflow (<code>build_concat()</code> + junction-hit flagging) used for the original single ELM webserver query is retained in <code>potytools</code> but is no longer needed here, since <code>gget</code> lets us query each isolate directly.</li>
+<li>The gget ELM database footprint is ~3 MB (ELM-curated instances/classes); the larger DIAMOND binary lives inside the disposable pixi env, not in the project.</li>
+</ul>
+
+
+<!-- -->
+
+<div id="refs" class="references csl-bib-body hanging-indent" role="list" style="display: none">
+<div id="ref-inouenagata2022" class="csl-entry" role="listitem">
+Inoue-Nagata, Alice K., Ramon Jordan, Jan Kreuze, et al. 2022. <span>“<span>ICTV</span> Virus Taxonomy Profile: <span>Potyviridae</span> 2022.”</span> <em>Journal of General Virology</em> 103 (5): 001738. <a href="https://doi.org/10.1099/jgv.0.001738">https://doi.org/10.1099/jgv.0.001738</a>.
+</div>
+<div id="ref-ictvvmr2024" class="csl-entry" role="listitem">
+International Committee on Taxonomy of Viruses (ICTV). 2024. <em>Virus Metadata Resource (<span>VMR</span>), Master Species List <span>MSL41</span></em>. <a href="https://ictv.global/vmr" class="uri">Https://ictv.global/vmr</a>.
+</div>
+<div id="ref-elm2024" class="csl-entry" role="listitem">
+<span class="nocase">Kumar, Manjeet, Sushama Michael, Jesus Alvarado-Valverde, Bálint Mészáros, et al.</span> 2024. <span>“<span>ELM</span>—the Eukaryotic Linear Motif Resource: 2024 Update.”</span> <em>Nucleic Acids Research</em> 52 (D1): D442–55. <a href="https://doi.org/10.1093/nar/gkad1058">https://doi.org/10.1093/nar/gkad1058</a>.
+</div>
+</div>
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    // Ensure there is a toggle, if there isn't float one in the top right
+    if (window.document.querySelector('.quarto-color-scheme-toggle') === null) {
+      const a = window.document.createElement('a');
+      a.classList.add('top-right');
+      a.classList.add('quarto-color-scheme-toggle');
+      a.href = "";
+      a.onclick = function() { try { window.quartoToggleColorScheme(); } catch {} return false; };
+      const i = window.document.createElement("i");
+      i.classList.add('bi');
+      a.appendChild(i);
+      window.document.body.appendChild(a);
+    }
+    setColorSchemeToggle(hasAlternateSentinel())
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+    const viewSource = window.document.getElementById('quarto-view-source') ||
+                       window.document.getElementById('quarto-code-tools-source');
+    if (viewSource) {
+      const sourceUrl = viewSource.getAttribute("data-quarto-source-url");
+      viewSource.addEventListener("click", function(e) {
+        if (sourceUrl) {
+          // rstudio viewer pane
+          if (/\bcapabilities=\b/.test(window.location)) {
+            window.open(sourceUrl);
+          } else {
+            window.location.href = sourceUrl;
+          }
+        } else {
+          const modal = new bootstrap.Modal(document.getElementById('quarto-embedded-source-code-modal'));
+          modal.show();
+        }
+        return false;
+      });
+    }
+    function toggleCodeHandler(show) {
+      return function(e) {
+        const detailsSrc = window.document.querySelectorAll(".cell > details > .sourceCode");
+        for (let i=0; i<detailsSrc.length; i++) {
+          const details = detailsSrc[i].parentElement;
+          if (show) {
+            details.open = true;
+          } else {
+            details.removeAttribute("open");
+          }
+        }
+        const cellCodeDivs = window.document.querySelectorAll(".cell > .sourceCode");
+        const fromCls = show ? "hidden" : "unhidden";
+        const toCls = show ? "unhidden" : "hidden";
+        for (let i=0; i<cellCodeDivs.length; i++) {
+          const codeDiv = cellCodeDivs[i];
+          if (codeDiv.classList.contains(fromCls)) {
+            codeDiv.classList.remove(fromCls);
+            codeDiv.classList.add(toCls);
+          } 
+        }
+        return false;
+      }
+    }
+    const hideAllCode = window.document.getElementById("quarto-hide-all-code");
+    if (hideAllCode) {
+      hideAllCode.addEventListener("click", toggleCodeHandler(false));
+    }
+    const showAllCode = window.document.getElementById("quarto-show-all-code");
+    if (showAllCode) {
+      showAllCode.addEventListener("click", toggleCodeHandler(true));
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp('/' + window.location.host + '/');
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+<nav class="page-navigation">
+  <div class="nav-page nav-page-previous">
+      <a href="../notebooks/03_codon_dnazyme.html" class="pagination-link" aria-label="Codon Usage and DNAzyme-like Motif Architecture">
+        <i class="bi bi-arrow-left-short"></i> <span class="nav-page-text"><span class="chapter-number">3</span>&nbsp; <span class="chapter-title">Codon Usage and DNAzyme-like Motif Architecture</span></span>
+      </a>          
+  </div>
+  <div class="nav-page nav-page-next">
+      <a href="../notebooks/05_potyvirus_motifs.html" class="pagination-link" aria-label="Potyvirus Protein Motifs and Interaction Networks">
+        <span class="nav-page-text"><span class="chapter-number">5</span>&nbsp; <span class="chapter-title">Potyvirus Protein Motifs and Interaction Networks</span></span> <i class="bi bi-arrow-right-short"></i>
+      </a>
+  </div>
+</nav><div class="modal fade" id="quarto-embedded-source-code-modal" tabindex="-1" aria-labelledby="quarto-embedded-source-code-modal-label" aria-hidden="true"><div class="modal-dialog modal-dialog-scrollable"><div class="modal-content"><div class="modal-header"><h5 class="modal-title" id="quarto-embedded-source-code-modal-label">Source Code</h5><button class="btn-close" data-bs-dismiss="modal"></button></div><div class="modal-body"><div class="">
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb12" data-shortcodes="false"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a><span class="an">title:</span><span class="co"> "Protein Motif Analysis"</span></span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a><span class="an">subtitle:</span><span class="co"> "Eukaryotic Linear Motifs in Potyviridae CI helicase — gget/ELM search and genus-specificity"</span></span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a><span class="an">author:</span><span class="co"> "Christina Muedsam"</span></span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a><span class="co">  echo: true</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb12-10"><a href="#cb12-10" aria-hidden="true" tabindex="-1"></a><span class="co">  error: true</span></span>
+<span id="cb12-11"><a href="#cb12-11" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb12-12"><a href="#cb12-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-13"><a href="#cb12-13" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
+<span id="cb12-14"><a href="#cb12-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-15"><a href="#cb12-15" aria-hidden="true" tabindex="-1"></a>The cylindrical inclusion (CI) helicase carries a short conserved region that,</span>
+<span id="cb12-16"><a href="#cb12-16" aria-hidden="true" tabindex="-1"></a>across Potyviridae, overlaps a number of **eukaryotic linear motifs (ELMs)** —</span>
+<span id="cb12-17"><a href="#cb12-17" aria-hidden="true" tabindex="-1"></a>short functional peptide motifs catalogued in the ELM database</span>
+<span id="cb12-18"><a href="#cb12-18" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">@elm2024</span><span class="co">]</span>. Here I extract the CI motif-flanking region from each isolate in the</span>
+<span id="cb12-19"><a href="#cb12-19" aria-hidden="true" tabindex="-1"></a>ICTV Potyviridae alignment <span class="co">[</span><span class="ot">@inouenagata2022</span><span class="co">]</span>, search it against ELM, and ask which</span>
+<span id="cb12-20"><a href="#cb12-20" aria-hidden="true" tabindex="-1"></a>motifs are **characteristic of particular genera**.</span>
+<span id="cb12-21"><a href="#cb12-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-22"><a href="#cb12-22" aria-hidden="true" tabindex="-1"></a>::: {.callout-note appearance="simple"}</span>
+<span id="cb12-23"><a href="#cb12-23" aria-hidden="true" tabindex="-1"></a>**Why a different sequence set here.** Chapters 1–3 used my **custom collection of</span>
+<span id="cb12-24"><a href="#cb12-24" aria-hidden="true" tabindex="-1"></a>the 16 potyvirus isolates** that carry the DNAzyme catalytic core. From this</span>
+<span id="cb12-25"><a href="#cb12-25" aria-hidden="true" tabindex="-1"></a>chapter on I switch to the **premade ICTV Potyviridae alignment**</span>
+<span id="cb12-26"><a href="#cb12-26" aria-hidden="true" tabindex="-1"></a><span class="co">[</span><span class="ot">@inouenagata2022</span><span class="co">]</span> to extend the motif analysis to the **whole family**. That</span>
+<span id="cb12-27"><a href="#cb12-27" aria-hidden="true" tabindex="-1"></a>alignment does **not** contain the 16 core-carrying isolates — which is fine</span>
+<span id="cb12-28"><a href="#cb12-28" aria-hidden="true" tabindex="-1"></a>here, because I first **confirmed the translated catalytic-core region is preserved</span>
+<span id="cb12-29"><a href="#cb12-29" aria-hidden="true" tabindex="-1"></a>in ICTV members**, and the question now is about the **CI protein and its sorting</span>
+<span id="cb12-30"><a href="#cb12-30" aria-hidden="true" tabindex="-1"></a>motifs across Potyviridae**, not about the DNAzyme core per se.</span>
+<span id="cb12-31"><a href="#cb12-31" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb12-32"><a href="#cb12-32" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-33"><a href="#cb12-33" aria-hidden="true" tabindex="-1"></a>The ELM search is run with the <span class="co">[</span><span class="ot">`gget`</span><span class="co">](https://github.com/pachterlab/gget)</span></span>
+<span id="cb12-34"><a href="#cb12-34" aria-hidden="true" tabindex="-1"></a>Python package (<span class="in">`gget elm`</span>), which reproduces the ELM webserver's two search</span>
+<span id="cb12-35"><a href="#cb12-35" aria-hidden="true" tabindex="-1"></a>modes: an ortholog (DIAMOND) search against ELM-annotated proteins and a direct</span>
+<span id="cb12-36"><a href="#cb12-36" aria-hidden="true" tabindex="-1"></a>regex search. It runs in a self-contained <span class="in">`pixi`</span> environment inside WSL; the</span>
+<span id="cb12-37"><a href="#cb12-37" aria-hidden="true" tabindex="-1"></a>per-isolate results are written to <span class="in">`data/elm_gget/`</span> by</span>
+<span id="cb12-38"><a href="#cb12-38" aria-hidden="true" tabindex="-1"></a><span class="in">`scripts/prep_elm_regions.R`</span> → <span class="in">`scripts/gget_elm_run.py`</span> →</span>
+<span id="cb12-39"><a href="#cb12-39" aria-hidden="true" tabindex="-1"></a><span class="in">`scripts/viz_elm_motifs.R`</span>. This chapter reads those results.</span>
+<span id="cb12-40"><a href="#cb12-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-41"><a href="#cb12-41" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup}</span></span>
+<span id="cb12-42"><a href="#cb12-42" aria-hidden="true" tabindex="-1"></a><span class="co">#| include: false</span></span>
+<span id="cb12-43"><a href="#cb12-43" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(Biostrings)</span>
+<span id="cb12-44"><a href="#cb12-44" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb12-45"><a href="#cb12-45" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(DECIPHER)   <span class="co"># gap removal</span></span>
+<span id="cb12-46"><a href="#cb12-46" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(potytools)</span>
+<span id="cb12-47"><a href="#cb12-47" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-48"><a href="#cb12-48" aria-hidden="true" tabindex="-1"></a>data_dir <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>)</span>
+<span id="cb12-49"><a href="#cb12-49" aria-hidden="true" tabindex="-1"></a>elm_dir  <span class="ot">&lt;-</span> here<span class="sc">::</span><span class="fu">here</span>(<span class="st">"data"</span>, <span class="st">"elm_gget"</span>)</span>
+<span id="cb12-50"><a href="#cb12-50" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-51"><a href="#cb12-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-52"><a href="#cb12-52" aria-hidden="true" tabindex="-1"></a><span class="fu">## CI motif region</span></span>
+<span id="cb12-53"><a href="#cb12-53" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-54"><a href="#cb12-54" aria-hidden="true" tabindex="-1"></a>I anchor the CI region on the alignment consensus at the conserved <span class="in">`VASYN`</span></span>
+<span id="cb12-55"><a href="#cb12-55" aria-hidden="true" tabindex="-1"></a>motif (allowing one mismatch) and take a ±20 aa window. The alignment is read</span>
+<span id="cb12-56"><a href="#cb12-56" aria-hidden="true" tabindex="-1"></a>from the **local** ICTV file (<span class="in">`data/OPSR.Poty.Fig3.v16_align.txt`</span>).</span>
+<span id="cb12-57"><a href="#cb12-57" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-58"><a href="#cb12-58" aria-hidden="true" tabindex="-1"></a><span class="in">```{r region}</span></span>
+<span id="cb12-59"><a href="#cb12-59" aria-hidden="true" tabindex="-1"></a>protaln <span class="ot">&lt;-</span> <span class="fu">readAAStringSet</span>(<span class="fu">file.path</span>(data_dir, <span class="st">"OPSR.Poty.Fig3.v16_align.txt"</span>),</span>
+<span id="cb12-60"><a href="#cb12-60" aria-hidden="true" tabindex="-1"></a>                           <span class="at">format =</span> <span class="st">"fasta"</span>)</span>
+<span id="cb12-61"><a href="#cb12-61" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-62"><a href="#cb12-62" aria-hidden="true" tabindex="-1"></a>cons    <span class="ot">&lt;-</span> <span class="fu">consensusString</span>(protaln, <span class="at">ambiguityMap =</span> <span class="st">"X"</span>)</span>
+<span id="cb12-63"><a href="#cb12-63" aria-hidden="true" tabindex="-1"></a>m       <span class="ot">&lt;-</span> <span class="fu">matchPattern</span>(<span class="st">"VASYN"</span>, cons, <span class="at">max.mismatch =</span> <span class="dv">1</span>)</span>
+<span id="cb12-64"><a href="#cb12-64" aria-hidden="true" tabindex="-1"></a>anchora <span class="ot">&lt;-</span> <span class="fu">start</span>(m)[<span class="dv">1</span>]</span>
+<span id="cb12-65"><a href="#cb12-65" aria-hidden="true" tabindex="-1"></a>anchorb <span class="ot">&lt;-</span> <span class="fu">end</span>(m)[<span class="dv">1</span>]</span>
+<span id="cb12-66"><a href="#cb12-66" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-67"><a href="#cb12-67" aria-hidden="true" tabindex="-1"></a>region  <span class="ot">&lt;-</span> <span class="fu">subseq</span>(protaln, anchora <span class="sc">-</span> <span class="dv">20</span>, anchorb <span class="sc">+</span> <span class="dv">20</span>)   <span class="co"># aligned window</span></span>
+<span id="cb12-68"><a href="#cb12-68" aria-hidden="true" tabindex="-1"></a><span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"VASYN anchor at consensus %d-%d; region columns %d-%d (%d isolates)</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb12-69"><a href="#cb12-69" aria-hidden="true" tabindex="-1"></a>            anchora, anchorb, anchora <span class="sc">-</span> <span class="dv">20</span>, anchorb <span class="sc">+</span> <span class="dv">20</span>, <span class="fu">length</span>(region)))</span>
+<span id="cb12-70"><a href="#cb12-70" aria-hidden="true" tabindex="-1"></a>region</span>
+<span id="cb12-71"><a href="#cb12-71" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-72"><a href="#cb12-72" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-73"><a href="#cb12-73" aria-hidden="true" tabindex="-1"></a><span class="fu">## Isolate metadata and genus assignment</span></span>
+<span id="cb12-74"><a href="#cb12-74" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-75"><a href="#cb12-75" aria-hidden="true" tabindex="-1"></a>Each sequence name encodes a virus abbreviation and one or more accessions.</span>
+<span id="cb12-76"><a href="#cb12-76" aria-hidden="true" tabindex="-1"></a>Genus is assigned by joining to the ICTV VMR table <span class="co">[</span><span class="ot">@ictvvmr2024</span><span class="co">]</span> — first by GENBANK</span>
+<span id="cb12-77"><a href="#cb12-77" aria-hidden="true" tabindex="-1"></a>accession, then, for isolates that are not VMR species exemplars, by matching</span>
+<span id="cb12-78"><a href="#cb12-78" aria-hidden="true" tabindex="-1"></a>the virus abbreviation to the VMR *"Virus name abbreviation(s)"* column. This</span>
+<span id="cb12-79"><a href="#cb12-79" aria-hidden="true" tabindex="-1"></a>two-stage join (implemented in <span class="in">`scripts/prep_elm_regions.R`</span>) leaves **no**</span>
+<span id="cb12-80"><a href="#cb12-80" aria-hidden="true" tabindex="-1"></a>isolate unclassified.</span>
+<span id="cb12-81"><a href="#cb12-81" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-82"><a href="#cb12-82" aria-hidden="true" tabindex="-1"></a><span class="in">```{r meta}</span></span>
+<span id="cb12-83"><a href="#cb12-83" aria-hidden="true" tabindex="-1"></a>meta <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="fu">file.path</span>(elm_dir, <span class="st">"region_meta.tsv"</span>),</span>
+<span id="cb12-84"><a href="#cb12-84" aria-hidden="true" tabindex="-1"></a>                        <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-85"><a href="#cb12-85" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-86"><a href="#cb12-86" aria-hidden="true" tabindex="-1"></a>meta <span class="sc">%&gt;%</span></span>
+<span id="cb12-87"><a href="#cb12-87" aria-hidden="true" tabindex="-1"></a>  <span class="fu">count</span>(genus, genus_source, <span class="at">name =</span> <span class="st">"n_isolates"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-88"><a href="#cb12-88" aria-hidden="true" tabindex="-1"></a>  <span class="fu">arrange</span>(<span class="fu">desc</span>(n_isolates)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-89"><a href="#cb12-89" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"Isolates per genus and how genus was assigned."</span>)</span>
+<span id="cb12-90"><a href="#cb12-90" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-91"><a href="#cb12-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-92"><a href="#cb12-92" aria-hidden="true" tabindex="-1"></a><span class="fu">## ELM search results (gget)</span></span>
+<span id="cb12-93"><a href="#cb12-93" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-94"><a href="#cb12-94" aria-hidden="true" tabindex="-1"></a><span class="in">`gget elm`</span> was run per isolate in ortholog + regex mode. As expected for viral</span>
+<span id="cb12-95"><a href="#cb12-95" aria-hidden="true" tabindex="-1"></a>CI proteins, the **ortholog** search returns nothing (ELM's ortholog set is</span>
+<span id="cb12-96"><a href="#cb12-96" aria-hidden="true" tabindex="-1"></a>eukaryotic), so the **regex** motif matches carry the signal — the same content</span>
+<span id="cb12-97"><a href="#cb12-97" aria-hidden="true" tabindex="-1"></a>the ELM webserver returns for a direct sequence query.</span>
+<span id="cb12-98"><a href="#cb12-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-99"><a href="#cb12-99" aria-hidden="true" tabindex="-1"></a><span class="in">```{r read-gget}</span></span>
+<span id="cb12-100"><a href="#cb12-100" aria-hidden="true" tabindex="-1"></a>regex_path <span class="ot">&lt;-</span> <span class="fu">file.path</span>(elm_dir, <span class="st">"elm_regex.tsv"</span>)</span>
+<span id="cb12-101"><a href="#cb12-101" aria-hidden="true" tabindex="-1"></a>have_gget  <span class="ot">&lt;-</span> <span class="fu">file.exists</span>(regex_path)</span>
+<span id="cb12-102"><a href="#cb12-102" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-103"><a href="#cb12-103" aria-hidden="true" tabindex="-1"></a><span class="cf">if</span> (have_gget) {</span>
+<span id="cb12-104"><a href="#cb12-104" aria-hidden="true" tabindex="-1"></a>  elm <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(regex_path, <span class="at">show_col_types =</span> <span class="cn">FALSE</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-105"><a href="#cb12-105" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">left_join</span>(dplyr<span class="sc">::</span><span class="fu">select</span>(meta, <span class="at">query =</span> name, virus_abbr, genus),</span>
+<span id="cb12-106"><a href="#cb12-106" aria-hidden="true" tabindex="-1"></a>                     <span class="at">by =</span> <span class="st">"query"</span>)</span>
+<span id="cb12-107"><a href="#cb12-107" aria-hidden="true" tabindex="-1"></a>  <span class="fu">cat</span>(<span class="fu">sprintf</span>(<span class="st">"%d motif hits across %d isolates and %d ELM motif classes</span><span class="sc">\n</span><span class="st">"</span>,</span>
+<span id="cb12-108"><a href="#cb12-108" aria-hidden="true" tabindex="-1"></a>              <span class="fu">nrow</span>(elm), dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(elm<span class="sc">$</span>query),</span>
+<span id="cb12-109"><a href="#cb12-109" aria-hidden="true" tabindex="-1"></a>              dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(elm<span class="sc">$</span>ELMIdentifier)))</span>
+<span id="cb12-110"><a href="#cb12-110" aria-hidden="true" tabindex="-1"></a>  elm <span class="sc">%&gt;%</span></span>
+<span id="cb12-111"><a href="#cb12-111" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">count</span>(ELMType, <span class="at">name =</span> <span class="st">"hits"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-112"><a href="#cb12-112" aria-hidden="true" tabindex="-1"></a>    dplyr<span class="sc">::</span><span class="fu">arrange</span>(dplyr<span class="sc">::</span><span class="fu">desc</span>(hits)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-113"><a href="#cb12-113" aria-hidden="true" tabindex="-1"></a>    knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="st">"ELM hits by motif type."</span>)</span>
+<span id="cb12-114"><a href="#cb12-114" aria-hidden="true" tabindex="-1"></a>} <span class="cf">else</span> {</span>
+<span id="cb12-115"><a href="#cb12-115" aria-hidden="true" tabindex="-1"></a>  <span class="fu">message</span>(<span class="st">"data/elm_gget/elm_regex.tsv not found. "</span>,</span>
+<span id="cb12-116"><a href="#cb12-116" aria-hidden="true" tabindex="-1"></a>          <span class="st">"Regenerate with scripts/prep_elm_regions.R -&gt; gget_elm_run.py."</span>)</span>
+<span id="cb12-117"><a href="#cb12-117" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb12-118"><a href="#cb12-118" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-119"><a href="#cb12-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-120"><a href="#cb12-120" aria-hidden="true" tabindex="-1"></a><span class="fu">### What the motifs are — reference table</span></span>
+<span id="cb12-121"><a href="#cb12-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-122"><a href="#cb12-122" aria-hidden="true" tabindex="-1"></a>Throughout this chapter motifs are labelled by their **ELM identifier** (e.g.</span>
+<span id="cb12-123"><a href="#cb12-123" aria-hidden="true" tabindex="-1"></a><span class="in">`LIG_SH2_STAT5`</span>), which is compact but opaque. The table below unpacks every</span>
+<span id="cb12-124"><a href="#cb12-124" aria-hidden="true" tabindex="-1"></a>detected class: its **functional-site name**, ELM **type** (CLV cleavage, DEG</span>
+<span id="cb12-125"><a href="#cb12-125" aria-hidden="true" tabindex="-1"></a>degron, DOC docking, LIG ligand-binding, MOD post-translational modification,</span>
+<span id="cb12-126"><a href="#cb12-126" aria-hidden="true" tabindex="-1"></a>TRG targeting), the **canonical regular-expression pattern** that defines the</span>
+<span id="cb12-127"><a href="#cb12-127" aria-hidden="true" tabindex="-1"></a>motif, a brief functional **description**, and the number of CI-region isolates</span>
+<span id="cb12-128"><a href="#cb12-128" aria-hidden="true" tabindex="-1"></a>carrying it. Sort by *n_isolates* for the near-universal motifs; filter by</span>
+<span id="cb12-129"><a href="#cb12-129" aria-hidden="true" tabindex="-1"></a>*Type* or search the description for a functional class of interest. Each</span>
+<span id="cb12-130"><a href="#cb12-130" aria-hidden="true" tabindex="-1"></a>identifier links to its ELM database entry.</span>
+<span id="cb12-131"><a href="#cb12-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-132"><a href="#cb12-132" aria-hidden="true" tabindex="-1"></a><span class="in">```{r elm-reference-table}</span></span>
+<span id="cb12-133"><a href="#cb12-133" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_regex.tsv"))</span></span>
+<span id="cb12-134"><a href="#cb12-134" aria-hidden="true" tabindex="-1"></a>elm_ref <span class="ot">&lt;-</span> elm <span class="sc">%&gt;%</span></span>
+<span id="cb12-135"><a href="#cb12-135" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(ELMIdentifier) <span class="sc">%&gt;%</span></span>
+<span id="cb12-136"><a href="#cb12-136" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(</span>
+<span id="cb12-137"><a href="#cb12-137" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Functional site</span><span class="st">`</span> <span class="ot">=</span> dplyr<span class="sc">::</span><span class="fu">first</span>(FunctionalSiteName),</span>
+<span id="cb12-138"><a href="#cb12-138" aria-hidden="true" tabindex="-1"></a>    <span class="at">Type              =</span> dplyr<span class="sc">::</span><span class="fu">first</span>(ELMType),</span>
+<span id="cb12-139"><a href="#cb12-139" aria-hidden="true" tabindex="-1"></a>    <span class="st">`</span><span class="at">Canonical regex</span><span class="st">`</span> <span class="ot">=</span> dplyr<span class="sc">::</span><span class="fu">first</span>(Regex),</span>
+<span id="cb12-140"><a href="#cb12-140" aria-hidden="true" tabindex="-1"></a>    <span class="at">Description       =</span> dplyr<span class="sc">::</span><span class="fu">first</span>(Description),</span>
+<span id="cb12-141"><a href="#cb12-141" aria-hidden="true" tabindex="-1"></a>    <span class="at">n_isolates        =</span> dplyr<span class="sc">::</span><span class="fu">n_distinct</span>(query),</span>
+<span id="cb12-142"><a href="#cb12-142" aria-hidden="true" tabindex="-1"></a>    <span class="at">.groups =</span> <span class="st">"drop"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-143"><a href="#cb12-143" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(dplyr<span class="sc">::</span><span class="fu">desc</span>(n_isolates)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-144"><a href="#cb12-144" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">ELMIdentifier =</span> <span class="fu">sprintf</span>(</span>
+<span id="cb12-145"><a href="#cb12-145" aria-hidden="true" tabindex="-1"></a>    <span class="st">'&lt;a href="http://elm.eu.org/elms/%s" target="_blank"&gt;%s&lt;/a&gt;'</span>,</span>
+<span id="cb12-146"><a href="#cb12-146" aria-hidden="true" tabindex="-1"></a>    ELMIdentifier, ELMIdentifier))</span>
+<span id="cb12-147"><a href="#cb12-147" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-148"><a href="#cb12-148" aria-hidden="true" tabindex="-1"></a>DT<span class="sc">::</span><span class="fu">datatable</span>(</span>
+<span id="cb12-149"><a href="#cb12-149" aria-hidden="true" tabindex="-1"></a>  elm_ref, <span class="at">rownames =</span> <span class="cn">FALSE</span>, <span class="at">escape =</span> <span class="cn">FALSE</span>, <span class="at">filter =</span> <span class="st">"top"</span>,</span>
+<span id="cb12-150"><a href="#cb12-150" aria-hidden="true" tabindex="-1"></a>  <span class="at">options =</span> <span class="fu">list</span>(<span class="at">pageLength =</span> <span class="dv">12</span>, <span class="at">scrollX =</span> <span class="cn">TRUE</span>,</span>
+<span id="cb12-151"><a href="#cb12-151" aria-hidden="true" tabindex="-1"></a>                 <span class="at">columnDefs =</span> <span class="fu">list</span>(<span class="fu">list</span>(<span class="at">width =</span> <span class="st">"320px"</span>, <span class="at">targets =</span> <span class="dv">4</span>))),</span>
+<span id="cb12-152"><a href="#cb12-152" aria-hidden="true" tabindex="-1"></a>  <span class="at">caption =</span> <span class="fu">paste</span>(<span class="st">"All ELM linear-motif classes detected in the CI motif-flanking"</span>,</span>
+<span id="cb12-153"><a href="#cb12-153" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"region, with functional-site name, type, canonical regex,"</span>,</span>
+<span id="cb12-154"><a href="#cb12-154" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"description and isolate count. Identifiers link to the ELM"</span>,</span>
+<span id="cb12-155"><a href="#cb12-155" aria-hidden="true" tabindex="-1"></a>                  <span class="st">"database."</span>))</span>
+<span id="cb12-156"><a href="#cb12-156" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-157"><a href="#cb12-157" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-158"><a href="#cb12-158" aria-hidden="true" tabindex="-1"></a><span class="fu">## Motif landscape across isolates</span></span>
+<span id="cb12-159"><a href="#cb12-159" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-160"><a href="#cb12-160" aria-hidden="true" tabindex="-1"></a>Motif presence per isolate, ELM classes on **y**, isolate fragments on **x**,</span>
+<span id="cb12-161"><a href="#cb12-161" aria-hidden="true" tabindex="-1"></a>faceted and coloured by genus (each panel is one genus, width proportional to</span>
+<span id="cb12-162"><a href="#cb12-162" aria-hidden="true" tabindex="-1"></a>isolate count). The wide bands are motifs shared across essentially all</span>
+<span id="cb12-163"><a href="#cb12-163" aria-hidden="true" tabindex="-1"></a>*Potyvirus* isolates; the narrow genus panels reveal motifs restricted to</span>
+<span id="cb12-164"><a href="#cb12-164" aria-hidden="true" tabindex="-1"></a>particular lineages.</span>
+<span id="cb12-165"><a href="#cb12-165" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-166"><a href="#cb12-166" aria-hidden="true" tabindex="-1"></a><span class="in">```{r grid}</span></span>
+<span id="cb12-167"><a href="#cb12-167" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 15</span></span>
+<span id="cb12-168"><a href="#cb12-168" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 18</span></span>
+<span id="cb12-169"><a href="#cb12-169" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Presence/absence of each ELM motif class (rows) across every CI-region isolate (columns), faceted and coloured by genus. Wide horizontal bands are motifs shared across essentially all Potyvirus isolates; motifs confined to a single narrow genus panel are lineage-restricted."</span></span>
+<span id="cb12-170"><a href="#cb12-170" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_regex.tsv"))</span></span>
+<span id="cb12-171"><a href="#cb12-171" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> elm <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">distinct</span>(query, genus, ELMIdentifier)</span>
+<span id="cb12-172"><a href="#cb12-172" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-173"><a href="#cb12-173" aria-hidden="true" tabindex="-1"></a>genus_sizes <span class="ot">&lt;-</span> meta <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">count</span>(genus, <span class="at">name =</span> <span class="st">"n_iso"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-174"><a href="#cb12-174" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(dplyr<span class="sc">::</span><span class="fu">desc</span>(n_iso))</span>
+<span id="cb12-175"><a href="#cb12-175" aria-hidden="true" tabindex="-1"></a>isolate_order <span class="ot">&lt;-</span> meta <span class="sc">%&gt;%</span></span>
+<span id="cb12-176"><a href="#cb12-176" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">genus =</span> <span class="fu">factor</span>(genus, <span class="at">levels =</span> genus_sizes<span class="sc">$</span>genus)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-177"><a href="#cb12-177" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(genus, virus_abbr) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(name)</span>
+<span id="cb12-178"><a href="#cb12-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-179"><a href="#cb12-179" aria-hidden="true" tabindex="-1"></a>pa <span class="ot">&lt;-</span> pa <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb12-180"><a href="#cb12-180" aria-hidden="true" tabindex="-1"></a>  <span class="at">query         =</span> <span class="fu">factor</span>(query, <span class="at">levels =</span> isolate_order),</span>
+<span id="cb12-181"><a href="#cb12-181" aria-hidden="true" tabindex="-1"></a>  <span class="at">ELMIdentifier =</span> forcats<span class="sc">::</span><span class="fu">fct_rev</span>(<span class="fu">factor</span>(ELMIdentifier)),</span>
+<span id="cb12-182"><a href="#cb12-182" aria-hidden="true" tabindex="-1"></a>  <span class="at">genus         =</span> <span class="fu">factor</span>(genus, <span class="at">levels =</span> genus_sizes<span class="sc">$</span>genus))</span>
+<span id="cb12-183"><a href="#cb12-183" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-184"><a href="#cb12-184" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(pa, <span class="fu">aes</span>(query, ELMIdentifier, <span class="at">fill =</span> genus)) <span class="sc">+</span></span>
+<span id="cb12-185"><a href="#cb12-185" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>() <span class="sc">+</span></span>
+<span id="cb12-186"><a href="#cb12-186" aria-hidden="true" tabindex="-1"></a>  <span class="fu">facet_grid</span>(<span class="at">cols =</span> <span class="fu">vars</span>(genus), <span class="at">scales =</span> <span class="st">"free_x"</span>, <span class="at">space =</span> <span class="st">"free_x"</span>) <span class="sc">+</span></span>
+<span id="cb12-187"><a href="#cb12-187" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_d</span>(<span class="at">option =</span> <span class="st">"turbo"</span>, <span class="at">guide =</span> <span class="st">"none"</span>) <span class="sc">+</span></span>
+<span id="cb12-188"><a href="#cb12-188" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"ELM linear motifs across Potyviridae CI region fragments"</span>,</span>
+<span id="cb12-189"><a href="#cb12-189" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"Isolate fragment (grouped by genus)"</span>, <span class="at">y =</span> <span class="st">"ELM motif class"</span>) <span class="sc">+</span></span>
+<span id="cb12-190"><a href="#cb12-190" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">8</span>) <span class="sc">+</span></span>
+<span id="cb12-191"><a href="#cb12-191" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_blank</span>(), <span class="at">axis.ticks.x =</span> <span class="fu">element_blank</span>(),</span>
+<span id="cb12-192"><a href="#cb12-192" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_blank</span>(), <span class="at">panel.spacing.x =</span> <span class="fu">unit</span>(<span class="fl">1.5</span>, <span class="st">"pt"</span>),</span>
+<span id="cb12-193"><a href="#cb12-193" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">90</span>, <span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb12-194"><a href="#cb12-194" aria-hidden="true" tabindex="-1"></a>        <span class="at">strip.background =</span> <span class="fu">element_rect</span>(<span class="at">fill =</span> <span class="st">"grey95"</span>, <span class="at">colour =</span> <span class="cn">NA</span>))</span>
+<span id="cb12-195"><a href="#cb12-195" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-196"><a href="#cb12-196" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-197"><a href="#cb12-197" aria-hidden="true" tabindex="-1"></a><span class="fu">## Genus-characteristic motifs</span></span>
+<span id="cb12-198"><a href="#cb12-198" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-199"><a href="#cb12-199" aria-hidden="true" tabindex="-1"></a>Motifs ranked by how much their prevalence varies across genera (restricted to</span>
+<span id="cb12-200"><a href="#cb12-200" aria-hidden="true" tabindex="-1"></a>genera with ≥3 isolates). Because genus sizes are very unequal, each call</span>
+<span id="cb12-201"><a href="#cb12-201" aria-hidden="true" tabindex="-1"></a>carries a **confidence** based on the size of the genus driving it, and a</span>
+<span id="cb12-202"><a href="#cb12-202" aria-hidden="true" tabindex="-1"></a>**Wilson lower bound** on the prevalence — so a motif present in 3/3 isolates of</span>
+<span id="cb12-203"><a href="#cb12-203" aria-hidden="true" tabindex="-1"></a>a small genus (point prevalence 1.0, lower bound ≈ 0.44) is not overstated</span>
+<span id="cb12-204"><a href="#cb12-204" aria-hidden="true" tabindex="-1"></a>relative to one present in 166/166 *Potyvirus* isolates (lower bound ≈ 0.98).</span>
+<span id="cb12-205"><a href="#cb12-205" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-206"><a href="#cb12-206" aria-hidden="true" tabindex="-1"></a><span class="in">```{r spec}</span></span>
+<span id="cb12-207"><a href="#cb12-207" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-width: 12</span></span>
+<span id="cb12-208"><a href="#cb12-208" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-height: 5.8</span></span>
+<span id="cb12-209"><a href="#cb12-209" aria-hidden="true" tabindex="-1"></a><span class="co">#| fig-cap: "Genus-characteristic ELM motifs: tile colour is each motif's prevalence within a genus (rows = genera with ≥3 isolates, columns = the most cross-genus-variable motifs). Blue-ringed cells flag calls driven by a small genus (low confidence); † marks genera with &lt;5 isolates."</span></span>
+<span id="cb12-210"><a href="#cb12-210" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_motif_specificity.tsv"))</span></span>
+<span id="cb12-211"><a href="#cb12-211" aria-hidden="true" tabindex="-1"></a>spec <span class="ot">&lt;-</span> readr<span class="sc">::</span><span class="fu">read_tsv</span>(<span class="fu">file.path</span>(elm_dir, <span class="st">"elm_motif_specificity.tsv"</span>),</span>
+<span id="cb12-212"><a href="#cb12-212" aria-hidden="true" tabindex="-1"></a>                        <span class="at">show_col_types =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb12-213"><a href="#cb12-213" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-214"><a href="#cb12-214" aria-hidden="true" tabindex="-1"></a>MIN_N <span class="ot">&lt;-</span> <span class="dv">3</span>; CONF_LOW <span class="ot">&lt;-</span> <span class="dv">5</span>; TOP_M <span class="ot">&lt;-</span> <span class="dv">30</span></span>
+<span id="cb12-215"><a href="#cb12-215" aria-hidden="true" tabindex="-1"></a>big_genera <span class="ot">&lt;-</span> genus_sizes <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(n_iso <span class="sc">&gt;=</span> MIN_N) <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">pull</span>(genus)</span>
+<span id="cb12-216"><a href="#cb12-216" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-217"><a href="#cb12-217" aria-hidden="true" tabindex="-1"></a>top_motifs <span class="ot">&lt;-</span> spec <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">slice_max</span>(spec_var, <span class="at">n =</span> TOP_M) <span class="sc">%&gt;%</span></span>
+<span id="cb12-218"><a href="#cb12-218" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">pull</span>(ELMIdentifier)</span>
+<span id="cb12-219"><a href="#cb12-219" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-220"><a href="#cb12-220" aria-hidden="true" tabindex="-1"></a>prev_long <span class="ot">&lt;-</span> spec <span class="sc">%&gt;%</span></span>
+<span id="cb12-221"><a href="#cb12-221" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">filter</span>(ELMIdentifier <span class="sc">%in%</span> top_motifs) <span class="sc">%&gt;%</span></span>
+<span id="cb12-222"><a href="#cb12-222" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(ELMIdentifier, dplyr<span class="sc">::</span><span class="fu">all_of</span>(<span class="fu">as.character</span>(big_genera))) <span class="sc">%&gt;%</span></span>
+<span id="cb12-223"><a href="#cb12-223" aria-hidden="true" tabindex="-1"></a>  tidyr<span class="sc">::</span><span class="fu">pivot_longer</span>(<span class="sc">-</span>ELMIdentifier, <span class="at">names_to =</span> <span class="st">"genus"</span>, <span class="at">values_to =</span> <span class="st">"prevalence"</span>)</span>
+<span id="cb12-224"><a href="#cb12-224" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-225"><a href="#cb12-225" aria-hidden="true" tabindex="-1"></a>lab_map <span class="ot">&lt;-</span> genus_sizes <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(genus <span class="sc">%in%</span> big_genera) <span class="sc">%&gt;%</span></span>
+<span id="cb12-226"><a href="#cb12-226" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">label =</span> <span class="fu">sprintf</span>(<span class="st">"%s (n=%d)%s"</span>, genus, n_iso,</span>
+<span id="cb12-227"><a href="#cb12-227" aria-hidden="true" tabindex="-1"></a>                                <span class="fu">ifelse</span>(n_iso <span class="sc">&lt;</span> CONF_LOW, <span class="st">" †"</span>, <span class="st">""</span>)))</span>
+<span id="cb12-228"><a href="#cb12-228" aria-hidden="true" tabindex="-1"></a>lm <span class="ot">&lt;-</span> <span class="fu">setNames</span>(lab_map<span class="sc">$</span>label, lab_map<span class="sc">$</span>genus)</span>
+<span id="cb12-229"><a href="#cb12-229" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-230"><a href="#cb12-230" aria-hidden="true" tabindex="-1"></a>prev_long <span class="ot">&lt;-</span> prev_long <span class="sc">%&gt;%</span> dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb12-231"><a href="#cb12-231" aria-hidden="true" tabindex="-1"></a>  <span class="at">genus_lab =</span> <span class="fu">factor</span>(lm[genus], <span class="at">levels =</span> <span class="fu">rev</span>(lm[<span class="fu">as.character</span>(big_genera)])),</span>
+<span id="cb12-232"><a href="#cb12-232" aria-hidden="true" tabindex="-1"></a>  <span class="at">ELMIdentifier =</span> <span class="fu">factor</span>(ELMIdentifier,</span>
+<span id="cb12-233"><a href="#cb12-233" aria-hidden="true" tabindex="-1"></a>    <span class="at">levels =</span> spec<span class="sc">$</span>ELMIdentifier[spec<span class="sc">$</span>ELMIdentifier <span class="sc">%in%</span> top_motifs]))</span>
+<span id="cb12-234"><a href="#cb12-234" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-235"><a href="#cb12-235" aria-hidden="true" tabindex="-1"></a>lowconf <span class="ot">&lt;-</span> spec<span class="sc">$</span>ELMIdentifier[spec<span class="sc">$</span>confidence <span class="sc">==</span> <span class="st">"low"</span>]</span>
+<span id="cb12-236"><a href="#cb12-236" aria-hidden="true" tabindex="-1"></a>prev_long <span class="ot">&lt;-</span> prev_long <span class="sc">%&gt;%</span></span>
+<span id="cb12-237"><a href="#cb12-237" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">lowconf =</span> ELMIdentifier <span class="sc">%in%</span> lowconf <span class="sc">&amp;</span> prevalence <span class="sc">&gt;</span> <span class="fl">0.5</span>)</span>
+<span id="cb12-238"><a href="#cb12-238" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-239"><a href="#cb12-239" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>(prev_long, <span class="fu">aes</span>(ELMIdentifier, genus_lab, <span class="at">fill =</span> prevalence)) <span class="sc">+</span></span>
+<span id="cb12-240"><a href="#cb12-240" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">colour =</span> <span class="st">"grey92"</span>) <span class="sc">+</span></span>
+<span id="cb12-241"><a href="#cb12-241" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_tile</span>(<span class="at">data =</span> dplyr<span class="sc">::</span><span class="fu">filter</span>(prev_long, lowconf),</span>
+<span id="cb12-242"><a href="#cb12-242" aria-hidden="true" tabindex="-1"></a>            <span class="at">colour =</span> <span class="st">"#2b8cbe"</span>, <span class="at">linewidth =</span> <span class="fl">0.7</span>, <span class="at">fill =</span> <span class="cn">NA</span>) <span class="sc">+</span></span>
+<span id="cb12-243"><a href="#cb12-243" aria-hidden="true" tabindex="-1"></a>  <span class="fu">scale_fill_viridis_c</span>(<span class="at">option =</span> <span class="st">"magma"</span>, <span class="at">direction =</span> <span class="sc">-</span><span class="dv">1</span>, <span class="at">limits =</span> <span class="fu">c</span>(<span class="dv">0</span>, <span class="dv">1</span>),</span>
+<span id="cb12-244"><a href="#cb12-244" aria-hidden="true" tabindex="-1"></a>                       <span class="at">name =</span> <span class="st">"Prevalence"</span>) <span class="sc">+</span></span>
+<span id="cb12-245"><a href="#cb12-245" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Genus-characteristic ELM motifs"</span>,</span>
+<span id="cb12-246"><a href="#cb12-246" aria-hidden="true" tabindex="-1"></a>       <span class="at">caption =</span> <span class="fu">paste0</span>(<span class="st">"† genus with &lt;"</span>, CONF_LOW,</span>
+<span id="cb12-247"><a href="#cb12-247" aria-hidden="true" tabindex="-1"></a>                        <span class="st">" isolates (low-confidence); blue-ringed cells: "</span>,</span>
+<span id="cb12-248"><a href="#cb12-248" aria-hidden="true" tabindex="-1"></a>                        <span class="st">"characteristic call from a small genus."</span>),</span>
+<span id="cb12-249"><a href="#cb12-249" aria-hidden="true" tabindex="-1"></a>       <span class="at">x =</span> <span class="st">"ELM motif class"</span>, <span class="at">y =</span> <span class="st">"Genus"</span>) <span class="sc">+</span></span>
+<span id="cb12-250"><a href="#cb12-250" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>(<span class="at">base_size =</span> <span class="dv">9</span>) <span class="sc">+</span></span>
+<span id="cb12-251"><a href="#cb12-251" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">axis.text.x =</span> <span class="fu">element_text</span>(<span class="at">angle =</span> <span class="dv">45</span>, <span class="at">hjust =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb12-252"><a href="#cb12-252" aria-hidden="true" tabindex="-1"></a>        <span class="at">plot.caption =</span> <span class="fu">element_text</span>(<span class="at">hjust =</span> <span class="dv">0</span>, <span class="at">size =</span> <span class="dv">7</span>, <span class="at">colour =</span> <span class="st">"grey30"</span>),</span>
+<span id="cb12-253"><a href="#cb12-253" aria-hidden="true" tabindex="-1"></a>        <span class="at">panel.grid =</span> <span class="fu">element_blank</span>())</span>
+<span id="cb12-254"><a href="#cb12-254" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-255"><a href="#cb12-255" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-256"><a href="#cb12-256" aria-hidden="true" tabindex="-1"></a>The highest-confidence genus-characteristic calls (largest driving genus). These</span>
+<span id="cb12-257"><a href="#cb12-257" aria-hidden="true" tabindex="-1"></a>are the **data-selected "interesting" motifs** — chosen by an unbiased</span>
+<span id="cb12-258"><a href="#cb12-258" aria-hidden="true" tabindex="-1"></a>cross-genus prevalence-variance ranking rather than by hand — so each is shown</span>
+<span id="cb12-259"><a href="#cb12-259" aria-hidden="true" tabindex="-1"></a>with its functional-site name and canonical pattern:</span>
+<span id="cb12-260"><a href="#cb12-260" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-261"><a href="#cb12-261" aria-hidden="true" tabindex="-1"></a><span class="in">```{r spec-table}</span></span>
+<span id="cb12-262"><a href="#cb12-262" aria-hidden="true" tabindex="-1"></a><span class="co">#| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_motif_specificity.tsv"))</span></span>
+<span id="cb12-263"><a href="#cb12-263" aria-hidden="true" tabindex="-1"></a><span class="co"># motif -&gt; (name, regex) lookup from the regex hit table</span></span>
+<span id="cb12-264"><a href="#cb12-264" aria-hidden="true" tabindex="-1"></a>motif_meta <span class="ot">&lt;-</span> elm <span class="sc">%&gt;%</span></span>
+<span id="cb12-265"><a href="#cb12-265" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">group_by</span>(ELMIdentifier) <span class="sc">%&gt;%</span></span>
+<span id="cb12-266"><a href="#cb12-266" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">summarise</span>(<span class="st">`</span><span class="at">Functional site</span><span class="st">`</span> <span class="ot">=</span> dplyr<span class="sc">::</span><span class="fu">first</span>(FunctionalSiteName),</span>
+<span id="cb12-267"><a href="#cb12-267" aria-hidden="true" tabindex="-1"></a>                   <span class="at">Regex =</span> dplyr<span class="sc">::</span><span class="fu">first</span>(Regex), <span class="at">.groups =</span> <span class="st">"drop"</span>)</span>
+<span id="cb12-268"><a href="#cb12-268" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-269"><a href="#cb12-269" aria-hidden="true" tabindex="-1"></a>spec <span class="sc">%&gt;%</span></span>
+<span id="cb12-270"><a href="#cb12-270" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">arrange</span>(dplyr<span class="sc">::</span><span class="fu">desc</span>(spec_var)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-271"><a href="#cb12-271" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">transmute</span>(ELMIdentifier, top_genus, top_n,</span>
+<span id="cb12-272"><a href="#cb12-272" aria-hidden="true" tabindex="-1"></a>                   <span class="at">top_prev =</span> <span class="fu">round</span>(top_prev, <span class="dv">2</span>),</span>
+<span id="cb12-273"><a href="#cb12-273" aria-hidden="true" tabindex="-1"></a>                   <span class="at">wilson_lwr =</span> <span class="fu">round</span>(top_prev_wilson_lwr, <span class="dv">2</span>),</span>
+<span id="cb12-274"><a href="#cb12-274" aria-hidden="true" tabindex="-1"></a>                   confidence, <span class="at">spec_var =</span> <span class="fu">round</span>(spec_var, <span class="dv">3</span>)) <span class="sc">%&gt;%</span></span>
+<span id="cb12-275"><a href="#cb12-275" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">slice_head</span>(<span class="at">n =</span> <span class="dv">15</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-276"><a href="#cb12-276" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">left_join</span>(motif_meta, <span class="at">by =</span> <span class="st">"ELMIdentifier"</span>) <span class="sc">%&gt;%</span></span>
+<span id="cb12-277"><a href="#cb12-277" aria-hidden="true" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">relocate</span>(<span class="st">`</span><span class="at">Functional site</span><span class="st">`</span>, Regex, <span class="at">.after =</span> ELMIdentifier) <span class="sc">%&gt;%</span></span>
+<span id="cb12-278"><a href="#cb12-278" aria-hidden="true" tabindex="-1"></a>  knitr<span class="sc">::</span><span class="fu">kable</span>(<span class="at">caption =</span> <span class="fu">paste</span>(<span class="st">"Top 15 motifs by cross-genus prevalence"</span>,</span>
+<span id="cb12-279"><a href="#cb12-279" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"variance, with functional-site name, canonical"</span>,</span>
+<span id="cb12-280"><a href="#cb12-280" aria-hidden="true" tabindex="-1"></a>                               <span class="st">"regex and small-sample confidence."</span>))</span>
+<span id="cb12-281"><a href="#cb12-281" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb12-282"><a href="#cb12-282" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-283"><a href="#cb12-283" aria-hidden="true" tabindex="-1"></a><span class="fu">## Notes</span></span>
+<span id="cb12-284"><a href="#cb12-284" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb12-285"><a href="#cb12-285" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The concatenated-submission workflow (<span class="in">`build_concat()`</span> + junction-hit</span>
+<span id="cb12-286"><a href="#cb12-286" aria-hidden="true" tabindex="-1"></a>  flagging) used for the original single ELM webserver query is retained in</span>
+<span id="cb12-287"><a href="#cb12-287" aria-hidden="true" tabindex="-1"></a>  <span class="in">`potytools`</span> but is no longer needed here, since <span class="in">`gget`</span> lets us query each</span>
+<span id="cb12-288"><a href="#cb12-288" aria-hidden="true" tabindex="-1"></a>  isolate directly.</span>
+<span id="cb12-289"><a href="#cb12-289" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The gget ELM database footprint is ~3 MB (ELM-curated instances/classes);</span>
+<span id="cb12-290"><a href="#cb12-290" aria-hidden="true" tabindex="-1"></a>  the larger DIAMOND binary lives inside the disposable pixi env, not in the</span>
+<span id="cb12-291"><a href="#cb12-291" aria-hidden="true" tabindex="-1"></a>  project.</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+</div></div></div></div></div>
+</div> <!-- /content -->
+
+
+
+
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/MintyHybrid/project-hail-mary/edit/main/notebooks/04_protein_motifs.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/MintyHybrid/project-hail-mary/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
