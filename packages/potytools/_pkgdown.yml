@@ -1,0 +1,97 @@
+url: ~
+
+template:
+  bootstrap: 5
+
+reference:
+  - title: "Sequence retrieval"
+    desc: "Fetch sequences from NCBI Entrez (memoised)"
+    contents:
+      - fetch_custom_sequences
+
+  - title: "Codon usage analysis"
+    desc: "RSCU, ENC, GC content — standard and optimized (seqinr-based)"
+    contents:
+      - extract_codons
+      - extract_codons_from_set
+      - calculate_codon_frequencies
+      - calculate_rscu
+      - calculate_rscu_correct
+      - calculate_rscu_matrix_fast
+      - calculate_enc
+      - calculate_enc_fast
+      - calculate_gc_content
+      - calculate_gc_fast
+      - calculate_gc_matrix_fast
+      - check_wobble_bias
+      - calculate_dinucleotide_freq
+      - compare_codon_usage
+      - compare_codon_usage_fast
+      - check_rare_codons
+      - analyze_motif_variants
+      - perform_rscu_pca_improved
+      - run_complete_analysis
+      - run_complete_analysis_optimized
+
+  - title: "Host classification"
+    desc: "Detect monocot / dicot hosts and compute host-adapted CAI"
+    contents:
+      - detect_host_from_name
+      - classify_host_type
+      - create_host_classification_table
+      - get_codon_table_for_host_type
+      - create_host_specific_codon_tables
+      - calculate_host_specific_cai
+      - group_sequences_by_host_type
+      - save_host_classification
+      - load_host_classification
+
+  - title: "ELM motif search"
+    desc: "Build concatenated sequences, query ELM database, parse hits"
+    contents:
+      - build_concat
+      - flag_junction_hits
+      - map_hits_to_isolates
+      - summarise_conservation
+      - run_elm_conservation
+      - parse_elm_hits
+      - query_elm
+      - query_elm_cached
+      - check_elm_api
+
+  - title: "Sequence logos & conservation"
+    desc: "Sequence logo plots, PSSM, and information content"
+    contents:
+      - create_dna_logo
+      - create_protein_logo
+      - create_combined_logo
+      - create_combined_logos
+      - create_host_specific_logos
+      - create_comprehensive_logo_analysis
+      - plot_information_content
+      - calculate_information_content
+      - calculate_pssm
+      - plot_pssm_heatmap
+      - logo_statistics
+      - calculate_position_entropy
+      - plot_conservation
+      - save_combined_logo
+
+  - title: "Phylogenetics"
+    desc: "Tree building, comparison, and tanglegram visualization"
+    contents:
+      - build_phylo_tree
+      - build_multi_region_trees
+      - compare_trees
+      - plot_tanglegram
+      - phylogenetic_analysis_workflow
+
+  - title: "GenBank parsing"
+    desc: "Parse GenBank flatfiles without Bioconductor genbankr"
+    contents:
+      - load_genbank_folder
+      - parse_genbank_file
+      - features_as_df
+      - get_all_proteins
+      - get_all_sequences
+      - write_fasta

@@ -1,0 +1,62 @@
+---
+title: "Appendix: Data Sources and Accessions"
+date: last-modified
+execute:
+  eval: false
+---
+
+## Sequence Data
+
+| Source | Description | Access | Citation |
+|---|---|---|---|
+| ICTV OPSR alignment | Potyviridae polyprotein/CI alignment (v16) | `data/OPSR.Poty.Fig3.v16_align.txt` | [@inouenagata2022] |
+| ICTV VMR (MSL41) | Virus metadata / genus assignment | `data/VMR_MSL41.v1.20260320.xlsx` | [@ictvvmr2024] |
+| NCBI GenBank | CDS sequences retrieved via `rentrez` | `data/ci_cds_fetched.fasta` | — |
+| ELM database | Short linear motif definitions | API / `gget elm`; `data/elm_gget/` | [@elm2024] |
+
+## External Databases
+
+| Database | Usage | API endpoint |
+|---|---|---|
+| GBIF | Taxonomic resolution, occurrence data | `api.gbif.org/v1/` |
+| GLOBI | Biotic interaction data | `api.globalbioticinteractions.org/` |
+| ELM | Protein short linear motifs | `elm.eu.org/api/` |
+| NCBI Entrez | Nucleotide/protein sequences | `eutils.ncbi.nlm.nih.gov/` |
+
+## Software and R packages
+
+All analyses were carried out in **R** [@R-base] with **Quarto**. The work relies
+heavily on the **rOpenSci** ecosystem — `rentrez` for NCBI Entrez access
+[@R-rentrez], `rotl` for the Open Tree of Life [@R-rotl], `rphylopic` for
+silhouettes [@R-rphylopic], and `crul` for HTTP [@R-crul] — alongside the
+Bioconductor sequence/tree stack (`Biostrings` [@R-Biostrings], `DECIPHER`
+[@R-DECIPHER], `msa` [@R-msa], `ggtree`/`treeio` [@R-ggtree; @R-treeio]), the
+phylogenetics packages `ape` [@R-ape] and `phytools` [@R-phytools], codon/sequence
+tools `seqinr` [@R-seqinr] and `ggseqlogo` [@R-ggseqlogo], the network packages
+`igraph` [@R-igraph], `ggraph` [@R-ggraph] and `visNetwork` [@R-visNetwork],
+interactive widgets `plotly` [@R-plotly], `DT` [@R-DT] and `r3dmol` [@R-r3dmol],
+`metacoder` [@R-metacoder], and the `tidyverse` [@R-tidyverse]. Analysis functions
+specific to this project are collected in the local **`potytools`** package
+[@R-potytools]. **Every package used, with its version, is listed in the session
+information below, and all software citations are collected in the complete
+bibliography.**
+
+```{r}
+#| eval: true
+#| echo: false
+# Session info with absolute filesystem paths redacted (privacy).
+.si <- capture.output(sessioninfo::session_info())
+.si <- gsub("[A-Za-z]:[\\\\/][^ ]*|/(home|Users)/[^ ]*", "<path redacted>", .si)
+cat(.si, sep = "\n")
+```
+
+## Reproducibility
+
+All analyses can be re-run end-to-end with:
+
+```r
+targets::tar_make()
+```
+
+See `_targets.R` for the full dependency graph. Individual steps requiring
+external tools (`mafft`, `iqtree2`, `hmmscan`) are noted where they appear.

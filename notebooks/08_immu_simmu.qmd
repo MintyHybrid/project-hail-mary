@@ -1,0 +1,804 @@
+---
+title: "Plant Immune Trafficking Observatory"
+subtitle: "Interactive kinetic simulation of receptor trafficking, autophagy flux, and AP-4 cargo dynamics"
+author: "Christina Muedsam"
+date: last-modified
+---
+
+<!-- SOURCE: 20260125_ClaudeAP4/immune_dashboard.ojs + AP4_TEPSIN_expanded_analysis.md -->
+
+## Background
+
+Potyvirus infection occurs against the backdrop of highly dynamic plant immune
+receptor trafficking. Understanding how the vesicle trafficking network responds
+to infection requires integrating three interconnected pathways:
+
+**AP-4 complex (Adaptor Protein Complex 4)** is a heterotetrameric TGN-resident
+complex (subunits AP4B, AP4E, AP4M, AP4S) that mediates clathrin-independent
+trafficking from the *trans*-Golgi network to endosomes. Unlike AP-1/2/3, AP-4
+operates without a clathrin coat. In *Arabidopsis* it is experimentally
+established to sort cargo bearing tyrosine-based (YXXΦ) motifs — including
+**VACUOLAR SORTING RECEPTOR1 (VSR1)** and the borate transporter BOR1 — via its µ
+(AP4M) subunit [@fuji2016], and AP-4 subunit interactions have been mapped
+systematically [@wang2022ap]. Its most conserved cargo is **ATG9**, a lipid
+scramblase essential for autophagosome biogenesis [@mattera2017, ].
+
+Crucially for immunity, AP-4 is required for the **fusion of the vacuolar and
+plasma membranes** that executes the hypersensitive cell-death response to
+avirulent bacteria: `ap4` mutants fail to fuse and lose resistance to effectors
+recognised at the plasma membrane [@hatsugai2018], part of the vacuole-membrane
+fusion immunity first described by @hatsugai2009 [@haranishimura2011]. And most
+directly, **AP-4 reads a tyrosine motif on an immune protein**: @huang2026 showed
+that the AP-4 µ subunit **binds the transmembrane immunity component BDA1 through
+BDA1's tyrosines Y18/Y257**, and that AP-4 is required for **SNC2**-mediated
+immunity and for basal, pattern- and effector-triggered immunity — a published
+precedent for a plant defence protein being AP-4-sorted via a YXXΦ-type signal.
+
+::: {.callout-warning appearance="simple"}
+By contrast, the assignment of the immune regulators **NPR1** and **CBP60g** as
+AP-4 cargo — and the idea of AP-4-dependent NPR1 "endosomal processing" before
+nuclear import — are **predictions inferred from mammalian AP-4 biology and
+sorting-motif analysis, not established plant facts**. In particular, **no direct
+experimental AP-4–NPR1 interaction is documented**, so no such edge is drawn in
+the protein-interaction network (Chapter 5); these links are included here only
+as explicit, testable hypotheses (lower confidence than the ATG9/VSR1 cargo) and
+are flagged as *predicted* wherever they appear.
+:::
+
+**ESCRT pathway** (Endosomal Sorting Complexes Required for Transport)
+mediates ubiquitin-dependent sorting of activated immune receptors (e.g. FLS2,
+EFR) from early endosomes into intraluminal vesicles (ILVs) of multivesicular
+bodies (MVBs), ultimately targeting them for vacuolar degradation. ESCRT-I
+mutation causes FLS2 mis-sorting and attenuated PTI [@spallek2013]. Phosphoinositide
+PI(3)P on early endosomes and PI(3,5)P₂ on late endosomes/MVBs coordinate ESCRT
+recruitment and MVB maturation [@simon2016].
+
+**Selective autophagy** provides an alternative degradation route and is
+functionally connected to ESCRT via shared PI(3)P pools and NBR1-mediated
+cargo recruitment. Autophagy is required for both immune amplification (clearing
+protein aggregates, eliminating pathogens) and immune termination (receptor
+turnover) [@ustun2018; @leary2018].
+
+**The virus works the very same surfaces.** This is not a coincidental overlap:
+positive-strand RNA viruses — potyviruses included — **remodel the host
+endomembrane system into viral replication organelles (VROs)**, and the same
+components that run immune trafficking are co-opted to build and protect them
+[@jovanovic2023]. Potyvirus VRO membranes are **enriched in PI(3)P and PI(4)P**,
+recruit **ATG9 and other autophagy factors**, and are shaped by **ESCRT** and by
+the proteasomal/lytic pathways — exactly the nodes this model tracks
+[@jovanovic2023]. Concretely, TuMV **co-opts the vacuolar sorting receptor VSR4 to
+target its replication vesicles to the endosome** for genome replication
+[@wu2022vsr4], and its CI protein reaches endosomes via **AP-2-read dileucine
+signals** (Chapter 5) — so the viral replication machinery is delivered through
+precisely the AP-adaptor / PI-lipid / autophagy / ESCRT circuitry modelled below.
+
+The simulation below models steady-state receptor pool dynamics across all three
+pathways, allowing in silico perturbation of individual components to predict
+pathological outcomes.
+
+## Interactive Simulation
+
+<!-- Rewritten as pure OJS — React/recharts version is not compatible with OJS runtime -->
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// STATIC DATA
+// ============================================================================
+
+genotype = [
+  { label: "None (WT)",                  value: "none" },
+  { label: "AP-4 knockout",              value: "ap4_knockout" },
+  { label: "ESCRT knockout",             value: "escrt_knockout" },
+  { label: "ATG5 knockout",              value: "atg5_knockout" },
+  { label: "VPS4-DN",                    value: "vps4_dominant_negative" },
+  { label: "Bafilomycin (autophagy inh)", value: "bafilomycin" },
+  { label: "PI3K inhibitor",             value: "pi3k_inhibitor" },
+  { label: "Sterol depletion",           value: "sterol_depletion" },
+  { label: "AP-4 + ESCRT double KO",     value: "ap4_escrt_double" },
+  { label: "AP-4-DN",                    value: "ap4_dominant_negative" }
+]
+
+resptype = [
+  { label: "PTI (Pattern-Triggered Immunity)", value: "pti" },
+  { label: "ETI (Effector-Triggered Immunity)", value: "eti" },
+  { label: "Mixed",                            value: "mixed" }
+]
+
+pathotype = [
+  { label: "None",                          value: "none" },
+  { label: "Magnaporthe oryzae (fungus)",   value: "magnaporthe" },
+  { label: "Colletotrichum (fungus)",       value: "colletotrichum" },
+  { label: "Botrytis cinerea (fungus)",     value: "botrytis" },
+  { label: "Fusarium graminearum (fungus)", value: "fusarium" },
+  { label: "Potyvirus (RNA virus)",         value: "potyvirus" }
+]
+
+// Short profiles shown in the pathogen card. Virus effects on the trafficking
+// network are those documented for potyviruses (autophagy manipulation, ER/6K2
+// membrane remodelling co-opting endomembrane flux); modifiers are illustrative.
+pathogenInfo = ({
+  none:          { kind: "—",      note: "No pathogen challenge." },
+  magnaporthe:   { kind: "Fungus", note: "Hemibiotroph; appressorial penetration; strong chitin-triggered ROS." },
+  colletotrichum:{ kind: "Fungus", note: "Hemibiotroph; effectors target autophagy and SA signalling." },
+  botrytis:      { kind: "Fungus", note: "Necrotroph; oxalic acid + ROS drive host cell death." },
+  fusarium:      { kind: "Fungus", note: "Cell-wall degradation and mycotoxins; moderate ROS." },
+  potyvirus:     { kind: "RNA virus", note: "6K2/VPg remodel ER membranes; induces/co-opts autophagy and endomembrane flux for replication (HC-Pro suppresses RNA silencing)." }
+})
+```
+
+```{ojs}
+//| echo: false
+//| panel: input
+
+viewof perturbation = Inputs.select(genotype, {
+  label: "Genotypic perturbation",
+  format: x => x.label,
+  value: genotype.find(g => g.value === "none")
+})
+
+viewof response = Inputs.select(resptype, {
+  label: "Response type",
+  format: x => x.label,
+  value: resptype.find(g => g.value === "pti")
+})
+
+viewof pathogen = Inputs.select(pathotype, {
+  label: "Pathogen",
+  format: x => x.label,
+  value: pathotype.find(g => g.value === "fusarium")
+})
+
+viewof timeMax = Inputs.range([10, 600], { value: 120, step: 5, label: "Max simulation time (min)" })
+
+viewof isRunningRaw = Inputs.checkbox(["▶  Run simulation"])
+isRunning = isRunningRaw.length > 0
+```
+
+```{ojs}
+//| echo: false
+// Pathogen profile card
+html`<div style="background:#fff7ed; border:1px solid #fdba74; border-radius:8px;
+                 padding:10px 14px; margin:6px 0; font-size:13px;">
+  <b style="color:#c2410c;">Pathogen:</b>
+  <span style="color:#7c2d12;">${pathogen.label}</span>
+  <span style="color:#9a3412;"> · ${pathogenInfo[pathogen.value].kind}</span>
+  <div style="color:#57534e; margin-top:4px;">${pathogenInfo[pathogen.value].note}</div>
+</div>`
+```
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// PERTURBATION MODIFIERS
+// ============================================================================
+
+function getPerturbationModifiers(type) {
+  const m = {
+    endocytosis: 1, ubiquitination: 1, escrt: 1, autophagy: 1,
+    recycling: 1, fusion: 1, lipids: 1, ros: 1, cellWall: 1,
+    ap4Sorting: 1, npr1Nuclear: 1, cbp60gNuclear: 1, exosomeTopology: 0
+  };
+  switch (type) {
+    case "ap4_knockout":
+      // Indirect topology risk only (autophagy→ESCRT stress); AP-4 is not in the
+      // scission machinery.
+      m.ap4Sorting = 0.05; m.autophagy = 0.6; m.npr1Nuclear = 0.5; m.exosomeTopology = 0.15; break;
+    case "escrt_knockout":
+      m.escrt = 0.05; m.autophagy = 1.3; m.ros = 1.2; m.exosomeTopology = 0.12; break;
+    case "atg5_knockout":
+      m.autophagy = 0.05; m.escrt = 1.3; m.ros = 0.9; break;
+    case "vps4_dominant_negative":
+      // Direct ESCRT-III scission defect — mechanistically the strongest single
+      // driver of topology reversal.
+      m.escrt = 0.1; m.lipids = 0.6; m.ros = 1.4; m.exosomeTopology = 0.35; break;
+    case "bafilomycin":
+      // Blocks vacuolar fusion/acidification (degradation), not autophagosome
+      // formation → autophagosomes accumulate.
+      m.fusion = 0.1; m.escrt = 1.1; break;
+    case "pi3k_inhibitor":
+      m.escrt = 0.7; m.autophagy = 0.7; m.lipids = 0.5; break;
+    case "sterol_depletion":
+      m.endocytosis = 0.7; m.escrt = 0.8; m.lipids = 0.3; m.exosomeTopology = 0.18; break;
+    case "ap4_escrt_double":
+      m.ap4Sorting = 0.05; m.escrt = 0.05; m.autophagy = 0.4; m.ros = 1.5; m.exosomeTopology = 0.45; break;
+    case "ap4_dominant_negative":
+      // Corrected: same topology risk as AP-4 KO (0.15). A DN sequesters cargo
+      // but adds no mechanism for membrane-scission/topology errors beyond the KO
+      // (see model-assumptions section).
+      m.ap4Sorting = 0.3; m.autophagy = 0.7; m.npr1Nuclear = 0.7; m.exosomeTopology = 0.15; break;
+  }
+  return m;
+}
+
+// Light pathogen-specific modifiers (illustrative). The virus co-opts
+// autophagy/endomembrane flux (potyvirus 6K2/VPg), fungi mainly drive ROS.
+function getPathogenModifiers(type) {
+  const p = { ros: 1, autophagy: 1, escrt: 1 };
+  switch (type) {
+    case "magnaporthe":    p.ros = 1.3; break;
+    case "colletotrichum": p.ros = 1.1; p.autophagy = 0.85; break;
+    case "botrytis":       p.ros = 1.5; break;
+    case "fusarium":       p.ros = 1.2; break;
+    case "potyvirus":      p.autophagy = 1.4; p.escrt = 1.2; break;
+  }
+  return p;
+}
+```
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// SIMULATION GENERATOR
+// ============================================================================
+
+simulation = {
+  // Restart cleanly whenever controls change
+  const dt = 0.1;
+  let s = {
+    pm: 100, ee: 0, mvb: 0, auto: 0, vac: 0,
+    ros: 0, mapk: 0, callose: 0,
+    pi3p_ee: 2.5, pi3p_mvb: 5.0,
+    atg9_tgn: 100, npr1_nucleus: 0, cbp60g_nucleus: 0,
+    exo_normal: 0, exo_reversed: 0,
+    time: 0
+  };
+  let hist = [];
+  let t = 0;
+
+  // Single source of truth: every rate constant the model uses lives here
+  // (matches the parameter table in "Model assumptions"). Rates are min⁻¹
+  // unless noted; receptor_synthesis is a zero-order replenishment coefficient.
+  const params = {
+    internalization: 0.30, recycling: 0.20, escrt_recruitment: 0.25,
+    mvb_fusion: 0.15, atg_activation: 0.10, autophagy_flux: 0.12,
+    pi3p_prod_ee: 0.04, pi3p_prod_mvb: 0.03,
+    pi3p_cons_ee: 0.020, pi3p_cons_mvb: 0.030,
+    atg9_export: 0.04, atg9_backlog: 2.5,
+    npr1_import_pti: 0.12, npr1_import_eti: 0.30, cbp60g_import: 0.15,
+    exo_rate: 0.80, exo_normal: 0.04,
+    k_ros_decay: 0.513, k_mapk_decay: 0.202,   // exp(-k·dt) reproduces 0.95/0.98 at dt=0.1
+    receptor_synthesis: 0.15                   // homeostatic PM replenishment toward baseline
+  };
+  const PM0 = 100;   // PM baseline that basal resynthesis restores toward
+
+  while (true) {
+    if (isRunning && t < timeMax) {
+      const mo = getPerturbationModifiers(perturbation.value);
+      const pmod = getPathogenModifiers(pathogen.value);
+      const rv = response.value;
+
+      // --- First-order mass-action fluxes (each proportional to dt exactly once) ---
+      const internalized = s.pm  * params.internalization    * dt * mo.endocytosis;
+      const recycled     = s.ee  * params.recycling          * dt * mo.recycling;
+      // ESCRT+ubiquitin sorting of endosomal cargo into ILVs of the MVB
+      const ilv_form     = s.ee  * params.escrt_recruitment  * dt * mo.escrt * mo.ubiquitination;
+      // MVB→vacuole delivery of ILVs
+      const mvb_fused    = s.mvb * params.mvb_fusion         * dt * mo.fusion;
+      // autophagosome formation (ATG machinery) and autophagosome→vacuole fusion
+      const auto_induced = s.ee  * params.atg_activation     * dt * mo.autophagy * pmod.autophagy;
+      const auto_flux    = s.auto * params.autophagy_flux    * dt * mo.fusion;
+
+      // --- Signalling (phenomenological, pathogen-modulated). Decay uses
+      //     exp(-k·dt) so the rate is dt-independent (reproduces 0.95/0.98 at dt=0.1) ---
+      const ros_t   = t < 5  ? Math.exp(-t / 2) * 100 * mo.ros * pmod.ros : s.ros  * Math.exp(-params.k_ros_decay  * dt);
+      const mapk_t  = t < 10 ? (1 - Math.exp(-t / 3)) * 80 * mo.ros : s.mapk * Math.exp(-params.k_mapk_decay * dt);
+      const cal_t   = t < 20 ? ros_t * 0.3 : s.callose * Math.exp(-params.k_ros_decay * dt);
+
+      // --- PI(3)P: produced on endosomes, consumed by ILV formation (ESCRT) ---
+      const pi3p_ee_new  = Math.max(0.05, s.pi3p_ee  + params.pi3p_prod_ee  * dt * mo.lipids - params.pi3p_cons_ee  * ilv_form);
+      const pi3p_mvb_new = Math.max(0.05, s.pi3p_mvb + params.pi3p_prod_mvb * dt * mo.lipids - params.pi3p_cons_mvb * ilv_form);
+
+      // --- AP-4 cargo sorting; ATG9 backs up at the TGN when AP-4 is impaired ---
+      const atg9_sorted   = s.atg9_tgn * params.atg9_export * dt * mo.ap4Sorting;
+      const atg9_backlog  = (1 - mo.ap4Sorting) * params.atg9_backlog * dt;
+      const npr1_import   = (rv === "eti" ? params.npr1_import_eti : params.npr1_import_pti) * dt * mo.npr1Nuclear * mo.ap4Sorting;
+      const cbp60g_import = params.cbp60g_import * dt * mo.cbp60gNuclear * mo.ap4Sorting;
+
+      // --- Exosomes: reversed-topology fraction = intrinsic perturbation risk,
+      //     amplified by membrane stress from CARGO BACKLOG. Keyed off accumulated
+      //     cargo (not ESCRT flux or PI(3)P), so aberrant vesiculation under an
+      //     ESCRT-deficient background (e.g. ap4+escrt double KO) still produces
+      //     reversed exosomes — matching the "aberrant ILV formation without
+      //     functional ESCRT" mechanism. ---
+      const backlog       = Math.min(2, (s.ee + s.mvb) / 40);   // 0..2 membrane stress
+      const exo_rev_gain  = mo.exosomeTopology * (0.5 + backlog) * params.exo_rate * dt;
+      const exo_norm_gain = (1 - mo.exosomeTopology) * s.mvb * params.exo_normal * dt;
+
+      // basal receptor resynthesis toward baseline → PM reaches a nonzero steady state
+      const pm_synth      = params.receptor_synthesis * Math.max(0, PM0 - s.pm) * dt;
+
+      s = {
+        pm:             Math.max(0, s.pm   - internalized + recycled + pm_synth),
+        ee:             Math.max(0, s.ee   + internalized - recycled - ilv_form - auto_induced),
+        mvb:            Math.max(0, s.mvb  + ilv_form - mvb_fused),
+        auto:           Math.max(0, s.auto + auto_induced - auto_flux),
+        vac:            s.vac + mvb_fused + auto_flux,
+        ros:            Math.max(0, ros_t),
+        mapk:           Math.max(0, mapk_t),
+        callose:        Math.max(0, cal_t),
+        pi3p_ee:        pi3p_ee_new,
+        pi3p_mvb:       pi3p_mvb_new,
+        atg9_tgn:       Math.max(20, s.atg9_tgn - atg9_sorted + atg9_backlog),
+        npr1_nucleus:   Math.max(0, Math.min(50, s.npr1_nucleus + npr1_import)),
+        cbp60g_nucleus: Math.max(0, Math.min(30, s.cbp60g_nucleus + cbp60g_import)),
+        exo_normal:     Math.max(0, s.exo_normal  + exo_norm_gain),
+        exo_reversed:   Math.max(0, s.exo_reversed + exo_rev_gain),
+        time: t
+      };
+      t = parseFloat((t + dt).toFixed(2));
+
+      if (Math.round(t * 10) % 5 === 0) {
+        hist = [...hist.slice(-800), { ...s }];
+      }
+    }
+
+    yield { state: s, history: hist, time: t };
+    await Promises.delay(30);
+  }
+}
+
+simState   = simulation.state   ?? {}
+simHistory = simulation.history ?? []
+simTime    = simulation.time    ?? 0
+```
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// PATHOLOGY DETECTION
+// ============================================================================
+
+pathologies = {
+  const s = simState;
+  const t = simTime;
+  const alerts = [];
+  // Failed receptor downregulation (impaired endocytosis) → receptors persist at PM
+  if (s.pm > 70 && t > 30)
+    alerts.push({ level: "warning", title: "Impaired receptor downregulation", msg: "PM receptors not cleared — risk of chronic signalling" });
+  // Endosomal / MVB overload (impaired sorting or fusion)
+  if (s.ee > 50 || s.mvb > 50)
+    alerts.push({ level: "warning", title: "Endosomal overload", msg: "Cargo accumulating in EE/MVB — impaired sorting or fusion" });
+  // Autophagosome accumulation without degradation (blocked fusion, e.g. bafilomycin)
+  if (s.auto > 40 && t > 25)
+    alerts.push({ level: "warning", title: "Autophagy flux blockade", msg: "Autophagosomes accumulate without vacuolar degradation" });
+  // AP-4 deficiency signature: ATG9 backs up at the TGN
+  if (s.atg9_tgn > 150 && t > 15)
+    alerts.push({ level: "warning", title: "ATG9 accumulation at TGN", msg: "AP-4 deficiency → ATG9 mis-sorting → impaired autophagosome biogenesis" });
+  // NPR1 fails to reach the nucleus despite signal (AP-4-dependent, predicted)
+  if (s.npr1_nucleus < 3 && s.atg9_tgn > 130 && t > 30)
+    alerts.push({ level: "warning", title: "NPR1 nuclear-import failure (predicted)", msg: "AP-4 deficiency → NPR1 mis-sorting → impaired SAR (hypothesis, cross-species inference)" });
+  // PI(3)P depletion on MVB (membrane-identity loss; precondition for topology errors)
+  if (s.pi3p_mvb < 1.0 && t > 15)
+    alerts.push({ level: "warning", title: "PI(3)P depletion (MVB)", msg: "Loss of endosomal identity — ESCRT assembly compromised" });
+  // Reversed-topology exosomes — the autoimmune-risk readout
+  if (s.exo_reversed > 20)
+    alerts.push({ level: "alert", title: "⚠ MEMBRANE TOPOLOGY INVERSION", msg: "Reversed-topology exosomes accumulating — cytoplasmic epitopes exposed → potential autoimmune response" });
+  return alerts;
+}
+```
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// VISUALISATIONS
+// ============================================================================
+
+// Tidy-long helpers
+traffLong = simHistory.flatMap(d => [
+  { time: d.time, variable: "Plasma membrane", value: d.pm   },
+  { time: d.time, variable: "Early endosome",  value: d.ee   },
+  { time: d.time, variable: "MVB",             value: d.mvb  },
+  { time: d.time, variable: "Vacuole",         value: d.vac  }
+])
+
+sigLong = simHistory.flatMap(d => [
+  { time: d.time, variable: "ROS",  value: d.ros  },
+  { time: d.time, variable: "MAPK", value: d.mapk }
+])
+
+pi3pLong = simHistory.flatMap(d => [
+  { time: d.time, variable: "PI(3)P — EE",  value: d.pi3p_ee  },
+  { time: d.time, variable: "PI(3)P — MVB", value: d.pi3p_mvb }
+])
+
+ap4Long = simHistory.flatMap(d => [
+  { time: d.time, variable: "ATG9 (TGN)",     value: d.atg9_tgn       },
+  { time: d.time, variable: "NPR1 (nucleus)", value: d.npr1_nucleus    },
+  { time: d.time, variable: "CBP60g (nucleus)",value: d.cbp60g_nucleus },
+  { time: d.time, variable: "Reversed exo.",  value: d.exo_reversed   }
+])
+```
+
+```{ojs}
+//| echo: false
+
+Plot.plot({
+  title: "Trafficking Dynamics",
+  width: 900, height: 280,
+  x: { label: "Time (min)" },
+  y: { label: "Count" },
+  color: { legend: true },
+  marks: [
+    Plot.line(traffLong, { x: "time", y: "value", stroke: "variable", tip: true }),
+    Plot.ruleY([0])
+  ]
+})
+```
+*Compartment pool sizes over time (arbitrary units): plasma-membrane receptors
+are internalised into the early endosome and delivered via the MVB to the
+vacuole. At steady state degradation balances production; perturbations shift the
+balance — e.g. impaired ESCRT stalls cargo in the EE/MVB.*
+
+```{ojs}
+//| echo: false
+
+Plot.plot({
+  title: "Immune Signalling Output",
+  width: 900, height: 240,
+  x: { label: "Time (min)" },
+  y: { label: "Activation level" },
+  color: { legend: true },
+  marks: [
+    Plot.line(sigLong, { x: "time", y: "value", stroke: "variable", tip: true }),
+    Plot.ruleY([0])
+  ]
+})
+```
+*Phenomenological immune-signalling outputs (ROS, MAPK): a fast transient rise
+after perception followed by decay. Amplitude scales with the ROS modifier;
+blocked receptor degradation prolongs the response.*
+
+```{ojs}
+//| echo: false
+
+Plot.plot({
+  title: "Phosphoinositide Dynamics",
+  width: 900, height: 240,
+  x: { label: "Time (min)" },
+  y: { label: "PI(3)P concentration (μM)" },
+  color: { legend: true },
+  marks: [
+    Plot.line(pi3pLong, { x: "time", y: "value", stroke: "variable", tip: true }),
+    Plot.ruleY([0])
+  ]
+})
+```
+*Phosphoinositide pools on the early endosome and MVB (μM). PI(3)P is consumed by
+ILV formation; a fall below ~1 μM on the MVB flags loss of endosomal identity and
+is the precondition for the membrane-topology defects tracked below.*
+
+```{ojs}
+//| echo: false
+
+Plot.plot({
+  title: "AP-4 Cargo Panel",
+  width: 900, height: 260,
+  x: { label: "Time (min)" },
+  y: { label: "Level" },
+  color: { legend: true },
+  marks: [
+    Plot.line(ap4Long, { x: "time", y: "value", stroke: "variable", tip: true }),
+    Plot.ruleY([0])
+  ]
+})
+```
+*AP-4-dependent cargo readouts: ATG9 at the TGN (rises when AP-4 is impaired — the
+mis-sorting signature), nuclear NPR1/CBP60g (fall when AP-4 sorting drops), and
+reversed-topology exosomes (the autoimmune-risk readout).*
+
+```{ojs}
+//| echo: false
+
+// ============================================================================
+// LIVE STATUS CARDS
+// ============================================================================
+
+html`<div style="
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 10px; margin: 20px 0;">
+
+  ${[
+    { label: "Time (min)",     val: simTime?.toFixed(1),              color: "#6b7280", bg: "#f3f4f6" },
+    { label: "PM Receptors",   val: simState.pm?.toFixed(1),          color: "#10b981", bg: "#f0fdf4" },
+    { label: "EE Cargo",       val: simState.ee?.toFixed(1),          color: "#3b82f6", bg: "#eff6ff" },
+    { label: "MVB ILVs",       val: simState.mvb?.toFixed(1),         color: "#f59e0b", bg: "#fef3c7" },
+    { label: "Vacuole",        val: simState.vac?.toFixed(1),         color: "#ef4444", bg: "#fef2f2" },
+    { label: "ROS",            val: simState.ros?.toFixed(1),         color: "#f43f5e", bg: "#fef2f2" },
+    { label: "MAPK",           val: simState.mapk?.toFixed(1),        color: "#f43f5e", bg: "#fef2f2" },
+    { label: "ATG9 TGN",       val: simState.atg9_tgn?.toFixed(1),   color: "#14b8a6", bg: "#f0fdfa" },
+    { label: "NPR1 nucleus",   val: simState.npr1_nucleus?.toFixed(1),color: "#ec4899", bg: "#fdf2f8" },
+    { label: "Reversed exo.",  val: simState.exo_reversed?.toFixed(2),color: "#dc2626", bg: "#fef2f2" },
+  ].map(c => `
+    <div style="background:${c.bg}; padding:10px; border-radius:6px;
+                border-left:4px solid ${c.color};">
+      <div style="font-size:11px; color:#555;">${c.label}</div>
+      <div style="font-size:22px; font-weight:bold; color:${c.color};">${c.val ?? "—"}</div>
+    </div>`
+  ).join("")}
+</div>`
+```
+
+```{ojs}
+//| echo: false
+
+// Alerts panel
+html`<div style="margin: 10px 0;">
+  ${pathologies.length === 0
+    ? `<div style="color:#10b981; font-weight:500; padding:10px;">✓ No pathological states detected</div>`
+    : pathologies.map(a => `
+        <div style="
+          background:${a.level === 'alert' ? '#fef2f2' : '#fef3c7'};
+          border:2px solid ${a.level === 'alert' ? '#ef4444' : '#f59e0b'};
+          border-radius:6px; padding:12px; margin-bottom:8px;">
+          <div style="font-weight:bold; color:${a.level === 'alert' ? '#dc2626' : '#d97706'};">
+            ${a.title}
+          </div>
+          <div style="font-size:13px; color:${a.level === 'alert' ? '#b91c1c' : '#92400e'};">
+            ${a.msg}
+          </div>
+        </div>`
+      ).join("")
+  }
+</div>`
+```
+
+## Receptor fate and the PTI/ETI dichotomy
+
+The compartment model above encodes a single decision that recurs throughout
+plant immunity: once an activated receptor is internalised, is it **recycled**
+back to the plasma membrane (sustaining signalling) or **committed to
+degradation** (attenuating it)? Ubiquitination is the switch — K63-linked chains
+route cargo into the ESCRT/MVB pathway, from where it is delivered either to the
+vacuole (degradation) or, via NBR1, to selective autophagy [@spallek2013;
+@ustun2018].
+
+```{mermaid}
+%%| label: fig-receptor-fate
+%%| fig-cap: "Receptor-fate decision tree. Ubiquitination status routes an internalised receptor between recycling (sustained PTI) and ESCRT-mediated degradation, which in turn branches into vacuolar turnover or selective autophagy."
+flowchart TD
+  A[PRR activation<br/>MAMP/PAMP perception] --> B{Ubiquitinated?}
+  B -- No / low --> C[Recycling to PM]
+  C --> D[Sustained PTI signalling]
+  B -- Yes, K63-Ub --> E[ESCRT sorting into MVB/ILVs]
+  E --> F{Degradation route}
+  F -- MVB --> G[Vacuolar degradation]
+  G --> H[PTI attenuation]
+  F -- Autophagy --> I[Selective autophagy<br/>NBR1-mediated]
+  I --> J[ETI / HR regulation]
+```
+
+The two branches of immunity differ systematically in how they use this
+trafficking machinery. Pattern-triggered immunity (PTI), initiated by
+surface-localised pattern-recognition receptors (PRRs), is fast and relies
+heavily on endocytosis and recycling; effector-triggered immunity (ETI),
+initiated by intracellular NLR receptors, is slower, autophagy-dominant, and
+culminates in the hypersensitive response (HR):
+
+| Feature | PTI | ETI |
+|---|---|---|
+| Receptors | PRRs (plasma membrane) | NLRs (cytoplasm) |
+| Activation | MAMP/PAMP | Effector (direct/indirect) |
+| Kinetics | Fast (minutes) | Slower (hours) |
+| Ubiquitination | PUB12/PUB13 | PUB22/PUB23 |
+| Trafficking | Heavy endocytosis/recycling | Autophagy-dominant |
+| ESCRT role | Signal attenuation | Positive *and* negative |
+| Autophagy | Minor | Major (selective degradation) |
+| Output | Basal resistance | HR + resistance |
+| Amplitude | Moderate | Strong/hypersensitive |
+| Duration | Transient | Prolonged |
+| Key adaptors | TOM1, VPS23 | NBR1, TSPO |
+| Membrane flux | High PM turnover | Organelle remodelling |
+| Cell-death programme | No | Yes (PCD/HR) |
+
+## Pathogen effector strategies
+
+Because trafficking controls the amplitude and duration of immune signalling,
+pathogen effectors repeatedly target it. The recurrent strategies fall into six
+classes — each intercepting a different step of the receptor life-cycle mapped
+above (effectors are illustrative examples from bacterial and oomycete systems):
+
+| # | Strategy | Example effectors | Host targets | Mechanism |
+|---|---|---|---|---|
+| 1 | Direct receptor suppression | AvrPto, AvrPtoB | FLS2, BAK1, CERK1 | Block receptor activation or promote its degradation |
+| 2 | Endocytic disruption | HopM1, HopQ1 | ARA7 (Rab), RabF2a | Prevent endosome maturation/trafficking |
+| 3 | SNARE inhibition | RXLR effectors, HopO1-1 | VTI12, SYP61 | Block vesicle fusion and recycling |
+| 4 | Autophagy manipulation | AVR-Pik, AvrRps4 | NBR1, ATG8 | Prevent selective autophagy of NLRs |
+| 5 | Ubiquitination hijacking | AvrPtoB (RING), Avr3a | PUB E3 ligases, CMPG1 | Act as an E3, or inhibit host ubiquitination |
+| 6 | Guard-model trigger (ETI) | AvrRpm1, AvrRpt2 | RIN4 (guard) | Modify a guard protein, triggering NLR activation |
+
+The evolutionary logic is an arms race: pathogens secrete effectors to suppress
+PTI at multiple trafficking steps; plants evolve NLRs that detect those effectors
+(or the modifications they make to guarded host proteins) and mount ETI. Because
+NLR trafficking itself tunes ETI amplitude, and autophagy plays the dual role of
+both suppressing PTI and regulating ETI, the balance between degradation and
+recycling ultimately sets immune homeostasis.
+
+The network below places these players together: plant proteins are coloured by
+functional class and pathogen effectors (red) are joined to their host targets by
+dashed **suppression** edges. It is a curated, literature-grounded map (hover a
+node for its class; drag to rearrange), not an exhaustive interactome.
+
+```{r effector-network}
+#| echo: false
+#| warning: false
+#| message: false
+#| fig-cap: "Immune receptor-trafficking network with pathogen-effector targets. Plant nodes coloured by functional class; dashed red edges mark effector suppression of a host target. Curated from the interactions described in this chapter."
+#| column: page
+library(visNetwork)
+
+nodes <- tibble::tribble(
+  ~id,        ~group,
+  "FLS2","PRR", "EFR","PRR", "CERK1","PRR", "BAK1","PRR",
+  "BIK1","Kinase", "MAPKKK5","Kinase", "MKK4","Kinase", "MPK3","Kinase",
+  "PUB12","E3 ligase", "PUB13","E3 ligase", "PUB22","E3 ligase", "CMPG1","E3 ligase",
+  "CHC1","Endocytic", "AP2M","Endocytic", "DRP2A","Endocytic", "TOM1","Endocytic",
+  "ARA6","Rab GTPase", "ARA7","Rab GTPase", "RabF2a","Rab GTPase",
+  "VPS23","ESCRT", "VPS37","ESCRT", "VPS4","ESCRT", "FREE1","ESCRT",
+  "NBR1","Autophagy", "ATG8","Autophagy", "ATG9","Autophagy", "AP4M","Autophagy",
+  "VTI12","SNARE", "SYP61","SNARE",
+  "RPS2","NLR", "SNC1","NLR", "RIN4","NLR",
+  "AvrPto","Effector", "AvrPtoB","Effector", "HopM1","Effector",
+  "AVR-Pik","Effector", "Avr3a","Effector", "AvrRpt2","Effector")
+nodes$label <- nodes$id
+pal <- c(PRR = "#7fb3d5", Kinase = "#82e0aa", `E3 ligase` = "#f5b7b1",
+         Endocytic = "#f0b27a", `Rab GTPase` = "#a9dfbf", ESCRT = "#f9e79f",
+         Autophagy = "#d2b4de", SNARE = "#f7dc6f", NLR = "#aed6f1",
+         Effector = "#c0392b")
+nodes$color <- pal[nodes$group]
+nodes$shape <- ifelse(nodes$group == "Effector", "triangle", "dot")
+
+edges <- tibble::tribble(
+  ~from,     ~to,      ~type,
+  "FLS2","BAK1","complex", "EFR","BAK1","complex", "CERK1","BAK1","complex",
+  "FLS2","BIK1","phospho", "BAK1","BIK1","phospho", "BIK1","MAPKKK5","activation",
+  "MAPKKK5","MKK4","phospho", "MKK4","MPK3","phospho",
+  "FLS2","PUB12","ubiquitin", "FLS2","PUB13","ubiquitin", "PUB22","NBR1","ubiquitin",
+  "FLS2","CHC1","complex", "CHC1","AP2M","complex", "AP2M","DRP2A","complex",
+  "FLS2","TOM1","complex", "TOM1","VPS23","complex", "VPS23","VPS37","complex",
+  "VPS37","VPS4","complex", "FREE1","VPS23","complex", "CHC1","ARA6","complex",
+  "ARA6","ARA7","activation", "ARA7","RabF2a","activation",
+  "NBR1","ATG8","complex", "AP4M","ATG9","complex", "ATG9","ATG8","activation",
+  "TOM1","VTI12","complex", "VTI12","SYP61","complex",
+  "RPS2","RIN4","complex", "SNC1","NBR1","complex",
+  "AvrPto","FLS2","suppress", "AvrPtoB","BAK1","suppress", "AvrPtoB","FLS2","suppress",
+  "HopM1","ARA7","suppress", "AVR-Pik","NBR1","suppress", "Avr3a","CMPG1","suppress",
+  "AvrRpt2","RIN4","suppress")
+edges$dashes <- edges$type == "suppress"
+ecol <- c(complex = "#5d6d7e", phospho = "#e74c3c", activation = "#229954",
+          ubiquitin = "#8e44ad", suppress = "#c0392b")
+edges$color <- ecol[edges$type]
+
+visNetwork(nodes, edges, width = "100%", height = "620px") |>
+  visEdges(arrows = list(to = list(enabled = TRUE, scaleFactor = 0.5)),
+           smooth = FALSE) |>
+  visGroups() |>
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 1, hover = TRUE),
+             selectedBy = "group") |>
+  visLegend(width = 0.15, position = "right", main = "Class") |>
+  visPhysics(stabilization = TRUE,
+             barnesHut = list(gravitationalConstant = -8000, springLength = 120)) |>
+  visLayout(randomSeed = 42)
+```
+
+## Model assumptions & calculations
+
+The simulation is a **deterministic compartment model** integrated by explicit
+Euler steps (Δt = 0.1 min). State variables are pool sizes (arbitrary units)
+across compartments: plasma membrane (PM), early endosome (EE), MVB/ILVs,
+autophagosome, vacuole, TGN (ATG9), nucleus (NPR1, CBP60g) and secreted exosomes
+(normal vs reversed topology), plus PI(3)P on EE and MVB and the signalling
+outputs ROS/MAPK/callose.
+
+**Kinetics.** Transport steps are **first-order mass action**: each flux is the
+product of a source pool, a rate constant, and the relevant perturbation ($m$)
+and pathogen ($p$) modifiers. Writing the compartment pools as
+$[\mathrm{PM}], [\mathrm{EE}], [\mathrm{MVB}], [\mathrm{Auto}], [\mathrm{Vac}]$,
+the core system integrated by explicit Euler ($\Delta t = 0.1$) is
+
+$$
+\begin{aligned}
+\frac{d[\mathrm{PM}]}{dt}   &= -k_{\text{int}}\,m_{\text{endo}}\,[\mathrm{PM}] + k_{\text{rec}}\,m_{\text{rec}}\,[\mathrm{EE}] + k_{\text{syn}}\,([\mathrm{PM}]_0 - [\mathrm{PM}])\\[2pt]
+\frac{d[\mathrm{EE}]}{dt}   &= k_{\text{int}}m_{\text{endo}}[\mathrm{PM}] - k_{\text{rec}}m_{\text{rec}}[\mathrm{EE}] - \underbrace{k_{\text{ILV}}m_{\text{escrt}}m_{\text{ub}}[\mathrm{EE}]}_{J_{\text{ILV}}} - k_{\text{atg}}m_{\text{auto}}p_{\text{auto}}[\mathrm{EE}]\\[2pt]
+\frac{d[\mathrm{MVB}]}{dt}  &= J_{\text{ILV}} - k_{\text{fus}}\,m_{\text{fus}}\,[\mathrm{MVB}]\\[2pt]
+\frac{d[\mathrm{Auto}]}{dt} &= k_{\text{atg}}m_{\text{auto}}p_{\text{auto}}[\mathrm{EE}] - k_{\text{flux}}\,m_{\text{fus}}\,[\mathrm{Auto}]\\[2pt]
+\frac{d[\mathrm{Vac}]}{dt}  &= k_{\text{fus}}m_{\text{fus}}[\mathrm{MVB}] + k_{\text{flux}}m_{\text{fus}}[\mathrm{Auto}].
+\end{aligned}
+$$
+
+ESCRT sorting into ILVs ($J_{\text{ILV}}$) requires **both** ubiquitination and
+ESCRT function, hence the product $m_{\text{escrt}}m_{\text{ub}}$. The final
+$k_{\text{syn}}([\mathrm{PM}]_0-[\mathrm{PM}])$ term is **basal receptor
+resynthesis**: the plasma-membrane pool is replenished toward its baseline
+$[\mathrm{PM}]_0$, so under balanced synthesis and trafficking PM relaxes to a
+**non-zero steady state** rather than draining entirely to the vacuole;
+perturbations then shift that steady state (the read-out of interest). Rate
+constants ($k \approx 0.1$–$0.5\ \text{min}^{-1}$; see table) are
+**order-of-magnitude estimates** from plant endomembrane/autophagy studies,
+**not fitted to data** — absolute values are illustrative and only relative
+trends are meaningful. Signalling outputs are phenomenological, e.g.
+$[\mathrm{ROS}](t) = 100\,m_{\text{ros}}p_{\text{ros}}\,e^{-t/2}$ for $t<5$ min,
+decaying as $[\mathrm{ROS}]\,e^{-k_{\text{ROS}}\Delta t}$ thereafter (the
+$\Delta t$-explicit form makes the decay rate independent of the step size;
+MAPK, callose analogous).
+
+**PI(3)P coupling.** PI(3)P is produced on endosomes and **consumed in proportion
+to ILV formation**, with a floor at $0.05$:
+
+$$
+\frac{d[\mathrm{PI3P}]_{\mathrm{EE}}}{dt} = a\,m_{\text{lip}} - b\,J_{\text{ILV}},
+\qquad [\mathrm{PI3P}] \ge 0.05,
+$$
+
+(and analogously on the MVB). Excessive ILV formation therefore depletes PI(3)P,
+which (a) impairs further ESCRT assembly and (b) raises the membrane-stress term.
+
+**AP-4 cargo.** ATG9 export and NPR1/CBP60g nuclear import scale with AP-4
+function $m_{\text{ap4}}$; when AP-4 is impaired, ATG9 backs up at the TGN
+($+c\,(1-m_{\text{ap4}})$) and nuclear import falls:
+$\frac{d[\mathrm{NPR1}_n]}{dt} = r_{\text{resp}}\,m_{\text{npr1}}\,m_{\text{ap4}}$,
+with $r_{\text{resp}}$ higher under ETI than PTI.
+
+**Topology-reversal heuristic.** Reversed-topology exosomes accumulate as
+
+$$
+\frac{d[\mathrm{exo}_{\text{rev}}]}{dt} = m_{\text{topo}}\,\sigma\,k_{\text{exo}},
+\qquad
+\sigma = 0.5 + \min\!\left(2,\ \frac{[\mathrm{EE}]+[\mathrm{MVB}]}{40}\right),
+$$
+
+where the *intrinsic risk* $m_{\text{topo}}$ is set per perturbation from
+mechanistic reasoning and the *stress* factor $\sigma$ rises with cargo backlog.
+Crucially this term is **decoupled from normal ESCRT flux**, so aberrant
+vesiculation (e.g. the AP-4+ESCRT double KO) still generates reversed exosomes.
+Intrinsic-risk values:
+
+| Perturbation | Reversed-topology risk | Basis |
+|---|---|---|
+| AP-4 + ESCRT double KO | 0.45 | Synergistic failure; aberrant ILV formation without ESCRT |
+| VPS4-DN | 0.35 | Direct ESCRT-III disassembly defect (strongest single driver) |
+| Sterol depletion | 0.18 | Impaired membrane curvature/scission |
+| AP-4 KO | 0.15 | **Indirect only** (autophagy→ESCRT stress) |
+| AP-4-DN | 0.15 | **Same as KO** — a DN adds no scission/topology mechanism |
+| ESCRT KO | 0.12 | Impaired ILV formation |
+
+The last two rows encode a deliberate correction: **AP-4 is a cargo adaptor, not
+part of the scission/curvature machinery**, so an AP-4 dominant-negative has no
+mechanistic route to *higher* topology risk than the knockout — both are set to
+0.15, driven indirectly via autophagy→ESCRT stress.
+
+**Rate constants.** The symbols above take these illustrative values (per the
+`params` object in the simulation code):
+
+| Symbol | Meaning | Value (min⁻¹) |
+|---|---|---|
+| $k_{\text{int}}$ | receptor internalisation | 0.30 |
+| $k_{\text{rec}}$ | endosome → PM recycling | 0.20 |
+| $k_{\text{ILV}}$ | ESCRT/ILV sorting | 0.25 |
+| $k_{\text{fus}}$ | MVB → vacuole fusion | 0.15 |
+| $k_{\text{atg}}$ | autophagosome induction | 0.10 |
+| $k_{\text{flux}}$ | autophagosome → vacuole flux | 0.12 |
+| $a$ | PI(3)P production | 0.04 |
+| $b$ | PI(3)P consumption per ILV flux | 0.020 (EE) / 0.030 (MVB) |
+| $k_9,\ c$ | ATG9 TGN export / backlog | 0.04 / 2.5 |
+| $r_{\text{resp}}$ | NPR1 nuclear import | 0.12 (PTI) / 0.30 (ETI) |
+| $k_{\text{exo}}$ | reversed-exosome rate | 0.80 |
+| $k_{\text{syn}}$ | basal PM resynthesis (toward $[\mathrm{PM}]_0$) | 0.15 |
+| $k_{\text{ROS}},\ k_{\text{MAPK}}$ | signalling decay | 0.51 / 0.20 |
+
+**Caveats.** Parameters are illustrative; plant AP-4 cargo beyond ATG9 (NPR1,
+CBP60g) is predicted from cross-species homology (flagged *predicted*); pathogen
+modifiers are light and illustrative (the potyvirus setting reflects documented
+autophagy/endomembrane co-option, not a fitted infection model).
+
+[Chapter 9](09_ap4_trafficking.qmd) sets out the mechanistic reasoning and
+literature behind the model's AP-4 arm in full, culminating in the
+tyrosine-motif hypothesis that ties this simulation back to the viral CI motifs
+characterised in [Chapter 5](05_potyvirus_motifs.qmd).
+

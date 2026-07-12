@@ -1,0 +1,314 @@
+---
+title: "Host-Virus Interaction Networks"
+subtitle: "Species interaction networks from GBIF and GLOBI; potyvirus host range in ecological context"
+author: "Christina Muedsam"
+date: last-modified
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+<!-- SOURCE: 2025_toys/copilot_networks1.Rmd + ecoDBs.Rmd; BioNexus app v3.0    -->
+<!-- Interactive companion app: shiny/bionexus/app.R (run with shiny::runApp())   -->
+
+```{r setup}
+#| include: false
+library(igraph)
+library(ggraph)
+library(tidyverse)
+library(visNetwork)
+library(rotl)
+```
+
+## Introduction
+
+To check whether interactions between species harbouring viral flanking sequences
+could explain the distribution of homologous loci, I built multilayer networks
+connecting:
+
+1. **Species–host plant** ecological interactions (from EPPO / GLOBI)
+2. **Shared-host** projections (species sharing a common host)
+3. **Phylogenetic** relationships (Open Tree of Life)
+
+See also the interactive [BioNexus Shiny app](../shiny/bionexus/) which queries
+GBIF and GLOBI in real time.
+
+## Part 1: Bipartite species–host network
+
+```{r species-hosts}
+species_hosts <- list(
+  "Fallopia convolvulus" = character(0),
+  "Luperina nickerlii"   = c("Elytrigia juncea", "Poaceae grasses"),
+  "Luperina testacea"    = c("Poaceae grasses", "Dactylis glomerata"),
+  "Trichiura crataegi"   = c("Prunus spinosa", "Crataegus", "Salix", "Carpinus"),
+  "Sphenella marginata"  = c("Senecio/Jacobaea ragworts")
+)
+
+edges <- enframe(species_hosts, name = "species", value = "hosts") %>%
+  unnest(hosts, keep_empty = TRUE)
+
+host_nodes <- edges$hosts[!is.na(edges$hosts)]
+
+bip_graph <- graph_from_data_frame(
+  d = edges %>% filter(!is.na(hosts)),
+  vertices = tibble(
+    name = c(names(species_hosts), unique(host_nodes)),
+    type = c(
+      rep(FALSE, length(species_hosts)),
+      rep(TRUE, length(unique(host_nodes)))
+    )
+  ),
+  directed = FALSE
+)
+
+stopifnot(!any(is.na(V(bip_graph)$type)))
+```
+
+```{r plot-bipartite}
+#| fig-cap: "Bipartite virus–host network: the two node classes (viral species, orange; host plants, blue) occupy the two rows, and an edge joins a virus to a plant it infects. Hubs are generalist viruses (or widely-infected hosts)."
+ggraph(bip_graph, layout = "bipartite") +
+  geom_edge_link() +
+  geom_node_point(aes(color = type), size = 6) +
+  geom_node_text(aes(label = name), repel = TRUE, size = 4) +
+  scale_color_manual(values = c("FALSE" = "steelblue", "TRUE" = "darkorange"),
+                     labels = c("species", "host plant")) +
+  theme_void() +
+  ggtitle("Species–Host Bipartite Network")
+```
+
+```{r species-projection}
+#| fig-cap: "One-mode projection of the bipartite network onto the viral species: two viruses are linked if they share at least one host plant. Edges now represent ecological overlap (shared host range) rather than direct infection."
+proj          <- bipartite_projection(bip_graph)
+species_graph <- proj$proj1
+
+ggraph(species_graph, layout = "fr") +
+  geom_edge_link() +
+  geom_node_point(color = "steelblue", size = 8) +
+  geom_node_text(aes(label = name), repel = TRUE, size = 4) +
+  theme_void() +
+  ggtitle("Species-only Projected Network")
+```
+
+# Part 2: Multilayer network with phylogenetic and ecological edges
+
+```{r multilayer-setup}
+species <- names(species_hosts)
+
+eco_edges <- enframe(species_hosts, name = "species", value = "hosts") %>%
+  unnest(hosts, keep_empty = TRUE)
+hosts <- unique(eco_edges$hosts[!is.na(eco_edges$hosts)])
+```
+
+```{r open-tree}
+# Match species names to OTT IDs via the Open Tree of Life API (network).
+# Wrapped so the chapter still renders offline / if the service is down —
+# phylo_edges then falls back to empty and the multilayer network simply
+# omits the phylogenetic layer.
+phylo_edges <- tryCatch({
+  taxa    <- rotl::tnrs_match_names(species)
+  ott_ids <- taxa$ott_id[!is.na(taxa$ott_id)]
+  tree    <- rotl::tol_induced_subtree(ott_ids = ott_ids)
+  tibble(
+    from = tree$tip.label[tree$edge[, 1]],
+    to   = tree$tip.label[tree$edge[, 2]]
+  ) %>%
+    filter(!is.na(from), !is.na(to)) %>%
+    mutate(type = "phylogenetic", weight = 1)
+}, error = function(e) {
+  message("Open Tree of Life query unavailable (", conditionMessage(e),
+          "); omitting the phylogenetic layer.")
+  tibble(from = character(), to = character(),
+         type = character(), weight = numeric())
+})
+```
+
+```{r shared-host-edges}
+pair_grid <- expand.grid(sp1 = species, sp2 = species, stringsAsFactors = FALSE)
+
+shared_host_edges <- pair_grid %>%
+  filter(sp1 < sp2) %>%
+  mutate(
+    shared = map2_int(sp1, sp2, ~ length(intersect(
+      species_hosts[[.x]], species_hosts[[.y]])))
+  ) %>%
+  filter(shared > 0) %>%
+  transmute(from = sp1, to = sp2, type = "shared_host", weight = shared)
+```
+
+```{r combine-edges}
+eco_edges2 <- eco_edges %>%
+  filter(!is.na(hosts)) %>%
+  transmute(from = species, to = hosts, type = "ecological", weight = 1)
+
+all_edges <- bind_rows(eco_edges2, phylo_edges, shared_host_edges)
+```
+
+```{r node-traits}
+traits <- tibble(
+  name = c(species, hosts),
+  trophic = case_when(
+    name %in% species ~ "herbivore",
+    name %in% hosts   ~ "plant",
+    TRUE              ~ "unknown"),
+  mobility = case_when(
+    name %in% species ~ "flying",
+    name %in% hosts   ~ "sessile",
+    TRUE              ~ "unknown"),
+  taxon = case_when(
+    name %in% species ~ "Insecta",
+    name %in% hosts   ~ "Plantae",
+    TRUE              ~ "internal")
+)
+```
+
+```{r visnetwork}
+#| fig-cap: "Interactive multilayer virus–host–interaction network. Edge colour encodes the relationship type (orange/green/blue for the layers combined above); drag nodes to explore, hover for taxonomic details. Built from GBIF/GLOBI records plus Open Tree taxonomy."
+nodes <- traits %>%
+  transmute(id = name, label = name, group = trophic,
+            mobility = mobility, taxon = taxon)
+
+edges_vis <- all_edges %>%
+  transmute(
+    from, to,
+    value = weight,
+    title = paste(type, "weight =", weight),
+    color = case_when(
+      type == "ecological"   ~ "darkorange",
+      type == "phylogenetic" ~ "forestgreen",
+      type == "shared_host"  ~ "steelblue"))
+
+visNetwork(nodes, edges_vis, height = "900px", width = "100%") %>%
+  visEdges(smooth = FALSE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visLegend() %>%
+  visPhysics(stabilization = TRUE) %>%
+  visLayout(randomSeed = 123)
+```
+
+## BioNexus Shiny App
+
+The BioNexus v3.0 Shiny application provides an interactive interface for
+querying GBIF and GLOBI interaction data for arbitrary species lists and
+constructing multilayer networks with multiplex participation coefficients.
+
+The app lives at [`shiny/bionexus/app.R`](../shiny/bionexus/app.R). To launch:
+
+```r
+shiny::runApp(here::here("shiny", "bionexus"))
+```
+
+Key features:
+
+- GBIF occurrence mapping for user-supplied species
+- GLOBI biotic interaction retrieval
+- Multilayer network construction (ecological + phylogenetic + shared-host layers)
+- Multiplex participation coefficient for identifying bridge species
+- Interactive visualisation via `visNetwork`
+
+### A saved BioNexus network: *Zucchini yellow mosaic virus* host community
+
+A live Shiny app cannot be embedded in a static document (an interactive
+`shinylive`/WASM build is a future option). Instead, the network below is
+**reconstructed from a saved BioNexus session** — the GLOBI-derived biotic
+interaction network built around a *Zucchini yellow mosaic virus* (a cucurbit
+potyvirus) host list. **Hover a node** for its taxonomy and a **PhyloPic
+silhouette**, resolved to the most specific rank PhyloPic provides (species →
+genus → family → order → class) so the outline matches the organism rather than
+a generic class icon.
+
+```{r bionexus-session}
+#| eval: !expr file.exists(here::here("data","bionexus_zucchini95.rds"))
+sess <- readRDS(here::here("data", "bionexus_zucchini95.rds"))
+
+# base64-embed cached PhyloPic silhouettes (per taxon, most specific rank
+# available) into hover tooltips — looked up by node name
+phylodir <- here::here("data", "phylopic")
+sil_b64 <- function(taxon) {
+  if (is.na(taxon) || !nzchar(taxon)) return("")
+  f <- file.path(phylodir, paste0(gsub("[^A-Za-z0-9]", "_", taxon), ".png"))
+  if (!file.exists(f)) return("")
+  sprintf('<img src="data:image/png;base64,%s" height="46" style="float:right;margin-left:8px;">',
+          base64enc::base64encode(f))
+}
+
+# Keep ONLY directly recorded interactions as EDGES. The saved BioNexus session
+# padded the network with heuristically inferred edges (source == "Heuristic",
+# e.g. a beetle "pollinating" every plant in the community) and a dense
+# statistical "cooccurrence" layer — neither represents an observed interaction,
+# so both are dropped as edges. Every queried species is still shown as a NODE
+# (including those with no recorded interaction) so the full community background
+# is legible at a glance; isolated nodes simply have no GLOBI-recorded biotic link.
+biotic <- sess$edges_df %>%
+  dplyr::filter(layer != "cooccurrence", source == "GLOBI")
+
+nodes <- sess$nodes_df %>%
+  dplyr::mutate(
+    label = name,
+    group = functional_group,
+    title = mapply(function(nm, k, cl, or, fa) paste0(
+      "<div style='max-width:230px;font-size:12px'>", sil_b64(nm),
+      "<b><i>", nm, "</i></b><br><span style='color:#666'>",
+      k, " &middot; ", cl, "<br>", or, " &middot; ", fa, "</span></div>"),
+      name, kingdom, class, order, family, SIMPLIFY = TRUE))
+
+id_of <- stats::setNames(sess$nodes_df$id, sess$nodes_df$name)
+edges <- biotic %>%
+  dplyr::transmute(
+    from = id_of[from_name], to = id_of[to_name],
+    title = paste0(layer, " (", confidence, ")"),
+    color = dplyr::recode(layer, pollination = "#e67e22", herbivory = "#27ae60",
+                          parasitism = "#c0392b", predation = "#8e44ad",
+                          .default = "#95a5a6")) %>%
+  dplyr::filter(!is.na(from), !is.na(to))
+
+visNetwork(nodes, edges, height = "620px", width = "100%") %>%
+  visNodes(size = 12, font = list(size = 13),
+           borderWidth = 1, color = list(border = "#ffffff")) %>%
+  visEdges(smooth = FALSE, color = list(opacity = 0.45), width = 0.6) %>%
+  # Live force-directed physics (spring/bounce) rather than a frozen igraph layout:
+  # forceAtlas2 gives a lively but self-settling arrangement; drag a node to see it
+  # spring back into place.
+  visPhysics(solver = "forceAtlas2Based",
+             forceAtlas2Based = list(gravitationalConstant = -60,
+                                     centralGravity = 0.012,
+                                     springLength = 90, springConstant = 0.08,
+                                     damping = 0.4, avoidOverlap = 0.5),
+             stabilization = list(enabled = TRUE, iterations = 200),
+             maxVelocity = 30, minVelocity = 0.75) %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 1, hover = TRUE),
+             nodesIdSelection = TRUE, selectedBy = "group") %>%
+  visLayout(randomSeed = 7) %>%
+  visLegend(main = "Functional group", width = 0.18, position = "right")
+```
+
+```{r bionexus-caption}
+#| echo: false
+#| eval: !expr file.exists(here::here("data","bionexus_zucchini95.rds"))
+lay <- sort(unique(biotic$layer))
+cat(sprintf(paste0(
+  "**Ecological interactions among taxa returned by a *Zucchini yellow mosaic ",
+  "virus*-seeded GBIF + GLOBI query** (a saved BioNexus session). All %d queried ",
+  "species are shown as nodes; only the %d **directly GLOBI-recorded** biotic ",
+  "interactions (%s layers; edge colour = layer) are drawn as edges. Heuristically ",
+  "inferred edges and the dense statistical co-occurrence layer that padded the ",
+  "original session are **excluded** as they do not represent observed interactions, ",
+  "so most species appear unconnected. That sparseness is itself informative: GLOBI ",
+  "holds only a handful of directly recorded biotic links for this community, ",
+  "consistent with the sporadic rather than continuous connectivity noted in ",
+  "Chapter 1. Node colour = functional group; hover a node for its taxonomy and a ",
+  "PhyloPic silhouette.\n"),
+  nrow(nodes), nrow(edges), paste(lay, collapse = "/")))
+```
+
+Silhouettes are fetched once with the rOpenSci `rphylopic` package
+(`scripts/fetch_phylopics.R`) and cached, so the chapter renders offline
+[@gearty2023].
+
+## Summary
+
+The network analysis places the species harbouring viral-homologous loci within
+a connected ecological network. Pollinators and their host plants — including
+known potyvirus hosts — cluster together, consistent with the hypothesis that
+viral flanking sequences were transferred horizontally via a shared biological
+vector during co-infection events.

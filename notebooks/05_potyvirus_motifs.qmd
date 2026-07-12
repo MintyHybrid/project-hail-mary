@@ -1,0 +1,267 @@
+---
+title: "Potyvirus Protein Motifs and Interaction Networks"
+subtitle: "Functional signature motifs across the polyprotein and the curated CI/HC-Pro/VPg interactome"
+author: "Christina Muedsam"
+date: last-modified
+execute:
+  echo: true
+  warning: false
+  message: false
+---
+
+## Overview
+
+The potyvirus genome is translated as a single polyprotein that is cleaved into
+**~11 mature proteins**, each carrying short functional signature motifs whose
+substitution changes transmissibility, silencing suppression, replication or
+movement [@revers2015]. This chapter (i) catalogues those motifs with their
+roles and primary references, (ii) locates the linear ones in the ICTV
+Potyviridae alignment [@inouenagata2022], and (iii) draws the curated
+protein–protein interaction network that centres on the cylindrical inclusion
+(CI) helicase — the protein carrying the DNAzyme-like locus studied in the
+earlier chapters.
+
+```{r setup}
+#| include: false
+library(Biostrings)
+library(tidyverse)
+library(igraph)
+library(visNetwork)
+library(potytools)
+```
+
+## CI helicase 3D structure (predicted)
+
+The cylindrical inclusion carries the DNAzyme-like locus and the ELM-rich CI
+region. No experimental potyvirus CI structure exists in the PDB and AlphaFold DB
+has no model for the viral polyprotein entries, so the **full 644-residue TuMV CI
+protein** (mature chain 1228–1871 of UniProt P89509) was folded with
+**AlphaFold 3** on the AlphaFold Server (pTM = 0.78, no clashes; the ESMFold
+domain in `scripts/fold_ci_esmfold.R` is retained as an offline fallback). The
+viewer highlights three functional sites: the **Walker-A P-loop** (ATPase) and
+**DECH box** (helicase motif II) in gold, and the **ELM/DNAzyme-like motif
+region** (VASYN ± 20; res 236–280) in red.
+
+```{r ci-3d}
+#| eval: !expr (file.exists(here::here("data","CI_af3.pdb")) || file.exists(here::here("data","CI_esmfold.pdb"))) && requireNamespace("r3dmol", quietly = TRUE)
+library(r3dmol)
+af3 <- here::here("data", "CI_af3.pdb")   # AlphaFold3 model (CIF->PDB, pLDDT in B-factor)
+if (file.exists(af3)) {
+  struct <- paste(readLines(af3), collapse = "\n"); fmt <- "pdb"
+  ms <- 236; me <- 280            # VASYN ± 20 in TuMV CI (P89509 1228-1871)
+  walkerA <- 84:92; dech <- 175:178
+} else {
+  struct <- paste(readLines(here::here("data","CI_esmfold.pdb")), collapse = "\n")
+  fmt <- "pdb"; mot <- readLines(here::here("data","CI_esmfold_motif.txt"))
+  mval <- function(k) as.integer(sub(paste0("^",k," "), "",
+                     grep(paste0("^",k," "), mot, value = TRUE)))
+  ms <- mval("motif_start"); me <- mval("motif_end")
+  walkerA <- integer(0); dech <- integer(0)
+}
+
+v <- r3dmol(width = "100%", height = "540px") |>
+  m_add_model(data = struct, format = fmt) |>
+  m_set_style(style = m_style_cartoon(color = "#a9c6e8"))
+if (length(walkerA)) {
+  v <- v |>
+    m_add_style(sel = m_sel(resi = c(walkerA, dech)),
+                style = m_style_cartoon(color = "#d4ac0d")) |>
+    m_add_style(sel = m_sel(resi = c(walkerA, dech)),
+                style = m_style_stick(radius = 0.2))
+}
+v |>
+  m_add_style(sel = m_sel(resi = seq(ms, me)), style = m_style_cartoon(color = "#c0392b")) |>
+  m_add_style(sel = m_sel(resi = seq(ms, me)), style = m_style_stick(radius = 0.15)) |>
+  m_zoom_to() |>
+  m_spin(speed = 0.4)
+```
+
+```{r ci-3d-fallback}
+#| echo: false
+#| eval: !expr "!((file.exists(here::here('data','CI_af3.pdb')) || file.exists(here::here('data','CI_esmfold.pdb'))) && requireNamespace('r3dmol', quietly = TRUE))"
+cat("3D viewer unavailable: provide data/CI_af3.pdb (AlphaFold) or run",
+    "scripts/fold_ci_esmfold.R (ESMFold).")
+```
+
+The model shows the canonical two-lobed SF2-helicase architecture, with the
+Walker-A and DECH catalytic motifs facing the interdomain cleft and the ELM/
+DNAzyme-like motif region on a surface-exposed segment. Structure predicted with
+AlphaFold 3 [@abramson2024] (fallback ESMFold [@lin2023]); interactive rendering
+via `r3dmol`/3Dmol.js [@rego2015].
+
+## Signature motif catalogue
+
+```{r motif-catalogue}
+motifs <- tibble::tribble(
+  ~protein,     ~motif,      ~pattern,       ~role,                                              ~ref,
+  "P1",         "protease",  "—",            "Serine protease; host-range adaptation",           "revers2015",
+  "HC-Pro",     "KITC",      "KITC",         "Aphid transmission (N-terminal)",                  "valli2018",
+  "HC-Pro",     "FRNK",      "FR[NR]K",      "RNA-silencing suppression; symptom severity",      "valli2018",
+  "P3N-PIPO",   "G2A6",      "GA{5,7}",      "Transcriptional slippage → PIPO; cell-to-cell movement", "chung2008",
+  "CI",         "Walker A",  "G.{4}GK[ST]",  "ATPase P-loop of the RNA helicase",                "sorel2014",
+  "CI",         "DECH box",  "DECH",         "Helicase motif II (Mg2+ coordination)",            "sorel2014",
+  "6K2",        "TM anchor", "—",            "ER membrane anchor; replication vesicles",         "revers2015",
+  "VPg",        "eIF4E-bind","—",            "Genome-linked protein; binds host eIF4E (recessive resistance)", "robaglia2006",
+  "NIa-Pro",    "catalytic", "H.{31,35}D.{60,70}GXCG", "Main protease catalytic triad",          "revers2015",
+  "NIb",        "GDD",       "GDD",          "RdRp catalytic motif (polymerase)",                "revers2015",
+  "CP",         "DAG",       "DAG",          "Aphid transmission determinant (N-terminal)",      "atreya1991"
+)
+
+knitr::kable(motifs, caption = "Potyvirus mature-protein signature motifs, roles and primary references.")
+```
+
+The motifs are backed by: HC-Pro KITC/FRNK [@valli2018]; the P3N-PIPO
+frameshift/movement locus [@chung2008]; the CI helicase Walker-A/DECH motifs and
+its interactome [@sorel2014]; VPg–eIF4E and recessive resistance
+[@robaglia2006]; the CP DAG aphid-transmission determinant [@atreya1991]; and the
+overall polyprotein organisation [@revers2015].
+
+## Locating linear motifs in the ICTV alignment
+
+```{r motif-scan}
+aln  <- readAAStringSet(here::here("data", "OPSR.Poty.Fig3.v16_align.txt"))
+cons <- as.character(consensusString(aln, ambiguityMap = "X", threshold = 0.4))
+cons_nogap <- gsub("-", "", cons)
+
+# Linear motifs searchable directly on the consensus (regex)
+scan_set <- dplyr::filter(motifs, pattern != "—")
+hits <- scan_set %>%
+  dplyr::rowwise() %>%
+  dplyr::mutate(
+    match_pos = list(as.integer(gregexpr(pattern, cons_nogap, perl = TRUE)[[1]])),
+    n_hits    = sum(match_pos > 0),
+    first_pos = ifelse(n_hits > 0, match_pos[1], NA_integer_)) %>%
+  dplyr::ungroup() %>%
+  dplyr::select(protein, motif, pattern, n_hits, first_pos)
+
+knitr::kable(hits,
+  caption = "Signature motifs located on the consensus of the ICTV Potyviridae alignment (gap-free coordinates).")
+```
+
+```{r motif-scan-plot}
+#| fig-width: 9
+#| fig-height: 3
+#| fig-cap: "Approximate positions of the curated mature-protein signature motifs along the potyvirus polyprotein consensus (one point per motif). Positions are approximate because they are matched on the gapped consensus; a motif absent from the consensus leaves a gap in the ladder."
+found <- dplyr::filter(hits, n_hits > 0)
+ggplot(found, aes(x = first_pos, y = reorder(paste(protein, motif), first_pos))) +
+  geom_point(size = 3, colour = "#A23B72") +
+  geom_segment(aes(xend = first_pos, yend = paste(protein, motif)), x = 0, colour = "grey80") +
+  labs(title = "Approximate motif positions along the potyvirus polyprotein consensus",
+       x = "Consensus position (aa, gap-free)", y = NULL) +
+  cowplot::theme_cowplot()
+```
+
+## Two host-type sorting signals in the CI region
+
+The stretch of CI that carries the DNAzyme-like locus (the ELM-rich region
+anchored on `VASYN` in Chapter 4) turns out to sit right next to **the two
+canonical endocytic sorting signals that adaptor-protein (AP) complexes read**:
+
+- a **tyrosine-based motif** of the **YXXΦ** type (Φ = a bulky hydrophobic
+  residue), and
+- immediately beside it, an **acidic dileucine signal**, `[DE]XXXL[LI]`.
+
+These are not incidental look-alikes. Wu et al. [@wu2022ci] showed that the
+multifunctional CI protein of *Turnip mosaic virus* contains **seven conserved
+acidic dileucine motifs**, that these motifs are **recognised by the adaptor
+complex AP-2**, and that **alanine substitutions** in them **reduce AP-2 binding,
+endosomal targeting and viral replication**. In other words, the CI's dileucine
+signals are *functional* endocytic sorting signals, not passengers. The same group
+further showed that TuMV **co-opts the vacuolar sorting receptor VSR4 to deliver
+its replication vesicles to the endosome** for genome replication [@wu2022vsr4],
+so this endosomal targeting is central to the viral life cycle.
+
+That matters for the adjacent tyrosine motif. Because a functionally-validated
+dileucine sits immediately next to it, the **YXXΦ motif is very likely surface-
+exposed and accessible** for adaptor interactions of its own — and YXXΦ is the
+classic ligand of the µ subunit of AP complexes (AP-1/2/3/**4**). Chapter 9
+develops why this is interesting: a plant immune regulator (BDA1) is sorted by
+**AP-4 through exactly this kind of tyrosine motif** [@huang2026], so a virus
+displaying host-type Y/dileucine signals on its CI is positioned to plug into —
+and potentially subvert — the same endomembrane sorting machinery.
+
+## Protein–protein interaction network
+
+A curated interaction network of the potyvirus proteins, centred on CI, drawn
+from the CI interactome review [@sorel2014], the HC-Pro multitasking review
+[@valli2018], the movement/PIPO literature [@chung2008; @xue2023] and VPg–host
+factor interactions [@robaglia2006]. **Host targets** are added from the
+systematic TuMV–*Arabidopsis* yeast-two-hybrid interaction map [@martinez2023],
+in which **NIb (the RdRp) was the dominant host hub** (245 contacts, including
+salicylate-dependent immune regulators). Solid edges are curated viral–viral
+interactions; **dashed edges are the high-throughput Y2H host interactions**.
+
+```{r ppi-network}
+#| fig-cap: "Curated potyvirus protein–protein interaction network. Solid edges are viral–viral interactions; dashed edges are experimentally supported viral–host (Y2H) interactions. Node colour distinguishes viral proteins from host factors; hover for each protein's function. The CI and NIb nodes are the two hubs discussed below."
+viral <- c("P1","HC-Pro","P3","P3N-PIPO","6K1","CI","6K2","VPg","NIa-Pro","NIb","CP")
+host  <- tibble::tribble(
+  ~id,          ~fn,
+  "eIF4E",      "Translation initiation factor (recessive resistance)",
+  "NPR1",       "Master regulator of salicylate immunity / SAR",
+  "TGA1",       "bZIP transcription factor (SA responses)",
+  "SCE1",       "SUMO E2 conjugating enzyme",
+  "HSP70",      "Chaperone",
+  "CALNEXIN",   "ER chaperone (CNX1)",
+  "OBE1",       "OBERON1 PHD-finger transcription factor",
+  "SEC22",      "SNARE (ER–Golgi secretion)",
+  "PCaP1",      "Plasma-membrane cation-binding protein (movement)",
+  "PIP1;3",     "Plasma-membrane aquaporin")
+
+nodes <- dplyr::bind_rows(
+  tibble::tibble(id = viral, group = "viral", title = "Viral protein"),
+  tibble::tibble(id = host$id, group = "host", title = host$fn))
+nodes$label <- nodes$id
+
+edges <- tibble::tribble(
+  ~from,     ~to,        ~process,               ~ref,          ~y2h,
+  # curated viral-viral core
+  "VPg",     "eIF4E",    "translation/resistance","robaglia2006", FALSE,
+  "VPg",     "NIb",      "replication",          "revers2015",   FALSE,
+  "NIa-Pro", "NIb",      "replication",          "revers2015",   FALSE,
+  "CI",      "HC-Pro",   "movement",             "sorel2014",    FALSE,
+  "CI",      "CP",       "movement",             "sorel2014",    FALSE,
+  "CI",      "P3N-PIPO", "movement",             "chung2008",    FALSE,
+  "CI",      "VPg",      "replication",          "sorel2014",    FALSE,
+  "HC-Pro",  "HC-Pro",   "self (dimer)",         "valli2018",    FALSE,
+  "HC-Pro",  "CP",       "aphid transmission",   "valli2018",    FALSE,
+  "CP",      "CP",       "encapsidation",        "revers2015",   FALSE,
+  # TuMV-Arabidopsis Y2H interaction map (Martinez et al. 2023)
+  "CI",      "eIF4E",    "translation/resistance","martinez2023", TRUE,
+  "VPg",     "OBE1",     "host factor",          "martinez2023", TRUE,
+  "VPg",     "CALNEXIN", "host factor",          "martinez2023", TRUE,
+  "NIb",     "NPR1",     "SA immunity",          "martinez2023", TRUE,
+  "NIb",     "TGA1",     "SA immunity",          "martinez2023", TRUE,
+  "NIb",     "SCE1",     "SUMO/host factor",     "martinez2023", TRUE,
+  "NIb",     "HSP70",    "host factor",          "martinez2023", TRUE,
+  "P3N-PIPO","PCaP1",    "movement",             "martinez2023", TRUE,
+  "P3N-PIPO","PIP1;3",   "movement",             "martinez2023", TRUE,
+  "6K2",     "SEC22",    "secretion",            "martinez2023", TRUE)
+
+edges$color <- dplyr::recode(edges$process,
+  "movement" = "#2E86AB", "replication" = "#D62828",
+  "translation/resistance" = "#8E44AD", "SA immunity" = "#e67e22",
+  "secretion" = "#16a085", .default = "#7f8c8d")
+edges$dashes <- edges$y2h
+edges$title  <- paste0(edges$process, " [", edges$ref, "]")
+
+visNetwork(nodes, edges, height = "640px", width = "100%") %>%
+  visGroups(groupname = "viral", color = "#f5b041") %>%
+  visGroups(groupname = "host",  color = "#82e0aa", shape = "diamond") %>%
+  visEdges(smooth = FALSE) %>%
+  visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
+  visLegend() %>%
+  visLayout(randomSeed = 42)
+```
+
+## Two hubs: CI and NIb
+
+Two viral proteins dominate the network. **CI** bridges replication (with VPg/NIb)
+and cell-to-cell movement (with CP, HC-Pro, P3N-PIPO and, via P3N-PIPO, the
+plasmodesmatal factor PCaP1) [@sorel2014; @xue2023] — and it carries the conserved
+DNAzyme-like locus and the ELM-rich CI region studied elsewhere in this book.
+**NIb**, the RdRp, is the dominant *host* hub in the systematic interaction map
+[@martinez2023], contacting salicylate-immunity regulators (NPR1, TGA1) and the
+SUMO machinery (SCE1) — implicating replication-complex assembly in the direct
+subversion of SA-dependent defence. Together these two hubs are where the
+sequence-level (motif/DNAzyme/ELM) and network-level views of the potyvirus
+proteome converge.

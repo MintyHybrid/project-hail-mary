@@ -1,0 +1,291 @@
+---
+title: "Protein Motif Analysis"
+subtitle: "Eukaryotic Linear Motifs in Potyviridae CI helicase — gget/ELM search and genus-specificity"
+author: "Christina Muedsam"
+date: last-modified
+execute:
+  echo: true
+  warning: false
+  message: false
+  error: true
+---
+
+## Overview
+
+The cylindrical inclusion (CI) helicase carries a short conserved region that,
+across Potyviridae, overlaps a number of **eukaryotic linear motifs (ELMs)** —
+short functional peptide motifs catalogued in the ELM database
+[@elm2024]. Here I extract the CI motif-flanking region from each isolate in the
+ICTV Potyviridae alignment [@inouenagata2022], search it against ELM, and ask which
+motifs are **characteristic of particular genera**.
+
+::: {.callout-note appearance="simple"}
+**Why a different sequence set here.** Chapters 1–3 used my **custom collection of
+the 16 potyvirus isolates** that carry the DNAzyme catalytic core. From this
+chapter on I switch to the **premade ICTV Potyviridae alignment**
+[@inouenagata2022] to extend the motif analysis to the **whole family**. That
+alignment does **not** contain the 16 core-carrying isolates — which is fine
+here, because I first **confirmed the translated catalytic-core region is preserved
+in ICTV members**, and the question now is about the **CI protein and its sorting
+motifs across Potyviridae**, not about the DNAzyme core per se.
+:::
+
+The ELM search is run with the [`gget`](https://github.com/pachterlab/gget)
+Python package (`gget elm`), which reproduces the ELM webserver's two search
+modes: an ortholog (DIAMOND) search against ELM-annotated proteins and a direct
+regex search. It runs in a self-contained `pixi` environment inside WSL; the
+per-isolate results are written to `data/elm_gget/` by
+`scripts/prep_elm_regions.R` → `scripts/gget_elm_run.py` →
+`scripts/viz_elm_motifs.R`. This chapter reads those results.
+
+```{r setup}
+#| include: false
+library(Biostrings)
+library(tidyverse)
+library(DECIPHER)   # gap removal
+library(potytools)
+
+data_dir <- here::here("data")
+elm_dir  <- here::here("data", "elm_gget")
+```
+
+## CI motif region
+
+I anchor the CI region on the alignment consensus at the conserved `VASYN`
+motif (allowing one mismatch) and take a ±20 aa window. The alignment is read
+from the **local** ICTV file (`data/OPSR.Poty.Fig3.v16_align.txt`).
+
+```{r region}
+protaln <- readAAStringSet(file.path(data_dir, "OPSR.Poty.Fig3.v16_align.txt"),
+                           format = "fasta")
+
+cons    <- consensusString(protaln, ambiguityMap = "X")
+m       <- matchPattern("VASYN", cons, max.mismatch = 1)
+anchora <- start(m)[1]
+anchorb <- end(m)[1]
+
+region  <- subseq(protaln, anchora - 20, anchorb + 20)   # aligned window
+cat(sprintf("VASYN anchor at consensus %d-%d; region columns %d-%d (%d isolates)\n",
+            anchora, anchorb, anchora - 20, anchorb + 20, length(region)))
+region
+```
+
+## Isolate metadata and genus assignment
+
+Each sequence name encodes a virus abbreviation and one or more accessions.
+Genus is assigned by joining to the ICTV VMR table [@ictvvmr2024] — first by GENBANK
+accession, then, for isolates that are not VMR species exemplars, by matching
+the virus abbreviation to the VMR *"Virus name abbreviation(s)"* column. This
+two-stage join (implemented in `scripts/prep_elm_regions.R`) leaves **no**
+isolate unclassified.
+
+```{r meta}
+meta <- readr::read_tsv(file.path(elm_dir, "region_meta.tsv"),
+                        show_col_types = FALSE)
+
+meta %>%
+  count(genus, genus_source, name = "n_isolates") %>%
+  arrange(desc(n_isolates)) %>%
+  knitr::kable(caption = "Isolates per genus and how genus was assigned.")
+```
+
+## ELM search results (gget)
+
+`gget elm` was run per isolate in ortholog + regex mode. As expected for viral
+CI proteins, the **ortholog** search returns nothing (ELM's ortholog set is
+eukaryotic), so the **regex** motif matches carry the signal — the same content
+the ELM webserver returns for a direct sequence query.
+
+```{r read-gget}
+regex_path <- file.path(elm_dir, "elm_regex.tsv")
+have_gget  <- file.exists(regex_path)
+
+if (have_gget) {
+  elm <- readr::read_tsv(regex_path, show_col_types = FALSE) %>%
+    dplyr::left_join(dplyr::select(meta, query = name, virus_abbr, genus),
+                     by = "query")
+  cat(sprintf("%d motif hits across %d isolates and %d ELM motif classes\n",
+              nrow(elm), dplyr::n_distinct(elm$query),
+              dplyr::n_distinct(elm$ELMIdentifier)))
+  elm %>%
+    dplyr::count(ELMType, name = "hits") %>%
+    dplyr::arrange(dplyr::desc(hits)) %>%
+    knitr::kable(caption = "ELM hits by motif type.")
+} else {
+  message("data/elm_gget/elm_regex.tsv not found. ",
+          "Regenerate with scripts/prep_elm_regions.R -> gget_elm_run.py.")
+}
+```
+
+### What the motifs are — reference table
+
+Throughout this chapter motifs are labelled by their **ELM identifier** (e.g.
+`LIG_SH2_STAT5`), which is compact but opaque. The table below unpacks every
+detected class: its **functional-site name**, ELM **type** (CLV cleavage, DEG
+degron, DOC docking, LIG ligand-binding, MOD post-translational modification,
+TRG targeting), the **canonical regular-expression pattern** that defines the
+motif, a brief functional **description**, and the number of CI-region isolates
+carrying it. Sort by *n_isolates* for the near-universal motifs; filter by
+*Type* or search the description for a functional class of interest. Each
+identifier links to its ELM database entry.
+
+```{r elm-reference-table}
+#| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_regex.tsv"))
+elm_ref <- elm %>%
+  dplyr::group_by(ELMIdentifier) %>%
+  dplyr::summarise(
+    `Functional site` = dplyr::first(FunctionalSiteName),
+    Type              = dplyr::first(ELMType),
+    `Canonical regex` = dplyr::first(Regex),
+    Description       = dplyr::first(Description),
+    n_isolates        = dplyr::n_distinct(query),
+    .groups = "drop") %>%
+  dplyr::arrange(dplyr::desc(n_isolates)) %>%
+  dplyr::mutate(ELMIdentifier = sprintf(
+    '<a href="http://elm.eu.org/elms/%s" target="_blank">%s</a>',
+    ELMIdentifier, ELMIdentifier))
+
+DT::datatable(
+  elm_ref, rownames = FALSE, escape = FALSE, filter = "top",
+  options = list(pageLength = 12, scrollX = TRUE,
+                 columnDefs = list(list(width = "320px", targets = 4))),
+  caption = paste("All ELM linear-motif classes detected in the CI motif-flanking",
+                  "region, with functional-site name, type, canonical regex,",
+                  "description and isolate count. Identifiers link to the ELM",
+                  "database."))
+```
+
+## Motif landscape across isolates
+
+Motif presence per isolate, ELM classes on **y**, isolate fragments on **x**,
+faceted and coloured by genus (each panel is one genus, width proportional to
+isolate count). The wide bands are motifs shared across essentially all
+*Potyvirus* isolates; the narrow genus panels reveal motifs restricted to
+particular lineages.
+
+```{r grid}
+#| fig-width: 15
+#| fig-height: 18
+#| fig-cap: "Presence/absence of each ELM motif class (rows) across every CI-region isolate (columns), faceted and coloured by genus. Wide horizontal bands are motifs shared across essentially all Potyvirus isolates; motifs confined to a single narrow genus panel are lineage-restricted."
+#| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_regex.tsv"))
+pa <- elm %>% dplyr::distinct(query, genus, ELMIdentifier)
+
+genus_sizes <- meta %>% dplyr::count(genus, name = "n_iso") %>%
+  dplyr::arrange(dplyr::desc(n_iso))
+isolate_order <- meta %>%
+  dplyr::mutate(genus = factor(genus, levels = genus_sizes$genus)) %>%
+  dplyr::arrange(genus, virus_abbr) %>% dplyr::pull(name)
+
+pa <- pa %>% dplyr::mutate(
+  query         = factor(query, levels = isolate_order),
+  ELMIdentifier = forcats::fct_rev(factor(ELMIdentifier)),
+  genus         = factor(genus, levels = genus_sizes$genus))
+
+ggplot(pa, aes(query, ELMIdentifier, fill = genus)) +
+  geom_tile() +
+  facet_grid(cols = vars(genus), scales = "free_x", space = "free_x") +
+  scale_fill_viridis_d(option = "turbo", guide = "none") +
+  labs(title = "ELM linear motifs across Potyviridae CI region fragments",
+       x = "Isolate fragment (grouped by genus)", y = "ELM motif class") +
+  theme_minimal(base_size = 8) +
+  theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
+        panel.grid = element_blank(), panel.spacing.x = unit(1.5, "pt"),
+        strip.text.x = element_text(angle = 90, hjust = 0, size = 7),
+        strip.background = element_rect(fill = "grey95", colour = NA))
+```
+
+## Genus-characteristic motifs
+
+Motifs ranked by how much their prevalence varies across genera (restricted to
+genera with ≥3 isolates). Because genus sizes are very unequal, each call
+carries a **confidence** based on the size of the genus driving it, and a
+**Wilson lower bound** on the prevalence — so a motif present in 3/3 isolates of
+a small genus (point prevalence 1.0, lower bound ≈ 0.44) is not overstated
+relative to one present in 166/166 *Potyvirus* isolates (lower bound ≈ 0.98).
+
+```{r spec}
+#| fig-width: 12
+#| fig-height: 5.8
+#| fig-cap: "Genus-characteristic ELM motifs: tile colour is each motif's prevalence within a genus (rows = genera with ≥3 isolates, columns = the most cross-genus-variable motifs). Blue-ringed cells flag calls driven by a small genus (low confidence); † marks genera with <5 isolates."
+#| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_motif_specificity.tsv"))
+spec <- readr::read_tsv(file.path(elm_dir, "elm_motif_specificity.tsv"),
+                        show_col_types = FALSE)
+
+MIN_N <- 3; CONF_LOW <- 5; TOP_M <- 30
+big_genera <- genus_sizes %>% dplyr::filter(n_iso >= MIN_N) %>% dplyr::pull(genus)
+
+top_motifs <- spec %>% dplyr::slice_max(spec_var, n = TOP_M) %>%
+  dplyr::pull(ELMIdentifier)
+
+prev_long <- spec %>%
+  dplyr::filter(ELMIdentifier %in% top_motifs) %>%
+  dplyr::select(ELMIdentifier, dplyr::all_of(as.character(big_genera))) %>%
+  tidyr::pivot_longer(-ELMIdentifier, names_to = "genus", values_to = "prevalence")
+
+lab_map <- genus_sizes %>% dplyr::filter(genus %in% big_genera) %>%
+  dplyr::mutate(label = sprintf("%s (n=%d)%s", genus, n_iso,
+                                ifelse(n_iso < CONF_LOW, " †", "")))
+lm <- setNames(lab_map$label, lab_map$genus)
+
+prev_long <- prev_long %>% dplyr::mutate(
+  genus_lab = factor(lm[genus], levels = rev(lm[as.character(big_genera)])),
+  ELMIdentifier = factor(ELMIdentifier,
+    levels = spec$ELMIdentifier[spec$ELMIdentifier %in% top_motifs]))
+
+lowconf <- spec$ELMIdentifier[spec$confidence == "low"]
+prev_long <- prev_long %>%
+  dplyr::mutate(lowconf = ELMIdentifier %in% lowconf & prevalence > 0.5)
+
+ggplot(prev_long, aes(ELMIdentifier, genus_lab, fill = prevalence)) +
+  geom_tile(colour = "grey92") +
+  geom_tile(data = dplyr::filter(prev_long, lowconf),
+            colour = "#2b8cbe", linewidth = 0.7, fill = NA) +
+  scale_fill_viridis_c(option = "magma", direction = -1, limits = c(0, 1),
+                       name = "Prevalence") +
+  labs(title = "Genus-characteristic ELM motifs",
+       caption = paste0("† genus with <", CONF_LOW,
+                        " isolates (low-confidence); blue-ringed cells: ",
+                        "characteristic call from a small genus."),
+       x = "ELM motif class", y = "Genus") +
+  theme_minimal(base_size = 9) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 7),
+        plot.caption = element_text(hjust = 0, size = 7, colour = "grey30"),
+        panel.grid = element_blank())
+```
+
+The highest-confidence genus-characteristic calls (largest driving genus). These
+are the **data-selected "interesting" motifs** — chosen by an unbiased
+cross-genus prevalence-variance ranking rather than by hand — so each is shown
+with its functional-site name and canonical pattern:
+
+```{r spec-table}
+#| eval: !expr file.exists(file.path(here::here("data","elm_gget"),"elm_motif_specificity.tsv"))
+# motif -> (name, regex) lookup from the regex hit table
+motif_meta <- elm %>%
+  dplyr::group_by(ELMIdentifier) %>%
+  dplyr::summarise(`Functional site` = dplyr::first(FunctionalSiteName),
+                   Regex = dplyr::first(Regex), .groups = "drop")
+
+spec %>%
+  dplyr::arrange(dplyr::desc(spec_var)) %>%
+  dplyr::transmute(ELMIdentifier, top_genus, top_n,
+                   top_prev = round(top_prev, 2),
+                   wilson_lwr = round(top_prev_wilson_lwr, 2),
+                   confidence, spec_var = round(spec_var, 3)) %>%
+  dplyr::slice_head(n = 15) %>%
+  dplyr::left_join(motif_meta, by = "ELMIdentifier") %>%
+  dplyr::relocate(`Functional site`, Regex, .after = ELMIdentifier) %>%
+  knitr::kable(caption = paste("Top 15 motifs by cross-genus prevalence",
+                               "variance, with functional-site name, canonical",
+                               "regex and small-sample confidence."))
+```
+
+## Notes
+
+- The concatenated-submission workflow (`build_concat()` + junction-hit
+  flagging) used for the original single ELM webserver query is retained in
+  `potytools` but is no longer needed here, since `gget` lets us query each
+  isolate directly.
+- The gget ELM database footprint is ~3 MB (ELM-curated instances/classes);
+  the larger DIAMOND binary lives inside the disposable pixi env, not in the
+  project.

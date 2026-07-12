@@ -11,3 +11,30 @@
 .Rdata
 .httr-oauth
 .DS_Store
+
+**/*.quarto_ipynb
+
+# Data files (large / locally generated — not tracked)
+/data/
+
+# Rendered book output (published from the gh-pages branch)
+/_book/
+/index.tex
+
+# Quarto render intermediates (freeze/ is tracked; these are not)
+**/*_cache/
+**/*_files/
+**/*.knit.md
+**/*.rmarkdown
+
+# renv: track lockfile + activate.R + settings.json, ignore the library
+renv/library/
+renv/local/
+renv/staging/
+renv/python/
+renv/sandbox/
+
+# Analysis caches / regenerable outputs
+/cache/
+
+.claude/

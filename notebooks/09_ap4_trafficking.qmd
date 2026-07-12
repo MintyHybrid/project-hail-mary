@@ -1,0 +1,283 @@
+---
+title: "AP-4 Trafficking and the Tyrosine-Motif Hypothesis"
+subtitle: "Mechanistic reasoning behind the AP-4 arm of the immune trafficking model, and the tyrosine-motif hypothesis it motivates"
+author: "Christina Muedsam"
+date: last-modified
+---
+
+<!-- SOURCE: split out of notebooks/08_immu_simmu.qmd (originally
+"# Extended analysis: AP-4, TEPSIN and cargo missorting") when the book's
+notebooks were renumbered to match Quarto's actual chapter order. -->
+
+## Overview
+
+The [interactive trafficking simulation](08_immu_simmu.qmd) foregrounds AP-4
+because it is the least-studied of the four adaptor-protein complexes yet, we
+argue, a plausible integration point between membrane trafficking and immune
+signalling. This chapter sets out the mechanistic reasoning and the (largely
+hypothetical) cargo assignments that motivate the model's AP-4 arm.
+
+::: {.callout-important appearance="simple"}
+Much of what follows is **predictive**: it extrapolates from well-characterised
+mammalian AP-4 biology and from sorting-motif analysis to plant proteins that
+have **not** been experimentally validated as AP-4 cargo. Established facts
+(ATG9A as AP-4 cargo in mammals; VSR1/BOR1 as AP-4 cargo in *Arabidopsis*;
+AP-4's requirement for the hypersensitive response) are cited; predictions are
+labelled as such and presented as testable hypotheses, not conclusions.
+:::
+
+## AP-4: the overlooked trafficking pathway
+
+Adaptor protein complex 4 (AP-4) is a heterotetramer — subunits β4 (AP4B,
+At5g11490), ε (AP4E, At5g09420), μ4 (AP4M, At4g24550) and σ4 (AP4S, At3g13420)
+in *Arabidopsis*. Unlike AP-1/2/3, AP-4 operates **without a clathrin coat** and
+mediates export from the *trans*-Golgi network (TGN) to endosomal and
+autophagy-related compartments [@hirst2013; @fuji2016].
+
+| Complex | Location | Coat | Function | Knockout phenotype |
+|---|---|---|---|---|
+| AP-1 | TGN/endosomes | Clathrin | TGN–endosome, secretion | Embryo-lethal (mammals) |
+| AP-2 | Plasma membrane | Clathrin | Endocytosis | Lethal (plants/mammals) |
+| AP-3 | TGN/endosomes | None | Vacuole/lysosome | Hermansky–Pudlak (mammals) |
+| **AP-4** | **TGN** | **None** | **TGN → endosome/autophagy** | **Neurodegeneration (mammals); subtle (plants)** |
+
+The compartments AP-4 connects, and the lipid identities that mark them, are
+summarised below; AP-4 acts at the TGN, exporting cargo (notably ATG9) toward
+endosomal and autophagy compartments (dashed arrow).
+
+```{=html}
+<figure style="margin:1em 0;">
+<svg viewBox="0 0 720 430" width="100%" style="max-width:720px;font-family:sans-serif;" role="img" aria-label="Plant cell trafficking compartment map">
+  <rect x="6" y="6" width="708" height="418" rx="18" fill="#fbfaf5" stroke="#8a7f5c" stroke-width="3"/>
+  <rect x="12" y="12" width="696" height="406" rx="14" fill="none" stroke="#f3c9c0" stroke-width="4"/>
+  <text x="24" y="34" font-size="13" fill="#8a7f5c" font-style="italic">plasma membrane (PC, PE, PI, PS; sterols)</text>
+  <!-- nucleus -->
+  <circle cx="150" cy="150" r="62" fill="#e8daf2" stroke="#7d5ba6" stroke-width="2"/>
+  <text x="150" y="155" font-size="14" text-anchor="middle" fill="#4a2f6b" font-weight="bold">Nucleus</text>
+  <!-- ER -->
+  <ellipse cx="150" cy="270" rx="70" ry="30" fill="#d6ecec" stroke="#4a9a9a" stroke-width="2"/>
+  <text x="150" y="274" font-size="12" text-anchor="middle" fill="#2e6b6b">ER · PC/PE/PI, low sterol</text>
+  <!-- Golgi/TGN -->
+  <g>
+    <rect x="330" y="120" width="120" height="12" rx="6" fill="#f4d35e"/>
+    <rect x="335" y="138" width="110" height="12" rx="6" fill="#f4d35e"/>
+    <rect x="340" y="156" width="100" height="12" rx="6" fill="#f4d35e"/>
+    <text x="390" y="188" font-size="12" text-anchor="middle" fill="#8a6d0a" font-weight="bold">TGN / Golgi</text>
+    <text x="390" y="203" font-size="11" text-anchor="middle" fill="#8a6d0a">PI(4)P · AP-4 acts here</text>
+  </g>
+  <!-- early endosome -->
+  <circle cx="560" cy="150" r="40" fill="#fde3cf" stroke="#d98841" stroke-width="2"/>
+  <text x="560" y="148" font-size="12" text-anchor="middle" fill="#9a531a">Early</text>
+  <text x="560" y="163" font-size="12" text-anchor="middle" fill="#9a531a">endosome</text>
+  <text x="560" y="205" font-size="10" text-anchor="middle" fill="#9a531a">PI(3)P</text>
+  <!-- MVB -->
+  <circle cx="580" cy="270" r="34" fill="#f5c6a5" stroke="#c0651f" stroke-width="2"/>
+  <circle cx="571" cy="264" r="5" fill="#c0651f"/><circle cx="588" cy="266" r="5" fill="#c0651f"/>
+  <circle cx="578" cy="280" r="5" fill="#c0651f"/>
+  <text x="580" y="320" font-size="11" text-anchor="middle" fill="#8a4413">MVB · PI(3,5)P₂</text>
+  <!-- autophagosome -->
+  <circle cx="440" cy="300" r="30" fill="#e2d0ee" stroke="#8e5bb5" stroke-width="2" stroke-dasharray="5 3"/>
+  <text x="440" y="304" font-size="10" text-anchor="middle" fill="#5a3480">Autophago-</text>
+  <text x="440" y="316" font-size="10" text-anchor="middle" fill="#5a3480">some</text>
+  <!-- vacuole -->
+  <ellipse cx="470" cy="380" rx="150" ry="34" fill="#dfe8f5" stroke="#3f6fa5" stroke-width="2"/>
+  <text x="470" y="384" font-size="13" text-anchor="middle" fill="#274a70" font-weight="bold">Vacuole (degradation)</text>
+  <!-- arrows -->
+  <defs><marker id="ah" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#c0392b"/></marker>
+        <marker id="ag" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto"><path d="M0,0 L7,3 L0,6 Z" fill="#555"/></marker></defs>
+  <!-- AP-4 TGN -> endosome (highlighted, dashed) -->
+  <path d="M452,140 Q510,120 522,140" fill="none" stroke="#c0392b" stroke-width="2.5" stroke-dasharray="6 4" marker-end="url(#ah)"/>
+  <text x="500" y="112" font-size="11" fill="#c0392b" font-weight="bold">AP-4 (ATG9)</text>
+  <!-- EE -> MVB -->
+  <path d="M565,190 Q575,225 578,234" fill="none" stroke="#555" stroke-width="2" marker-end="url(#ag)"/>
+  <!-- MVB -> vacuole -->
+  <path d="M575,304 Q540,335 500,350" fill="none" stroke="#555" stroke-width="2" marker-end="url(#ag)"/>
+  <!-- autophagosome -> vacuole -->
+  <path d="M440,330 Q450,350 460,346" fill="none" stroke="#8e5bb5" stroke-width="2" marker-end="url(#ag)"/>
+</svg>
+<figcaption style="font-size:12px;color:#555;">Plant-cell trafficking compartments and their marker lipids. AP-4 exports cargo (notably ATG9) from the TGN toward endosomal/autophagy compartments (red dashed arrow); ESCRT-marked MVBs and autophagosomes both deliver to the vacuole for degradation.</figcaption>
+</figure>
+```
+
+AP-4 is understudied in plants precisely because it is *not* essential for
+viability and gives subtle phenotypes — yet in mammals its loss causes a
+hereditary spastic paraplegia ("AP-4 deficiency syndrome") traced to
+missorting of its most conserved cargo, the autophagy lipid-scramblase **ATG9A**
+[@mattera2017; @davies2018]. In *Arabidopsis*, AP-4 is experimentally
+established to sort the tyrosine-motif cargoes VACUOLAR SORTING RECEPTOR 1 and
+the borate transporter BOR1 via its µ subunit, and its loss abolishes the
+hypersensitive cell-death response to avirulent bacteria [@fuji2016].
+
+### Predicted plant AP-4 cargo
+
+Mammalian AP-4 cargo (ATG9A, AMPA receptors, SLC17A5, SERINC1/3, δ-opioid
+receptor, ADAM10) are transmembrane proteins bearing **[D/E]XXX[L/I/M]** or
+**YXXΦ** sorting motifs and functioning in membrane remodelling, receptor
+localisation, autophagosome formation or lipid transport. Screening plant
+immune-relevant proteins for the same motifs yields a ranked set of candidate
+cargo — **a bioinformatic prediction, not a validated interaction map**:
+
+| Confidence | Candidate | Sorting motif(s) | Predicted missorting consequence |
+|---|---|---|---|
+| High | ATG9 (At2g31260) | multiple DXXXL/EXXXL in cytoplasmic loops | ATG9 accumulates at TGN → impaired autophagosome biogenesis |
+| High | SYP4 SNAREs (SYP41/42/43) | (VAMP7-like, by homology) | ectopic TGN–endosome fusion |
+| High | VTI11/VTI12 | (VAMP8-like) | failed autophagosome–vacuole fusion |
+| Medium | **NPR1** (At1g64280) | DXXXL (234–238), EXXXM (456–460) | mis-localised NPR1 → impaired SAR (see below) |
+| Medium | **CBP60g** (At5g26920) | YXXL (189–193), DXXXL (341–345) | dysregulated SA biosynthesis |
+| Medium | NRAMP3 (At2g23150) | EIXXL (445–449) | iron mislocalisation → oxidative stress |
+| Medium | PUB22/23 | membrane-associated E3s | failed NLR ubiquitination → NLR accumulation |
+| Speculative | RabG3, cleaved PRR tails | — | impaired autophagosome fusion; chronic fragment signalling |
+
+Only the ATG9 assignment rests on strong cross-species precedent [@mattera2017;
+@davies2018]; the immune-regulator assignments (NPR1, CBP60g, PUB22/23) are the
+novel, lower-confidence predictions that the callout above flags.
+
+## TEPSIN: the AP-4 accessory protein
+
+TEPSIN is an AP-4-interacting protein that stabilises the complex, enhances
+membrane curvature and concentrates cargo prior to clathrin-independent scission
+[@hirst2013]. A plant TEPSIN-like protein is present but uncharacterised
+(*Arabidopsis* candidate At5g48795). We hypothesise it stabilises AP-4 under the
+elevated trafficking demand of stress responses, predicting that *tepsin* mutants
+phenocopy mild *ap4* defects and that TEPSIN–AP-4 association is enhanced during
+infection. The mechanistically distinctive outcome of TEPSIN (or AP-4) loss is
+not a clean autophagy block but a **dysfunctional** one:
+
+```{mermaid}
+%%| label: fig-tepsin-autophagy
+%%| fig-cap: "Hypothesised consequence of TEPSIN/AP-4 loss: ATG9 mis-sorting yields structurally aberrant, cargo-incompetent autophagosomes rather than a complete autophagy block."
+flowchart TD
+  A[TEPSIN / AP-4 loss] --> B[ATG9 mis-sorted,<br/>accumulates at TGN]
+  B --> C[Reduced ATG9 delivery to phagophore]
+  C --> D[Impaired autophagosome formation]
+  D --> E{ATG8 lipidation still occurs?}
+  E -- Yes --> F[Aberrant autophagosomes:<br/>ATG8+ membranes, poor cargo recruitment]
+  F --> G[Non-selective autophagy impaired]
+  F --> H[Selective NBR1 autophagy compensatorily enhanced]
+  F --> I[Chronic autophagy-stress response]
+```
+
+## NPR1 and CBP60g: trafficking hypotheses for immune regulators
+
+NPR1, the master regulator of systemic acquired resistance (SAR), is held as
+cytoplasmic oligomers that must be reduced to monomers — via thioredoxins and
+S-nitrosylation at Cys156 — before nuclear import and coactivation of *PR* genes
+[@mou2003; @tada2008; @kinkema2000]. The compartment in which monomerisation
+occurs is not fully resolved. We propose (hypothesis) that AP-4 routes NPR1
+oligomers through an endosomal compartment whose reducing environment promotes
+monomerisation before retrograde delivery and nuclear import:
+
+```{mermaid}
+%%| label: fig-npr1-hypothesis
+%%| fig-cap: "Hypothesised AP-4-dependent endosomal step in NPR1 activation (predicted, not established). AP-4 loss could either reduce nuclear NPR1 (loss of function) or, if the compartment normally sequesters NPR1, increase it (gain of function/autoimmunity)."
+flowchart LR
+  A[NPR1 oligomers<br/>cytoplasm] --> B[AP-4-mediated<br/>TGN sorting]
+  B --> C[Endosomal compartment<br/>reducing environment]
+  C --> D[Monomerisation]
+  D --> E[Retrograde to cytosol]
+  E --> F[Nuclear import → PR genes]
+  B -. AP-4 loss .-> G[Missorted / sequestered NPR1]
+  G --> H[Reduced SAR<br/>or constitutive autoimmunity]
+```
+
+This predicts that *ap4* mutants show altered NPR1 localisation and SA-response
+kinetics, testable by *ap4 npr1* epistasis. Analogously, CBP60g — a
+calcium-responsive transcription factor that activates the SA-biosynthesis gene
+*ICS1* [@wang2009cbp60g] — may be held in a vesicular pool and released for rapid
+perinuclear import upon MAMP-triggered Ca²⁺ influx, with AP-4 providing the
+sorting step; *ap4* mutants would then show delayed CBP60g nuclear accumulation
+and reduced SA after infection.
+
+::: {.callout-important appearance="simple"}
+## A published AP-4 → immunity link — and a hidden thread to NPR1
+The NPR1/CBP60g routes above remain **predictions**. But there is now a
+**concrete, published** AP-4↔immunity mechanism that makes the whole idea far
+less speculative. @huang2026 showed that the **AP-4 µ subunit binds the
+transmembrane immune protein BDA1 through BDA1's tyrosine residues (Y18, Y257)**,
+and that AP-4 is required for **SNC2-mediated immunity** (a receptor-like-protein
+pathway) as well as for basal, pattern- and effector-triggered immunity; a second
+endocytic adaptor, ECA4, tunes BDA1 levels in parallel [@wang2025eca4]. This is a
+**direct precedent for a plant defence protein being AP-4-sorted via a
+tyrosine-based motif** — precisely the motif class the viral CI displays
+(Chapter 5).
+
+The thread to **NPR1** is suggestive but **not yet fully characterised**: SNC2 is
+literally *SUPPRESSOR OF NPR1-1, CONSTITUTIVE 2* — i.e. it was isolated genetically
+in relation to NPR1 and defines an RLP-based resistance branch that runs partly
+**parallel to / independent of NPR1**. So AP-4, by gating BDA1/SNC2, sits on an
+immune axis genetically tied to NPR1, without (to my knowledge) a demonstrated
+direct AP-4–NPR1 interaction. We flag this as a **hypothesis worth pursuing**, not
+an established pathway.
+:::
+
+## Cargo missorting as a distinct pathology
+
+The central hypothesis reframes AP-4 deficiency: the damaging consequence may be
+not *failed degradation* but **aberrant localisation**, producing a signalling
+imbalance. Missorting can create autophagy-resistant protein aggregates and
+mislocalised signalling components — a route to chronic, autoimmune-like
+activation that is mechanistically distinct from simple loss of function. Several
+independent routes converge on this outcome, paralleling known plant autoimmune
+mutants (e.g. ESCRT-defective *vps* alleles that fail to degrade activated
+receptors; autophagy-deficient backgrounds that accumulate NLRs):
+
+- **Failed receptor degradation** → receptor persistence at the PM → chronic MAPK.
+- **NLR hyperaccumulation** in autophagy-deficient backgrounds → ETI without effector.
+- **Persistent endosomal signalling platforms** when ESCRT sorting fails.
+- **Lipid-identity imbalance** (PI(3)P/PI(3,5)P₂ dysregulation) → trafficking paralysis and, at the extreme, the membrane-topology inversion tracked by the simulation [@simon2016].
+- **Cargo missorting → aggregates** that resist autophagy and trigger stress signalling.
+
+These mechanisms are why the model reads out an *autoimmune-risk* signal
+(reversed-topology exosomes) rather than a simple loss-of-signal, and why the
+AP-4 arm — despite AP-4's subtle single-mutant phenotype — is worth modelling.
+
+## Synthesis: a tyrosine-motif hypothesis
+
+Pulling the threads together, the working hypothesis of this compendium is not
+about DNAzyme catalysis at all — it is about **sorting motifs**. Four propositions,
+in decreasing order of support:
+
+1. **The CI's tyrosine/dileucine motifs let the virus tap host sorting.** The
+   potyvirus CI carries functional acidic-dileucine signals read by AP-2
+   [@wu2022ci] and, beside them, an accessible **YXXΦ tyrosine motif** (Chapter 5).
+   A cytosolic pathogen protein wearing host-type endocytic signals is positioned
+   to **co-opt the AP-mediated sorting machinery** it needs for replication and
+   movement — and, potentially, to perturb the immune trafficking that runs on the
+   same adaptors.
+2. **Tyrosine-based sorting is a deeply conserved, re-used device.** YXXΦ (and the
+   related immunoreceptor tyrosine motifs, ITAM/ITIM) govern receptor sorting and
+   signalling from plants to mammals; the same motif logic is repeatedly exploited
+   by human-pathogenic viruses, including RNA viruses and oncoviruses. That AP-4
+   itself reads a tyrosine motif on the plant immune protein **BDA1** [@huang2026]
+   shows the device is active on *both* sides of the host–pathogen interface.
+3. **Membrane-topology reversal can originate only at the LE/MVB.** The
+   late-endosome / multivesicular body is the branch point where sorting,
+   recycling, autophagy and degradation segregate — and the **only** compartment
+   where vesicles are generated by membrane remodelling *away from* the cytosol
+   (ILV budding). A defect that scrambles this orchestration is therefore the only
+   plausible origin of the reversed-topology, cytoplasm-facing vesicles the
+   simulation flags as an autoimmune risk. AP-4 is implicated at exactly this hub,
+   from ATG9 delivery for autophagy to the vacuole–PM fusion that executes HR cell
+   death [@hatsugai2018].
+4. **Tyrosine motifs, modified, are read across the whole endomembrane system.**
+   The same Y/dileucine signals — and their phospho-/other modifications — feed
+   **autophagy** (the CI region's ELM hits include autophagy-related targeting
+   classes; Chapter 4), **ESCRT**-dependent ILV sorting, and **AP-complex**
+   recognition. For TuMV in particular, both **NPR1-related resistance and
+   autophagy** are established parts of the host-defence landscape [@wu2024brassica],
+   and viral replication itself runs on endomembrane co-option [@jovanovic2023]. A
+   fuller review of how these modifications switch a motif between sorting fates is
+   the natural next chapter of this story.
+
+Everything past proposition 1 is explicitly **hypothesis**; the value of the
+[interactive model](08_immu_simmu.qmd) is to make those hypotheses *quantitative
+and falsifiable* rather than merely narrative.
+
+::: {.callout-note collapse="true"}
+## React/recharts version (not compatible with the OJS runtime)
+
+The full React component (`PlantImmuneTrafficDashboard`) with recharts
+visualisations is preserved in the project history for reference. To enable it,
+either (a) host it as a standalone React app and embed via `<iframe>`, or
+(b) move to a Shiny app (`shiny/immu_simu/`) with the same simulation logic.
+:::

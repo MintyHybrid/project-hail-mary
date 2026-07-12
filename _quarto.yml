@@ -1,17 +1,62 @@
 project:
-  type: manuscript
+  type: book
+
+book:
+  title: "DNAzyme-like Motifs, Horizontal Gene Transfer, and Short Linear Motif Conservation in Potyviridae"
+  author:
+    - name: "Christina Muedsam"
+  date: today
+  repo-url: https://github.com/MintyHybrid/project-hail-mary
+  repo-actions: [edit, issue]
+  chapters:
+    - index.qmd
+    - part: "Part I — The Discovery"
+      chapters:
+        - notebooks/01_discovery.qmd
+        - notebooks/02_phylogenetics.qmd
+    - part: "Part II — Codon Usage & Motif Architecture"
+      chapters:
+        - notebooks/03_codon_dnazyme.qmd
+        - notebooks/04_protein_motifs.qmd
+        - notebooks/05_potyvirus_motifs.qmd
+    - part: "Part III — Evolutionary Mechanisms"
+      chapters:
+        - notebooks/06_hgt.qmd
+        - notebooks/07_networks.qmd
+    - part: "Part IV — Host Immunity"
+      chapters:
+        - notebooks/08_immu_simmu.qmd
+        - notebooks/09_ap4_trafficking.qmd
+    - part: "Appendix"
+      chapters:
+        - notebooks/A1_data_sources.qmd
+        - references.qmd
+
+bibliography:
+  - references.bib
+  - packages.bib
 
 execute:
   freeze: auto
 
 format:
   html:
+    theme:
+      light: cosmo
+      dark: darkly
     toc: true
-    comments:
-      hypothesis: true
-  docx: default
-  jats: default
-  agu-pdf: default
-
-
-
+    toc-depth: 3
+    code-fold: true
+    code-tools: true
+    fig-cap-location: bottom
+  # PDF download — deferred. TinyTeX is installed, but this book's interactive
+  # widgets (visNetwork, plotly, r3dmol, DT, Observable) have no PDF form and
+  # currently halt the LaTeX render even with `prefer-html: true`. Enabling PDF
+  # cleanly needs per-widget static fallbacks (e.g. knitr::kable when
+  # !knitr::is_html_output()) across the chapters — tracked as follow-up work.
+  # pdf:
+  #   documentclass: scrreport
+  #   geometry: margin=1in
+  #   fontsize: 11pt
+  #   toc: true
+  #   prefer-html: true

@@ -1,0 +1,12 @@
+---
+title: "Complete Bibliography"
+nocite: |
+  @*
+---
+
+Each chapter lists the references it cites in its own **References** section. This
+appendix collects the **full bibliography** — every entry in `references.bib`,
+whether or not it is cited above.
+
+::: {#refs}
+:::
