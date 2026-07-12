@@ -1,11 +1,14 @@
 ---
-title: "Project Hail Mary"
-subtitle: "DNAzyme-like motifs, horizontal gene transfer, and short linear motif conservation in Potyviridae"
 author:
   - name: "Christina Muedsam"
 date: last-modified
 number-sections: false
 ---
+
+# Project Hail Mary {.unnumbered}
+
+*DNAzyme-like motifs, horizontal gene transfer, and short linear motif
+conservation in Potyviridae*
 
 ::: {.callout-warning}
 ## Preprint / work in progress — not peer reviewed
