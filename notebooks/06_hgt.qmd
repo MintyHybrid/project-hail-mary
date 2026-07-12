@@ -498,5 +498,5 @@ reveal conservation patterns consistent with functional constraint post-insertio
 
 ### Network-based HGT detection
 
-See Chapter 5b for the multilayer network approach connecting viruses, host
+See Chapter 7 for the multilayer network approach connecting viruses, host
 plants, and pollinators via GLOBI and GBIF interaction data.

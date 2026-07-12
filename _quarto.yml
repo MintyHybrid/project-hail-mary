@@ -18,14 +18,15 @@ book:
       chapters:
         - notebooks/03_codon_dnazyme.qmd
         - notebooks/04_protein_motifs.qmd
-        - notebooks/04b_potyvirus_motifs.qmd
+        - notebooks/05_potyvirus_motifs.qmd
     - part: "Part III — Evolutionary Mechanisms"
       chapters:
-        - notebooks/05_hgt.qmd
-        - notebooks/05b_networks.qmd
+        - notebooks/06_hgt.qmd
+        - notebooks/07_networks.qmd
     - part: "Part IV — Host Immunity"
       chapters:
-        - notebooks/06_immu_simmu.qmd
+        - notebooks/08_immu_simmu.qmd
+        - notebooks/09_ap4_trafficking.qmd
     - part: "Appendix"
       chapters:
         - notebooks/A1_data_sources.qmd

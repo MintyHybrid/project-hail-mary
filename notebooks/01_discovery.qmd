@@ -40,7 +40,7 @@ versus supported — here is the actual chain of thought, step by step:
    transfer (HGT) to vectors and/or hosts**.
 4. **Caveat — this is not yet established.** It is *not* shown that the
    flank-matching species actually **are hosts or vectors** of the corresponding
-   potyvirus. I built the **BioNexus** app (Chapter 8) to test connectivity; the
+   potyvirus. I built the **BioNexus** app (Chapter 7) to test connectivity; the
    interactions looked **sporadic rather than continuous** — which is *not* enough
    to infer the **absence** of HGT either.
 5. **A small aside.** A central target nucleotide was initially omitted; adding it
