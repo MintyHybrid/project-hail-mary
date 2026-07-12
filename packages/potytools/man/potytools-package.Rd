@@ -20,11 +20,11 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Christina Muedsam \email{christina.muedsam@example.com} (\href{https://orcid.org/0000-0001-8488-3442}{ORCID})
+\strong{Maintainer}: Christina Muedsam \email{70411777+MintyHybrid@users.noreply.github.com} (\href{https://orcid.org/0000-0001-8488-3442}{ORCID})
 
 Authors:
 \itemize{
-  \item Christina Muedsam \email{christina.muedsam@example.com} (\href{https://orcid.org/0000-0001-8488-3442}{ORCID})
+  \item Christina Muedsam \email{70411777+MintyHybrid@users.noreply.github.com} (\href{https://orcid.org/0000-0001-8488-3442}{ORCID})
 }
 
 }

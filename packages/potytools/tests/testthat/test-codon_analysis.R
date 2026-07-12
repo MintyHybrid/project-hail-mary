@@ -17,6 +17,38 @@ test_that("extract_codons handles Ns by dropping them", {
   expect_false(any(grepl("N", codons)))
 })
 
+test_that("codon_align_from_protein projects gaps and codons correctly", {
+  prot_aln <- Biostrings::AAStringSet(c(a = "M-K", b = "MAK"))
+  cds <- Biostrings::DNAStringSet(c(a = "ATGAAA", b = "ATGGCAAAA"))
+  codon_aln <- codon_align_from_protein(prot_aln, cds)
+  expect_equal(as.character(codon_aln[["a"]]), "ATG---AAA")
+  expect_equal(as.character(codon_aln[["b"]]), "ATGGCAAAA")
+})
+
+test_that("codon_align_from_protein pads with NNN when CDS runs out early", {
+  prot_aln <- Biostrings::AAStringSet(c(a = "MKV"))
+  cds <- Biostrings::DNAStringSet(c(a = "ATGAAA")) # only 2 codons for 3 residues
+  codon_aln <- codon_align_from_protein(prot_aln, cds)
+  expect_equal(as.character(codon_aln[["a"]]), "ATGAAANNN")
+})
+
+test_that("codon_align_from_protein only projects names present in both", {
+  prot_aln <- Biostrings::AAStringSet(c(a = "MK", b = "MK"))
+  cds <- Biostrings::DNAStringSet(c(a = "ATGAAA"))
+  codon_aln <- codon_align_from_protein(prot_aln, cds)
+  expect_equal(names(codon_aln), "a")
+})
+
+test_that("safe_translate trims to a whole number of codons and translates", {
+  aa <- safe_translate(Biostrings::DNAString("ATGGCTTA"))  # 8 nt -> trims to 6
+  expect_equal(as.character(aa), "MA")
+})
+
+test_that("safe_translate strips alignment gaps before translating", {
+  aa <- safe_translate(Biostrings::DNAString("ATG---GCT"))
+  expect_equal(as.character(aa), "MA")
+})
+
 test_that("calculate_gc_content returns values between 0 and 1", {
   seq <- "ATGCATGC"
   gc <- calculate_gc_content(seq)

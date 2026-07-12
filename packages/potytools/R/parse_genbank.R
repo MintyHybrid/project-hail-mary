@@ -345,6 +345,140 @@ parse_genbank_file <- function(filepath) {
 
 
 # =============================================================================
+# Reference/CDS matching
+# =============================================================================
+# Matches a named reference sequence (e.g. a protein-alignment FASTA header) to
+# the CDS feature in a parse_genbank_file() record that it came from, and
+# extracts that CDS's coding sequence. Used to recover per-isolate CDS when all
+# you have is a protein alignment and the genome flatfiles.
+
+#' Extract GenBank-style accession numbers from a string
+#'
+#' @param x Character vector (e.g. FASTA headers) to search.
+#' @return Character vector of matched accessions (e.g. `"AB011819"`,
+#'   `"NC_001445.1"`); empty if none found.
+#' @export
+extract_accessions <- function(x) {
+  unlist(regmatches(x, gregexpr("[A-Z]{1,2}_?[0-9]{5,8}(?:\\.[0-9]+)?", x)))
+}
+
+#' Does a string contain a GenBank-style accession?
+#'
+#' @param x Character vector to test.
+#' @return Logical vector, same length as `x`.
+#' @export
+has_genbank_id <- function(x) {
+  grepl("[A-Z]{1,2}_?[0-9]{5,8}", x)
+}
+
+.normalize_name <- function(x) {
+  tolower(gsub("[^a-z0-9]", "", x))
+}
+
+.aa_similarity <- function(x, y) {
+  n <- min(nchar(x), nchar(y))
+  if (n == 0) {
+    return(0)
+  }
+  sum(strsplit(substr(x, 1, n), "")[[1]] == strsplit(substr(y, 1, n), "")[[1]]) / n
+}
+
+#' Frame-safe translation of a (possibly gapped) coding sequence
+#'
+#' Strips alignment gaps, trims to a whole number of codons, and translates.
+#'
+#' @param seq A `Biostrings::DNAString` (or coercible via `as.character()`).
+#' @return An `Biostrings::AAString` translation.
+#' @export
+safe_translate <- function(seq) {
+  s <- gsub("-", "", as.character(seq))
+  trim_len <- nchar(s) - (nchar(s) %% 3)
+  s <- substr(s, 1, trim_len)
+  Biostrings::translate(Biostrings::DNAString(s))
+}
+
+#' Match a reference sequence to its CDS feature and extract the coding sequence
+#'
+#' Finds the CDS in a parsed GenBank `record` (as returned by one element of
+#' [parse_genbank_file()]'s result) that corresponds to a named reference
+#' sequence, trying in order: (1) an exact `protein_id` match against `name`,
+#' (2) a normalised `product`-qualifier match, and (3) — if `ref_protein` is
+#' supplied — the CDS whose translation is most similar to `ref_protein`,
+#' accepted only above `min_similarity`.
+#'
+#' @param record A single parsed GenBank record (one element of the list
+#'   returned by [parse_genbank_file()] or [load_genbank_folder()]).
+#' @param name Character scalar. Reference sequence name to match, e.g. a
+#'   protein-alignment FASTA header containing a `protein_id`.
+#' @param ref_protein Character scalar. Reference amino-acid sequence (gaps
+#'   allowed), used only for the similarity fallback. Optional.
+#' @param min_similarity Numeric in `[0, 1]`. Minimum fractional amino-acid
+#'   identity (over the shorter of the two sequences) required to accept a
+#'   similarity-based match. Default `0.7`.
+#' @return A `Biostrings::DNAString` with the matched CDS (reverse-complemented
+#'   if the feature is on the minus strand), or `NULL` if no feature matched or
+#'   `record$sequence` is unavailable.
+#' @export
+match_cds_to_reference <- function(record, name, ref_protein = NULL, min_similarity = 0.7) {
+  cds_feats <- Filter(function(f) identical(f$type, "CDS"), record$features)
+  if (length(cds_feats) == 0 || is.na(record$sequence)) {
+    return(NULL)
+  }
+
+  genome <- Biostrings::DNAString(toupper(record$sequence))
+
+  extract <- function(feat) {
+    seq <- Biostrings::subseq(genome, start = feat$start, end = feat$end)
+    if (identical(feat$strand, -1L)) seq <- Biostrings::reverseComplement(seq)
+    seq
+  }
+
+  # 1) protein_id exact match against the reference name
+  if (nzchar(name)) {
+    for (f in cds_feats) {
+      pid <- f$qualifiers[["protein_id"]]
+      if (!is.null(pid) && any(grepl(pid[1], name, fixed = TRUE))) {
+        return(extract(f))
+      }
+    }
+  }
+
+  # 2) normalised product-name match
+  target <- .normalize_name(name)
+  if (nzchar(target)) {
+    for (f in cds_feats) {
+      prod <- f$qualifiers[["product"]]
+      if (!is.null(prod)) {
+        prod_norm <- .normalize_name(prod[1])
+        if (nzchar(prod_norm) && (identical(prod_norm, target) || grepl(target, prod_norm, fixed = TRUE))) {
+          return(extract(f))
+        }
+      }
+    }
+  }
+
+  # 3) translated-CDS similarity fallback
+  if (!is.null(ref_protein) && nzchar(ref_protein)) {
+    best_sim <- -Inf
+    best_feat <- NULL
+    for (f in cds_feats) {
+      aa <- safe_translate(extract(f))
+      sim <- .aa_similarity(as.character(aa), ref_protein)
+      if (sim > best_sim) {
+        best_sim <- sim
+        best_feat <- f
+      }
+    }
+    if (!is.null(best_feat) && best_sim >= min_similarity) {
+      return(extract(best_feat))
+    }
+  }
+
+  NULL
+}
+
+
+# =============================================================================
 # Convenience accessors
 # =============================================================================
 

@@ -41,6 +41,51 @@ get_aa_to_codons <- function() {
 AA_TO_CODONS <- get_aa_to_codons()
 
 # ==============================================================================
+# CODON ALIGNMENT PROJECTION
+# ==============================================================================
+
+#' Project a protein alignment onto its underlying coding sequences
+#'
+#' Given a gapped protein alignment and the (ungapped) coding sequence for each
+#' entry, walks each alignment row and substitutes the matching codon for every
+#' non-gap residue (an all-gap codon `"---"` for alignment gaps, `"NNN"` if the
+#' CDS runs out of codons early), producing a codon-level nucleotide alignment
+#' with the same column structure as `prot_aln`.
+#'
+#' @param prot_aln An `AAStringSet` protein alignment (gapped, `"-"` for gaps).
+#' @param cds A `DNAStringSet` of ungapped coding sequences, named to match
+#'   `prot_aln`. Only names present in both are projected.
+#' @return A `DNAStringSet` codon alignment, one row per shared name, with
+#'   width `3 * width(prot_aln)`.
+#' @export
+codon_align_from_protein <- function(prot_aln, cds) {
+  out <- Biostrings::DNAStringSet()
+  ids <- intersect(names(prot_aln), names(cds))
+  for (id in ids) {
+    prot <- strsplit(as.character(prot_aln[[id]]), "")[[1]]
+    codons <- substring(
+      as.character(cds[[id]]),
+      seq(1, length(cds[[id]]), 3),
+      seq(3, length(cds[[id]]), 3)
+    )
+    idx <- 1
+    seq_out <- character()
+    for (aa in prot) {
+      if (aa == "-") {
+        seq_out <- c(seq_out, "---")
+      } else if (idx > length(codons)) {
+        seq_out <- c(seq_out, "NNN")
+      } else {
+        seq_out <- c(seq_out, codons[idx])
+        idx <- idx + 1
+      }
+    }
+    out[[id]] <- Biostrings::DNAString(paste(seq_out, collapse = ""))
+  }
+  out
+}
+
+# ==============================================================================
 # CORE CODON EXTRACTION FUNCTIONS
 # ==============================================================================
 
