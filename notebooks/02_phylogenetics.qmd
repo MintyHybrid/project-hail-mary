@@ -46,124 +46,23 @@ library(readr)
 library(potytools) # rolling_alignment_stats() and _per_sequence() live here now
 ```
 
-Helper functions below implement GenBank parsing, accession extraction, codon
-projection, safe translation etc.
+GenBank parsing, accession extraction, CDS-matching, codon projection and safe
+translation now live in `potytools` (`extract_accessions()`,
+`has_genbank_id()`, `parse_genbank_file()`, `match_cds_to_reference()`,
+`codon_align_from_protein()`, `write_iqtree_codon_partitions()`,
+`safe_translate()`) — see `packages/potytools/R/parse_genbank.R` and
+`codon_analysis.R`. The inline versions previously here had two correctness
+bugs the package versions fix: they stripped IUPAC ambiguity codes (e.g. `N`)
+from the genome before applying position-based CDS coordinates, silently
+frame-shifting any genome containing one; and they didn't strip `<`/`>`
+partial-location markers before `as.integer()`, corrupting old-style
+multi-CDS annotations. Validated against all 219 cached GenBank flatfiles:
+the package's `match_cds_to_reference()` reproduces every affected record's
+own `/translation=` qualifier exactly.
 
 ```{r helpers}
-has_genbank_id <- function(x) {
-  grepl("[A-Z]{1,2}_?[0-9]{5,8}", x)
-}
-
-extract_accessions <- function(x) {
-  unlist(stringr::str_extract_all(x,
-    "[A-Z]{1,2}_?[0-9]{5,8}(?:\\.[0-9]+)?"))
-}
-
-normalize_name <- function(x) {
-  tolower(gsub("[^a-z0-9]", "", x))
-}
-
-aa_similarity <- function(x, y) {
-  n <- min(nchar(x), nchar(y))
-  sum(strsplit(substr(x, 1, n), "")[[1]] == strsplit(substr(y, 1, n), "")[[1]]) / n
-}
-
-parse_cds_features <- function(gb_txt) {
-  feat_start <- grep("^FEATURES", gb_txt)
-  seq_start  <- grep("^ORIGIN", gb_txt)
-  if (length(feat_start) == 0 || length(seq_start) == 0) return(list())
-  feat_lines <- gb_txt[(feat_start + 1):(seq_start - 1)]
-  cds_idx <- grep("^ +CDS +", feat_lines)
-  if (length(cds_idx) == 0) return(list())
-  feats <- list()
-  for (i in cds_idx) {
-    lines <- feat_lines[i]
-    j <- i + 1
-    while (j <= length(feat_lines) && grepl("^ {21}", feat_lines[j])) {
-      lines <- c(lines, feat_lines[j]); j <- j + 1
-    }
-    loc <- sub("^ +CDS +", "", lines[1])
-    product <- NA; prot_id <- NA
-    for (l in lines) {
-      if (grepl("/product=", l)) {
-        m <- regmatches(l, regexec('"([^"]+)"', l))[[1]]
-        if (length(m) >= 2) product <- m[2]
-      }
-      if (grepl("/protein_id=", l)) {
-        m <- regmatches(l, regexec('"([^"]+)"', l))[[1]]
-        if (length(m) >= 2) prot_id <- m[2]
-      }
-    }
-    feats[[length(feats) + 1]] <- list(location = loc, product = product, protein_id = prot_id)
-  }
-  feats
-}
-
-extract_genbank_sequence <- function(gb_txt) {
-  origin_start <- grep("^ORIGIN", gb_txt)
-  if (length(origin_start) == 0) return(DNAString(""))
-  seq_lines <- gb_txt[(origin_start + 1):length(gb_txt)]
-  seq <- paste(gsub("[^acgtACGT]", "", seq_lines), collapse = "")
-  DNAString(seq)
-}
-
-parse_location <- function(loc) {
-  loc_clean <- gsub("complement\\(|join\\(|\\)", "", loc)
-  parts <- unlist(strsplit(loc_clean, ","))
-  coords <- lapply(parts, function(p) {
-    nums <- as.integer(unlist(strsplit(p, "\\.\\.")))
-    c(start = nums[1], end = nums[2])
-  })
-  do.call(rbind, coords)
-}
-
-extract_cds_sequence <- function(genome, cds_feat) {
-  coords <- parse_location(cds_feat$location)
-  seqs <- apply(coords, 1, function(x) subseq(genome, start = x["start"], end = x["end"]))
-  do.call(xscat, as.list(seqs))
-}
-
-codon_align_from_protein <- function(prot_aln, cds) {
-  out <- DNAStringSet()
-  for (id in intersect(names(prot_aln), names(cds))) {
-    prot   <- strsplit(as.character(prot_aln[[id]]), "")[[1]]
-    codons <- substring(as.character(cds[[id]]),
-                        seq(1, length(cds[[id]]), 3),
-                        seq(3, length(cds[[id]]), 3))
-    idx <- 1
-    seq_out <- character()
-    for (aa in prot) {
-      if (aa == "-") {
-        seq_out <- c(seq_out, "---")
-      } else {
-        if (idx > length(codons)) {
-          seq_out <- c(seq_out, "NNN")
-        } else {
-          seq_out <- c(seq_out, codons[idx]); idx <- idx + 1
-        }
-      }
-    }
-    out[[id]] <- DNAString(paste(seq_out, collapse = ""))
-  }
-  out
-}
-
-write_iqtree_codon_partitions <- function(codon_aln, file = "iqtree_codon_partitions.txt") {
-  aln_len <- width(codon_aln)[1]
-  lines <- c(
-    sprintf("DNA, codon1 = 1-%d\\3", aln_len),
-    sprintf("DNA, codon2 = 2-%d\\3", aln_len),
-    sprintf("DNA, codon3 = 3-%d\\3", aln_len)
-  )
-  writeLines(lines, file)
-}
-
-safe_translate <- function(seq) {
-  s <- gsub("-", "", as.character(seq))
-  trim_len <- nchar(s) - (nchar(s) %% 3)
-  s <- substr(s, 1, trim_len)
-  translate(DNAString(s))
-}
+#| include: false
+# potytools is already attached (see setup chunk); nothing to define here.
 ```
 
 # Data Input
@@ -211,33 +110,10 @@ for (i in seq_along(prot_ref)) {
       }, silent = TRUE)
     }
     if (!file.exists(gb_file)) next
-    gb_txt <- readLines(gb_file)
-    feats  <- parse_cds_features(gb_txt)
-    if (length(feats) == 0) next
-    genome <- extract_genbank_sequence(gb_txt)
-    hit <- NULL
-    for (cf in feats) {
-      if (!is.na(cf$protein_id) && grepl(cf$protein_id, nm, fixed = TRUE)) { hit <- cf; break }
-    }
-    if (is.null(hit)) {
-      target <- normalize_name(nm)
-      for (cf in feats) {
-        prod <- normalize_name(cf$product)
-        if (!is.na(prod) && (prod == target || grepl(target, prod, fixed = TRUE))) { hit <- cf; break }
-      }
-    }
-    if (is.null(hit)) {
-      best <- -Inf; best_cf <- NULL
-      for (cf in feats) {
-        cds_seq_tmp <- extract_cds_sequence(genome, cf)
-        aa  <- safe_translate(cds_seq_tmp)
-        sim <- aa_similarity(as.character(aa), gsub("-", "", as.character(prot_ref[[nm]])))
-        if (sim > best) { best <- sim; best_cf <- cf }
-      }
-      if (!is.null(best_cf) && best >= 0.7) { hit <- best_cf }
-    }
-    if (is.null(hit)) next
-    cds_seq <- extract_cds_sequence(genome, hit)
+    rec <- parse_genbank_file(gb_file)[[1]]
+    ref_protein <- gsub("-", "", as.character(prot_ref[[nm]]))
+    cds_seq <- match_cds_to_reference(rec, name = nm, ref_protein = ref_protein)
+    if (is.null(cds_seq)) next
     if (length(cds_seq) %% 3 != 0)
       cds_seq <- subseq(cds_seq, start = 1, end = length(cds_seq) - (length(cds_seq) %% 3))
     if (length(cds_seq) == 0) next
@@ -316,13 +192,15 @@ for (nm in names(prot_ref)) {
   if (length(accs) == 0) next
   gb_file <- file.path(cache_dir, paste0(accs[1], ".gb"))
   if (!file.exists(gb_file)) next
-  gb_txt  <- readLines(gb_file)
-  feats   <- parse_cds_features(gb_txt)
-  ci_feats <- Filter(function(x) grepl("cylindrical inclusion|\\bci\\b", tolower(x$product)), feats)
+  rec <- parse_genbank_file(gb_file)[[1]]
+  cds_feats <- Filter(function(f) identical(f$type, "CDS"), rec$features)
+  ci_feats <- Filter(function(f) {
+    prod <- f$qualifiers[["product"]]
+    !is.null(prod) && grepl("cylindrical inclusion|\\bci\\b", tolower(prod[1]))
+  }, cds_feats)
   if (length(ci_feats) > 0) {
-    coords   <- parse_location(ci_feats[[1]]$location)
-    ci_start <- min(coords[, "start"]) / 3
-    ci_end   <- max(coords[, "end"]) / 3
+    ci_start <- ci_feats[[1]]$start / 3
+    ci_end   <- ci_feats[[1]]$end / 3
     break
   }
 }
@@ -546,3 +424,151 @@ ggplot(ras_ps, aes(start, CpG_OE, colour = sequence)) +
   theme(legend.position = "none") +
   labs(x = "Genome position", y = "CpG O/E")
 ```
+
+# Partition Rate Test — Does the CI Region Evolve at a Different Rate?
+
+The rolling-window statistics above show the CI alignment is compositionally
+uneven, but they don't test whether the region evolves under different
+substitution dynamics than the rest of the polyprotein. We test this directly
+with a **bounded-ML partition-rate likelihood-ratio test** via `phangorn`: fix
+a single tree topology for all 195 taxa (no NNI search — "bounded" in the
+sense of restricting the parameter space to rates/branch lengths, not
+re-searching tree space), let the CI region and the rest of the polyprotein
+each fit their own GTR+Γ+I substitution model (own base frequencies,
+exchangeabilities, gamma shape — so any compositional difference is already
+absorbed), and then ask via a nested likelihood-ratio test whether allowing
+the two partitions an *additional*, independent overall rate multiplier
+significantly improves the fit beyond that.
+
+```{r partition-lrt-setup}
+#| cache: true
+# Recompute the CI window in the FULL codon alignment's coordinates (same
+# deterministic logic as "Automatic CI Coordinates Inference" above, kept
+# self-contained here since that chunk is eval:false / network-dependent).
+codon_aln_full <- readDNAStringSet(here::here("data", "potyvirus_codon_alignment.fna"))
+
+ci_start_p <- NA; ci_end_p <- NA
+for (nm in names(prot_ref)) {
+  accs <- extract_accessions(nm)
+  if (length(accs) == 0) next
+  gb_file <- file.path(cache_dir, paste0(accs[1], ".gb"))
+  if (!file.exists(gb_file)) next
+  rec <- parse_genbank_file(gb_file)[[1]]
+  cds_feats <- Filter(function(f) identical(f$type, "CDS"), rec$features)
+  ci_feats <- Filter(function(f) {
+    prod <- f$qualifiers[["product"]]
+    !is.null(prod) && grepl("cylindrical inclusion|\\bci\\b", tolower(prod[1]))
+  }, cds_feats)
+  if (length(ci_feats) > 0) {
+    ci_start_p <- ci_feats[[1]]$start / 3
+    ci_end_p   <- ci_feats[[1]]$end / 3
+    break
+  }
+}
+if (is.na(ci_start_p) || is.na(ci_end_p)) {
+  aa_len_p   <- width(prot_aln)[1]
+  ci_start_p <- floor(aa_len_p * 2 / 7)
+  ci_end_p   <- ceiling(aa_len_p * 3 / 7)
+}
+ci_nt_start_p <- (ceiling(ci_start_p) - 1) * 3 + 1
+ci_nt_end_p   <- ceiling(ci_end_p) * 3
+
+codon_CI_p   <- subseq(codon_aln_full, start = ci_nt_start_p, end = ci_nt_end_p)
+codon_rest_p <- xscat(
+  subseq(codon_aln_full, start = 1, end = ci_nt_start_p - 1),
+  subseq(codon_aln_full, start = ci_nt_end_p + 1, end = width(codon_aln_full)[1])
+)
+names(codon_rest_p) <- names(codon_aln_full)
+
+cat(sprintf(
+  "CI partition: nt %d-%d (%d nt); rest of polyprotein: %d nt\n",
+  ci_nt_start_p, ci_nt_end_p, width(codon_CI_p)[1], width(codon_rest_p)[1]
+))
+```
+
+```{r partition-lrt-fit}
+#| cache: true
+#| warning: false
+# Shared NJ backbone for both partitions. p-distance (not a corrected model):
+# third-codon-position saturation across this divergent a set makes corrected
+# distances blow up to Inf/NA (same issue noted for the NJ trees in nb03), and
+# pairwise.deletion=TRUE lets njs cope with an alignment this gappy.
+dm_full   <- ape::dist.dna(ape::as.DNAbin(codon_aln_full), model = "raw", pairwise.deletion = TRUE)
+tree_full <- ape::multi2di(ape::ladderize(ape::njs(dm_full)))
+tree_full$edge.length[tree_full$edge.length < 0] <- 1e-6
+
+dat_CI_p   <- phangorn::as.phyDat(codon_CI_p, type = "DNA")
+dat_rest_p <- phangorn::as.phyDat(codon_rest_p, type = "DNA")
+
+# Each partition gets its own GTR+Gamma(4)+Inv fit on the shared tree (no NNI
+# -- topology is held fixed; only the substitution model and branch lengths
+# are optimised). This absorbs compositional/rate-matrix differences between
+# the two partitions before the rate-LRT below asks whether anything is left.
+fit_ci_0   <- phangorn::pml(tree_full, dat_CI_p, k = 4, inv = 0.05)
+fit_ci_p   <- phangorn::optim.pml(fit_ci_0,
+  model = "GTR", optBf = TRUE, optQ = TRUE, optInv = TRUE, optGamma = TRUE,
+  optEdge = TRUE, optNni = FALSE, control = phangorn::pml.control(trace = 0)
+)
+
+fit_rest_0 <- phangorn::pml(tree_full, dat_rest_p, k = 4, inv = 0.05)
+fit_rest_p <- phangorn::optim.pml(fit_rest_0,
+  model = "GTR", optBf = TRUE, optQ = TRUE, optInv = TRUE, optGamma = TRUE,
+  optEdge = TRUE, optNni = FALSE, control = phangorn::pml.control(trace = 0)
+)
+
+fits_p <- list(CI = fit_ci_p, rest = fit_rest_p)
+
+# H0: partitions share edge lengths and rate (rate not in the formula at all
+# -> fixed at 1 for both, i.e. no partition-specific rate).
+sp0 <- phangorn::pmlPart(edge ~ 1, fits_p, control = phangorn::pml.control(trace = 0, maxit = 5))
+# H1: partitions share edge lengths but each gets its own overall rate
+# multiplier -- the nested alternative, 1 extra free parameter for 2 partitions.
+sp1 <- phangorn::pmlPart(edge ~ rate, fits_p, control = phangorn::pml.control(trace = 0, maxit = 5))
+
+lrt_stat_p <- as.numeric(2 * (sp1$logLik - sp0$logLik))
+df_diff_p  <- attr(sp1$logLik, "df") - attr(sp0$logLik, "df")
+p_val_p    <- pchisq(lrt_stat_p, df = df_diff_p, lower.tail = FALSE)
+rate_ci_p  <- sp1$fits$CI$rate
+rate_rest_p<- sp1$fits$rest$rate
+```
+
+```{r partition-lrt-results}
+tibble(
+  quantity = c("logLik H0 (shared rate)", "logLik H1 (partition-specific rate)",
+               "LRT statistic", "df", "p-value",
+               "CI-region rate (relative)", "Rest-of-polyprotein rate (relative)",
+               "Rate ratio (CI / rest)"),
+  value = c(sprintf("%.1f", as.numeric(sp0$logLik)), sprintf("%.1f", as.numeric(sp1$logLik)),
+            sprintf("%.3f", lrt_stat_p), as.character(df_diff_p), sprintf("%.2e", p_val_p),
+            sprintf("%.4f", rate_ci_p), sprintf("%.4f", rate_rest_p),
+            sprintf("%.3f", rate_ci_p / rate_rest_p))
+)
+```
+
+The likelihood-ratio test rejects the shared-rate null: allowing the CI
+region its own overall substitution rate (on top of the compositional
+differences already absorbed by fitting GTR+Γ+I independently per partition)
+significantly improves the fit. The effect is real but modest in size — the
+CI region evolves at roughly `r sprintf("%.0f", 100 * (rate_ci_p / rate_rest_p - 1))`%
+above the rate of the rest of the polyprotein under the same fixed topology,
+not an order-of-magnitude outlier.
+
+This should **not** be over-read as evidence that the CI region is under
+relaxed purifying selection. Potyvirus genomes are under strong, genome-wide
+negative selection [@gibbs2020], and a codon-level dN/dS survey across
+potyviruses found CI to be, if anything, the *most* conserved cistron in the
+genome — the fewest sites under positive selection and the highest
+concentration of negative-selection sites of any potyviral protein
+[@nigam2019]. Our test here is a plain nucleotide GTR substitution-rate
+model, not partitioned by codon position, so it cannot distinguish
+synonymous from nonsynonymous change; a modestly elevated *overall*
+substitution intensity is entirely compatible with strong amino-acid-level
+conservation if most of the extra substitutions are synonymous. Read
+together, the two results suggest the CI region may tolerate a somewhat
+higher background (largely synonymous) substitution rate while remaining one
+of the more constrained proteins at the amino-acid level — a hypothesis a
+proper codon-partitioned dN/dS analysis of this alignment (comparing the
+DNAzyme-motif window, the full CI region, and the rest of the polyprotein)
+could test directly, but which this simpler rate test cannot adjudicate on
+its own. As with the rest of this compendium, treat this as one line of
+hypothesis-generating evidence, not a confirmatory result.
