@@ -82,7 +82,7 @@ metadata <- left_join(metadata, host_classification, suffix = c("", "")) %>%
 # NOTE: run_complete_analysis_optimized() is the function name used in the original
 # dashboard. If potytools only exports run_complete_analysis(), use that instead.
 results <- run_complete_analysis_optimized(motif_seqs, ref_seqs, host_codon_tables,
-                                           output_prefix = "new_improved")
+                                           output_prefix = here::here("data", "new_improved_motif"))
 
 motif_char <- as.character(motif_seqs)
 ref_char   <- as.character(ref_seqs)
@@ -100,7 +100,7 @@ enc_ref    <- results$enc_ref[!is.na(results$enc_ref)]
 #| cache: true
 
 results_DNAzyme <- run_complete_analysis_optimized(DNAzyme_seqs, ci_seqs, host_codon_tables,
-                                                    output_prefix = "new_improved")
+                                                    output_prefix = here::here("data", "new_improved_dnazyme"))
 
 DNAzyme_char <- as.character(DNAzyme_seqs)
 ci_char      <- as.character(ci_seqs)

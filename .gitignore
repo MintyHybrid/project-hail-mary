@@ -36,6 +36,5 @@ renv/sandbox/
 
 # Analysis caches / regenerable outputs
 /cache/
-/notebooks/new_improved_*.csv
 
 .claude/
