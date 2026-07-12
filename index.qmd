@@ -36,6 +36,8 @@ Additionally, the Potyviridae CI helicase - harbouring the DNAzyme-like sequence
 - The flanking regions of those DNAzyme-matching sequences (16 isolates, 9 identical by sequence) are identical to regions in the genomes of several eukaryotes, including plants (potential viral hosts) and insects (potential viral vectors).
 - Interactions between those eukaryotic species suggest the homology might reflect cross-kingdom horizontal DNA transfer.
 - The eukaryotic genes span diverse functions — DNA repair, transcription regulation, chromatin remodelling, RNA processing, translation, and genes of unknown function — several of them essential for cell survival and development.
+- The CI protein also carries conserved short linear motifs (ELM) beyond the DNAzyme-matching sequence itself, including an accessible tyrosine-based (YXXΦ) sorting signal alongside an acidic-dileucine AP-2 motif, recurring with genus-specific variation across isolates.
+- Those sorting motifs motivate a testable hypothesis that the CI protein co-opts host intracellular trafficking — potentially via the AP-4 adaptor complex — to aid viral replication and spread, and to perturb the same trafficking machinery used in plant immune signalling.
 
 The work spans several interconnected research threads:
 

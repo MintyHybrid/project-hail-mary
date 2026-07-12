@@ -90,7 +90,7 @@ ggraph(species_graph, layout = "fr") +
   ggtitle("Species-only Projected Network")
 ```
 
-# Part 2: Multilayer network with phylogenetic and ecological edges
+## Part 2: Multilayer network with phylogenetic and ecological edges
 
 ```{r multilayer-setup}
 species <- names(species_hosts)

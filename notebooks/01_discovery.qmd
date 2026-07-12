@@ -76,7 +76,7 @@ region (below). *Scheme redrawn after Borggräfe et al. 2022 [@borggraefe2022];
 no figure is reproduced.*
 
 
-# Origins
+## Origins
 
 Since I was curious whether this system might also occur in nature, I blasted
 this 15nt sequence against the viral nucleotide collection on NCBI and found that it
@@ -313,7 +313,7 @@ is its ability to form large and highly symmetrical conical and cylindrical incl
 with a central hollow cylinder from which laminate sheets radiate outward and fold
 in on themselves in a pattern often described as 'pinwheels'."
 
-# Transduction?
+## Transduction?
 
 ## BLAST and data wrangling
 

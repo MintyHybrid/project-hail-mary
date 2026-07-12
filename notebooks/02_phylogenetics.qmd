@@ -13,7 +13,7 @@ execute:
 <!-- NOTE: eval: false — requires rentrez and external files; remove once renv is synced -->
 <!-- NOTE: external tools required: mafft, iqtree2 (run via system() calls) -->
 
-# Introduction
+## Introduction
 
 This chapter performs a comprehensive phylogenetic pipeline for potyviruses,
 without the Bioconductor `genbankr` package. It reads a MAFFT protein alignment,
@@ -22,7 +22,7 @@ CDS from plain GenBank flatfiles, projects to codon alignment, infers the CI
 region automatically, extracts a short motif of interest, visualises these motifs
 on the resulting tree, and tests for convergent evolution versus shared ancestry.
 
-# Setup and Helpers
+## Setup and Helpers
 
 ```{r setup}
 #| include: false
@@ -59,7 +59,7 @@ own `/translation=` qualifier exactly.
 # potytools is already attached (see setup chunk); nothing to define here.
 ```
 
-# Data Input
+## Data Input
 
 ```{r data-input}
 prot_file <- here::here("data", "OPSR.Poty.Fig3.v16_align_withblasthits_protmafftadd.txt")
@@ -71,7 +71,7 @@ stopifnot(length(unique(width(prot_aln))) == 1)
 cat("Protein alignment loaded: length =", width(prot_aln)[1], "aa\n")
 ```
 
-# Reference and Isolate Separation
+## Reference and Isolate Separation
 
 ```{r separation}
 ref_idx  <- has_genbank_id(names(prot_aln))
@@ -80,7 +80,7 @@ prot_orf <- prot_aln[!ref_idx]
 cat(length(prot_ref), "reference sequences and", length(prot_orf), "isolate sequences.\n")
 ```
 
-# Retrieve Reference CDS
+## Retrieve Reference CDS
 
 This section downloads GenBank flatfiles for references and extracts the
 polyprotein CDS via our parser.
@@ -123,7 +123,7 @@ for (i in seq_along(prot_ref)) {
 }
 ```
 
-# Read Isolate CDS
+## Read Isolate CDS
 
 ```{r read-isolate-cds}
 #| eval: false
@@ -135,7 +135,7 @@ cds_orf <- DNAStringSet(lapply(cds_orf, function(x) {
 }))
 ```
 
-# Merge and Project to Codon Alignment
+## Merge and Project to Codon Alignment
 
 ```{r codon-projection}
 #| eval: false
@@ -147,7 +147,7 @@ writeXStringSet(codon_aln, here::here("data", "potyvirus_codon_alignment.fna"))
 cat("Codon alignment constructed: length =", width(codon_aln)[1], "nt\n")
 ```
 
-# Partition Files for IQ-TREE
+## Partition Files for IQ-TREE
 
 ```{r partitions}
 #| eval: false
@@ -173,7 +173,7 @@ for (i in seq_len(nrow(potyvirus_subproteins))) {
 writeLines(lines_sub, here::here("data", "iqtree_subprotein_codon_partitions.txt"))
 ```
 
-# Automatic CI Coordinates Inference
+## Automatic CI Coordinates Inference
 
 We infer the CI region from GenBank annotations where available and provide a
 fallback region.
@@ -208,7 +208,7 @@ ci_nt_end   <- ceiling(ci_end) * 3
 cat(sprintf("CI region: aa %d-%d; nt %d-%d\n", ci_start, ci_end, ci_nt_start, ci_nt_end))
 ```
 
-# Extract CI Region
+## Extract CI Region
 
 ```{r extract-ci}
 #| eval: false
@@ -217,7 +217,7 @@ writeXStringSet(codon_CI, here::here("data", "potyvirus_CI_codon_alignment.fna")
 cat("CI alignment length =", width(codon_CI)[1], "nt\n")
 ```
 
-# Motif Definition and Extraction
+## Motif Definition and Extraction
 
 Define your motif below and extract its presence/position.
 
@@ -240,7 +240,7 @@ motif_df <- tibble(taxon = names(codon_CI), motif = motif_state, pos_nt = motif_
 write.csv(motif_df, here::here("data", "CI_motif_states.csv"), row.names = FALSE)
 ```
 
-# Phylogeny on CI Region
+## Phylogeny on CI Region
 
 Infer the phylogeny using IQ-TREE, or read a precomputed tree.
 
@@ -250,7 +250,7 @@ Infer the phylogeny using IQ-TREE, or read a precomputed tree.
 # ci_tree <- read.tree(here::here("data", "potyvirus_CI.treefile"))
 ```
 
-# Visualisation: Trait Mapping
+## Visualisation: Trait Mapping
 
 ```{r plot-tree}
 #| fig-width: 9
@@ -294,7 +294,7 @@ if (file.exists(treefile)) {
 }
 ```
 
-# Visualisation: Motif Sequence Logo
+## Visualisation: Motif Sequence Logo
 
 ```{r logo}
 #| eval: false
@@ -314,7 +314,7 @@ if (length(seqs_with_motif) > 0) {
 }
 ```
 
-# Test for Convergent Evolution
+## Test for Convergent Evolution
 
 ```{r tests}
 #| eval: false
@@ -329,7 +329,7 @@ phylo_sig  <- caper::phylo.d(data.frame(species = names(trait), x = trait), ci_t
 print(phylo_sig)
 ```
 
-# Summary
+## Summary
 
 ```{r summary}
 #| eval: false
@@ -340,7 +340,7 @@ summary_tbl <- tibble(
 print(summary_tbl)
 ```
 
-# Partition Rate Test — Does the CI Region Evolve at a Different Rate?
+## Partition Rate Test — Does the CI Region Evolve at a Different Rate?
 
 The rolling-window statistics above show the CI alignment is compositionally
 uneven, but they don't test whether the region evolves under different
