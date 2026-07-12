@@ -3,9 +3,6 @@ title: "AP-4 Trafficking and the Tyrosine-Motif Hypothesis"
 subtitle: "Mechanistic reasoning behind the AP-4 arm of the immune trafficking model, and the tyrosine-motif hypothesis it motivates"
 author: "Christina Muedsam"
 date: last-modified
-format:
-  html:
-    toc: true
 ---
 
 <!-- SOURCE: split out of notebooks/08_immu_simmu.qmd (originally

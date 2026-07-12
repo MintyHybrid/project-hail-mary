@@ -3,12 +3,6 @@ title: "Codon Usage and DNAzyme-like Motif Architecture"
 subtitle: "RSCU, ENC, GC content, wobble bias and dinucleotide analysis of the DNAzyme-matching locus"
 author: "Christina Muedsam"
 date: last-modified
-format:
-  html:
-    toc: true
-    toc-depth: 3
-    code-fold: true
-    code-tools: true
 execute:
   echo: false
   warning: false

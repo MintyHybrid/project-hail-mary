@@ -4,12 +4,6 @@ subtitle: "A catalytic RNA motif sequence conserved across Potyviridae and match
 author: "Christina Muedsam"
 date: "2026-02-07"
 date-modified: last-modified
-format:
-  html:
-    toc: true
-    toc-depth: 4
-    code-fold: true
-    code-tools: true
 execute:
   echo: true
   warning: false

@@ -3,12 +3,6 @@ title: "Potyvirus Phylogenetics and CI Region Inference"
 subtitle: "MAFFT alignment, codon-aware tree inference, and convergent evolution testing"
 author: "Christina Muedsam"
 date: last-modified
-format:
-  html:
-    toc: true
-    toc-depth: 3
-    code-fold: true
-    code-tools: true
 execute:
   echo: true
   warning: false

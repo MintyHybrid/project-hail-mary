@@ -3,9 +3,6 @@ title: "Plant Immune Trafficking Observatory"
 subtitle: "Interactive kinetic simulation of receptor trafficking, autophagy flux, and AP-4 cargo dynamics"
 author: "Christina Muedsam"
 date: last-modified
-format:
-  html:
-    toc: true
 ---
 
 <!-- SOURCE: 20260125_ClaudeAP4/immune_dashboard.ojs + AP4_TEPSIN_expanded_analysis.md -->

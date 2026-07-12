@@ -1,9 +1,6 @@
 ---
 title: "Appendix: Data Sources and Accessions"
 date: last-modified
-format:
-  html:
-    toc: true
 execute:
   eval: false
 ---
