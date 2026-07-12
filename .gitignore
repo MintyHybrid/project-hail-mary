@@ -38,3 +38,4 @@ renv/sandbox/
 /cache/
 /notebooks/new_improved_*.csv
 
+.claude/
