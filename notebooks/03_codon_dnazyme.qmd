@@ -841,10 +841,18 @@ cat(sprintf("- Mean GC3 (motif): %.3f\n", mean(gc_motif[,"GC3"])))
 cat(sprintf("- DNAzyme exact matches: %d\n", sum(metadata$DNAzyme_hit == "match", na.rm = TRUE)))
 ```
 
-## ICTV sequences
+<!--
+## ICTV sequences -- disabled: dead code, nothing downstream in this notebook
+uses ictv_aa_aln / ictv_tb / poty_best_polyprotein / read_genbank_folder /
+codon_align_from_protein_local (the "Rolling genome-wide composition" section
+below reads claude_polyproteinDNA_mafft.fasta independently). Kept commented
+out rather than deleted: this is useful groundwork (ICTV alignment + VMR
+metadata loading, GenBank folder reader, protein->codon alignment projection)
+for the queued codon-partitioned dN/dS analysis of the CI region.
 
 ```{r ictv-mafft}
 #| cache: true
+#| eval: false
 
 ictv_aa_aln <- readAAStringSet(here::here("data", "OPSR.Poty.Fig3.v16_align.txt"))
 
@@ -856,6 +864,7 @@ ictv_tb <- readxl::read_xlsx(here::here("data", "VMR_MSL41.v1.20260320.xlsx"),
 ```
 
 ```{r poty-best-polyprotein}
+#| eval: false
 poty_best_polyprotein <- function(seqs, min_len = 2000) {
   by_acc <- split(seqs, gsub("\\..*", "", names(seqs)))
   best <- lapply(by_acc, function(x) x[which.max(width(x))])
@@ -866,6 +875,7 @@ poty_best_polyprotein <- function(seqs, min_len = 2000) {
 
 ```{r genbank-reader}
 #| cache: true
+#| eval: false
 
 read_genbank_folder <- function(path, pattern = "\\.gb$") {
   files <- list.files(path, pattern = pattern, full.names = TRUE)
@@ -886,6 +896,7 @@ read_genbank_folder <- function(path, pattern = "\\.gb$") {
 ```
 
 ```{r codon-align}
+#| eval: false
 codon_align_from_protein_local <- function(prot_aln, cds) {
   out <- DNAStringSet()
   for (id in intersect(names(prot_aln), names(cds))) {
@@ -907,6 +918,7 @@ codon_align_from_protein_local <- function(prot_aln, cds) {
   out
 }
 ```
+-->
 
 ## Rolling genome-wide composition {.tabset}
 
