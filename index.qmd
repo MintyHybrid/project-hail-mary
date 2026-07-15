@@ -16,32 +16,14 @@ conservation in Potyviridae* [⚑ preprint — not peer reviewed]{.preprint-badg
 ::: {.column-margin}
 **⚑ Preprint — not peer reviewed**
 
-This compendium is under active development and has not been peer reviewed.
+This collection is under active development and has not been peer reviewed.
 Much of it is exploratory, and several of the central ideas (in particular the
 DNAzyme-activity, horizontal-gene-transfer, and AP-4 / tyrosine-motif immune
 hypotheses) are presented as explicit, testable hypotheses rather than
 established results — they are flagged as such throughout. Analyses, figures,
 interpretations and conclusions may change; please treat everything here as a
-living draft and cite with that caveat.
+living draft and cite with that caveat. Feel free to contribute. Constructive feedback is always welcome (no matter who you are or what your background is!).
 :::
-
-## Overview
-
-This compendium documents the discovery and characterisation of a DNAzyme-like
-catalytic domain sequence that maps precisely to the genomes of multiple
-Potyviridae species, with flanking regions matching eukaryotic genes across
-plant, fungal, and animal kingdoms. Cross-kingdom horizontal gene transfer is
-the most parsimonious explanation for this pattern.
-Additionally, the Potyviridae CI helicase - harbouring the DNAzyme-like sequence, corresponds to a conserved protein motif likely involved in viral-host interactions associated with intracellular sorting (potentially via AP-4), viral replication, viral spread and immunity.
-
-### Key findings at a glance
-
-- A DNAzyme catalytic domain sequence matches perfectly to a region in the genomes of several potyviruses (6 species, 16 isolates).
-- The flanking regions of those DNAzyme-matching sequences (16 isolates, 9 identical by sequence) are identical to regions in the genomes of several eukaryotes, including plants (potential viral hosts) and insects (potential viral vectors).
-- Interactions between those eukaryotic species suggest the homology might reflect cross-kingdom horizontal DNA transfer.
-- The eukaryotic genes span diverse functions — DNA repair, transcription regulation, chromatin remodelling, RNA processing, translation, and genes of unknown function — several of them essential for cell survival and development.
-- The CI protein also carries conserved short linear motifs (ELM) beyond the DNAzyme-matching sequence itself, including an accessible tyrosine-based (YXXΦ) sorting signal alongside an acidic-dileucine AP-2 motif, recurring with genus-specific variation across isolates.
-- Those sorting motifs motivate a testable hypothesis that the CI protein co-opts host intracellular trafficking — potentially via the AP-4 adaptor complex — to aid viral replication and spread, and to perturb the same trafficking machinery used in plant immune signalling.
 
 ### Explore by thread
 
@@ -134,7 +116,18 @@ The work spans several interconnected research threads:
 | [8 — Immunity](notebooks/08_immu_simmu.qmd) | PTI/ETI simulation under genetic perturbations | Observable JS |
 | [9 — AP-4 Trafficking](notebooks/09_ap4_trafficking.qmd) | AP-4/tyrosine-motif immune-trafficking hypothesis | — |
 
-## Reproducibility
+
+## Lessons learned
+
+- A DNAzyme catalytic domain sequence matches perfectly to a region in the genomes of several potyviruses (6 species, 16 isolates).
+- The flanking regions of those DNAzyme-matching sequences (16 isolates, 9 identical by sequence) are identical to regions in the genomes of several eukaryotes, including plants (potential viral hosts) and insects (potential viral vectors).
+- Interactions between those eukaryotic species suggest the homology might reflect cross-kingdom horizontal DNA transfer.
+- The eukaryotic genes span diverse functions — DNA repair, transcription regulation, chromatin remodelling, RNA processing, translation, and genes of unknown function — several of them essential for cell survival and development.
+- The CI protein also carries conserved short linear motifs (ELM) beyond the DNAzyme-matching sequence itself, including an accessible tyrosine-based (YXXΦ) sorting signal alongside an acidic-dileucine AP-2 motif, recurring with genus-specific variation across isolates.
+- Those sorting motifs motivate a testable hypothesis that the CI protein co-opts host intracellular trafficking — potentially via the AP-4 adaptor complex — to aid viral replication and spread, and to perturb the same trafficking machinery used in plant immune signalling.
+
+
+### Reproducibility
 
 All computationally intensive steps (alignment, phylogenetic inference, NCBI
 fetching, ELM queries) are orchestrated by a `targets` pipeline:
@@ -188,3 +181,38 @@ Analysis functions are collected in the **potytools** R package
 | May 2026 | Cleaned codon + DNAzyme notebook |
 | May 2026 | Final phylogenetic pipeline |
 | Jun 2026 | ELM motif & immunity notebooks; this document |
+
+
+
+## Overview
+
+This collection documents the discovery and characterisation of a DNAzyme-like
+catalytic domain sequence that maps precisely to the genomes of multiple
+Potyviridae species, with flanking regions matching eukaryotic genes across
+plant, fungal, and animal kingdoms. Cross-kingdom horizontal gene transfer is a possible explanation and presence-absence analyses of the potentially viral fragment in related plant species support the idea. However, considering that activity-critical positions show substitutions in homologous Potyvirus species, DNAzyme activity due to the presence of the detected sequence, in vivo, and especially DNAzymatic activity of homologous Potyvirus sequences, is still unlikely or a very rare event - and would additionally require conciding reverse transcriptase activity in the host. 
+
+Additionally, the Potyviridae DNAzyme-like sequence, corresponds to a conserved protein motif in the viral CI helicase. Motif homology and the CIs' subcellular distribution and regulation suggest that the tyrosine-based motif could be involved in viral-host interactions associated with intracellular sorting (potentially via AP-4), viral replication, viral spread and immunity. The motif is conserved across species and kingdoms and known to be involved in and crucial for processes such as autophagy and endosomal processing and correct targeting. 
+
+### Long-shot hypothesis
+
+I further suspect that i) defects in components orchestrating protein sorting, recycling and degradation, or ii) viral particle overload (e.g. during infections) could result in endosomal jamming, lipid distortions and sporadic reversal of membrane (incl. receptor or transporter) topologies due to insufficient coordination at the late endosome. 
+I also suspect that this mechanism applies not only to the plant system. Motif and pathway conservation instead suggest that it might be conserved in multicellular organisms. 
+
+### Side-quests and follow-ups
+
+- if the presence of viral sequences in plants (or insects) indeed turns out to be originating from HGT, it's another evidence that many of such events are still remaining undetected. 
+- DNAzyme activity might not occur on its own in biological systems, but did anyone ever try to turn it around and fight potyviruses with DNAzymes?! One of the limiting factors in medicine might not be limiting in plants (presence of magnesium-ions)
+- one of the annoying but important questions was "ssDNA in a living cell? When is there ssDNA in a cell, at all?!". And the answer to that brings me to one of the few branches of the tree of life that are otherwise excluded in this document: bacteria. Specifically: Agrobacteria which transmit part of their plasmid DNA into plant cells as ssDNA. 
+
+
+<!--
+### Life-lessons learned
+
+- it takes an afternoon to hand-check stuff and a month to automate a systematic approach
+- it takes another month to make the output look nice and a lifetime to make it look nice to everyone
+- annoying questions often turn out to be the most relevant
+- when you are trying to answer a difficult question, you solve at least 3 partially related but sometimes more relevant problems, but not unless you go out for a walk every now and then.
+- biology is nice and being a biologist is also nice, but it does not reach awesomemess until you realize that noone can keep you from using the rest of your brain, too (anymore).
+- Standing on the shoulders of giants with nothing but a 13inch screen and public data allows you to come up with a disruptive hypothesis within a couple of days, but to get funding for all the stuff you need to prove yourself wrong (in case you are wrong) requires you to climb down just to then creep up someone's butt. And whoever ends up testing your hypothesis will act as if you don't exist in case you were right unless you do it yourself, but then your results will be questioned.
+- you don't rant about stuff you don't care about, but when you rant people assume you hate, even when you are passionate, instead.
+-->

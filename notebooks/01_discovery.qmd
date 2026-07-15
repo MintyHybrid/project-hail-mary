@@ -18,6 +18,7 @@ execute:
 To make the reasoning followable — and to be explicit about where it is speculation
 versus supported — here is the actual chain of thought, step by step:
 
+0. **be curious and wonder ...** "Evolution is extremely good at filling every nook in the   ecosystem." (Andy Weir) - do biological systems maybe "use" DNAzymes?
 1. **Start from a real DNAzyme.** I BLASTed the **catalytic core of the 10-23
    deoxyribozyme** [@borggraefe2022] against the viral nucleotide collection and
    recovered **16 potyvirus isolates** (6 species) carrying that core.
@@ -35,8 +36,8 @@ versus supported — here is the actual chain of thought, step by step:
 4. **Caveat — this is not yet established.** It is *not* shown that the
    flank-matching species actually **are hosts or vectors** of the corresponding
    potyvirus. I built the **BioNexus** app (Chapter 7) to test connectivity; the
-   interactions looked **sporadic rather than continuous** — which is *not* enough
-   to infer the **absence** of HGT either.
+   interactions (only interactions that have been documented) looked **sporadic rather than continuous** — which is *not* enough
+   to infer the **absence** of HGT, either.
 5. **A small aside.** A central target nucleotide was initially omitted; adding it
    back (as **G**) gives exactly one isolate a **single perfect match to *Aphis
    gossypii*** (a principal aphid vector) — a nice, suggestive observation, **not**
