@@ -1,6 +1,6 @@
 ---
 title: "The DNAzyme-like Motif Discovery"
-subtitle: "A catalytic RNA motif sequence conserved across Potyviridae and matching eukaryotic genes"
+subtitle: "A catalytic nucleic acid motif sequence conserved across Potyviridae and eukaryotic genes"
 author: "Christina Muedsam"
 date: "2026-02-07"
 date-modified: last-modified
@@ -98,6 +98,8 @@ library(metacoder)
 library(phyloseq)
 library(ggtree)
 library(ape)
+library(potytools)
+theme_set(theme_manuscript())
 ```
 
 ## Blasting the catalytic center of a DNAzyme
@@ -297,7 +299,8 @@ ggplot() +
            alpha = .5, col = 'black', fill = 'grey') +
   geom_logo(pfm, stack_width = 0.90, seq_type = "dna") +
   annotate('text', x = 33, xmax = 40.5, y = 2.2, label = 'catalytic15') +
-  theme_logo()
+  theme_logo() +
+  theme_manuscript_bg()
 ```
 
 ### FunFacts
@@ -313,7 +316,6 @@ is its ability to form large and highly symmetrical conical and cylindrical incl
 with a central hollow cylinder from which laminate sheets radiate outward and fold
 in on themselves in a pattern often described as 'pinwheels'."
 
-## Transduction?
 
 ## BLAST and data wrangling
 
@@ -549,12 +551,16 @@ ft_tiplabs  <- filtreedf %>% dplyr::filter(isTip) %>%
 ft    <- ggtree(filtreedf, layout = "circular")
 ftdl  <- ggtree(as.phylo(filtreefortified), layout = "daylight")
 
+tree_bg <- theme_manuscript_bg()
+
 ft +
   geom_tippoint(aes(node = node, color = query_name)) +
-  geom_highlight(ft_nodelabs, aes(node = node, fill = label), alpha = 0.2)
+  geom_highlight(ft_nodelabs, aes(node = node, fill = label), alpha = 0.2) +
+  tree_bg
 
 ftdl +
-  geom_highlight(ft_nodelabs, aes(node = node, fill = label), alpha = 0.4)
+  geom_highlight(ft_nodelabs, aes(node = node, fill = label), alpha = 0.4) +
+  tree_bg
 ```
 
 ```{r}
@@ -569,7 +575,7 @@ pdat2 <- left_join(perparentphylodf, ft_phyla) %>% left_join(., pdat) %>%
 
 ggplot(pdat2, aes(y = reorder(phylum, n), fill = phylum)) +
   geom_bar(show.legend = FALSE) +
-  theme_minimal() +
+  theme_manuscript() +
   theme(axis.title.y = element_blank())
 
 pdat3 <- perparentphylodf %>% left_join(., filtreedf) %>% dplyr::filter(isTip) %>%
@@ -577,7 +583,7 @@ pdat3 <- perparentphylodf %>% left_join(., filtreedf) %>% dplyr::filter(isTip) %
 
 ggplot(pdat3, aes(x = n, y = phylum, fill = query_name)) +
   geom_bar(stat = "identity") +
-  theme_minimal() +
+  theme_manuscript() +
   theme(axis.title.y = element_blank())
 ```
 
@@ -659,7 +665,7 @@ plotdatbhits <- hits %>%
 
 ggplot(plotdatbhits, mapping = aes(x = relative, y = name, color = name)) +
   geom_point(alpha = 0.4) +
-  theme_minimal() +
+  theme_manuscript() +
   theme(axis.title.y = element_blank(), legend.position = "none") +
   facet_wrap(query_acc~., scales = "free_y")
 ```
@@ -668,7 +674,7 @@ ggplot(plotdatbhits, mapping = aes(x = relative, y = name, color = name)) +
 #| fig-cap: "Density of the same BLAST hits along the relative chromosomal position, faceted by query — summarising where on their host chromosomes the flanking-region homologs concentrate."
 ggplot(plotdatbhits, mapping = aes(x = relative)) +
   geom_density(alpha = 0.4) +
-  theme_minimal() +
+  theme_manuscript() +
   theme(axis.title.y = element_blank()) +
   facet_wrap(query_acc~., scales = "free_y")
 ```
@@ -712,7 +718,7 @@ rc_G <- oopsaln %>%
   dplyr::mutate(query_cover_num = as.numeric(stringr::str_remove(query_cover, "%"))) %>%
   dplyr::filter(query_cover_num >= 99)
 
-rc_G %>% ggplot(aes(y = query)) + geom_bar() + theme_minimal() +
+rc_G %>% ggplot(aes(y = query)) + geom_bar() + theme_manuscript() +
   labs(x = "number of identical blast hits", y = "")
 ```
 
@@ -743,7 +749,8 @@ df2 <- left_join(df, rc2G) %>%
 ggtree(df2) + geom_tiplab() +
   geom_nodelab(mapping = aes(label = labelinodes)) +
   geom_tippoint(mapping = aes(color = virus)) +
-  xlim(0, 150) + ylim(0, 60)
+  xlim(0, 150) + ylim(0, 60) +
+  theme_manuscript_bg()
 ```
 
 ### Some more?

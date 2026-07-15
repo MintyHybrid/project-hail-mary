@@ -1,0 +1,180 @@
+/*-- scss:defaults --*/
+
+// Manuscript "Cyanotype" palette
+$paper:  #EFF1EC;
+$ink:    #171B1D;
+$soft:   #4B5459;
+$accent: #1F5C73;
+$flag:   #9C5B18;
+$line:   #C9CFC9;
+
+$mono-stack: Consolas, 'Cascadia Code', SFMono-Regular, monospace;
+$sans-stack: 'Segoe UI', Calibri, 'Helvetica Neue', sans-serif;
+
+$body-bg: $paper;
+$body-color: $ink;
+$link-color: $accent;
+
+$font-family-sans-serif: $sans-stack;
+$font-family-monospace: $mono-stack;
+$headings-font-family: $mono-stack;
+$headings-color: $ink;
+$headings-font-weight: 700;
+
+$border-color: $line;
+$table-border-color: $line;
+$code-color: $accent;
+$code-bg: #F1F2EF;
+
+/*-- scss:rules --*/
+
+// CSS custom properties mirroring the SCSS palette above, so client-side JS
+// (the index-page network graph) can read the same colors at runtime via
+// getComputedStyle() instead of hardcoding a second copy of the palette.
+:root {
+  --paper: #{$paper};
+  --ink: #{$ink};
+  --soft: #{$soft};
+  --accent: #{$accent};
+  --flag: #{$flag};
+  --line: #{$line};
+  --mono: #{$mono-stack};
+  --sans: #{$sans-stack};
+}
+
+body {
+  font-family: $sans-stack;
+}
+
+.title, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: $mono-stack;
+  letter-spacing: -0.01em;
+}
+
+// rule-above-heading instead of Bootstrap's default rule-below
+h2, .anchored.h2 {
+  border-top: 2px solid $accent;
+  padding-top: .6rem;
+  margin-top: 2.5rem;
+}
+h3, .anchored.h3 {
+  margin-top: 1.75rem;
+}
+
+#title-block-header .title {
+  border-top: none;
+  // Bootstrap's fluid book-title sizing (~2.5-3rem) reads oversized and
+  // wraps badly in monospace at this column width -- clamp it down.
+  font-size: clamp(1.5rem, 1rem + 1.6vw, 2.15rem);
+  line-height: 1.25;
+}
+
+.quarto-title-banner {
+  background: $paper;
+}
+
+.quarto-title-meta-heading,
+#toc-title,
+nav[role="doc-toc"] .toc-actions,
+.sidebar-item-section > .sidebar-item-text {
+  font-family: $mono-stack;
+  font-size: .78em;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: $soft;
+}
+
+// ---------- compact "flag" callout for preprint/hypothesis warnings ----------
+.callout-warning {
+  border: none;
+  border-left: 3px solid $flag;
+  border-radius: 0 6px 6px 0;
+  background: rgba(156, 91, 24, 0.06);
+  padding: 0;
+
+  .callout-header {
+    background: transparent;
+    font-family: $mono-stack;
+    font-size: .72rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    color: $flag;
+    padding: .6rem .9rem .2rem;
+  }
+  .callout-icon-container { display: none; }
+  .callout-body-container { padding: .5rem .9rem; }
+  .callout-body { padding: 0; }
+}
+
+// ---------- margin notes / citations ----------
+.column-margin {
+  font-family: $sans-stack;
+  font-size: .8rem;
+  color: $soft;
+  line-height: 1.5;
+
+  .csl-entry, sup.footnote-ref, .footnote-ref {
+    font-family: $mono-stack;
+    font-size: .68rem;
+  }
+
+  table {
+    font-size: .72rem;
+    width: 100%;
+  }
+  table th {
+    font-family: $mono-stack;
+    font-size: .62rem;
+    text-transform: uppercase;
+    color: $soft;
+  }
+}
+
+// preprint badge (used by index.qmd's compact warning treatment)
+.preprint-badge {
+  display: inline-block;
+  font-family: $mono-stack;
+  font-size: .78rem;
+  color: $flag;
+  border: 1px solid $flag;
+  border-radius: 4px;
+  padding: .05rem .4rem;
+  margin-left: .5rem;
+  vertical-align: middle;
+  text-decoration: none;
+}
+
+// ---------- tables ----------
+.table {
+  font-size: .92rem;
+}
+.table th {
+  font-family: $mono-stack;
+  font-size: .72rem;
+  text-transform: uppercase;
+  letter-spacing: .03em;
+  color: $soft;
+}
+
+// ---------- code blocks ----------
+pre.sourceCode, div.sourceCode {
+  border: 1px solid $line;
+  border-radius: 6px;
+}
+
+// ================================================================
+// sidebar -- Quarto's normal always-visible in-flow sidebar, themed only
+// (the collapse/expand numeral rail was reverted: it fought Quarto's
+// book-grid centering and content-offset math on several fronts with no
+// clean resolution, for a feature the reading experience doesn't need).
+// ================================================================
+#quarto-sidebar.sidebar-navigation {
+  background: $paper;
+  border-right: 1px solid $line;
+}
+
+.chapter-number {
+  font-family: $mono-stack;
+  color: $accent;
+  font-weight: 700;
+}

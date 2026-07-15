@@ -41,14 +41,17 @@ execute:
 
 format:
   html:
-    theme:
-      light: cosmo
-      dark: darkly
+    theme: theme-light.scss
     toc: true
     toc-depth: 3
-    code-fold: true
     code-tools: true
     fig-cap-location: bottom
+    citation-location: margin
+    grid:
+      sidebar-width: 250px
+      body-width: 860px
+      margin-width: 260px
+      gutter-width: 32px
   # PDF download — deferred. TinyTeX is installed, but this book's interactive
   # widgets (visNetwork, plotly, r3dmol, DT, Observable) have no PDF form and
   # currently halt the LaTeX render even with `prefer-html: true`. Enabling PDF

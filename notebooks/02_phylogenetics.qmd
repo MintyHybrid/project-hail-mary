@@ -38,6 +38,7 @@ library(ggtree)
 library(ggseqlogo)
 library(readr)
 library(potytools) # rolling_alignment_stats() and _per_sequence() live here now
+theme_set(theme_manuscript())
 ```
 
 GenBank parsing, accession extraction, CDS-matching, codon projection and safe
@@ -286,7 +287,8 @@ if (file.exists(treefile)) {
     ggplot2::scale_colour_viridis_d(option = "turbo", na.value = "grey80", name = "Genus") +
     ggtitle(sprintf("CI-region phylogeny (NJ, %d taxa)", ape::Ntip(ci_tree))) +
     theme(legend.position = "right", legend.key.size = unit(8, "pt"),
-          legend.text = element_text(size = 6))
+          legend.text = element_text(size = 6)) +
+    theme_manuscript_bg()
 } else {
   cat("Tree file not found. Run scripts/build_ci_tree.R (offline) or the",
       "IQ-TREE command in the preceding chunk to generate",
@@ -308,7 +310,8 @@ seqs_with_motif <- lapply(names(codon_CI), function(id) {
 })
 seqs_with_motif <- Filter(Negate(is.null), seqs_with_motif)
 if (length(seqs_with_motif) > 0) {
-  ggseqlogo(unlist(seqs_with_motif), method = "prob")
+  ggseqlogo(unlist(seqs_with_motif), method = "prob") +
+    theme_manuscript_bg()
 } else {
   cat("No motifs found for logo plot.")
 }

@@ -3,20 +3,24 @@ author:
   - name: "Christina Muedsam"
 date: last-modified
 number-sections: false
+execute:
+  warning: false
+  message: false
 ---
 
 # Project Hail Mary {.unnumbered}
 
 *DNAzyme-like motifs, horizontal gene transfer, and short linear motif
-conservation in Potyviridae*
+conservation in Potyviridae* [⚑ preprint — not peer reviewed]{.preprint-badge}
 
-::: {.callout-warning}
-## Preprint / work in progress — not peer reviewed
-This compendium is **under active development and has not been peer reviewed**.
-Much of it is **exploratory**, and several of the central ideas (in particular the
+::: {.column-margin}
+**⚑ Preprint — not peer reviewed**
+
+This compendium is under active development and has not been peer reviewed.
+Much of it is exploratory, and several of the central ideas (in particular the
 DNAzyme-activity, horizontal-gene-transfer, and AP-4 / tyrosine-motif immune
-hypotheses) are presented as **explicit, testable hypotheses rather than
-established results** — they are flagged as such throughout. Analyses, figures,
+hypotheses) are presented as explicit, testable hypotheses rather than
+established results — they are flagged as such throughout. Analyses, figures,
 interpretations and conclusions may change; please treat everything here as a
 living draft and cite with that caveat.
 :::
@@ -38,6 +42,83 @@ Additionally, the Potyviridae CI helicase - harbouring the DNAzyme-like sequence
 - The eukaryotic genes span diverse functions — DNA repair, transcription regulation, chromatin remodelling, RNA processing, translation, and genes of unknown function — several of them essential for cell survival and development.
 - The CI protein also carries conserved short linear motifs (ELM) beyond the DNAzyme-matching sequence itself, including an accessible tyrosine-based (YXXΦ) sorting signal alongside an acidic-dileucine AP-2 motif, recurring with genus-specific variation across isolates.
 - Those sorting motifs motivate a testable hypothesis that the CI protein co-opts host intracellular trafficking — potentially via the AP-4 adaptor complex — to aid viral replication and spread, and to perturb the same trafficking machinery used in plant immune signalling.
+
+### Explore by thread
+
+The work spans multiple interconnected research threads, each running through
+several chapters. Drag a node to rearrange, hover to trace its connections,
+click a chapter to open it.
+
+```{r network-index}
+#| echo: false
+#| fig-cap: "Interactive map of five analysis threads and the chapters that investigate them. Drag to rearrange, hover to trace connections, click a chapter node to open it."
+library(visNetwork)
+library(dplyr)
+
+threads <- tibble::tibble(
+  id    = c("t1", "t2", "t3", "t4", "t5"),
+  label = c("DNAzyme Motif", "Horizontal Gene Transfer", "AP-4 / SLiM Immune Motif",
+            "Host–Vector Ecology", "Codon Usage & Host Adaptation"),
+  group = "thread"
+)
+
+chapters <- tibble::tibble(
+  id    = c("c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "ca"),
+  label = c("1 · Discovery", "2 · Phylogenetics", "3 · Codon Usage",
+            "4 · ELM Motifs", "5 · Potyvirus Motifs", "6 · HGT",
+            "7 · Networks", "8 · Immunity", "9 · AP-4 Trafficking",
+            "Appendix · Data Sources"),
+  group = "chapter",
+  url   = c("notebooks/01_discovery.html", "notebooks/02_phylogenetics.html",
+            "notebooks/03_codon_dnazyme.html", "notebooks/04_protein_motifs.html",
+            "notebooks/05_potyvirus_motifs.html", "notebooks/06_hgt.html",
+            "notebooks/07_networks.html", "notebooks/08_immu_simmu.html",
+            "notebooks/09_ap4_trafficking.html", "notebooks/A1_data_sources.html")
+)
+
+edges <- tibble::tribble(
+  ~from, ~to,
+  "c1", "t1",  "c1", "t2",
+  "c2", "t2",  "c2", "t1",
+  "c3", "t5",  "c3", "t1",
+  "c4", "t3",
+  "c5", "t3",
+  "c6", "t2",
+  "c7", "t4",
+  "c8", "t3",  "c8", "t4",
+  "c9", "t3",
+  "ca", "t1"
+)
+
+nodes <- bind_rows(threads, chapters) %>%
+  mutate(
+    shape       = if_else(group == "thread", "dot", "box"),
+    value       = if_else(group == "thread", 22, 14),
+    color       = if_else(group == "thread", "#1F5C73", "#EFF1EC"),
+    font        = if_else(group == "thread",
+                           "13px Consolas #EFF1EC",
+                           "13px Consolas #171B1D"),
+    borderWidth = if_else(group == "thread", 0, 1.5),
+    title       = label
+  )
+
+visNetwork(nodes, edges, height = "440px", width = "100%") %>%
+  visEdges(color = list(color = "#C9CFC9", highlight = "#1F5C73"), smooth = FALSE) %>%
+  visOptions(highlightNearest = list(enabled = TRUE, degree = 1, hover = TRUE)) %>%
+  visLegend(useGroups = FALSE, addNodes = data.frame(
+    label = c("Thread", "Chapter"), shape = c("dot", "box"),
+    color = c("#1F5C73", "#EFF1EC")), width = 0.15) %>%
+  visPhysics(stabilization = TRUE, solver = "forceAtlas2Based") %>%
+  visInteraction(hover = TRUE) %>%
+  visEvents(click = "function(params) {
+    if (params.nodes.length > 0) {
+      var url = this.body.data.nodes.get(params.nodes[0]).url;
+      if (url) { window.location.href = url; }
+    }
+  }")
+```
+
+Prefer a plain list? The chapter table below covers the same ground.
 
 The work spans several interconnected research threads:
 

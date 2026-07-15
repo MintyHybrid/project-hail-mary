@@ -36,7 +36,7 @@ plot_pca_biplot <- function(pca_results, host_classification = NULL,
       x = sprintf("PC1 (%.1f%% variance)", var_explained[1]),
       y = sprintf("PC2 (%.1f%% variance)", var_explained[2])
     ) +
-    cowplot::theme_cowplot() +
+    theme_manuscript() +
     ggplot2::theme(legend.position = "right")
 
   if (interactive && requireNamespace("plotly", quietly = TRUE)) {
@@ -72,7 +72,7 @@ plot_pca_scree <- function(pca_results) {
       sec.axis = ggplot2::sec_axis(~., name = "Cumulative Variance (%)")
     ) +
     ggplot2::labs(title = "PCA Scree Plot", x = "Principal Component") +
-    cowplot::theme_cowplot() +
+    theme_manuscript() +
     ggplot2::theme(axis.text.x = ggplot2::element_text(angle = 45, hjust = 1))
 }
 
@@ -119,7 +119,10 @@ plot_pca_3d <- function(pca_results, host_classification = NULL) {
   ) |>
     plotly::layout(
       title = "3D PCA of Codon Usage (RSCU)",
+      paper_bgcolor = hailmary_palette()[["paper"]],
+      plot_bgcolor = hailmary_palette()[["paper"]],
       scene = list(
+        bgcolor = hailmary_palette()[["paper"]],
         xaxis = list(title = sprintf("PC1 (%.1f%%)", var_exp[1])),
         yaxis = list(title = sprintf("PC2 (%.1f%%)", var_exp[2])),
         zaxis = list(title = sprintf("PC3 (%.1f%%)", var_exp[3]))
@@ -156,7 +159,7 @@ plot_cai_by_host <- function(cai_results, host_classification) {
       subtitle = "Higher CAI = better adaptation to host codon usage",
       x = "Host Type", y = "CAI"
     ) +
-    cowplot::theme_cowplot()
+    theme_manuscript()
 
   if (length(unique(plot_data$host_type)) == 2) {
     test_result <- stats::wilcox.test(CAI ~ host_type, data = plot_data)

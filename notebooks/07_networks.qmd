@@ -19,6 +19,7 @@ library(ggraph)
 library(tidyverse)
 library(visNetwork)
 library(rotl)
+library(potytools)
 ```
 
 ## Introduction
@@ -74,6 +75,7 @@ ggraph(bip_graph, layout = "bipartite") +
   scale_color_manual(values = c("FALSE" = "steelblue", "TRUE" = "darkorange"),
                      labels = c("species", "host plant")) +
   theme_void() +
+  theme_manuscript_bg() +
   ggtitle("Species–Host Bipartite Network")
 ```
 
@@ -87,6 +89,7 @@ ggraph(species_graph, layout = "fr") +
   geom_node_point(color = "steelblue", size = 8) +
   geom_node_text(aes(label = name), repel = TRUE, size = 4) +
   theme_void() +
+  theme_manuscript_bg() +
   ggtitle("Species-only Projected Network")
 ```
 
@@ -178,7 +181,8 @@ edges_vis <- all_edges %>%
       type == "phylogenetic" ~ "forestgreen",
       type == "shared_host"  ~ "steelblue"))
 
-visNetwork(nodes, edges_vis, height = "900px", width = "100%") %>%
+visNetwork(nodes, edges_vis, height = "900px", width = "100%",
+           background = hailmary_palette()[["paper"]]) %>%
   visEdges(smooth = FALSE) %>%
   visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
   visLegend() %>%
@@ -262,7 +266,8 @@ edges <- biotic %>%
                           .default = "#95a5a6")) %>%
   dplyr::filter(!is.na(from), !is.na(to))
 
-visNetwork(nodes, edges, height = "620px", width = "100%") %>%
+visNetwork(nodes, edges, height = "620px", width = "100%",
+           background = hailmary_palette()[["paper"]]) %>%
   visNodes(size = 12, font = list(size = 13),
            borderWidth = 1, color = list(border = "#ffffff")) %>%
   visEdges(smooth = FALSE, color = list(opacity = 0.45), width = 0.6) %>%
