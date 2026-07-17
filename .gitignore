@@ -17,6 +17,9 @@
 # Data files (large / locally generated — not tracked)
 /data/
 
+# Not wired into the site; may contain personal/unverified data — not tracked
+/embeds/
+
 # Rendered book output (published from the gh-pages branch)
 /_book/
 /index.tex
