@@ -421,7 +421,7 @@ ap4Long = simHistory.flatMap(d => [
 Plot.plot({
   title: "Trafficking Dynamics",
   width: 900, height: 280,
-  style: { background: "#EFF1EC" },
+  style: { background: "transparent", color: "var(--ink)" },
   x: { label: "Time (min)" },
   y: { label: "Count" },
   color: { legend: true },
@@ -442,7 +442,7 @@ balance — e.g. impaired ESCRT stalls cargo in the EE/MVB.*
 Plot.plot({
   title: "Immune Signalling Output",
   width: 900, height: 240,
-  style: { background: "#EFF1EC" },
+  style: { background: "transparent", color: "var(--ink)" },
   x: { label: "Time (min)" },
   y: { label: "Activation level" },
   color: { legend: true },
@@ -462,7 +462,7 @@ blocked receptor degradation prolongs the response.*
 Plot.plot({
   title: "Phosphoinositide Dynamics",
   width: 900, height: 240,
-  style: { background: "#EFF1EC" },
+  style: { background: "transparent", color: "var(--ink)" },
   x: { label: "Time (min)" },
   y: { label: "PI(3)P concentration (μM)" },
   color: { legend: true },
@@ -482,7 +482,7 @@ is the precondition for the membrane-topology defects tracked below.*
 Plot.plot({
   title: "AP-4 Cargo Panel",
   width: 900, height: 260,
-  style: { background: "#EFF1EC" },
+  style: { background: "transparent", color: "var(--ink)" },
   x: { label: "Time (min)" },
   y: { label: "Level" },
   color: { legend: true },
@@ -678,7 +678,7 @@ ecol <- c(complex = "#5d6d7e", phospho = "#e74c3c", activation = "#229954",
           ubiquitin = "#8e44ad", suppress = "#c0392b")
 edges$color <- ecol[edges$type]
 
-visNetwork(nodes, edges, width = "100%", height = "620px", background = "#EFF1EC") |>
+visNetwork(nodes, edges, width = "100%", height = "620px", background = "transparent") |>
   visEdges(arrows = list(to = list(enabled = TRUE, scaleFactor = 0.5)),
            smooth = FALSE) |>
   visGroups() |>

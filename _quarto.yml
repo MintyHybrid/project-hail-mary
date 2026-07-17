@@ -39,9 +39,22 @@ bibliography:
 execute:
   freeze: auto
 
+# Force ragg's PNG device to initialise with a transparent canvas rather than
+# opaque white -- needed so figure plot.background/panel.background set to
+# "transparent" (theme_manuscript()/theme_manuscript_bg()) actually render
+# transparent, instead of showing white underneath regardless of the ggplot
+# theme. Set once, project-wide, rather than per-notebook setup chunks.
+knitr:
+  opts_chunk:
+    dev: "ragg_png"
+    dev.args:
+      background: "transparent"
+
 format:
   html:
-    theme: theme-light.scss
+    theme:
+      light: theme-light.scss
+      dark: theme-dark.scss
     toc: true
     toc-depth: 3
     code-tools: true

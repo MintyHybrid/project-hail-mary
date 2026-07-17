@@ -1,12 +1,12 @@
 /*-- scss:defaults --*/
 
-// Manuscript "Cyanotype" palette
-$paper:  #EFF1EC;
-$ink:    #171B1D;
-$soft:   #4B5459;
-$accent: #1F5C73;
-$flag:   #9C5B18;
-$line:   #C9CFC9;
+// Manuscript "Cyanotype" palette -- dark variant
+$paper:  #171B1D;
+$ink:    #E7E9E5;
+$soft:   #9AA19B;
+$accent: #5FB8D6;
+$flag:   #E0A64D;
+$line:   #2B3134;
 
 $mono-stack: Consolas, 'Cascadia Code', SFMono-Regular, monospace;
 $sans-stack: 'Segoe UI', Calibri, 'Helvetica Neue', sans-serif;
@@ -24,13 +24,16 @@ $headings-font-weight: 700;
 $border-color: $line;
 $table-border-color: $line;
 $code-color: $accent;
-$code-bg: #F1F2EF;
+$code-bg: #1D2224;
 
 /*-- scss:rules --*/
 
 // CSS custom properties mirroring the SCSS palette above, so client-side JS
-// (the index-page network graph) can read the same colors at runtime via
-// getComputedStyle() instead of hardcoding a second copy of the palette.
+// (the index-page network graph, the ch.8 Observable Plot charts) can read
+// the same colors at runtime via var()/getComputedStyle() instead of
+// hardcoding a second copy of the palette. Quarto swaps the entire compiled
+// stylesheet between the light/dark variants, so whichever :root block is
+// active here simply wins -- no [data-bs-theme] nesting needed.
 :root {
   --paper: #{$paper};
   --ink: #{$ink};
@@ -89,7 +92,7 @@ nav[role="doc-toc"] .toc-actions,
   border: none;
   border-left: 3px solid $flag;
   border-radius: 0 6px 6px 0;
-  background: rgba(156, 91, 24, 0.06);
+  background: rgba(224, 166, 77, 0.08);
   padding: 0;
 
   .callout-header {
@@ -164,9 +167,6 @@ pre.sourceCode, div.sourceCode {
 
 // ================================================================
 // sidebar -- Quarto's normal always-visible in-flow sidebar, themed only
-// (the collapse/expand numeral rail was reverted: it fought Quarto's
-// book-grid centering and content-offset math on several fronts with no
-// clean resolution, for a feature the reading experience doesn't need).
 // ================================================================
 #quarto-sidebar.sidebar-navigation {
   background: $paper;
@@ -181,8 +181,6 @@ pre.sourceCode, div.sourceCode {
 
 // ================================================================
 // reasoning map (index.qmd "how the argument actually holds together")
-// Mirrored in theme-dark.scss -- Quarto swaps the whole compiled
-// stylesheet per theme, so no @media/data-attribute nesting is needed here.
 // ================================================================
 .reasoning-map {
   margin: 1.5rem 0 2rem;
@@ -193,7 +191,7 @@ pre.sourceCode, div.sourceCode {
     gap: .5rem 1.4rem;
     border: 1px solid $line;
     border-radius: 8px;
-    background: rgba(0, 0, 0, .02);
+    background: rgba(255, 255, 255, .04);
     padding: .9rem 1.1rem;
     margin-bottom: 1.8rem;
     font-size: .78rem;
@@ -225,7 +223,7 @@ pre.sourceCode, div.sourceCode {
   .node.open { border: 1.5px dashed $flag; }
   .node.open .t { color: $flag; }
   .node.deprioritized { border: 1px solid $line; opacity: .72; }
-  .node.main { border: 2px solid $flag; background: rgba(156, 91, 24, .06); }
+  .node.main { border: 2px solid $flag; background: rgba(224, 166, 77, .08); }
   .node.main .t { color: $flag; font-family: $mono-stack; }
 
   .tag-next {

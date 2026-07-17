@@ -11,12 +11,13 @@ A ggplot2 theme object (partial).
 }
 \description{
 A partial \code{theme()} covering just \code{plot.background} \emph{and}
-\code{panel.background} with the book's paper colour. Meant to be layered
+\code{panel.background}, set to transparent so figures show whichever page
+theme is active rather than a baked-in paper colour. Meant to be layered
 after visualization-specific themes that intentionally hide axes/grid
 (\code{ggplot2::theme_void()}, \code{ggtree::theme_tree()}/\code{theme_tree2()},
 \code{ggraph::theme_graph()}, \code{ggseqlogo::theme_logo()}) -- those set both
 background elements to \code{element_blank()} (transparent) as part of their
 own construction, so overriding \code{plot.background} alone still leaves the
-PNG device's white background showing through the (larger) panel area.
+PNG device's own background showing through the (larger) panel area.
 Use \code{theme_manuscript()} instead for ordinary axis-bearing plots.
 }

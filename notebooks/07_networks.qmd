@@ -182,7 +182,7 @@ edges_vis <- all_edges %>%
       type == "shared_host"  ~ "steelblue"))
 
 visNetwork(nodes, edges_vis, height = "900px", width = "100%",
-           background = hailmary_palette()[["paper"]]) %>%
+           background = "transparent") %>%
   visEdges(smooth = FALSE) %>%
   visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
   visLegend() %>%
@@ -267,7 +267,7 @@ edges <- biotic %>%
   dplyr::filter(!is.na(from), !is.na(to))
 
 visNetwork(nodes, edges, height = "620px", width = "100%",
-           background = hailmary_palette()[["paper"]]) %>%
+           background = "transparent") %>%
   visNodes(size = 12, font = list(size = 13),
            borderWidth = 1, color = list(border = "#ffffff")) %>%
   visEdges(smooth = FALSE, color = list(opacity = 0.45), width = 0.6) %>%
