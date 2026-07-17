@@ -12,21 +12,20 @@ execute:
 
 ## Overview
 
-The cylindrical inclusion (CI) helicase carries a short conserved region that,
-across Potyviridae, overlaps a number of **eukaryotic linear motifs (ELMs)** —
+The DNAzyme-like fragment within the cylindrical inclusion (CI) helicase translates to a partially conserved protein sequence. Homologous protein regions overlap with a number of **eukaryotic linear motifs (ELMs)** —
 short functional peptide motifs catalogued in the ELM database
-[@elm2024]. Here I extract the CI motif-flanking region from each isolate in the
+[@elm2024]. Here I extract the DNAzyme motif incl. its flanking region from each isolate in the
 ICTV Potyviridae alignment [@inouenagata2022], search it against ELM, and ask which
 motifs are **characteristic of particular genera**.
 
 ::: {.callout-note appearance="simple"}
 **Why a different sequence set here.** Chapters 1–3 used my **custom collection of
-the 16 potyvirus isolates** that carry the DNAzyme catalytic core. From this
+the 16 potyvirus isolates** that carry the DNAzyme-like catalytic core, as well as other Potyvirus species all belonging to the same genus. From this
 chapter on I switch to the **premade ICTV Potyviridae alignment**
 [@inouenagata2022] to extend the motif analysis to the **whole family**. That
 alignment does **not** contain the 16 core-carrying isolates — which is fine
 here, because I first **confirmed the translated catalytic-core region is preserved
-in ICTV members**, and the question now is about the **CI protein and its sorting
+in ICTV members**, and the question now is about the **CI protein and its (sorting)
 motifs across Potyviridae**, not about the DNAzyme core per se.
 :::
 

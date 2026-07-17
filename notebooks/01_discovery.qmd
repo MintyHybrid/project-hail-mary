@@ -18,7 +18,7 @@ execute:
 To make the reasoning followable — and to be explicit about where it is speculation
 versus supported — here is the actual chain of thought, step by step:
 
-0. **be curious and wonder ...** "Evolution is extremely good at filling every nook in the   ecosystem." (Andy Weir) - do biological systems maybe "use" DNAzymes?
+0. **be curious and wonder ...** "Evolution is extremely good at filling every nook in the ecosystem." (Andy Weir) - do biological systems maybe "use" DNAzymes?
 1. **Start from a real DNAzyme.** I BLASTed the **catalytic core of the 10-23
    deoxyribozyme** [@borggraefe2022] against the viral nucleotide collection and
    recovered **16 potyvirus isolates** (6 species) carrying that core.
@@ -30,13 +30,12 @@ versus supported — here is the actual chain of thought, step by step:
    DNAzyme might target.
 3. **The flank-matches hinted at an ecological pattern.** A quick look at two flanks
    (from a *Turnip mosaic virus* and a *Maize dwarf mosaic virus* isolate) suggested
-   the recovered species might be **ecologically associated**, which made me
+   the recovered species might be **ecologically associated** (as it appeared to be enriched in plant and insect species), which made me
    speculate the viral↔eukaryote matches could be signatures of **horizontal gene
-   transfer (HGT) to vectors and/or hosts**.
+   transfer (HGT) to vectors and/or hosts** (if you are into computing rather than biology, think "evolutionary prompt injection".
 4. **Caveat — this is not yet established.** It is *not* shown that the
    flank-matching species actually **are hosts or vectors** of the corresponding
-   potyvirus. I built the **BioNexus** app (Chapter 7) to test connectivity; the
-   interactions (only interactions that have been documented) looked **sporadic rather than continuous** — which is *not* enough
+   potyvirus. But I built the **BioNexus** app (Chapter 7) to test connectivity between the eukaryotic hits; the interactions (only interactions that have been documented) looked **sporadic rather than continuous** — which is *not* enough
    to infer the **absence** of HGT, either.
 5. **A small aside.** A central target nucleotide was initially omitted; adding it
    back (as **G**) gives exactly one isolate a **single perfect match to *Aphis
@@ -46,13 +45,13 @@ versus supported — here is the actual chain of thought, step by step:
    of the potyviral **cylindrical inclusion (CI)** protein (Chapters 2–4).
 
 **Where this goes.** Assessing potential DNAzyme catalytic activity (Chapter 3) 
-shows most homologs carry **substitutions at activity-critical core positions**, 
+shows most Potyvirus homologs carry **substitutions at activity-critical core positions**, 
 so DNAzyme activity is **unlikely / rare** — and would additionally require reverse
-transcription to coincide. The nucleotide-level analyses (logos, GC/CpG, codon
-usage) are therefore **exploratory context, not evidence**. The thread that *does*
+transcription to coincide (Potyviridae genomes are based on +ssRNA - not DNA). The nucleotide-level analyses (logos, GC/CpG, codon
+usage) are therefore **exploratory context, not evidence** and rather argue against in vivo DNAzyme activity and so does the even (negative) selection over the broader sequence context. The thread that eventually *does*
 lead somewhere is the **CI protein itself** — specifically **host-type sorting
-motifs** in the DNAzyme-locus region (a tyrosine-based motif beside an acidic
-dileucine signal; Chapter 5) — which connects to **AP-4-dependent trafficking and
+motifs** in the DNAzyme-locus region (a tyrosine-based motif adjacent to an acidic
+dileucine signal, which has been characterized earlier [@wu2022]; Chapter 5). This putative signal connects to **AP-4-dependent trafficking and
 the LE/MVB** and motivates the immune-trafficking hypothesis of Chapter 9.
 
 ## Intro
@@ -82,6 +81,41 @@ no figure is reproduced.*
 Since I was curious whether this system might also occur in nature, I blasted
 this 15nt sequence against the viral nucleotide collection on NCBI and found that it
 matches perfectly to a region in the genomes of several potyviruses.
+
+The same day, I did a quick check for putative RNA targets (under the assumption that DNAzyme activity indeed occured), which sent me straight into the rabbit hole (probably for a bit too long). I picked two semi-random viral hits (maize and turnip mosaic virus). Semi-random, because if you would ask someone who knows me well enough to predict what I would be drawn to immediately had a pretty good chance of correctly guessing that: if there is something with a name indicating the virus infects a root crop, she will pick that one (turnip) and if she checked two of them and had already checked turnip, her second pick would not be another dicot infecting virus if there also was one targeting monocots (maize). That still leaves multiple isolates (blast hits) for each of these two viruses.  
+
+These were my initial thoughts - which sound way too much like I had found the holy grail that I later realized I probably had not: 
+
+### Implications part I
+
+Now the crazy part - or rather the observation that got me hooked for the rest of the night and the following weeks. For these two examples (sequences based on) a Turnip mosaic
+virus and b) a maize dwarf something virus, the flanking regions appeared to occur
+MASSIVELY enriched in very specific clades:
+
+1.  **Plants.**
+    1.  The fact that the viruses appear to leave traces in the genomes of putative
+        hosts is pretty "wow" already. These viruses are no retroviruses, which in turn
+        are indeed known to insert their genomes or parts of it in that of their hosts.
+        Secondly, because it is not a continuous part of the viral genome, but specifically
+        one that matches a DNAzyme TARGET only (without the catalytic loop thingy in the
+        middle, that still is present in the virus).
+    2.  Another thing I think is interesting is that when I searched the Turnip virus
+        sequences, I did not find ANY monocotyledons (Turnip is a dicotyledonous plant).
+        When I tried with the Maize flanks, the hits however did indeed include monocotyledonous
+        plants. (And wine btw, and cassava).
+
+2.  **Insects**
+    1.  But not just any insects. Pollinators!!!!
+    2.  This is not only indicating that DNAzymes might have existed in nature,
+        but also that they might have been transferred between species and even
+        kingdoms. 
+
+![screenshot of blast hits (taxonomy report) for viral flanks of a turnip mosaic virus](../images/ScreenshotBlasthighlighted.png "BlastHitsTurnipFlanks")
+
+
+So much for my quick check, which took several hours to complete. That's how easy it is to fool me into months of analyses that I am not even paid to do...
+
+The remainder of this notebook shows the systematic approach (and the code I wrote, so everyone can reproduce my fails or adapt it to other problems [at least, failures might happen a lot faster then]).
 
 ```{r setup}
 #| include: false
@@ -194,7 +228,7 @@ poty <- readDNAStringSet(here::here("data", "seqdump.txt"))
 poty
 ```
 
-Next, I search the regions with the matches to the 15 bases I had searched. I do
+Next, I search the regions with the matches to the 15 bases I had blasted initially. I do
 this, because I next want to extract the flanking sequences, i.e. the regions,
 which - if the 15 bases indeed belonged to a natural DNAzyme - would determine
 the target (RNA) specificity.
@@ -588,31 +622,7 @@ ggplot(pdat3, aes(x = n, y = phylum, fill = query_name)) +
   theme(axis.title.y = element_blank())
 ```
 
-### Implications part I
 
-Now the crazy part. For these two examples (sequences based on a) a Turnip mosaic
-virus and b) a maize dwarf something virus, the flanking regions appeared to occur
-MASSIVELY enriched in very specific clades:
-
-1.  **Plants.**
-    1.  The fact that the viruses appear to leave traces in the genomes of putative
-        hosts is pretty "wow" already. These viruses are no retroviruses, which in turn
-        are indeed known to insert their genomes or parts of it in that of their hosts.
-        Secondly, because it is not a continuous part of the viral genome, but specifically
-        one that matches a DNAzyme TARGET only (without the catalytic loop thingy in the
-        middle, that still is present in the virus).
-    2.  Another thing I think is interesting is that when I searched the Turnip virus
-        sequences, I did not find ANY monocotyledons (Turnip is a dicotyledonous plant).
-        When I tried with the Maize flanks, the hits however did indeed include monocotyledonous
-        plants. (And wine btw, and cassava).
-
-2.  **Insects**
-    1.  But not just any insects. Pollinators!!!!
-    2.  This is not only indicating that DNAzymes might have existed in nature,
-        but also that they might have been transferred between species and even
-        kingdoms. Here's the origin of life ... right in front of us.
-
-![screenshot of blast hits (taxonomy report) for viral flanks of a turnip mosaic virus](../images/ScreenshotBlasthighlighted.png "BlastHitsTurnipFlanks")
 
 ```{r}
 annotated <- descvir %>%
@@ -624,23 +634,8 @@ annotated <- descvir %>%
 annotated
 ```
 
-#### Strawberry
 
-```{r}
-strawberry <- descvir %>%
-  dplyr::filter(str_detect(name, "Fragaria")) %>%
-  dplyr::rename(seqname = seq_acc) %>%
-  left_join(., hits) %>%
-  select(-c("s_start", "s_end", "Max Score ", "Total Score ",
-            "Query Cover ", "E value ", "Per. Ident ", "chromosome", "misc"))
-strawberry
-```
-
-```{r}
-strawberryseqs <- stretchedseqs[(which(str_detect(names(stretchedseqs), "Fragaria")))]
-strawberryseqs
-# writeXStringSet(strawberryseqs, here::here("data", "strawberryseqs.fasta"))
-```
+### closer inspection of eukaryotic hits
 
 Some of the annotated hits include:
 
@@ -679,6 +674,25 @@ ggplot(plotdatbhits, mapping = aes(x = relative)) +
   theme(axis.title.y = element_blank()) +
   facet_wrap(query_acc~., scales = "free_y")
 ```
+
+#### Strawberry
+
+```{r}
+strawberry <- descvir %>%
+  dplyr::filter(str_detect(name, "Fragaria")) %>%
+  dplyr::rename(seqname = seq_acc) %>%
+  left_join(., hits) %>%
+  select(-c("s_start", "s_end", "Max Score ", "Total Score ",
+            "Query Cover ", "E value ", "Per. Ident ", "chromosome", "misc"))
+strawberry
+```
+
+```{r}
+strawberryseqs <- stretchedseqs[(which(str_detect(names(stretchedseqs), "Fragaria")))]
+strawberryseqs
+# writeXStringSet(strawberryseqs, here::here("data", "strawberryseqs.fasta"))
+```
+
 
 ## Corrected analysis (2026-02-14)
 
@@ -753,7 +767,7 @@ ggtree(df2) + geom_tiplab() +
   xlim(0, 150) + ylim(0, 60) +
   theme_manuscript_bg()
 ```
-
+<!-- 
 ### Some more?
 
 The 10-23 deoxyribozyme has been structurally characterised in a homodimer
@@ -767,7 +781,7 @@ conformation [@cramer2023]. Its target / catalytic-core arrangement is:
 The related **8-17 DNAzyme** can operate in a single active structure regardless
 of the metal-ion cofactor [@wieruszewska2024]. There the catalytic domain
 corresponds to 5' GCCAGCGCCTCGAA 3', and the target harbours an additional
-nucleotide between the specificity-determining flanks.
+nucleotide between the specificity-determining flanks. -->
 
 ## Open Questions, Outlook, Thoughts
 
@@ -800,6 +814,8 @@ As those authors put it:
 
 ## Multilayer Network analysis
 
+How I prepped for what went into the network-section (chapter 7) and the Nexus App.
+
 #### Resources
 
 1. <https://www.globalbioticinteractions.org/>
@@ -811,6 +827,8 @@ As those authors put it:
 7. <https://knb.ecoinformatics.org>
 8. <https://www.gbif.org>
 
+initially planned to visualise taxonomies with the `metacoder` R package [@foster2017].
+
 ### Species by Potyvirus
 
 ```{r taxpervirus}
@@ -821,9 +839,6 @@ taxbyvir <- descvir %>%
 taxbyvir$`Leek yellow stripe virus`
 ```
 
-###### Additional References
-
-Taxonomic diversity is visualised with the `metacoder` R package [@foster2017].
 
 #### Session Info
 

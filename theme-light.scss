@@ -178,3 +178,126 @@ pre.sourceCode, div.sourceCode {
   color: $accent;
   font-weight: 700;
 }
+
+// ================================================================
+// reasoning map (index.qmd "how the argument actually holds together")
+// Built against the light Manuscript palette only -- no dark-theme rules
+// exist anywhere on the site yet, so this deliberately doesn't add any
+// @media(prefers-color-scheme: dark) branch either; revisit together
+// with the rest of the site when a dark theme is actually implemented.
+// ================================================================
+.reasoning-map {
+  margin: 1.5rem 0 2rem;
+
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: .5rem 1.4rem;
+    border: 1px solid $line;
+    border-radius: 8px;
+    background: rgba(0, 0, 0, .02);
+    padding: .9rem 1.1rem;
+    margin-bottom: 1.8rem;
+    font-size: .78rem;
+
+    .item { display: flex; align-items: center; gap: .5rem; }
+    .swatch { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
+    .swatch.established { background: $ink; }
+    .swatch.supported { background: $accent; }
+    .swatch.open { background: transparent; border: 2px dashed $flag; }
+    .swatch.deprioritized { background: $line; }
+    .label { color: $soft; }
+    .label b { color: $ink; font-weight: 600; }
+  }
+
+  .node {
+    border-radius: 8px;
+    padding: .55rem .8rem;
+    font-size: .84rem;
+    background: $paper;
+    display: inline-block;
+    max-width: 100%;
+
+    .t { display: block; font-weight: 600; color: $ink; }
+    .d { display: block; color: $soft; font-size: .76rem; margin-top: .15rem; }
+  }
+  .node.established { border: 1.5px solid $ink; }
+  .node.supported { border: 1.5px solid $accent; }
+  .node.supported .t { color: $accent; }
+  .node.open { border: 1.5px dashed $flag; }
+  .node.open .t { color: $flag; }
+  .node.deprioritized { border: 1px solid $line; opacity: .72; }
+  .node.main { border: 2px solid $flag; background: rgba(156, 91, 24, .06); }
+  .node.main .t { color: $flag; font-family: $mono-stack; }
+
+  .tag-next {
+    display: inline-flex;
+    align-items: center;
+    gap: .3rem;
+    margin-top: .5rem;
+    font-family: $mono-stack;
+    font-size: .66rem;
+    letter-spacing: .02em;
+    color: $accent;
+    border: 1px solid $accent;
+    border-radius: 20px;
+    padding: .15rem .55rem;
+  }
+
+  .tree { display: flex; flex-direction: column; align-items: center; }
+  .tree .stem { width: 1.5px; height: 1.6rem; background: $line; }
+  .tree .branches {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.4rem;
+    width: 100%;
+    padding-top: 1.6rem;
+    position: relative;
+  }
+  .tree .branches::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 16.6%;
+    right: 16.6%;
+    height: 1.5px;
+    background: $line;
+  }
+  .tree .branch {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: .9rem;
+    position: relative;
+  }
+  .tree .branch::before {
+    content: "";
+    width: 1.5px;
+    height: 1.4rem;
+    background: $line;
+    margin-bottom: -.2rem;
+  }
+  .tree .branch .label {
+    font-family: $mono-stack;
+    font-size: .68rem;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: $soft;
+    text-align: center;
+    margin-bottom: .2rem;
+  }
+  .tree .connector { width: 1.5px; height: 1rem; background: $line; }
+  .tree .sub {
+    margin-left: 1rem;
+    align-self: flex-start;
+    border-left: 1.5px dashed $line;
+    padding-left: .9rem;
+    margin-top: -.3rem;
+  }
+
+  @media (max-width: 760px) {
+    .tree .branches { grid-template-columns: 1fr; }
+    .tree .branches::before { display: none; }
+    .tree .branch::before { display: none; }
+  }
+}

@@ -18,8 +18,7 @@ movement [@revers2015]. This chapter (i) catalogues those motifs with their
 roles and primary references, (ii) locates the linear ones in the ICTV
 Potyviridae alignment [@inouenagata2022], and (iii) draws the curated
 protein–protein interaction network that centres on the cylindrical inclusion
-(CI) helicase — the protein carrying the DNAzyme-like locus studied in the
-earlier chapters.
+(CI) helicase — the protein carrying the DNAzyme-like locus studied in the earlier chapters.
 
 ```{r setup}
 #| include: false
