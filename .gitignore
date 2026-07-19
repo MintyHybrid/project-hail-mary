@@ -40,4 +40,9 @@ renv/sandbox/
 # Analysis caches / regenerable outputs
 /cache/
 
+# potytools pkgdown build output (locally regenerable; already in
+# packages/potytools/.Rbuildignore but that only excludes it from the
+# build tarball, not from git)
+/packages/potytools/docs/
+
 .claude/
