@@ -1,8 +1,8 @@
 # Workflow derived from https://github.com/r-lib/actions/tree/v2/examples
-# NOTE: potytools lives in packages/potytools/ within a larger repository.
-# GitHub Actions only executes workflows from the repository-root
-# .github/workflows/. To run this on GitHub, move it there and set
-# `defaults.run.working-directory: packages/potytools` (and adjust paths).
+# potytools lives in packages/potytools/ within a larger (Quarto book) repo,
+# hence the working-directory overrides below -- GitHub Actions only
+# discovers workflows under the repository-root .github/workflows/, but the
+# package root for setup-r-dependencies/check-r-package is packages/potytools.
 on:
   push:
     branches: [main, master]
@@ -12,6 +12,10 @@ on:
 name: R-CMD-check.yaml
 
 permissions: read-all
+
+defaults:
+  run:
+    working-directory: packages/potytools
 
 jobs:
   R-CMD-check:
@@ -42,10 +46,12 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          working-directory: packages/potytools
           extra-packages: any::rcmdcheck
           needs: check
 
       - uses: r-lib/actions/check-r-package@v2
         with:
+          working-directory: packages/potytools
           upload-snapshots: true
           build_args: 'c("--no-manual","--compact-vignettes=gs+qpdf")'
