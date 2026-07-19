@@ -572,9 +572,12 @@ version of this argument.
 ::: {.callout-note}
 ## What this doesn't rule out
 No recombination screen (e.g. GARD) was run on either alignment.
-Recombination is a known confound for site-selection methods — a
-recombination breakpoint can produce a false signal of selection — and
-that's a real caveat here specifically because Chapter 6 investigates
-horizontal transfer in this same genomic region. Treat the selection
-results above as solid but not the final word until that screen is run.
+Recombination *among the 217 Potyviridae isolates in this alignment* is a
+known confound for site-selection methods — a recombination breakpoint
+within the sampled taxa can produce a false signal of selection at the
+codon-model level, independent of anything in Chapter 6. (Chapter 6's HGT
+argument is a different phenomenon — a virus-to-plant transfer into
+*Fragaria*/strawberry genomes, not recombination among viral strains here —
+so it doesn't bear on this particular caveat.) Treat the selection results
+above as solid but not the final word until a recombination screen is run.
 ::: 
