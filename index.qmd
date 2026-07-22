@@ -8,7 +8,69 @@ execute:
   message: false
 ---
 
+<!-- Kept as an .unnumbered H1 rather than a YAML `title:` -- a YAML title makes
+     Quarto count index.qmd as a numbered chapter, which shifts every
+     subsequent chapter number by one. Quarto promotes this heading into
+     #title-block-header, which the landing page hides in CSS (the hero below
+     carries the title visually). -->
+
 # Project Hail Mary {.unnumbered}
+
+```{=html}
+<!-- ===================================================================
+     Landing hero: the reasoning graph IS the navigation. Nodes and edges
+     are built by assets/network-nav.js from assets/hail-mary-data.js;
+     everything below the fold is the written overview.
+     Under 820px the graph is swapped for .hm-fallback-list (see the CSS).
+     =================================================================== -->
+<div class="hm-hero" data-hm-hero>
+
+  <div class="hm-graph"></div>
+
+  <header class="hm-header">
+    <div class="hm-wordmark">
+      <span class="hm-mark">POTYVIRUS</span>
+      <span class="sub">· PROJECT HAIL MARY</span>
+      <a href="about.html">ABOUT</a>
+      <a href="data-code.html">DATA &amp; CODE</a>
+    </div>
+    <div class="hm-controls">
+      <div class="hm-segmented" role="group" aria-label="Reading level">
+        <button type="button" data-hm-audience="expert" aria-pressed="true">expert</button>
+        <button type="button" data-hm-audience="plain" aria-pressed="false">plain</button>
+      </div>
+      <button type="button" class="hm-switch" data-hm-expand-all aria-pressed="false">
+        <span class="track"><span class="knob"></span></span>
+        EXPAND ALL
+      </button>
+    </div>
+  </header>
+
+  <div class="hm-title-card">
+    <div class="hm-eyebrow">SEQUENCE · ECOLOGY · PROTEIN SORTING</div>
+    <h1>Project Hail<br><span class="accent">Mary</span></h1>
+    <p class="hm-tagline">a chain of <span class="accent">(deep)</span> thought</p>
+    <p class="hm-standfirst">
+      Following one 15-nucleotide coincidence all the way to a hypothesis about
+      how a plant virus hijacks a cell's sorting machinery.
+    </p>
+    <p class="hm-explain">
+      Each node is a chapter; each edge is a step in the reasoning —
+      <em>what led to what</em>. Start at the spark, end at the synthesis.
+    </p>
+    <div class="hm-legend">
+      <div class="item"><span class="dot spark"></span><span>the spark</span></div>
+      <div class="item"><span class="dot gold"></span><span>the hypothesis</span></div>
+    </div>
+    <div class="hm-hint">
+      click a node to expand<br>drag to rearrange · toggle to reveal all
+    </div>
+  </div>
+
+  <div class="hm-fallback-list" aria-label="Chapters"></div>
+  <div class="hm-scroll-cue">scroll for the written overview</div>
+</div>
+```
 
 *DNAzyme-like motifs, horizontal gene transfer, and short linear motif
 conservation in Potyviridae* [⚑ preprint — not peer reviewed]{.preprint-badge}
@@ -27,80 +89,10 @@ living draft and cite with that caveat. Feel free to contribute. Constructive fe
 
 ### Explore by thread
 
-The work spans multiple interconnected research threads, each running through
-several chapters. Drag a node to rearrange, hover to trace its connections,
-click a chapter to open it.
+The graph at the top of this page is the primary map: chapters as nodes, the
+reasoning that connects them as edges. The table below covers the same ground
+as a plain list.
 
-```{r network-index}
-#| echo: false
-#| fig-cap: "Interactive map of five analysis threads and the chapters that investigate them. Drag to rearrange, hover to trace connections, click a chapter node to open it."
-library(visNetwork)
-library(dplyr)
-
-threads <- tibble::tibble(
-  id    = c("t1", "t2", "t3", "t4", "t5"),
-  label = c("DNAzyme Motif", "Horizontal Gene Transfer", "AP-4 / SLiM Immune Motif",
-            "Host–Vector Ecology", "Codon Usage & Host Adaptation"),
-  group = "thread"
-)
-
-chapters <- tibble::tibble(
-  id    = c("c1", "c2", "c3", "c4", "c5", "c6", "c7", "c8", "c9", "ca"),
-  label = c("1 · Discovery", "2 · Phylogenetics", "3 · Codon Usage",
-            "4 · ELM Motifs", "5 · Potyvirus Motifs", "6 · HGT",
-            "7 · Networks", "8 · Immunity", "9 · AP-4 Trafficking",
-            "Appendix · Data Sources"),
-  group = "chapter",
-  url   = c("notebooks/01_discovery.html", "notebooks/02_phylogenetics.html",
-            "notebooks/03_codon_dnazyme.html", "notebooks/04_protein_motifs.html",
-            "notebooks/05_potyvirus_motifs.html", "notebooks/06_hgt.html",
-            "notebooks/07_networks.html", "notebooks/08_immu_simmu.html",
-            "notebooks/09_ap4_trafficking.html", "notebooks/A1_data_sources.html")
-)
-
-edges <- tibble::tribble(
-  ~from, ~to,
-  "c1", "t1",  "c1", "t2",
-  "c2", "t2",  "c2", "t1",
-  "c3", "t5",  "c3", "t1",
-  "c4", "t3",
-  "c5", "t3",
-  "c6", "t2",
-  "c7", "t4",
-  "c8", "t3",  "c8", "t4",
-  "c9", "t3",
-  "ca", "t1"
-)
-
-nodes <- bind_rows(threads, chapters) %>%
-  mutate(
-    shape       = if_else(group == "thread", "dot", "box"),
-    value       = if_else(group == "thread", 22, 14),
-    color       = if_else(group == "thread", "#1F5C73", "#EFF1EC"),
-    font        = if_else(group == "thread",
-                           "13px Consolas #EFF1EC",
-                           "13px Consolas #171B1D"),
-    borderWidth = if_else(group == "thread", 0, 1.5),
-    title       = label
-  )
-
-visNetwork(nodes, edges, height = "440px", width = "100%") %>%
-  visEdges(color = list(color = "#C9CFC9", highlight = "#1F5C73"), smooth = FALSE) %>%
-  visOptions(highlightNearest = list(enabled = TRUE, degree = 1, hover = TRUE)) %>%
-  visLegend(useGroups = FALSE, addNodes = data.frame(
-    label = c("Thread", "Chapter"), shape = c("dot", "box"),
-    color = c("#1F5C73", "#EFF1EC")), width = 0.15) %>%
-  visPhysics(stabilization = TRUE, solver = "forceAtlas2Based") %>%
-  visInteraction(hover = TRUE) %>%
-  visEvents(click = "function(params) {
-    if (params.nodes.length > 0) {
-      var url = this.body.data.nodes.get(params.nodes[0]).url;
-      if (url) { window.location.href = url; }
-    }
-  }")
-```
-
-Prefer a plain list? The chapter table below covers the same ground.
 
 The work spans several interconnected research threads:
 

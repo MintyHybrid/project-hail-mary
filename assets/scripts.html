@@ -1,0 +1,24 @@
+<script>
+/* Load the three navigation scripts with a base path that survives both local
+   preview (served from /) and GitHub Pages (served from /project-hail-mary/),
+   and both root pages and chapters nested in notebooks/.
+
+   Quarto rewrites the `css:` entry in _quarto.yml to a correct relative href
+   for each page, so we read the prefix back off that <link> rather than trying
+   to reconstruct the site root ourselves. `async = false` on a dynamically
+   created script preserves execution order, which matters: hail-mary-data.js
+   defines window.HailMary for the other two. */
+(function () {
+  var link = document.querySelector('link[href$="hail-mary.css"]');
+  var base = link
+    ? link.getAttribute("href").replace(/hail-mary\.css(\?.*)?$/, "")
+    : "assets/";
+
+  ["hail-mary-data.js", "network-nav.js", "workbench.js"].forEach(function (file) {
+    var s = document.createElement("script");
+    s.src = base + file;
+    s.async = false;
+    document.head.appendChild(s);
+  });
+})();
+</script>

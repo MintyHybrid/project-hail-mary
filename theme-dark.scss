@@ -1,299 +1,136 @@
 /*-- scss:defaults --*/
 
-// Manuscript "Cyanotype" palette -- dark variant
-$paper:  #171B1D;
-$ink:    #E7E9E5;
-$soft:   #9AA19B;
-$accent: #5FB8D6;
-$flag:   #E0A64D;
-$line:   #2B3134;
+// ===========================================================================
+// Project Hail Mary — dark theme (primary)
+//
+// Palette and type from the "Research Website Navigation Design" prototype:
+// a low-chroma olive ground, a sage-green "spark" accent and a warm gold
+// "hypothesis" accent, on warm off-white text.
+//
+// This file defines TOKENS ONLY. Every component rule lives in
+// assets/hail-mary.css and reads the custom properties emitted below, so the
+// light and dark themes can never drift apart structurally.
+// ===========================================================================
 
-$mono-stack: Consolas, 'Cascadia Code', SFMono-Regular, monospace;
-$sans-stack: 'Segoe UI', Calibri, 'Helvetica Neue', sans-serif;
+// ground
+$bg-page:    #20241d;   // page background
+$bg-deep:    #181c13;   // inset panels (graph canvas)
+$bg-card:    #161a12;   // floating cards / tooltips
+$bg-panel:   #252a20;   // raised panels, buttons
+$bg-node:    #262b20;   // unfilled graph nodes
+$bg-active:  #2f3527;   // active rail item
 
-$body-bg: $paper;
-$body-color: $ink;
-$link-color: $accent;
+// ink
+$fg-bright:  #f6f4ec;
+$fg-body:    #dfe3d5;
+$fg-muted:   #c4c8b6;
+$fg-dim:     #9aa08d;
+$fg-faint:   #6f7563;
+
+// accents
+$spark:      #8faa76;   // sage — "the spark", origin, R
+$spark-dim:  #5f7a52;
+$gold:       #cc9a5b;   // warm gold — "the hypothesis", destination, Python
+$gold-hover: #dcb178;
+$gold-dim:   #a67a45;
+$steel:      #7d94a8;   // chapter nodes in the package graph
+$steel-soft: #a9c2cf;
+$steel-bg:   #1e2a30;
+
+// lines
+$line:       #363c30;
+$line-soft:  #3a4132;
+$line-strong:#454b3d;
+$edge:       #39402e;
+
+// type
+$mono-stack:    'IBM Plex Mono', Consolas, SFMono-Regular, monospace;
+$sans-stack:    'Spline Sans', system-ui, 'Segoe UI', sans-serif;
+$serif-stack:   'Spectral', Georgia, serif;
+$display-stack: 'Michroma', 'Spline Sans', sans-serif;
+
+// --- Bootstrap / Quarto overrides ------------------------------------------
+$body-bg:    $bg-page;
+$body-color: $fg-body;
+
+$link-color:       $gold;
+$link-hover-color: $gold-hover;
 
 $font-family-sans-serif: $sans-stack;
-$font-family-monospace: $mono-stack;
-$headings-font-family: $mono-stack;
-$headings-color: $ink;
-$headings-font-weight: 700;
+$font-family-monospace:  $mono-stack;
+$headings-font-family:   $serif-stack;
+$headings-color:         $fg-bright;
+$headings-font-weight:   500;
 
-$border-color: $line;
+$border-color:       $line;
 $table-border-color: $line;
-$code-color: $accent;
-$code-bg: #1D2224;
+
+$code-color: $gold;
+$code-bg:    $bg-deep;
+$pre-bg:     $bg-deep;
+
+// Quarto chrome
+$sidebar-bg:  $bg-page;
+$sidebar-fg:  $fg-dim;
+$navbar-bg:   $bg-page;
+$navbar-fg:   $fg-muted;
+$toc-color:   $fg-dim;
+$toc-font-size: .82rem;
 
 /*-- scss:rules --*/
 
-// CSS custom properties mirroring the SCSS palette above, so client-side JS
-// (the index-page network graph, the ch.8 Observable Plot charts) can read
-// the same colors at runtime via var()/getComputedStyle() instead of
-// hardcoding a second copy of the palette. Quarto swaps the entire compiled
-// stylesheet between the light/dark variants, so whichever :root block is
-// active here simply wins -- no [data-bs-theme] nesting needed.
+// Token bridge: every component rule (assets/hail-mary.css) and all
+// client-side JS reads these, so there is exactly one copy of the palette.
 :root {
-  --paper: #{$paper};
-  --ink: #{$ink};
-  --soft: #{$soft};
-  --accent: #{$accent};
-  --flag: #{$flag};
-  --line: #{$line};
-  --mono: #{$mono-stack};
-  --sans: #{$sans-stack};
+  --hm-bg-page:   #{$bg-page};
+  --hm-bg-deep:   #{$bg-deep};
+  --hm-bg-card:   #{$bg-card};
+  --hm-bg-panel:  #{$bg-panel};
+  --hm-bg-node:   #{$bg-node};
+  --hm-bg-active: #{$bg-active};
+
+  --hm-fg-bright: #{$fg-bright};
+  --hm-fg-body:   #{$fg-body};
+  --hm-fg-muted:  #{$fg-muted};
+  --hm-fg-dim:    #{$fg-dim};
+  --hm-fg-faint:  #{$fg-faint};
+
+  --hm-spark:      #{$spark};
+  --hm-spark-dim:  #{$spark-dim};
+  --hm-gold:       #{$gold};
+  --hm-gold-hover: #{$gold-hover};
+  --hm-gold-dim:   #{$gold-dim};
+  --hm-steel:      #{$steel};
+  --hm-steel-soft: #{$steel-soft};
+  --hm-steel-bg:   #{$steel-bg};
+
+  --hm-line:        #{$line};
+  --hm-line-soft:   #{$line-soft};
+  --hm-line-strong: #{$line-strong};
+  --hm-edge:        #{$edge};
+
+  --hm-mono:    #{$mono-stack};
+  --hm-sans:    #{$sans-stack};
+  --hm-serif:   #{$serif-stack};
+  --hm-display: #{$display-stack};
+
+  // node label plates sit over the graph and need to match the page ground
+  --hm-label-plate: rgba(24, 28, 20, .72);
+  --hm-card-shadow: 0 14px 40px rgba(0, 0, 0, .4);
+  --hm-scheme: dark;
+
+  color-scheme: dark;
 }
 
-body {
-  font-family: $sans-stack;
-}
-
-.title, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-  font-family: $mono-stack;
-  letter-spacing: -0.01em;
-}
-
-// rule-above-heading instead of Bootstrap's default rule-below
-h2, .anchored.h2 {
-  border-top: 2px solid $accent;
-  padding-top: .6rem;
-  margin-top: 2.5rem;
-}
-h3, .anchored.h3 {
-  margin-top: 1.75rem;
-}
-
-#title-block-header .title {
-  border-top: none;
-  // Bootstrap's fluid book-title sizing (~2.5-3rem) reads oversized and
-  // wraps badly in monospace at this column width -- clamp it down.
-  font-size: clamp(1.5rem, 1rem + 1.6vw, 2.15rem);
-  line-height: 1.25;
-}
-
-.quarto-title-banner {
-  background: $paper;
-}
-
-.quarto-title-meta-heading,
-#toc-title,
-nav[role="doc-toc"] .toc-actions,
-.sidebar-item-section > .sidebar-item-text {
-  font-family: $mono-stack;
-  font-size: .78em;
-  letter-spacing: .04em;
-  text-transform: uppercase;
-  color: $soft;
-}
-
-// ---------- compact "flag" callout for preprint/hypothesis warnings ----------
-.callout-warning {
-  border: none;
-  border-left: 3px solid $flag;
-  border-radius: 0 6px 6px 0;
-  background: rgba(224, 166, 77, 0.08);
-  padding: 0;
-
-  .callout-header {
-    background: transparent;
-    font-family: $mono-stack;
-    font-size: .72rem;
-    letter-spacing: .06em;
-    text-transform: uppercase;
-    color: $flag;
-    padding: .6rem .9rem .2rem;
-  }
-  .callout-icon-container { display: none; }
-  .callout-body-container { padding: .5rem .9rem; }
-  .callout-body { padding: 0; }
-}
-
-// ---------- margin notes / citations ----------
-.column-margin {
-  font-family: $sans-stack;
-  font-size: .8rem;
-  color: $soft;
-  line-height: 1.5;
-
-  .csl-entry, sup.footnote-ref, .footnote-ref {
-    font-family: $mono-stack;
-    font-size: .68rem;
-  }
-
-  table {
-    font-size: .72rem;
-    width: 100%;
-  }
-  table th {
-    font-family: $mono-stack;
-    font-size: .62rem;
-    text-transform: uppercase;
-    color: $soft;
-  }
-}
-
-// preprint badge (used by index.qmd's compact warning treatment)
-.preprint-badge {
-  display: inline-block;
-  font-family: $mono-stack;
-  font-size: .78rem;
-  color: $flag;
-  border: 1px solid $flag;
-  border-radius: 4px;
-  padding: .05rem .4rem;
-  margin-left: .5rem;
-  vertical-align: middle;
-  text-decoration: none;
-}
-
-// ---------- tables ----------
-.table {
-  font-size: .92rem;
-}
-.table th {
-  font-family: $mono-stack;
-  font-size: .72rem;
-  text-transform: uppercase;
-  letter-spacing: .03em;
-  color: $soft;
-}
-
-// ---------- code blocks ----------
-pre.sourceCode, div.sourceCode {
-  border: 1px solid $line;
-  border-radius: 6px;
-}
-
-// ================================================================
-// sidebar -- Quarto's normal always-visible in-flow sidebar, themed only
-// ================================================================
-#quarto-sidebar.sidebar-navigation {
-  background: $paper;
-  border-right: 1px solid $line;
-}
-
-.chapter-number {
-  font-family: $mono-stack;
-  color: $accent;
-  font-weight: 700;
-}
-
-// ================================================================
-// reasoning map (index.qmd "how the argument actually holds together")
-// ================================================================
-.reasoning-map {
-  margin: 1.5rem 0 2rem;
-
-  .legend {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5rem 1.4rem;
-    border: 1px solid $line;
-    border-radius: 8px;
-    background: rgba(255, 255, 255, .04);
-    padding: .9rem 1.1rem;
-    margin-bottom: 1.8rem;
-    font-size: .78rem;
-
-    .item { display: flex; align-items: center; gap: .5rem; }
-    .swatch { width: 14px; height: 14px; border-radius: 4px; flex-shrink: 0; }
-    .swatch.established { background: $ink; }
-    .swatch.supported { background: $accent; }
-    .swatch.open { background: transparent; border: 2px dashed $flag; }
-    .swatch.deprioritized { background: $line; }
-    .label { color: $soft; }
-    .label b { color: $ink; font-weight: 600; }
-  }
-
-  .node {
-    border-radius: 8px;
-    padding: .55rem .8rem;
-    font-size: .84rem;
-    background: $paper;
-    display: inline-block;
-    max-width: 100%;
-
-    .t { display: block; font-weight: 600; color: $ink; }
-    .d { display: block; color: $soft; font-size: .76rem; margin-top: .15rem; }
-  }
-  .node.established { border: 1.5px solid $ink; }
-  .node.supported { border: 1.5px solid $accent; }
-  .node.supported .t { color: $accent; }
-  .node.open { border: 1.5px dashed $flag; }
-  .node.open .t { color: $flag; }
-  .node.deprioritized { border: 1px solid $line; opacity: .72; }
-  .node.main { border: 2px solid $flag; background: rgba(224, 166, 77, .08); }
-  .node.main .t { color: $flag; font-family: $mono-stack; }
-
-  .tag-next {
-    display: inline-flex;
-    align-items: center;
-    gap: .3rem;
-    margin-top: .5rem;
-    font-family: $mono-stack;
-    font-size: .66rem;
-    letter-spacing: .02em;
-    color: $accent;
-    border: 1px solid $accent;
-    border-radius: 20px;
-    padding: .15rem .55rem;
-  }
-
-  .tree { display: flex; flex-direction: column; align-items: center; }
-  .tree .stem { width: 1.5px; height: 1.6rem; background: $line; }
-  .tree .branches {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 1.4rem;
-    width: 100%;
-    padding-top: 1.6rem;
-    position: relative;
-  }
-  .tree .branches::before {
-    content: "";
-    position: absolute;
-    top: 0;
-    left: 16.6%;
-    right: 16.6%;
-    height: 1.5px;
-    background: $line;
-  }
-  .tree .branch {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: .9rem;
-    position: relative;
-  }
-  .tree .branch::before {
-    content: "";
-    width: 1.5px;
-    height: 1.4rem;
-    background: $line;
-    margin-bottom: -.2rem;
-  }
-  .tree .branch .label {
-    font-family: $mono-stack;
-    font-size: .68rem;
-    text-transform: uppercase;
-    letter-spacing: .05em;
-    color: $soft;
-    text-align: center;
-    margin-bottom: .2rem;
-  }
-  .tree .connector { width: 1.5px; height: 1rem; background: $line; }
-  .tree .sub {
-    margin-left: 1rem;
-    align-self: flex-start;
-    border-left: 1.5px dashed $line;
-    padding-left: .9rem;
-    margin-top: -.3rem;
-  }
-
-  @media (max-width: 760px) {
-    .tree .branches { grid-template-columns: 1fr; }
-    .tree .branches::before { display: none; }
-    .tree .branch::before { display: none; }
-  }
+// Legacy aliases — the pre-redesign palette names are still referenced by a
+// few inline `var(--flag)` styles inside index.qmd's reasoning map.
+:root {
+  --paper:  #{$bg-page};
+  --ink:    #{$fg-bright};
+  --soft:   #{$fg-dim};
+  --accent: #{$spark};
+  --flag:   #{$gold};
+  --line:   #{$line};
+  --mono:   #{$mono-stack};
+  --sans:   #{$sans-stack};
 }
