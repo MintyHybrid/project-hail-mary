@@ -33,6 +33,14 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      # The repo-root .Rprofile auto-activates renv (source renv/activate.R),
+      # which hijacks .libPaths() in every R session on the runner -- including
+      # the pak subprocess that setup-r-dependencies spawns. renv points the
+      # library at its own (empty) cache, so pak vanishes and dependency
+      # resolution dies with "there is no package called 'pak'". This package
+      # is checked with pak, not renv, so switch renv's autoloader off in CI;
+      # local development (where renv IS wanted) is unaffected.
+      RENV_CONFIG_AUTOLOADER_ENABLED: false
     steps:
       - uses: actions/checkout@v4
 
