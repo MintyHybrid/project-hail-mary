@@ -6,10 +6,25 @@
 on:
   push:
     branches: [main, master]
+    # Only the package is checked here, so only run when the package (or this
+    # workflow) changes. Book/site-only commits -- assets/, *.qmd, *.scss --
+    # don't touch potytools and shouldn't spin up a five-OS R matrix.
+    paths:
+      - 'packages/potytools/**'
+      - '.github/workflows/R-CMD-check.yaml'
   pull_request:
     branches: [main, master]
+    paths:
+      - 'packages/potytools/**'
+      - '.github/workflows/R-CMD-check.yaml'
 
 name: R-CMD-check.yaml
+
+# Cancel an in-flight run when a newer commit lands on the same ref, so rapid
+# pushes don't stack up concurrent five-OS matrices.
+concurrency:
+  group: R-CMD-check-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions: read-all
 

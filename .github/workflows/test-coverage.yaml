@@ -4,10 +4,22 @@
 on:
   push:
     branches: [main, master]
+    # See R-CMD-check.yaml: only run when the package (or this workflow)
+    # changes; skip book/site-only commits.
+    paths:
+      - 'packages/potytools/**'
+      - '.github/workflows/test-coverage.yaml'
   pull_request:
     branches: [main, master]
+    paths:
+      - 'packages/potytools/**'
+      - '.github/workflows/test-coverage.yaml'
 
 name: test-coverage.yaml
+
+concurrency:
+  group: test-coverage-${{ github.ref }}
+  cancel-in-progress: true
 
 permissions: read-all
 
