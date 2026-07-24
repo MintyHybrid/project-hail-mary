@@ -69,22 +69,31 @@ theme_manuscript <- function(base_size = 11) {
 
 #' Background-only overlay for chrome-free ggplot themes
 #'
-#' A partial `theme()` covering just `plot.background` *and*
-#' `panel.background`, set to transparent so figures show whichever page
-#' theme is active rather than a baked-in paper colour. Meant to be layered
-#' after visualization-specific themes that intentionally hide axes/grid
-#' (`ggplot2::theme_void()`, `ggtree::theme_tree()`/`theme_tree2()`,
-#' `ggraph::theme_graph()`, `ggseqlogo::theme_logo()`) -- those set both
-#' background elements to `element_blank()` (transparent) as part of their
-#' own construction, so overriding `plot.background` alone still leaves the
-#' PNG device's own background showing through the (larger) panel area.
+#' A partial `theme()` covering `plot.background`, `panel.background` and
+#' the legend background/key, set to transparent so figures show whichever
+#' page theme is active rather than a baked-in paper colour. Meant to be
+#' layered after visualization-specific themes that intentionally hide
+#' axes/grid (`ggplot2::theme_void()`, `ggtree::theme_tree()`/
+#' `theme_tree2()`, `ggraph::theme_graph()`, `ggseqlogo::theme_logo()`) --
+#' those set both background elements to `element_blank()` (transparent) as
+#' part of their own construction, so overriding `plot.background` alone
+#' still leaves the PNG device's own background (and, for plots with a
+#' legend, the legend's own opaque background) showing through. Legend text
+#' and title are also recoloured to the same neutral `text_strong` used by
+#' [theme_manuscript()], since their default black would be illegible once
+#' the legend background stops being paper-coloured on the dark theme.
 #' Use `theme_manuscript()` instead for ordinary axis-bearing plots.
 #'
 #' @return A ggplot2 theme object (partial).
 #' @export
 theme_manuscript_bg <- function() {
+  pal <- hailmary_palette()
   ggplot2::theme(
     plot.background  = ggplot2::element_rect(fill = "transparent", colour = NA),
-    panel.background = ggplot2::element_rect(fill = "transparent", colour = NA)
+    panel.background = ggplot2::element_rect(fill = "transparent", colour = NA),
+    legend.background = ggplot2::element_rect(fill = "transparent", colour = NA),
+    legend.key       = ggplot2::element_rect(fill = "transparent", colour = NA),
+    legend.text  = ggplot2::element_text(colour = pal[["text_strong"]]),
+    legend.title = ggplot2::element_text(colour = pal[["text_strong"]])
   )
 }

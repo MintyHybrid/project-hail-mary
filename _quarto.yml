@@ -51,6 +51,19 @@ bibliography:
 execute:
   freeze: auto
 
+# Force the ragg device with an explicitly transparent canvas. Without this,
+# knitr's default PNG device opens with an opaque white background regardless
+# of what a chunk's ggplot theme sets (`fill = "transparent"` only controls
+# what ggplot draws *onto* the canvas, not the canvas's own starting alpha),
+# so every figure -- even ones using potytools::theme_manuscript() -- was
+# being saved fully opaque. See packages/potytools/R/theme_manuscript.R for
+# the theme side of this same fix.
+knitr:
+  opts_chunk:
+    dev: ragg_png
+    dev.args:
+      background: transparent
+
 format:
   html:
     # Dark is the primary theme (listed first = Quarto's default); the light

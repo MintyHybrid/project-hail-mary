@@ -160,33 +160,6 @@ pre.sourceCode, div.sourceCode {
   background: var(--hm-bg-deep);
 }
 
-/* ---------------------------------------------- static figures (interim) ---
-   The figures cached in _freeze/ are currently baked with an OPAQUE light
-   background: potytools' transparent-background work (theme_manuscript() /
-   hailmary_palette()'s text_strong/text_soft pair) is reverted in the working
-   tree, and the PNGs carry no tRNS chunk. Left alone they read as raw white
-   rectangles on the dark theme, so present them on a deliberate light plate.
-
-   REMOVE THIS BLOCK once the chapters are re-rendered with transparent
-   figure backgrounds -- at that point the plate actively hurts, because a
-   transparent figure is supposed to pick up the page ground itself.
-   -------------------------------------------------------------------------- */
-body.quarto-dark .cell-output-display > img,
-body.quarto-dark .quarto-figure img,
-body.quarto-dark figure > img {
-  background: #f4f2e9;
-  padding: 10px 12px;
-  border-radius: 10px;
-  border: 1px solid var(--hm-line);
-}
-
-/* the site's own imagery is not a baked figure and must not get the plate */
-body.quarto-dark .hm-about-card img,
-body.quarto-dark .hm-hero img {
-  background: none;
-  padding: 0;
-  border: none;
-}
 
 /* ==========================================================================
    LANDING — full-bleed reasoning graph
@@ -1137,4 +1110,130 @@ html.hm-landing body { overflow-x: hidden; }
   .hm-title-card,
   .hm-node .card { animation: none !important; transition: none !important; }
   .hm-node.is-origin .circle { animation: none !important; }
+}
+
+/* ------------------------------------------------------- code output --- */
+/* Bootstrap's compiled `pre{}` rule hardcodes text colour to #000 while
+   correctly tokenising the background (via $pre-bg), so plain R console
+   output (`.cell-output-stdout`) reads as near-black-on-dark in the dark
+   theme. Syntax-highlighted source blocks are unaffected -- their tokens
+   carry their own per-span colour and only fall back to this for
+   unclassified text. */
+pre { color: var(--hm-fg-body); }
+
+/* ----------------------------------------------------------- callouts --- */
+/* Quarto's built-in callouts ship Bootstrap's stock blue/green/amber/red;
+   recolour to the site's own accent tokens. Icons keep Bootstrap's glyphs
+   but painted via mask-image (not a colour baked into the SVG data URI) so
+   the fill tracks the active theme's token instead of one fixed hex. */
+.callout-note.callout,
+.callout-tip.callout { border-left-color: var(--hm-spark); }
+.callout-warning.callout,
+.callout-important.callout { border-left-color: var(--hm-gold); }
+
+.callout-note.callout-style-default > .callout-header,
+.callout-tip.callout-style-default > .callout-header,
+.callout-warning.callout-style-default > .callout-header,
+.callout-important.callout-style-default > .callout-header {
+  background-color: var(--hm-bg-panel);
+}
+
+.callout-note .callout-icon::before,
+.callout-tip .callout-icon::before,
+.callout-warning .callout-icon::before,
+.callout-important .callout-icon::before {
+  background-image: none;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+.callout-note .callout-icon::before,
+.callout-tip .callout-icon::before { background-color: var(--hm-spark); }
+.callout-warning .callout-icon::before,
+.callout-important .callout-icon::before { background-color: var(--hm-gold); }
+
+.callout-note .callout-icon::before {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>');
+  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/></svg>');
+}
+.callout-tip .callout-icon::before {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/></svg>');
+  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M2 6a6 6 0 1 1 10.174 4.31c-.203.196-.359.4-.453.619l-.762 1.769A.5.5 0 0 1 10.5 13a.5.5 0 0 1 0 1 .5.5 0 0 1 0 1l-.224.447a1 1 0 0 1-.894.553H6.618a1 1 0 0 1-.894-.553L5.5 15a.5.5 0 0 1 0-1 .5.5 0 0 1 0-1 .5.5 0 0 1-.46-.302l-.761-1.77a1.964 1.964 0 0 0-.453-.618A5.984 5.984 0 0 1 2 6zm6-5a5 5 0 0 0-3.479 8.592c.263.254.514.564.676.941L5.83 12h4.342l.632-1.467c.162-.377.413-.687.676-.941A5 5 0 0 0 8 1z"/></svg>');
+}
+.callout-warning .callout-icon::before {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/><path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/></svg>');
+  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/><path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/></svg>');
+}
+.callout-important .callout-icon::before {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>');
+  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/><path d="M7.002 11a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 4.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 4.995z"/></svg>');
+}
+
+.callout .callout-toggle::before {
+  background-image: none;
+  background-color: var(--hm-fg-dim);
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
+  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M1.646 4.646a.5.5 0 0 1 .708 0L8 10.293l5.646-5.647a.5.5 0 0 1 .708.708l-6 6a.5.5 0 0 1-.708 0l-6-6a.5.5 0 0 1 0-.708z"/></svg>');
+}
+
+/* --------------------------------------------------- DT / DataTables --- */
+/* DT ships its own fixed, light-mode-tuned stylesheet (jquery.dataTables +
+   the noUiSlider column-range-filter extension) that reads none of the
+   site's tokens, so `DT::datatable()` output (unlike plain `knitr::kable()`
+   tables, which already inherit Bootstrap's tokenised `.table` variables
+   correctly) stays hardcoded to a near-white theme regardless of the page's
+   light/dark toggle. Re-skin the visible chrome on top of it. */
+table.dataTable {
+  color: var(--hm-fg-body);
+  border-color: var(--hm-line);
+}
+table.dataTable thead th,
+table.dataTable thead td {
+  color: var(--hm-fg-bright);
+  border-bottom-color: var(--hm-line-strong);
+}
+table.dataTable tbody th,
+table.dataTable tbody td { border-bottom-color: var(--hm-line); }
+table.dataTable.stripe tbody tr.odd,
+table.dataTable.display tbody tr.odd { background-color: var(--hm-bg-panel); }
+table.dataTable.hover tbody tr:hover,
+table.dataTable.display tbody tr:hover { background-color: var(--hm-bg-active) !important; }
+
+.dataTables_wrapper .dataTables_info,
+.dataTables_wrapper .dataTables_length,
+.dataTables_wrapper .dataTables_paginate { color: var(--hm-fg-dim); }
+.dataTables_wrapper .dataTables_length select,
+.dataTables_wrapper .dataTables_filter input {
+  background-color: var(--hm-bg-card);
+  color: var(--hm-fg-body);
+  border-color: var(--hm-line);
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current,
+.dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+  background: var(--hm-bg-active);
+  border-color: var(--hm-line-strong);
+}
+
+/* per-column filter row (`DT::datatable(filter = "top")`) */
+table.dataTable thead input[type="text"],
+table.dataTable thead input[type="search"],
+table.dataTable thead select {
+  background-color: var(--hm-bg-card);
+  color: var(--hm-fg-body);
+  border: 1px solid var(--hm-line);
+}
+
+/* numeric-column range filter (noUiSlider) */
+.noUi-target { background: transparent; }
+.noUi-background { background: var(--hm-bg-panel); box-shadow: none; }
+.noUi-connect { background: var(--hm-spark); }
+.noUi-handle {
+  background: var(--hm-bg-card);
+  border-color: var(--hm-line-strong);
+  box-shadow: none;
 }

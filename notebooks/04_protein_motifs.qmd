@@ -191,7 +191,7 @@ ggplot(pa, aes(query, ELMIdentifier, fill = genus)) +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         panel.grid = element_blank(), panel.spacing.x = unit(1.5, "pt"),
         strip.text.x = element_text(angle = 90, hjust = 0, size = 7),
-        strip.background = element_rect(fill = "grey95", colour = NA))
+        strip.background = element_rect(fill = "transparent", colour = NA))
 ```
 
 ## Genus-characteristic motifs

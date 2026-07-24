@@ -1,5 +1,5 @@
 // Production steps of ECMA-262, Edition 6, 22.1.2.1
-// Reference: https://people.mozilla.org/~jorendorff/es6-draft.html#sec-array.from
+// Référence : https://people.mozilla.org/~jorendorff/es6-draft.html#sec-array.from
 if (!Array.from) {
   Array.from = (function () {
     var toStr = Object.prototype.toString;
@@ -18,46 +18,46 @@ if (!Array.from) {
       return Math.min(Math.max(len, 0), maxSafeInteger);
     }; 
   
-    // The length property of the method is 1.
+    // La propriété length de la méthode vaut 1.
     return function from(arrayLike/*, mapFn, thisArg */) { 
-      // 1. Let C be the this value.
+      // 1. Soit C, la valeur this
       var C = this;
       
-      // 2. Let items be ToObject(arrayLike).
+      // 2. Soit items le ToObject(arrayLike).
       var items = Object(arrayLike); 
       
       // 3. ReturnIfAbrupt(items).
       if (arrayLike == null) { 
-        throw new TypeError("Array.from requires an array-like object - null or undefined cannot be used");
+        throw new TypeError("Array.from doit utiliser un objet semblable à un tableau - null ou undefined ne peuvent pas être utilisés");
       }
     
-      // 4. If mapfn is undefined, mapping will be false.
+      // 4. Si mapfn est undefined, le mapping sera false.
       var mapFn = arguments.length > 1 ? arguments[1] : void undefined;
       var T;
       if (typeof mapFn !== 'undefined') {  
-        // 5. otherwise      
-        // 5. a. If IsCallable(mapfn) is false, throw a TypeError.
+        // 5. sinon      
+        // 5. a. si IsCallable(mapfn) est false, on lève une TypeError.
         if (!isCallable(mapFn)) { 
-          throw new TypeError('Array.from: when provided, the second argument must be a function'); 
+          throw new TypeError('Array.from: lorsqu il est utilisé le deuxième argument doit être une fonction'); 
         }
      
-        // 5. b. If thisArg was supplied, T will be thisArg; otherwise T will be undefined.
+        // 5. b. si thisArg a été fourni, T sera thisArg ; sinon T sera undefined.
         if (arguments.length > 2) { 
           T = arguments[2];
         }
       }
     
-      // 10. Let lenValue be Get(items, "length").
-      // 11. Let len be ToLength(lenValue).
+      // 10. Soit lenValue pour Get(items, "length").
+      // 11. Soit len pour ToLength(lenValue).
       var len = toLength(items.length);  
      
-      // 13. If IsConstructor(C) is true, then
-      // 13. a. Let A be the result of calling the internal [[Construct]] method with an argument list containing the single item len.
-      // 14. a. Otherwise, let A be the result of ArrayCreate(len).
+      // 13. Si IsConstructor(C) vaut true, alors
+      // 13. a. Soit A le résultat de l'appel à la méthode interne [[Construct]] avec une liste en argument qui contient l'élément len.
+      // 14. a. Sinon, soit A le résultat de ArrayCreate(len).
       var A = isCallable(C) ? Object(new C(len)) : new Array(len);
    
-      // 16. Let k be 0.
-      var k = 0;  // 17. Repeat while k < len… 
+      // 16. Soit k égal à 0.
+      var k = 0;  // 17. On répète tant que k < len… 
       var kValue;
       while (k < len) {
         kValue = items[k]; 
@@ -68,8 +68,8 @@ if (!Array.from) {
         }
         k += 1;
       }
-      // 18. Let putStatus be Put(A, "length", len, true).
-      A.length = len;  // 20. Return A.
+      // 18. Soit putStatus égal à Put(A, "length", len, true).
+      A.length = len;  // 20. On renvoie A.
       return A;
     };
   }());
@@ -82,48 +82,48 @@ if (!Array.prototype.includes) {
     value: function(searchElement, fromIndex) {
 
       if (this == null) {
-        throw new TypeError('"this" is null or not defined');
+        throw new TypeError('"this" est nul ou non défini');
       }
 
-      // 1. Let o be ? Object(this value).
+      // 1. Soit o égal à ? Object(cette valeur).
       var o = Object(this);
 
-      // 2. Let len be ? Length(? Get(o, "length")).
+      // 2. Soit len égal à ? Length(? Get(o, "length")).
       var len = o.length >>> 0;
 
-      // 3. If len is 0, return false.
+      // 3. Si len = 0, renvoyer "false".
       if (len === 0) {
         return false;
       }
 
-      // 4. Let n be ? ToInteger(fromIndex).
-      // Keep the English name "fromIndex" for this variable (originally "indiceDépart" in the French source)
-      //    (If fromIndex is undefined, this step produces the value 0.)
+      // 4. Soit n = ? ToInteger(fromIndex).
+      // Pour la cohérence du code, on gardera le nom anglais "fromIndex" pour la variable auparavant appelée "indiceDépart"
+      //    (Si fromIndex n'est pas défini, cette étape produit la valeur 0.)
       var n = fromIndex | 0;
 
-      // 5. If n ≥ 0,
-      //  a. Then k = n.
-      // 6. Otherwise, if n < 0,
-      //  a. Then k = len + n.
-      //  b. If k < 0, then k = 0.
+      // 5. Si n ≥ 0,
+      //  a. Alors k = n.
+      // 6. Sinon, si n < 0,
+      //  a. Alors k = len + n.
+      //  b. Si k < 0, alors k = 0.
       var k = Math.max(n >= 0 ? n : len - Math.abs(n), 0);
 
       function sameValueZero(x, y) {
         return x === y || (typeof x === 'number' && typeof y === 'number' && isNaN(x) && isNaN(y));
       }
 
-      // 7. Repeat while k < len
+      // 7. Répéter tant que k < len
       while (k < len) {
-        // a. Let elementK be the result of ? Get(O, ! ToString(k)).
-        // b. If SameValueZero(searchElement, elementK) is true, return true.
+        // a. Soit elementK le résultat de ? Get(O, ! ToString(k)).
+        // b. Si SameValueZero(searchElement, elementK) est vrai, renvoyer "true".
         if (sameValueZero(o[k], searchElement)) {
           return true;
         }
-        // c. Increase k by 1. 
+        // c. Augmenter la valeur de k de 1. 
         k++;
       }
 
-      // 8. Return false
+      // 8. Renvoyer "false"
       return false;
     }
   });

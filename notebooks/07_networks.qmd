@@ -69,9 +69,10 @@ stopifnot(!any(is.na(V(bip_graph)$type)))
 ```{r plot-bipartite}
 #| fig-cap: "Bipartite virus–host network: the two node classes (viral species, orange; host plants, blue) occupy the two rows, and an edge joins a virus to a plant it infects. Hubs are generalist viruses (or widely-infected hosts)."
 ggraph(bip_graph, layout = "bipartite") +
-  geom_edge_link() +
+  geom_edge_link(colour = hailmary_palette()[["text_soft"]]) +
   geom_node_point(aes(color = type), size = 6) +
-  geom_node_text(aes(label = name), repel = TRUE, size = 4) +
+  geom_node_text(aes(label = name), repel = TRUE, size = 4,
+                 colour = hailmary_palette()[["text_strong"]]) +
   scale_color_manual(values = c("FALSE" = "steelblue", "TRUE" = "darkorange"),
                      labels = c("species", "host plant")) +
   theme_void() +
@@ -85,9 +86,10 @@ proj          <- bipartite_projection(bip_graph)
 species_graph <- proj$proj1
 
 ggraph(species_graph, layout = "fr") +
-  geom_edge_link() +
+  geom_edge_link(colour = hailmary_palette()[["text_soft"]]) +
   geom_node_point(color = "steelblue", size = 8) +
-  geom_node_text(aes(label = name), repel = TRUE, size = 4) +
+  geom_node_text(aes(label = name), repel = TRUE, size = 4,
+                 colour = hailmary_palette()[["text_strong"]]) +
   theme_void() +
   theme_manuscript_bg() +
   ggtitle("Species-only Projected Network")

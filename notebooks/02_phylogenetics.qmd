@@ -282,7 +282,7 @@ if (file.exists(treefile)) {
         by = "taxon")
   }
 
-  ggtree(ci_tree, layout = "circular", size = 0.25) %<+% trait +
+  ggtree(ci_tree, layout = "circular", size = 0.25, colour = hailmary_palette()[["text_soft"]]) %<+% trait +
     geom_tippoint(aes(colour = genus), size = 1.4, na.rm = TRUE) +
     ggplot2::scale_colour_viridis_d(option = "turbo", na.value = "grey80", name = "Genus") +
     ggtitle(sprintf("CI-region phylogeny (NJ, %d taxa)", ape::Ntip(ci_tree))) +

@@ -583,8 +583,9 @@ ft_nodelabs <- filtreedf %>% dplyr::filter(ncbi_rank == "phylum") %>%
 ft_tiplabs  <- filtreedf %>% dplyr::filter(isTip) %>%
   dplyr::select(c(label, node, query_name))
 
-ft    <- ggtree(filtreedf, layout = "circular")
-ftdl  <- ggtree(as.phylo(filtreefortified), layout = "daylight")
+tree_line <- hailmary_palette()[["text_soft"]]
+ft    <- ggtree(filtreedf, layout = "circular", colour = tree_line)
+ftdl  <- ggtree(as.phylo(filtreefortified), layout = "daylight", colour = tree_line)
 
 tree_bg <- theme_manuscript_bg()
 
@@ -761,8 +762,9 @@ df2 <- left_join(df, rc2G) %>%
     str_detect(query, "Ocimum")  ~ "Basil putative",
     str_detect(query, "Turnip")  ~ "Turnip mosaic virus"))
 
-ggtree(df2) + geom_tiplab() +
-  geom_nodelab(mapping = aes(label = labelinodes)) +
+ggtree(df2, colour = hailmary_palette()[["text_soft"]]) +
+  geom_tiplab(colour = hailmary_palette()[["text_strong"]]) +
+  geom_nodelab(mapping = aes(label = labelinodes), colour = hailmary_palette()[["text_strong"]]) +
   geom_tippoint(mapping = aes(color = virus)) +
   xlim(0, 150) + ylim(0, 60) +
   theme_manuscript_bg()
