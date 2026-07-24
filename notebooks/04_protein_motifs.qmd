@@ -147,6 +147,7 @@ elm_ref <- elm %>%
 
 DT::datatable(
   elm_ref, rownames = FALSE, escape = FALSE, filter = "top",
+  class = "display compact hm-elm-ref",
   options = list(pageLength = 12, scrollX = TRUE,
                  columnDefs = list(list(width = "320px", targets = 4))),
   caption = paste("All ELM linear-motif classes detected in the CI motif-flanking",
@@ -187,10 +188,10 @@ ggplot(pa, aes(query, ELMIdentifier, fill = genus)) +
   scale_fill_viridis_d(option = "turbo", guide = "none") +
   labs(title = "ELM linear motifs across Potyviridae CI region fragments",
        x = "Isolate fragment (grouped by genus)", y = "ELM motif class") +
-  theme_manuscript(base_size = 8) +
+  theme_manuscript(base_size = 12) +
   theme(axis.text.x = element_blank(), axis.ticks.x = element_blank(),
         panel.grid = element_blank(), panel.spacing.x = unit(1.5, "pt"),
-        strip.text.x = element_text(angle = 90, hjust = 0, size = 7),
+        strip.text.x = element_text(angle = 90, hjust = 0, size = 10),
         strip.background = element_rect(fill = "transparent", colour = NA))
 ```
 

@@ -1237,3 +1237,6 @@ table.dataTable thead select {
   border-color: var(--hm-line-strong);
   box-shadow: none;
 }
+
+/* nb04 ELM reference table: dense, many columns -- smaller type reads better */
+table.hm-elm-ref { font-size: 0.82rem; }
