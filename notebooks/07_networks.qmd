@@ -19,6 +19,7 @@ library(ggraph)
 library(tidyverse)
 library(visNetwork)
 library(rotl)
+library(potytools)
 ```
 
 ## Introduction
@@ -68,12 +69,14 @@ stopifnot(!any(is.na(V(bip_graph)$type)))
 ```{r plot-bipartite}
 #| fig-cap: "Bipartite virus–host network: the two node classes (viral species, orange; host plants, blue) occupy the two rows, and an edge joins a virus to a plant it infects. Hubs are generalist viruses (or widely-infected hosts)."
 ggraph(bip_graph, layout = "bipartite") +
-  geom_edge_link() +
+  geom_edge_link(colour = hailmary_palette()[["text_soft"]]) +
   geom_node_point(aes(color = type), size = 6) +
-  geom_node_text(aes(label = name), repel = TRUE, size = 4) +
+  geom_node_text(aes(label = name), repel = TRUE, size = 4,
+                 colour = hailmary_palette()[["text_strong"]]) +
   scale_color_manual(values = c("FALSE" = "steelblue", "TRUE" = "darkorange"),
                      labels = c("species", "host plant")) +
   theme_void() +
+  theme_manuscript_bg() +
   ggtitle("Species–Host Bipartite Network")
 ```
 
@@ -83,14 +86,16 @@ proj          <- bipartite_projection(bip_graph)
 species_graph <- proj$proj1
 
 ggraph(species_graph, layout = "fr") +
-  geom_edge_link() +
+  geom_edge_link(colour = hailmary_palette()[["text_soft"]]) +
   geom_node_point(color = "steelblue", size = 8) +
-  geom_node_text(aes(label = name), repel = TRUE, size = 4) +
+  geom_node_text(aes(label = name), repel = TRUE, size = 4,
+                 colour = hailmary_palette()[["text_strong"]]) +
   theme_void() +
+  theme_manuscript_bg() +
   ggtitle("Species-only Projected Network")
 ```
 
-# Part 2: Multilayer network with phylogenetic and ecological edges
+## Part 2: Multilayer network with phylogenetic and ecological edges
 
 ```{r multilayer-setup}
 species <- names(species_hosts)
@@ -178,7 +183,8 @@ edges_vis <- all_edges %>%
       type == "phylogenetic" ~ "forestgreen",
       type == "shared_host"  ~ "steelblue"))
 
-visNetwork(nodes, edges_vis, height = "900px", width = "100%") %>%
+visNetwork(nodes, edges_vis, height = "900px", width = "100%",
+           background = "transparent") %>%
   visEdges(smooth = FALSE) %>%
   visOptions(highlightNearest = TRUE, nodesIdSelection = TRUE) %>%
   visLegend() %>%
@@ -262,7 +268,8 @@ edges <- biotic %>%
                           .default = "#95a5a6")) %>%
   dplyr::filter(!is.na(from), !is.na(to))
 
-visNetwork(nodes, edges, height = "620px", width = "100%") %>%
+visNetwork(nodes, edges, height = "620px", width = "100%",
+           background = "transparent") %>%
   visNodes(size = 12, font = list(size = 13),
            borderWidth = 1, color = list(border = "#ffffff")) %>%
   visEdges(smooth = FALSE, color = list(opacity = 0.45), width = 0.6) %>%

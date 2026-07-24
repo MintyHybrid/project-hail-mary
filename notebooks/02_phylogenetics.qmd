@@ -13,16 +13,16 @@ execute:
 <!-- NOTE: eval: false — requires rentrez and external files; remove once renv is synced -->
 <!-- NOTE: external tools required: mafft, iqtree2 (run via system() calls) -->
 
-# Introduction
+## Introduction
 
-This chapter performs a comprehensive phylogenetic pipeline for potyviruses,
+This chapter performs a comprehensive phylogenetic pipeline for about 200 potyvirus sequences,
 without the Bioconductor `genbankr` package. It reads a MAFFT protein alignment,
-separates references and isolates, retrieves reference CDS via `rentrez`, parses
+separates references and isolates (the 16 blast hits of chapter 1), retrieves reference CDS via `rentrez`, parses
 CDS from plain GenBank flatfiles, projects to codon alignment, infers the CI
 region automatically, extracts a short motif of interest, visualises these motifs
 on the resulting tree, and tests for convergent evolution versus shared ancestry.
 
-# Setup and Helpers
+## Setup and Helpers
 
 ```{r setup}
 #| include: false
@@ -38,15 +38,16 @@ library(ggtree)
 library(ggseqlogo)
 library(readr)
 library(potytools) # rolling_alignment_stats() and _per_sequence() live here now
+theme_set(theme_manuscript())
 ```
 
 GenBank parsing, accession extraction, CDS-matching, codon projection and safe
-translation now live in `potytools` (`extract_accessions()`,
+translation are now live in `potytools` (`extract_accessions()`,
 `has_genbank_id()`, `parse_genbank_file()`, `match_cds_to_reference()`,
 `codon_align_from_protein()`, `write_iqtree_codon_partitions()`,
 `safe_translate()`) — see `packages/potytools/R/parse_genbank.R` and
 `codon_analysis.R`. The inline versions previously here had two correctness
-bugs the package versions fix: they stripped IUPAC ambiguity codes (e.g. `N`)
+bugs the package versions fix (and I have to acknowledge Claude for finding and fixing the bugs introduced by suboptimal code parameters that affected handling of ambigiuties during load): they stripped IUPAC ambiguity codes (e.g. `N`)
 from the genome before applying position-based CDS coordinates, silently
 frame-shifting any genome containing one; and they didn't strip `<`/`>`
 partial-location markers before `as.integer()`, corrupting old-style
@@ -59,7 +60,7 @@ own `/translation=` qualifier exactly.
 # potytools is already attached (see setup chunk); nothing to define here.
 ```
 
-# Data Input
+## Data Input
 
 ```{r data-input}
 prot_file <- here::here("data", "OPSR.Poty.Fig3.v16_align_withblasthits_protmafftadd.txt")
@@ -71,7 +72,7 @@ stopifnot(length(unique(width(prot_aln))) == 1)
 cat("Protein alignment loaded: length =", width(prot_aln)[1], "aa\n")
 ```
 
-# Reference and Isolate Separation
+## Reference and Isolate Separation
 
 ```{r separation}
 ref_idx  <- has_genbank_id(names(prot_aln))
@@ -80,7 +81,7 @@ prot_orf <- prot_aln[!ref_idx]
 cat(length(prot_ref), "reference sequences and", length(prot_orf), "isolate sequences.\n")
 ```
 
-# Retrieve Reference CDS
+## Retrieve Reference CDS
 
 This section downloads GenBank flatfiles for references and extracts the
 polyprotein CDS via our parser.
@@ -123,7 +124,7 @@ for (i in seq_along(prot_ref)) {
 }
 ```
 
-# Read Isolate CDS
+## Read Isolate CDS
 
 ```{r read-isolate-cds}
 #| eval: false
@@ -135,7 +136,7 @@ cds_orf <- DNAStringSet(lapply(cds_orf, function(x) {
 }))
 ```
 
-# Merge and Project to Codon Alignment
+## Merge and Project to Codon Alignment
 
 ```{r codon-projection}
 #| eval: false
@@ -147,7 +148,7 @@ writeXStringSet(codon_aln, here::here("data", "potyvirus_codon_alignment.fna"))
 cat("Codon alignment constructed: length =", width(codon_aln)[1], "nt\n")
 ```
 
-# Partition Files for IQ-TREE
+## Partition Files for IQ-TREE
 
 ```{r partitions}
 #| eval: false
@@ -173,7 +174,7 @@ for (i in seq_len(nrow(potyvirus_subproteins))) {
 writeLines(lines_sub, here::here("data", "iqtree_subprotein_codon_partitions.txt"))
 ```
 
-# Automatic CI Coordinates Inference
+## Automatic CI Coordinates Inference
 
 We infer the CI region from GenBank annotations where available and provide a
 fallback region.
@@ -208,7 +209,7 @@ ci_nt_end   <- ceiling(ci_end) * 3
 cat(sprintf("CI region: aa %d-%d; nt %d-%d\n", ci_start, ci_end, ci_nt_start, ci_nt_end))
 ```
 
-# Extract CI Region
+## Extract CI Region
 
 ```{r extract-ci}
 #| eval: false
@@ -217,9 +218,9 @@ writeXStringSet(codon_CI, here::here("data", "potyvirus_CI_codon_alignment.fna")
 cat("CI alignment length =", width(codon_CI)[1], "nt\n")
 ```
 
-# Motif Definition and Extraction
+## Motif Definition and Extraction
 
-Define your motif below and extract its presence/position.
+Define your motif below and extract its presence/position. Upon closer inspection you might wonder, why the 15nt (DNAzyme catalytic center) become 18nt, below. The reason is that a) I noticed the remaining 3nt were strictly conserved among all 16 of the initially found viral sequence entries and b) the 18nt fragments follow the CI reading frame.
 
 ```{r motif-extraction}
 #| eval: false
@@ -240,7 +241,7 @@ motif_df <- tibble(taxon = names(codon_CI), motif = motif_state, pos_nt = motif_
 write.csv(motif_df, here::here("data", "CI_motif_states.csv"), row.names = FALSE)
 ```
 
-# Phylogeny on CI Region
+## Phylogeny on CI Region
 
 Infer the phylogeny using IQ-TREE, or read a precomputed tree.
 
@@ -250,7 +251,7 @@ Infer the phylogeny using IQ-TREE, or read a precomputed tree.
 # ci_tree <- read.tree(here::here("data", "potyvirus_CI.treefile"))
 ```
 
-# Visualisation: Trait Mapping
+## Visualisation: Trait Mapping
 
 ```{r plot-tree}
 #| fig-width: 9
@@ -281,12 +282,13 @@ if (file.exists(treefile)) {
         by = "taxon")
   }
 
-  ggtree(ci_tree, layout = "circular", size = 0.25) %<+% trait +
+  ggtree(ci_tree, layout = "circular", size = 0.25, colour = hailmary_palette()[["text_soft"]]) %<+% trait +
     geom_tippoint(aes(colour = genus), size = 1.4, na.rm = TRUE) +
     ggplot2::scale_colour_viridis_d(option = "turbo", na.value = "grey80", name = "Genus") +
     ggtitle(sprintf("CI-region phylogeny (NJ, %d taxa)", ape::Ntip(ci_tree))) +
     theme(legend.position = "right", legend.key.size = unit(8, "pt"),
-          legend.text = element_text(size = 6))
+          legend.text = element_text(size = 6)) +
+    theme_manuscript_bg()
 } else {
   cat("Tree file not found. Run scripts/build_ci_tree.R (offline) or the",
       "IQ-TREE command in the preceding chunk to generate",
@@ -294,7 +296,7 @@ if (file.exists(treefile)) {
 }
 ```
 
-# Visualisation: Motif Sequence Logo
+## Visualisation: Motif Sequence Logo
 
 ```{r logo}
 #| eval: false
@@ -308,13 +310,14 @@ seqs_with_motif <- lapply(names(codon_CI), function(id) {
 })
 seqs_with_motif <- Filter(Negate(is.null), seqs_with_motif)
 if (length(seqs_with_motif) > 0) {
-  ggseqlogo(unlist(seqs_with_motif), method = "prob")
+  ggseqlogo(unlist(seqs_with_motif), method = "prob") +
+    theme_manuscript_bg()
 } else {
   cat("No motifs found for logo plot.")
 }
 ```
 
-# Test for Convergent Evolution
+## Test for Convergent Evolution
 
 ```{r tests}
 #| eval: false
@@ -329,7 +332,7 @@ phylo_sig  <- caper::phylo.d(data.frame(species = names(trait), x = trait), ci_t
 print(phylo_sig)
 ```
 
-# Summary
+## Summary
 
 ```{r summary}
 #| eval: false
@@ -340,7 +343,7 @@ summary_tbl <- tibble(
 print(summary_tbl)
 ```
 
-# Partition Rate Test — Does the CI Region Evolve at a Different Rate?
+## Partition Rate Test — Does the CI Region Evolve at a Different Rate?
 
 The rolling-window statistics above show the CI alignment is compositionally
 uneven, but they don't test whether the region evolves under different
@@ -487,3 +490,94 @@ DNAzyme-motif window, the full CI region, and the rest of the polyprotein)
 could test directly, but which this simpler rate test cannot adjudicate on
 its own. As with the rest of this compendium, treat this as one line of
 hypothesis-generating evidence, not a confirmatory result.
+
+## Codon-Partitioned Selection Test — Is the Motif Under Protein-Level Constraint?
+
+The rate-LRT above can't separate synonymous from nonsynonymous change. This
+section can: three HyPhy analyses [@pond2005hyphy] run via the Datamonkey web
+server against a **family-wide, 217-taxon Potyviridae alignment spanning 13
+genera** (Potyvirus dominant at ~80%, but with real representation from
+Ipomovirus, Macluravirus, Bymovirus, Tritimovirus, Rymovirus, Poacevirus and
+six smaller genera — see `data/hyphy_selection/README.md` for the full
+breakdown and provenance) — a FEL [@pond2005fel] and FUBAR [@murrell2013fubar]
+run on the 18nt/6-codon DNAzyme-matching motif itself, and a separate
+FUBAR/MEME [@murrell2012meme] run on a much larger 543–724-codon window of
+CI, giving genuine background context rather than just the motif in
+isolation.
+
+```{r hyphy-motif-summary}
+motif_sel <- readr::read_csv(here::here("data", "hyphy_selection", "motif_18nt_sites_summary.csv"),
+                              show_col_types = FALSE)
+knitr::kable(
+  dplyr::transmute(motif_sel, Codon = codon,
+                    `dN/dS (FEL)` = round(dNdS_FEL, 3),
+                    `p (FEL)` = signif(p_FEL, 2),
+                    `P[purifying] (FUBAR)` = round(prob_purifying_FUBAR, 3)),
+  caption = "Per-codon selection at the 18nt DNAzyme-matching motif (FEL + FUBAR, 217 taxa).")
+```
+
+Five of the six codons show strong, significant purifying selection by both
+the frequentist (FEL) and Bayesian (FUBAR) methods; one (codon 5) is
+ambiguous by both. Read alone, that's compatible with a protein-level
+conservation story — but "under purifying selection" is true of most of CI,
+so the real question is whether the motif is under *unusual* constraint
+relative to its surroundings, not just constraint in the abstract.
+
+```{r hyphy-background-summary}
+bg <- readr::read_csv(here::here("data", "hyphy_selection", "CI_724codon_FUBAR_sites_clean.csv"),
+                       show_col_types = FALSE)
+cat(sprintf(
+  "Background (724-codon FUBAR window): %d/%d sites (%.1f%%) under strong purifying selection (P>0.9); %d sites under positive selection; median dN/dS = %.4f.",
+  sum(bg$prob_purifying > 0.9), nrow(bg), 100*mean(bg$prob_purifying > 0.9),
+  sum(bg$prob_positive > 0.9), median(bg$dNdS, na.rm = TRUE)))
+```
+
+That's the context that matters: **92.5% of the entire sampled CI window** is
+already under strong purifying selection, with zero sites showing positive
+selection. CI is one of the most conserved potyvirus cistrons generally
+[@nigam2019] — this alignment reproduces that independently, across genus
+boundaries, at the codon level.
+
+Locating the motif precisely within that 724-codon window (the canonical
+15nt catalytic core, `GGCTAGCTACAACGA`, is carried verbatim by 10 of the 217
+taxa, all placing it at the same alignment position — codon site 276; see
+`scripts/summarize_hyphy_selection.R`) lets the two results be compared
+directly rather than left side by side:
+
+```{r hyphy-motif-vs-background}
+cmp <- readr::read_csv(here::here("data", "hyphy_selection", "motif_window_vs_background_comparison.csv"),
+                        show_col_types = FALSE)
+knitr::kable(
+  dplyr::transmute(cmp, Site = site, `dN/dS` = round(dNdS, 4),
+                    `Percentile (vs. all 724 sites)` = sprintf("%.0f%%", 100*percentile_vs_all_sites),
+                    `P[purifying]` = round(prob_purifying, 3)),
+  caption = "The motif window (codon sites 273-279) placed in the context of the full 724-codon distribution. Lower percentile = more purifying-selected than the CI background.")
+```
+
+Every motif-window site is under maximal-confidence purifying selection
+(P = 1.000 throughout), but the *degree* of constraint is not uniformly
+exceptional: the two flanking codons (273, 278) rank among the most
+conserved 10–20% of the entire window, while the core catalytic positions
+themselves sit at perfectly ordinary CI conservation levels (roughly the
+25th–50th percentile). So the defensible claim is not "this locus is more
+conserved than CI" as a blanket statement — it's that the locus is exactly
+as conserved as typical CI, with two specific flanking codons standing out
+even against that already-high baseline, and gives no indication of an
+unusual nucleotide-level (DNAzyme-related) selective signature setting it
+apart from its surroundings. That is the actual evidence behind the
+protein-over-DNA reading used elsewhere in this compendium — not the raw
+3rd-codon-position variability alone, which was the earlier, less rigorous
+version of this argument.
+
+::: {.callout-note}
+## What this doesn't rule out
+No recombination screen (e.g. GARD) was run on either alignment.
+Recombination *among the 217 Potyviridae isolates in this alignment* is a
+known confound for site-selection methods — a recombination breakpoint
+within the sampled taxa can produce a false signal of selection at the
+codon-model level, independent of anything in Chapter 6. (Chapter 6's HGT
+argument is a different phenomenon — a virus-to-plant transfer into
+*Fragaria*/strawberry genomes, not recombination among viral strains here —
+so it doesn't bear on this particular caveat.) Treat the selection results
+above as solid but not the final word until a recombination screen is run.
+::: 

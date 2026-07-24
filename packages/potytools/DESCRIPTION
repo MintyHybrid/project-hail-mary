@@ -22,17 +22,18 @@ BugReports: https://github.com/MintyHybrid/project-hail-mary/issues
 Depends:
     R (>= 4.1.0)
 Imports:
-    dplyr (>= 1.0.0),
-    stringr (>= 1.4.0),
-    purrr (>= 0.3.0),
-    rentrez (>= 1.2.0),
-    Biostrings (>= 2.60.0),
-    seqinr (>= 4.0.0),
     ape (>= 5.0),
-    tidyr (>= 1.1.0),
+    Biostrings (>= 2.60.0),
+    cowplot (>= 1.1.0),
+    dplyr (>= 1.0.0),
     ggplot2 (>= 3.3.0),
     ggseqlogo,
-    cowplot (>= 1.1.0)
+    memoise,
+    purrr (>= 0.3.0),
+    rentrez (>= 1.2.0),
+    seqinr (>= 4.0.0),
+    stringr (>= 1.4.0),
+    tidyr (>= 1.1.0)
 Suggests:
     plotly (>= 4.9.0),
     phangorn,

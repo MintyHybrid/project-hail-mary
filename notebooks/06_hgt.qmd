@@ -27,6 +27,7 @@ library(rentrez)
 library(ape)
 library(ggtree)
 library(potytools)
+theme_set(theme_manuscript())
 ```
 
 ## Introduction
@@ -118,9 +119,12 @@ aln3 <- msa::msaMuscle(leek)
 ### Visualising alignments
 
 ```{r plot-alignments}
+pal <- hailmary_palette()
+old_par <- par(col.axis = pal[["text_soft"]], col.lab = pal[["text_strong"]], fg = pal[["text_soft"]])
 image(as.DNAbin(aln1))
 image(as.DNAbin(aln2))
 image(as.DNAbin(aln3))
+par(old_par)
 ```
 
 ### Phylogenetic trees from eukaryotic flanks
@@ -133,9 +137,12 @@ leek_tree1 <- potytools::build_phylo_tree(as(aln1, "DNAStringSet"), method = "TN
 leek_tree2 <- potytools::build_phylo_tree(as(aln2, "DNAStringSet"), method = "TN93", tree_method = "nj", bootstrap = 100)
 leek_tree3 <- potytools::build_phylo_tree(as(aln3, "DNAStringSet"), method = "TN93", tree_method = "nj", bootstrap = 100)
 
-ggtree::ggtree(leek_tree1) + geom_tiplab(size = 2) + ggtitle("ClustalW alignment")
-ggtree::ggtree(leek_tree2) + geom_tiplab(size = 2) + ggtitle("ClustalOmega alignment")
-ggtree::ggtree(leek_tree3) + geom_tiplab(size = 2) + ggtitle("MUSCLE alignment")
+tree_bg <- theme_manuscript_bg()
+tree_line <- hailmary_palette()[["text_soft"]]
+tip_line  <- hailmary_palette()[["text_strong"]]
+ggtree::ggtree(leek_tree1, colour = tree_line) + geom_tiplab(size = 2, colour = tip_line) + ggtitle("ClustalW alignment") + tree_bg
+ggtree::ggtree(leek_tree2, colour = tree_line) + geom_tiplab(size = 2, colour = tip_line) + ggtitle("ClustalOmega alignment") + tree_bg
+ggtree::ggtree(leek_tree3, colour = tree_line) + geom_tiplab(size = 2, colour = tip_line) + ggtitle("MUSCLE alignment") + tree_bg
 ```
 
 ### Strawberry (*Fragaria*) — presence/absence of the ~3 kb fragment
@@ -206,6 +213,15 @@ if (have_homologs) {
 } else {
   combined <- straw
 }
+
+# Exact-duplicate accessions (e.g. multiple GenBank deposits of the same
+# Fragaria orientalis locus) collapse to a zero-branch-length split in the NJ
+# tree below, rendering as an overlapping tip with no visible connecting
+# branch. Drop them here, before alignment/tree-building, keeping one
+# representative per unique sequence; trait/label bookkeeping above (and the
+# fragment-positive loci count table) is untouched since it's about locus
+# presence, not tree topology.
+combined <- combined[!duplicated(as.character(combined))]
 length(combined)
 ```
 
@@ -217,7 +233,10 @@ straw_aln <- msa::msaClustalOmega(combined)
 #| fig-width: 9
 #| fig-height: 5
 # The long insertion appears as a block present in some rows and gapped in others
+pal <- hailmary_palette()
+old_par <- par(col.axis = pal[["text_soft"]], col.lab = pal[["text_strong"]], fg = pal[["text_soft"]])
 image(as.DNAbin(straw_aln))
+par(old_par)
 ```
 
 ```{r strawberry-tree}
@@ -226,14 +245,16 @@ image(as.DNAbin(straw_aln))
 straw_tree <- potytools::build_phylo_tree(as(straw_aln, "DNAStringSet"),
                                           method = "TN93", tree_method = "nj",
                                           bootstrap = 100)
-ggtree::ggtree(straw_tree) %<+% trait +
+ggtree::ggtree(straw_tree, colour = hailmary_palette()[["text_soft"]]) %<+% trait +
   geom_tippoint(aes(colour = fragment), size = 2.6, na.rm = TRUE) +
-  geom_tiplab(aes(label = species), size = 2.2, offset = 0.01) +
+  geom_tiplab(aes(label = species), size = 2.2, offset = 0.01, colour = hailmary_palette()[["text_strong"]]) +
   scale_colour_manual(
     values = c(present = "#c0392b", partial = "#e67e22", flank_only = "#2471a3"),
     na.value = "grey70", name = "~3 kb fragment") +
   ggtitle("Fragaria homologous-locus phylogeny with fragment presence/absence") +
-  ggplot2::xlim(0, 0.6) + theme(legend.position = "right")
+  ggplot2::xlim(0, 0.6) +
+  theme(legend.position = "right") +
+  theme_manuscript_bg()
 ```
 
 ```{r strawberry-interpretation}
@@ -319,7 +340,7 @@ ggplot(track, aes(pos, value, colour = track)) +
   labs(title = "Sliding-window localization of the strawberry insert",
        subtitle = "Blue shading = host TCP7 region (homology to relatives); the insert is conserved among positives but absent from relatives",
        x = "Position along representative positive locus (bp)", y = "Windowed identity") +
-  ylim(0, 1) + cowplot::theme_cowplot() + theme(legend.position = "top")
+  ylim(0, 1) + theme_manuscript() + theme(legend.position = "top")
 ```
 
 ```{r strawberry-sliding-note}
@@ -384,7 +405,7 @@ ggplot(hsp) +
   scale_x_continuous(limits = c(0, qlen), expand = c(0.01, 0)) +
   labs(title = "Rosaceae BLAST of the 3 kb strawberry locus",
        x = "Position along the 3 kb query (bp)", y = NULL) +
-  cowplot::theme_cowplot() +
+  theme_manuscript() +
   theme(axis.text.y = element_text(size = 6), legend.position = "top")
 ```
 
@@ -401,7 +422,7 @@ ggplot(covdf, aes(pos, hits)) +
            fill = "#f9e79f", alpha = 0.45) +
   geom_area(fill = "#5d6d7e", alpha = 0.8) +
   labs(x = "Position along the 3 kb query (bp)", y = "BLAST hits") +
-  cowplot::theme_cowplot()
+  theme_manuscript()
 ```
 
 ::: {.callout-tip collapse="true"}

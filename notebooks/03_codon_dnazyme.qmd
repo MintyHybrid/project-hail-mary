@@ -29,7 +29,7 @@ library(ape)
 library(ggtree)
 library(potytools)
 
-theme_set(theme_cowplot())
+theme_set(theme_manuscript())
 ```
 
 ```{r load-data}
@@ -168,7 +168,7 @@ ggplot(enc_df, aes(grp, ENC, fill = grp)) +
   scale_fill_manual(values = c("Motif" = "#c0392b", "Reference" = "#7f8c8d",
                                "CI region" = "#16a085"), guide = "none") +
   labs(x = NULL, y = "ENC (Wright's Nc)") +
-  theme_cowplot() + theme(axis.text.x = element_text(angle = 20, hjust = 1))
+  theme_manuscript() + theme(axis.text.x = element_text(angle = 20, hjust = 1))
 ```
 
 ### RSCU Validation
@@ -331,7 +331,7 @@ ggplot(act, aes(x = activity_score)) +
   labs(title = "Predicted DNAzyme activity across CI DNAzyme-like homologs",
        subtitle = "Multiplicative core-conservation model (1 = canonical core; 0 = essential-position substitution)",
        x = "Predicted activity score", y = "Number of homologs") +
-  theme_cowplot()
+  theme_manuscript()
 ```
 
 ### Core conservation logo
@@ -343,7 +343,8 @@ core_windows <- act$core_window[!is.na(act$core_window)]
 if (length(core_windows) > 0) {
   ggseqlogo(core_windows, method = "prob") +
     ggtitle("Observed catalytic-core windows vs canonical GGCTAGCTACAACGA") +
-    theme(plot.title = element_text(size = 11))
+    theme(plot.title = element_text(size = 11)) +
+    theme_manuscript_bg()
 } else {
   cat("No core windows detected.")
 }
@@ -455,11 +456,12 @@ if (!is.null(trees) && length(tree_comparisons) > 0) {
 #| fig.width: 12
 if (!is.null(trees)) {
   for (region_name in names(trees)) {
-    p <- ggtree(trees[[region_name]]) +
-      geom_tiplab(size = 2) +
+    p <- ggtree(trees[[region_name]], colour = hailmary_palette()[["text_soft"]]) +
+      geom_tiplab(size = 2, colour = hailmary_palette()[["text_strong"]]) +
       geom_nodelab(aes(label = round(as.numeric(label), 0)), size = 2, hjust = -0.3, color = "blue") +
       labs(title = paste("Phylogeny:", region_name)) +
-      theme_tree2()
+      theme_tree2() +
+      theme_manuscript_bg()
     print(p)
   }
 } else {
@@ -549,7 +551,7 @@ volcano_codon <- function(cmp, title, padj_thr = 0.05, lfc_thr = log2(1.5)) {
     labs(title = title,
          x = expression(log[2] ~ "fold-change (motif / reference)"),
          y = expression(-log[10] ~ "adjusted " * italic(p))) +
-    theme_cowplot() + theme(legend.position = "top")
+    theme_manuscript() + theme(legend.position = "top")
 }
 volcano_codon(cu_comparison, "Codon usage: DNAzyme motif vs genome background")
 ```
@@ -568,7 +570,7 @@ ggplot(top_diffs_cu, aes(x = reorder(codon, fold_change), y = fold_change,
   labs(title = "Top 20 Codons with Largest CU Differences",
        subtitle = "Motif vs Reference",
        x = "Codon", y = "CU Fold Change (Motif vs Reference)") +
-  coord_flip() + theme_cowplot() + theme(legend.position = "top")
+  coord_flip() + theme_manuscript() + theme(legend.position = "top")
 ```
 
 #### Interactive CU Table
@@ -612,7 +614,7 @@ ggplot(top_diffs_cu_DNAzyme, aes(x = reorder(codon, fold_change), y = fold_chang
   labs(title = "Top 20 Codons with Largest CU Differences",
        subtitle = "DNAzyme-matches vs. other",
        x = "Codon", y = "CU Fold Change (DNAzyme-matches vs. other)") +
-  coord_flip() + theme_cowplot() + theme(legend.position = "top")
+  coord_flip() + theme_manuscript() + theme(legend.position = "top")
 ```
 
 #### Volcano
@@ -667,12 +669,14 @@ igraph::V(g)$community <- as.factor(igraph::membership(igraph::cluster_louvain(g
 ggraph(g, layout = "fr") +
   geom_edge_link(aes(width = weight), colour = "grey75", alpha = 0.5) +
   geom_node_point(aes(size = degree, colour = amino_acid)) +
-  geom_node_text(aes(label = name), size = 2.6, repel = FALSE, vjust = -1) +
+  geom_node_text(aes(label = name), size = 2.6, repel = FALSE, vjust = -1,
+                 colour = hailmary_palette()[["text_strong"]]) +
   scale_edge_width(range = c(0.3, 2.5), guide = "none") +
   scale_size(range = c(2, 9), guide = "none") +
   labs(colour = "Amino acid") +
   theme_graph(base_family = "sans") +
-  theme(legend.position = "right")
+  theme(legend.position = "right") +
+  theme_manuscript_bg()
 ```
 
 ## Host-Specific Analysis {.tabset}
@@ -712,7 +716,7 @@ if (nchar(dicots) %% 3 == 0 && nchar(monocots) %% 3 == 0) {
     geom_bar(stat = "identity", position = "dodge", alpha = 0.7) +
     labs(title = "RSCU: Monocot vs Dicot-infecting Potyviruses",
          x = "Codon", y = "RSCU") +
-    coord_flip() + theme_cowplot() + theme(legend.position = "top")
+    coord_flip() + theme_manuscript() + theme(legend.position = "top")
 }
 ```
 
@@ -736,7 +740,7 @@ if (!is.null(rscu_matrix)) {
     geom_tile() +
     scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 1) +
     labs(title = "RSCU Heatmap — Motif Sequences") +
-    theme_minimal() +
+    theme_manuscript() +
     theme(axis.text.x = element_blank(), axis.ticks.x = element_blank())
 }
 ```
@@ -794,7 +798,7 @@ ggplot(gc_long, aes(x = position, y = GC, fill = group)) +
   geom_boxplot(alpha = 0.7) +
   labs(title = "GC Content by Codon Position",
        x = "Codon position", y = "GC fraction") +
-  theme_cowplot()
+  theme_manuscript()
 ```
 
 ### Dinucleotide Bias (CpG suppression)
@@ -820,7 +824,7 @@ ggplot(dinuc, aes(x = reorder(dinucleotide, rho), y = rho, fill = highlight)) +
                     name = NULL) +
   labs(title = "Dinucleotide odds ratios across the motif locus",
        x = "Dinucleotide", y = expression(rho ~ "(observed / expected)")) +
-  theme_cowplot() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
+  theme_manuscript() + theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
 
 ## Summary Report
@@ -948,7 +952,7 @@ ggplot(ras_long, aes(start, value)) +
   geom_line(colour = "#2E86AB") +
   facet_wrap(~metric, ncol = 1, scales = "free_y") +
   labs(x = "Alignment position (bp)", y = NULL) +
-  theme_cowplot()
+  theme_manuscript()
 ```
 
 ### CpG O/E
@@ -961,7 +965,7 @@ ggplot(ras, aes(start, CpG_OE)) +
   geom_line(colour = "#D62828") +
   geom_hline(yintercept = 1, linetype = 2) +
   labs(x = "Alignment position (bp)", y = "CpG O/E") +
-  theme_cowplot()
+  theme_manuscript()
 ```
 
 ### Per-isolate GC3
@@ -973,5 +977,5 @@ ggplot(ras, aes(start, CpG_OE)) +
 ggplot(ras_ps, aes(start, GC3, group = sequence)) +
   geom_line(alpha = 0.25, colour = "#2E86AB") +
   labs(x = "Alignment position (bp)", y = "GC3") +
-  theme_cowplot()
+  theme_manuscript()
 ```

@@ -18,8 +18,7 @@ movement [@revers2015]. This chapter (i) catalogues those motifs with their
 roles and primary references, (ii) locates the linear ones in the ICTV
 Potyviridae alignment [@inouenagata2022], and (iii) draws the curated
 protein–protein interaction network that centres on the cylindrical inclusion
-(CI) helicase — the protein carrying the DNAzyme-like locus studied in the
-earlier chapters.
+(CI) helicase — the protein carrying the DNAzyme-like locus studied in the earlier chapters.
 
 ```{r setup}
 #| include: false
@@ -28,6 +27,7 @@ library(tidyverse)
 library(igraph)
 library(visNetwork)
 library(potytools)
+theme_set(theme_manuscript())
 ```
 
 ## CI helicase 3D structure (predicted)
@@ -59,7 +59,14 @@ if (file.exists(af3)) {
   walkerA <- integer(0); dech <- integer(0)
 }
 
-v <- r3dmol(width = "100%", height = "540px") |>
+# r3dmol's WebGL canvas has no exposed alpha/transparency option in the R
+# wrapper (m_viewer_spec() takes only a solid backgroundColor), so it can't
+# blend into either theme's page background the way the other widgets/plots
+# do -- using a fixed neutral dark background instead (a common convention
+# for molecular viewers regardless of surrounding page theme), which also
+# reads well against the bright cartoon/stick highlight colours below.
+v <- r3dmol(width = "100%", height = "540px",
+            viewer_spec = m_viewer_spec(backgroundColor = "#22272A")) |>
   m_add_model(data = struct, format = fmt) |>
   m_set_style(style = m_style_cartoon(color = "#a9c6e8"))
 if (length(walkerA)) {
@@ -148,7 +155,7 @@ ggplot(found, aes(x = first_pos, y = reorder(paste(protein, motif), first_pos)))
   geom_segment(aes(xend = first_pos, yend = paste(protein, motif)), x = 0, colour = "grey80") +
   labs(title = "Approximate motif positions along the potyvirus polyprotein consensus",
        x = "Consensus position (aa, gap-free)", y = NULL) +
-  cowplot::theme_cowplot()
+  theme_manuscript()
 ```
 
 ## Two host-type sorting signals in the CI region
@@ -244,7 +251,8 @@ edges$color <- dplyr::recode(edges$process,
 edges$dashes <- edges$y2h
 edges$title  <- paste0(edges$process, " [", edges$ref, "]")
 
-visNetwork(nodes, edges, height = "640px", width = "100%") %>%
+visNetwork(nodes, edges, height = "640px", width = "100%",
+           background = "transparent") %>%
   visGroups(groupname = "viral", color = "#f5b041") %>%
   visGroups(groupname = "host",  color = "#82e0aa", shape = "diamond") %>%
   visEdges(smooth = FALSE) %>%
