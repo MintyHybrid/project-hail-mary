@@ -59,14 +59,8 @@ if (file.exists(af3)) {
   walkerA <- integer(0); dech <- integer(0)
 }
 
-# r3dmol's WebGL canvas has no exposed alpha/transparency option in the R
-# wrapper (m_viewer_spec() takes only a solid backgroundColor), so it can't
-# blend into either theme's page background the way the other widgets/plots
-# do -- using a fixed neutral dark background instead (a common convention
-# for molecular viewers regardless of surrounding page theme), which also
-# reads well against the bright cartoon/stick highlight colours below.
 v <- r3dmol(width = "100%", height = "540px",
-            viewer_spec = m_viewer_spec(backgroundColor = "#22272A")) |>
+            viewer_spec = m_viewer_spec(backgroundColor = hailmary_palette()[["paper"]])) |>
   m_add_model(data = struct, format = fmt) |>
   m_set_style(style = m_style_cartoon(color = "#a9c6e8"))
 if (length(walkerA)) {
@@ -252,7 +246,7 @@ edges$dashes <- edges$y2h
 edges$title  <- paste0(edges$process, " [", edges$ref, "]")
 
 visNetwork(nodes, edges, height = "640px", width = "100%",
-           background = "transparent") %>%
+           background = hailmary_palette()[["paper"]]) %>%
   visGroups(groupname = "viral", color = "#f5b041") %>%
   visGroups(groupname = "host",  color = "#82e0aa", shape = "diamond") %>%
   visEdges(smooth = FALSE) %>%

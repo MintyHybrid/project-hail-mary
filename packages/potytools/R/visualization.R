@@ -119,17 +119,13 @@ plot_pca_3d <- function(pca_results, host_classification = NULL) {
   ) |>
     plotly::layout(
       title = "3D PCA of Codon Usage (RSCU)",
-      # Transparent rather than a baked-in paper colour, since this is a
-      # static render that can't react to the site's light/dark toggle --
-      # see theme_manuscript.R for the same reasoning re: text colour.
-      paper_bgcolor = "rgba(0,0,0,0)",
-      plot_bgcolor = "rgba(0,0,0,0)",
-      font = list(color = hailmary_palette()[["text_strong"]]),
+      paper_bgcolor = hailmary_palette()[["paper"]],
+      plot_bgcolor = hailmary_palette()[["paper"]],
       scene = list(
-        bgcolor = "rgba(0,0,0,0)",
-        xaxis = list(title = sprintf("PC1 (%.1f%%)", var_exp[1]), color = hailmary_palette()[["text_soft"]]),
-        yaxis = list(title = sprintf("PC2 (%.1f%%)", var_exp[2]), color = hailmary_palette()[["text_soft"]]),
-        zaxis = list(title = sprintf("PC3 (%.1f%%)", var_exp[3]), color = hailmary_palette()[["text_soft"]])
+        bgcolor = hailmary_palette()[["paper"]],
+        xaxis = list(title = sprintf("PC1 (%.1f%%)", var_exp[1])),
+        yaxis = list(title = sprintf("PC2 (%.1f%%)", var_exp[2])),
+        zaxis = list(title = sprintf("PC3 (%.1f%%)", var_exp[3]))
       )
     )
 }

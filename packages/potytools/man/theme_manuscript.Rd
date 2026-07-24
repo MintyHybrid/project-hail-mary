@@ -13,11 +13,8 @@ theme_manuscript(base_size = 11)
 A ggplot2 theme object.
 }
 \description{
-A \code{theme_minimal()}-derived theme with a transparent background so figures
-show whichever page theme (light or dark) is active, hairline gridlines,
-and a neutral text palette chosen to stay legible against both the light
-and dark paper colours (see \code{\link[=hailmary_palette]{hailmary_palette()}}) since a given render of
-a figure can't itself react to the reader's theme toggle. Only themes
+A \code{theme_minimal()}-derived theme using the same paper background, ink
+text colour, and hairline gridlines as \code{theme-light.scss}. Only themes
 figure chrome (background, gridlines, axis/legend text, title styling) --
 it does not touch data colours (\verb{scale_colour_*}/\verb{scale_fill_*}), which
 stay whatever each plot's own encoding calls for.
