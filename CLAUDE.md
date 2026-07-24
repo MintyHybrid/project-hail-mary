@@ -104,6 +104,13 @@ from what was tested locally.
   light "plate" behind figures in dark mode — a clearly-marked interim block to delete once the
   chapters are re-rendered with transparent backgrounds. Keep new figures/widgets
   transparent-background so they work in both themes.
+- **WebGL widgets are re-themed client-side, not at render time.** r3dmol / 3Dmol.js viewers
+  bake their `backgroundColor` into the frozen widget, so a static viewer can't follow the
+  light/dark toggle and the old-palette value (`#EFF1EC`) shows as a light box on the dark theme.
+  `assets/workbench.js` fixes this at runtime: it reaches each viewer through the binding's
+  `el.widget` handle and pushes the active theme's `--hm-bg-deep` token in, on load and on every
+  theme switch. Any new baked WebGL widget needs the same treatment (or a transparent background);
+  editing the `.qmd`'s `viewer_spec` alone only takes effect on a full re-render.
 
 ## Conventions
 

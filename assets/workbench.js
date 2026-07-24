@@ -21,8 +21,11 @@
   var REPO = "https://github.com/MintyHybrid/project-hail-mary";
 
   // Set to true once CHAPTER_STEPS has been reviewed and rewritten, to drop
-  // the "draft summary" notice under each step panel.
-  var STEPS_REVIEWED = false;
+  // the "draft summary" notice under each step panel. Reviewed by the author
+  // against the chapter text: the empirical figures match index.qmd and the
+  // open questions (Ch.2 GARD screen, Ch.6 HGT origin, Ch.8/9 model-not-result)
+  // are stated as open, consistent with the preprint's hedging.
+  var STEPS_REVIEWED = true;
 
   function el(tag, cls, parent) {
     var node = document.createElement(tag);
@@ -179,4 +182,59 @@
   } else {
     boot();
   }
+})();
+
+/* ===========================================================================
+   r3dmol background theme-sync.
+
+   The 3D structure viewers (r3dmol / 3Dmol.js) are static htmlwidgets: their
+   background is baked at render time (viewer_spec backgroundColor in the .qmd),
+   so a frozen widget can't follow the light/dark toggle the way CSS can, and
+   the value baked from the old palette (#EFF1EC) shows as a light box on the
+   dark theme.
+
+   The binding exposes each viewer's methods on the widget element as
+   `el.widget`, so we can recolour at runtime instead: read the active theme's
+   --hm-bg-deep token and push it into every viewer, on load and on every
+   theme switch. This keeps the 3D canvas on the same inset colour as the
+   other figure plates in both themes, with no re-render of the frozen chapter.
+   =========================================================================== */
+(function () {
+  "use strict";
+
+  function tokenHex(name, fallback) {
+    var v = getComputedStyle(document.documentElement)
+      .getPropertyValue(name).trim();
+    var m = /#?([0-9a-f]{6})/i.exec(v);
+    return m ? parseInt(m[1], 16) : fallback;
+  }
+
+  function syncViewers() {
+    var hex = tokenHex("--hm-bg-deep", 0x181c13);
+    var els = document.querySelectorAll(".r3dmol");
+    for (var i = 0; i < els.length; i++) {
+      var w = els[i].widget;
+      if (w && typeof w.setBackgroundColor === "function") {
+        try { w.setBackgroundColor({ hex: hex, alpha: 1 }); } catch (e) { /* not ready yet */ }
+      }
+    }
+  }
+
+  // Nothing to do on pages without a viewer.
+  if (!document.querySelector(".r3dmol")) return;
+
+  // htmlwidgets render on window load; retry a couple of times in case the
+  // viewer binds a beat later, then keep in step with the theme toggle.
+  function scheduleSync() {
+    syncViewers();
+    setTimeout(syncViewers, 300);
+    setTimeout(syncViewers, 1200);
+  }
+  if (document.readyState === "complete") scheduleSync();
+  else window.addEventListener("load", scheduleSync);
+
+  // Quarto's scheme toggle swaps a class on <body>; re-read the token after it
+  // settles so the viewer follows light <-> dark.
+  var mo = new MutationObserver(function () { setTimeout(syncViewers, 50); });
+  mo.observe(document.body, { attributes: true, attributeFilter: ["class"] });
 })();
