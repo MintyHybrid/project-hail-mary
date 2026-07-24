@@ -15,7 +15,7 @@ suppressPackageStartupMessages({
   library(ape)
 })
 
-root      <- "C:/Users/chris/R_projects/project-hail-mary"
+root      <- here::here()
 prot_file <- file.path(root, "data",
                        "OPSR.Poty.Fig3.v16_align_withblasthits_protmafftadd.txt")
 out_file  <- file.path(root, "data", "potyvirus_CI.treefile")

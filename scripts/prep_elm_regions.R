@@ -13,7 +13,7 @@ suppressPackageStartupMessages({
   library(fuzzyjoin)
 })
 
-root <- "C:/Users/chris/R_projects/project-hail-mary"
+root <- here::here()
 out_dir <- file.path(root, "data", "elm_gget")
 dir.create(out_dir, showWarnings = FALSE, recursive = TRUE)
 
