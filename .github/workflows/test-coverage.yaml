@@ -62,7 +62,10 @@ jobs:
 
       - uses: codecov/codecov-action@v4
         with:
-          fail_ci_if_error: ${{ github.event_name != 'pull_request' }}
+          # Non-blocking: no CODECOV_TOKEN secret is configured yet, so an
+          # upload failure shouldn't fail the whole workflow. Revisit once
+          # Codecov is actually wired up (see the token line above).
+          fail_ci_if_error: false
           file: packages/potytools/cobertura.xml
           plugins: noop
           disable_search: true
