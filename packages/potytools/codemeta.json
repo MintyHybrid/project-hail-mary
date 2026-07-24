@@ -2,7 +2,7 @@
   "@context": "https://doi.org/10.5063/schema/codemeta-2.0",
   "@type": "SoftwareSourceCode",
   "identifier": "potytools",
-  "description": "Provides functions for potyvirus genomic analysis, including GenBank file parsing (no external dependencies), codon usage bias calculation (RSCU, ENC, CAI, GC content), host classification for monocot/dicot-infecting isolates, short linear motif (SLM) detection via the ELM database API, motif-flanking region extraction, and phylogenetic utilities. Designed for reproducible analysis of Potyviridae diversity, DNAzyme-like motif conservation, and horizontal gene transfer detection.",
+  "description": "Provides functions for potyvirus genomic analysis, including GenBank file parsing (no external dependencies), codon usage bias calculation (RSCU, ENC, CAI, GC content), host classification for monocot/dicot-infecting isolates, motif-flanking region extraction and concatenation for short-linear-motif analysis, and phylogenetic utilities. Designed for reproducible analysis of Potyviridae diversity, DNAzyme-like motif conservation, and horizontal gene transfer detection.",
   "name": "potytools: Analysis Tools for Potyvirus Genomics and Short Linear Motifs",
   "codeRepository": "https://github.com/MintyHybrid/project-hail-mary",
   "issueTracker": "https://github.com/MintyHybrid/project-hail-mary/issues",
@@ -19,7 +19,8 @@
       "@type": "Person",
       "givenName": "Christina",
       "familyName": "Muedsam",
-      "email": "christina.muedsam@example.com"
+      "email": "70411777+MintyHybrid@users.noreply.github.com",
+      "@id": "https://orcid.org/0000-0001-8488-3442"
     }
   ],
   "maintainer": [
@@ -27,22 +28,11 @@
       "@type": "Person",
       "givenName": "Christina",
       "familyName": "Muedsam",
-      "email": "christina.muedsam@example.com"
+      "email": "70411777+MintyHybrid@users.noreply.github.com",
+      "@id": "https://orcid.org/0000-0001-8488-3442"
     }
   ],
   "softwareSuggestions": [
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "ggseqlogo",
-      "name": "ggseqlogo",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=ggseqlogo"
-    },
     {
       "@type": "SoftwareApplication",
       "identifier": "plotly",
@@ -82,6 +72,30 @@
     },
     {
       "@type": "SoftwareApplication",
+      "identifier": "dendextend",
+      "name": "dendextend",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=dendextend"
+    },
+    {
+      "@type": "SoftwareApplication",
+      "identifier": "BiocGenerics",
+      "name": "BiocGenerics",
+      "provider": {
+        "@id": "https://www.bioconductor.org",
+        "@type": "Organization",
+        "name": "Bioconductor",
+        "url": "https://www.bioconductor.org"
+      },
+      "sameAs": "https://bioconductor.org/packages/release/bioc/html/BiocGenerics.html"
+    },
+    {
+      "@type": "SoftwareApplication",
       "identifier": "testthat",
       "name": "testthat",
       "version": ">= 3.0.0",
@@ -92,32 +106,6 @@
         "url": "https://cran.r-project.org"
       },
       "sameAs": "https://CRAN.R-project.org/package=testthat"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "vcr",
-      "name": "vcr",
-      "version": ">= 1.6.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=vcr"
-    },
-    {
-      "@type": "SoftwareApplication",
-      "identifier": "webmockr",
-      "name": "webmockr",
-      "version": ">= 1.0.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=webmockr"
     },
     {
       "@type": "SoftwareApplication",
@@ -189,96 +177,18 @@
     },
     "2": {
       "@type": "SoftwareApplication",
-      "identifier": "dplyr",
-      "name": "dplyr",
-      "version": ">= 1.0.0",
+      "identifier": "ape",
+      "name": "ape",
+      "version": ">= 5.0",
       "provider": {
         "@id": "https://cran.r-project.org",
         "@type": "Organization",
         "name": "Comprehensive R Archive Network (CRAN)",
         "url": "https://cran.r-project.org"
       },
-      "sameAs": "https://CRAN.R-project.org/package=dplyr"
+      "sameAs": "https://CRAN.R-project.org/package=ape"
     },
     "3": {
-      "@type": "SoftwareApplication",
-      "identifier": "stringr",
-      "name": "stringr",
-      "version": ">= 1.4.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=stringr"
-    },
-    "4": {
-      "@type": "SoftwareApplication",
-      "identifier": "purrr",
-      "name": "purrr",
-      "version": ">= 0.3.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=purrr"
-    },
-    "5": {
-      "@type": "SoftwareApplication",
-      "identifier": "crul",
-      "name": "crul",
-      "version": ">= 1.4.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=crul"
-    },
-    "6": {
-      "@type": "SoftwareApplication",
-      "identifier": "jsonlite",
-      "name": "jsonlite",
-      "version": ">= 1.7.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=jsonlite"
-    },
-    "7": {
-      "@type": "SoftwareApplication",
-      "identifier": "memoise",
-      "name": "memoise",
-      "version": ">= 2.0.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=memoise"
-    },
-    "8": {
-      "@type": "SoftwareApplication",
-      "identifier": "rentrez",
-      "name": "rentrez",
-      "version": ">= 1.2.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=rentrez"
-    },
-    "9": {
       "@type": "SoftwareApplication",
       "identifier": "Biostrings",
       "name": "Biostrings",
@@ -291,59 +201,7 @@
       },
       "sameAs": "https://bioconductor.org/packages/release/bioc/html/Biostrings.html"
     },
-    "10": {
-      "@type": "SoftwareApplication",
-      "identifier": "seqinr",
-      "name": "seqinr",
-      "version": ">= 4.0.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=seqinr"
-    },
-    "11": {
-      "@type": "SoftwareApplication",
-      "identifier": "ape",
-      "name": "ape",
-      "version": ">= 5.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=ape"
-    },
-    "12": {
-      "@type": "SoftwareApplication",
-      "identifier": "tidyr",
-      "name": "tidyr",
-      "version": ">= 1.1.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=tidyr"
-    },
-    "13": {
-      "@type": "SoftwareApplication",
-      "identifier": "ggplot2",
-      "name": "ggplot2",
-      "version": ">= 3.3.0",
-      "provider": {
-        "@id": "https://cran.r-project.org",
-        "@type": "Organization",
-        "name": "Comprehensive R Archive Network (CRAN)",
-        "url": "https://cran.r-project.org"
-      },
-      "sameAs": "https://CRAN.R-project.org/package=ggplot2"
-    },
-    "14": {
+    "4": {
       "@type": "SoftwareApplication",
       "identifier": "cowplot",
       "name": "cowplot",
@@ -356,6 +214,121 @@
       },
       "sameAs": "https://CRAN.R-project.org/package=cowplot"
     },
+    "5": {
+      "@type": "SoftwareApplication",
+      "identifier": "dplyr",
+      "name": "dplyr",
+      "version": ">= 1.0.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=dplyr"
+    },
+    "6": {
+      "@type": "SoftwareApplication",
+      "identifier": "ggplot2",
+      "name": "ggplot2",
+      "version": ">= 3.3.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggplot2"
+    },
+    "7": {
+      "@type": "SoftwareApplication",
+      "identifier": "ggseqlogo",
+      "name": "ggseqlogo",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=ggseqlogo"
+    },
+    "8": {
+      "@type": "SoftwareApplication",
+      "identifier": "memoise",
+      "name": "memoise",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=memoise"
+    },
+    "9": {
+      "@type": "SoftwareApplication",
+      "identifier": "purrr",
+      "name": "purrr",
+      "version": ">= 0.3.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=purrr"
+    },
+    "10": {
+      "@type": "SoftwareApplication",
+      "identifier": "rentrez",
+      "name": "rentrez",
+      "version": ">= 1.2.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=rentrez"
+    },
+    "11": {
+      "@type": "SoftwareApplication",
+      "identifier": "seqinr",
+      "name": "seqinr",
+      "version": ">= 4.0.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=seqinr"
+    },
+    "12": {
+      "@type": "SoftwareApplication",
+      "identifier": "stringr",
+      "name": "stringr",
+      "version": ">= 1.4.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=stringr"
+    },
+    "13": {
+      "@type": "SoftwareApplication",
+      "identifier": "tidyr",
+      "name": "tidyr",
+      "version": ">= 1.1.0",
+      "provider": {
+        "@id": "https://cran.r-project.org",
+        "@type": "Organization",
+        "name": "Comprehensive R Archive Network (CRAN)",
+        "url": "https://cran.r-project.org"
+      },
+      "sameAs": "https://CRAN.R-project.org/package=tidyr"
+    },
     "SystemRequirements": null
   },
   "fileSize": "NAKB",
@@ -367,7 +340,8 @@
         {
           "@type": "Person",
           "givenName": "Christina",
-          "familyName": "Muedsam"
+          "familyName": "Muedsam",
+          "@id": "https://orcid.org/0000-0001-8488-3442"
         }
       ],
       "name": "potytools: Analysis Tools for Potyvirus Genomics and Short Linear Motifs",
@@ -377,6 +351,5 @@
   ],
   "releaseNotes": "https://github.com/MintyHybrid/project-hail-mary/blob/main/NEWS.md",
   "readme": "https://github.com/MintyHybrid/project-hail-mary/blob/main/README.md",
-  "contIntegration": "https://github.com/actions",
   "developmentStatus": "https://lifecycle.r-lib.org/articles/stages.html#experimental"
 }

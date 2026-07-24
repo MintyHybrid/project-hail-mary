@@ -12,7 +12,7 @@
 # read by notebook 04b (renders offline from the cache).
 
 suppressPackageStartupMessages({ library(Biostrings); library(crul) })
-root    <- "C:/Users/chris/R_projects/project-hail-mary"
+root    <- here::here()
 out_pdb <- file.path(root, "data", "CI_esmfold.pdb")
 out_mot <- file.path(root, "data", "CI_esmfold_motif.txt")
 

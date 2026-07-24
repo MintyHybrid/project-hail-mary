@@ -46,22 +46,10 @@ reference:
       - save_host_classification
       - load_host_classification
 
-  - title: "ELM motif search"
-    desc: "Build concatenated sequences, query ELM database, parse hits"
+  - title: "Sequence logos & conservation"
+    desc: "Motif-fragment concatenation, sequence logo plots, PSSM, and information content"
     contents:
       - build_concat
-      - flag_junction_hits
-      - map_hits_to_isolates
-      - summarise_conservation
-      - run_elm_conservation
-      - parse_elm_hits
-      - query_elm
-      - query_elm_cached
-      - check_elm_api
-
-  - title: "Sequence logos & conservation"
-    desc: "Sequence logo plots, PSSM, and information content"
-    contents:
       - create_dna_logo
       - create_protein_logo
       - create_combined_logo

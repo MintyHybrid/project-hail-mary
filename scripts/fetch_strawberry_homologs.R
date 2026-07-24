@@ -22,7 +22,7 @@ suppressPackageStartupMessages({
   library(dplyr); library(stringr); library(xml2)
 })
 
-root    <- "C:/Users/chris/R_projects/project-hail-mary"
+root    <- here::here()
 out_fa  <- file.path(root, "data", "strawberry_homologs.fasta")
 out_tsv <- file.path(root, "data", "strawberry_homolog_table.tsv")
 

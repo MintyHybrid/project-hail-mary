@@ -12,7 +12,7 @@ suppressPackageStartupMessages({
   library(ggplot2); library(forcats)
 })
 
-root    <- "C:/Users/chris/R_projects/project-hail-mary"
+root    <- here::here()
 dat_dir <- file.path(root, "data", "elm_gget")
 MIN_N   <- 3    # min isolates per genus to be included in specificity analysis
 TOP_M   <- 30   # number of most genus-variable motifs to show

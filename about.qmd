@@ -1,0 +1,103 @@
+---
+number-sections: false
+---
+
+<!-- See the note in data-code.qmd: .unnumbered H1, and no YAML subtitle. -->
+
+# About {.unnumbered}
+
+*Author & project.*
+
+```{=html}
+<div class="hm-about-card">
+  <div class="avatar">photo</div>
+  <div>
+    <div class="name">Christina Muedsam</div>
+    <div class="role">Plant virology · computational biology</div>
+    <div class="links">
+      <a href="https://github.com/MintyHybrid" rel="noopener">GitHub ↗</a>
+      <a href="https://orcid.org/0000-0001-8488-3442" rel="noopener">ORCID ↗</a>
+    </div>
+  </div>
+</div>
+```
+
+::: {.callout-note appearance="simple"}
+**Placeholders to fill in.** The bio line, the photo, and any further profile
+links (Scholar, Bluesky, LinkedIn) are yours to write — I've left the slots
+rather than inventing them. Drop an image at `images/author.jpg` and replace
+the `avatar` div in `about.qmd` with
+`<img src="images/author.jpg" alt="Christina Muedsam">` when you have one.
+:::
+
+## The project
+
+This compendium follows a single thread of reasoning: a catalytic-looking
+15-nucleotide sequence that turned up in several potyvirus genomes, and what
+chasing it implies about horizontal sequence transfer and the host protein
+sorting machinery.
+
+It is a **preprint and work in progress**, not peer-reviewed work. Several of
+its central ideas — DNAzyme activity, horizontal gene transfer, and the
+AP-4 / tyrosine-motif immune hypothesis — are stated as explicit, testable
+hypotheses rather than results, and are flagged as such throughout. Analyses,
+figures and conclusions may change.
+
+Constructive feedback is welcome from anyone, regardless of background. The
+repository's [issue tracker](https://github.com/MintyHybrid/project-hail-mary/issues)
+is the best place for it.
+
+## Acknowledgements
+
+Public data providers whose resources this work depends on:
+
+- **NCBI** — sequence records and BLAST
+- **GBIF** — species occurrence records
+- **GloBI** — biotic interaction records
+- **ELM** — the eukaryotic linear motif resource
+
+...alongside the open-source R and Python communities behind every tool listed
+in [Data & Code](data-code.qmd).
+
+Typefaces: **Spectral**, **Michroma**, **Spline Sans** and **IBM Plex Mono**, all
+under the [SIL Open Font License 1.1](https://scripts.sil.org/OFL). They are
+self-hosted rather than loaded from a CDN, so reading this book sends no request
+to a third party; the licence texts ship alongside the font files in
+`assets/fonts/`, and `scripts/fetch_fonts.sh` regenerates both.
+
+::: {.callout-note appearance="simple"}
+Funding, institutional affiliation and individual acknowledgements are left
+blank deliberately — please add whatever is accurate before this is published.
+:::
+
+## Citing this work
+
+Until there is a preprint DOI, cite the repository directly, noting the commit
+or render date. The `potytools` package carries its own citation metadata in
+`packages/potytools/CITATION.cff`.
+
+Author metadata: Christina Muedsam, ORCID
+[0000-0001-8488-3442](https://orcid.org/0000-0001-8488-3442).
+
+## Licensing
+
+Code in `packages/potytools/` is MIT-licensed. Sequence data and other
+third-party inputs under `data/` retain their original source licensing — see
+the [data sources appendix](notebooks/A1_data_sources.qmd) for provenance.
+
+```{=html}
+<div class="hm-downloads" style="margin-top:2rem;">
+  <a class="hm-btn accent" href="https://github.com/MintyHybrid/project-hail-mary" rel="noopener">↗ repository</a>
+  <a class="hm-btn" href="data-code.html">→ data &amp; code</a>
+</div>
+```
+
+<!--
+Omitted from the design prototype on purpose: the password-gated "full CV"
+download. The prototype implemented it with a client-side prompt() that
+accepted any input and showed an alert -- it looked like an access control
+without being one. A real gated download needs a server (or simply an
+email address); shipping the fake version would imply protection that a
+static GitHub Pages site cannot provide. A public CV link can go in the
+profile card above whenever you'd like one.
+-->

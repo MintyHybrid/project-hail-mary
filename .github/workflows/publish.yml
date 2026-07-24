@@ -1,7 +1,10 @@
+# Deploys are manual: run `quarto publish gh-pages . --no-browser` locally,
+# which renders with your own Quarto/R/renv versions (matching what you see
+# in local preview) and pushes straight to gh-pages. This workflow is kept
+# only as a manual fallback (Actions tab -> Run workflow), not on push, so
+# CI's Quarto version can never silently diverge from what was tested.
 on:
   workflow_dispatch:
-  push:
-    branches: main
 
 name: Quarto Publish
 

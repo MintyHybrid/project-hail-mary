@@ -1,0 +1,136 @@
+/*-- scss:defaults --*/
+
+// ===========================================================================
+// Project Hail Mary — dark theme (primary)
+//
+// Palette and type from the "Research Website Navigation Design" prototype:
+// a low-chroma olive ground, a sage-green "spark" accent and a warm gold
+// "hypothesis" accent, on warm off-white text.
+//
+// This file defines TOKENS ONLY. Every component rule lives in
+// assets/hail-mary.css and reads the custom properties emitted below, so the
+// light and dark themes can never drift apart structurally.
+// ===========================================================================
+
+// ground
+$bg-page:    #20241d;   // page background
+$bg-deep:    #181c13;   // inset panels (graph canvas)
+$bg-card:    #161a12;   // floating cards / tooltips
+$bg-panel:   #252a20;   // raised panels, buttons
+$bg-node:    #262b20;   // unfilled graph nodes
+$bg-active:  #2f3527;   // active rail item
+
+// ink
+$fg-bright:  #f6f4ec;
+$fg-body:    #dfe3d5;
+$fg-muted:   #c4c8b6;
+$fg-dim:     #9aa08d;
+$fg-faint:   #6f7563;
+
+// accents
+$spark:      #8faa76;   // sage — "the spark", origin, R
+$spark-dim:  #5f7a52;
+$gold:       #cc9a5b;   // warm gold — "the hypothesis", destination, Python
+$gold-hover: #dcb178;
+$gold-dim:   #a67a45;
+$steel:      #7d94a8;   // chapter nodes in the package graph
+$steel-soft: #a9c2cf;
+$steel-bg:   #1e2a30;
+
+// lines
+$line:       #363c30;
+$line-soft:  #3a4132;
+$line-strong:#454b3d;
+$edge:       #39402e;
+
+// type
+$mono-stack:    'IBM Plex Mono', Consolas, SFMono-Regular, monospace;
+$sans-stack:    'Spline Sans', system-ui, 'Segoe UI', sans-serif;
+$serif-stack:   'Spectral', Georgia, serif;
+$display-stack: 'Michroma', 'Spline Sans', sans-serif;
+
+// --- Bootstrap / Quarto overrides ------------------------------------------
+$body-bg:    $bg-page;
+$body-color: $fg-body;
+
+$link-color:       $gold;
+$link-hover-color: $gold-hover;
+
+$font-family-sans-serif: $sans-stack;
+$font-family-monospace:  $mono-stack;
+$headings-font-family:   $serif-stack;
+$headings-color:         $fg-bright;
+$headings-font-weight:   500;
+
+$border-color:       $line;
+$table-border-color: $line;
+
+$code-color: $gold;
+$code-bg:    $bg-deep;
+$pre-bg:     $bg-deep;
+
+// Quarto chrome
+$sidebar-bg:  $bg-page;
+$sidebar-fg:  $fg-dim;
+$navbar-bg:   $bg-page;
+$navbar-fg:   $fg-muted;
+$toc-color:   $fg-dim;
+$toc-font-size: .82rem;
+
+/*-- scss:rules --*/
+
+// Token bridge: every component rule (assets/hail-mary.css) and all
+// client-side JS reads these, so there is exactly one copy of the palette.
+:root {
+  --hm-bg-page:   #{$bg-page};
+  --hm-bg-deep:   #{$bg-deep};
+  --hm-bg-card:   #{$bg-card};
+  --hm-bg-panel:  #{$bg-panel};
+  --hm-bg-node:   #{$bg-node};
+  --hm-bg-active: #{$bg-active};
+
+  --hm-fg-bright: #{$fg-bright};
+  --hm-fg-body:   #{$fg-body};
+  --hm-fg-muted:  #{$fg-muted};
+  --hm-fg-dim:    #{$fg-dim};
+  --hm-fg-faint:  #{$fg-faint};
+
+  --hm-spark:      #{$spark};
+  --hm-spark-dim:  #{$spark-dim};
+  --hm-gold:       #{$gold};
+  --hm-gold-hover: #{$gold-hover};
+  --hm-gold-dim:   #{$gold-dim};
+  --hm-steel:      #{$steel};
+  --hm-steel-soft: #{$steel-soft};
+  --hm-steel-bg:   #{$steel-bg};
+
+  --hm-line:        #{$line};
+  --hm-line-soft:   #{$line-soft};
+  --hm-line-strong: #{$line-strong};
+  --hm-edge:        #{$edge};
+
+  --hm-mono:    #{$mono-stack};
+  --hm-sans:    #{$sans-stack};
+  --hm-serif:   #{$serif-stack};
+  --hm-display: #{$display-stack};
+
+  // node label plates sit over the graph and need to match the page ground
+  --hm-label-plate: rgba(24, 28, 20, .72);
+  --hm-card-shadow: 0 14px 40px rgba(0, 0, 0, .4);
+  --hm-scheme: dark;
+
+  color-scheme: dark;
+}
+
+// Legacy aliases — the pre-redesign palette names are still referenced by a
+// few inline `var(--flag)` styles inside index.qmd's reasoning map.
+:root {
+  --paper:  #{$bg-page};
+  --ink:    #{$fg-bright};
+  --soft:   #{$fg-dim};
+  --accent: #{$spark};
+  --flag:   #{$gold};
+  --line:   #{$line};
+  --mono:   #{$mono-stack};
+  --sans:   #{$sans-stack};
+}

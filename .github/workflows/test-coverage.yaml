@@ -4,18 +4,38 @@
 on:
   push:
     branches: [main, master]
+    # See R-CMD-check.yaml: only run when the package (or this workflow)
+    # changes; skip book/site-only commits.
+    paths:
+      - 'packages/potytools/**'
+      - '.github/workflows/test-coverage.yaml'
   pull_request:
     branches: [main, master]
+    paths:
+      - 'packages/potytools/**'
+      - '.github/workflows/test-coverage.yaml'
 
 name: test-coverage.yaml
 
+concurrency:
+  group: test-coverage-${{ github.ref }}
+  cancel-in-progress: true
+
 permissions: read-all
+
+defaults:
+  run:
+    working-directory: packages/potytools
 
 jobs:
   test-coverage:
     runs-on: ubuntu-latest
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
+      # See R-CMD-check.yaml: the repo-root .Rprofile auto-activates renv, which
+      # hijacks .libPaths() and hides pak from setup-r-dependencies. Disable
+      # renv's autoloader in CI; local development is unaffected.
+      RENV_CONFIG_AUTOLOADER_ENABLED: false
     steps:
       - uses: actions/checkout@v4
 
@@ -25,6 +45,7 @@ jobs:
 
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          working-directory: packages/potytools
           extra-packages: any::covr, any::xml2
           needs: coverage
 
@@ -37,11 +58,12 @@ jobs:
           )
           covr::to_cobertura(cov)
         shell: Rscript {0}
+        working-directory: packages/potytools
 
       - uses: codecov/codecov-action@v4
         with:
           fail_ci_if_error: ${{ github.event_name != 'pull_request' }}
-          file: ./cobertura.xml
+          file: packages/potytools/cobertura.xml
           plugins: noop
           disable_search: true
           token: ${{ secrets.CODECOV_TOKEN }}

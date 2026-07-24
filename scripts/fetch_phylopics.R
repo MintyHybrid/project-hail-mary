@@ -12,7 +12,7 @@
 # Network: run once.
 
 suppressPackageStartupMessages({ library(rphylopic); library(png) })
-root  <- "C:/Users/chris/R_projects/project-hail-mary"
+root  <- here::here()
 sess  <- readRDS(file.path(root, "data", "bionexus_zucchini95.rds"))
 outdir <- file.path(root, "data", "phylopic"); dir.create(outdir, showWarnings = FALSE)
 

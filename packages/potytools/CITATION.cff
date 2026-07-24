@@ -5,12 +5,13 @@ version: 0.1.0
 abstract: >-
   Functions for potyvirus genomic analysis, including GenBank file parsing,
   codon usage bias calculation (RSCU, ENC, CAI, GC content), host classification
-  for monocot/dicot-infecting isolates, short linear motif (SLM) detection via
-  the ELM database API, motif-flanking region extraction, and phylogenetic
-  utilities.
+  for monocot/dicot-infecting isolates, motif-flanking region extraction and
+  concatenation for short-linear-motif analysis, and phylogenetic utilities.
 authors:
   - family-names: Muedsam
     given-names: Christina
+    email: 70411777+MintyHybrid@users.noreply.github.com
+    orcid: "https://orcid.org/0000-0001-8488-3442"
 repository-code: "https://github.com/MintyHybrid/project-hail-mary"
 url: "https://github.com/MintyHybrid/project-hail-mary"
 license: MIT

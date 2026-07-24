@@ -44,7 +44,8 @@ create_dna_logo <- function(sequences,
       plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
       axis.title = element_text(size = 12),
       axis.text = element_text(size = 10)
-    )
+    ) +
+    theme_manuscript_bg()
 
   if (color_scheme == "base_pairing") {
     # Custom colors: A-T (red/blue), G-C (yellow/green)
@@ -90,7 +91,8 @@ create_protein_logo <- function(sequences,
       plot.title = element_text(size = 14, face = "bold", hjust = 0.5),
       axis.title = element_text(size = 12),
       axis.text = element_text(size = 10)
-    )
+    ) +
+    theme_manuscript_bg()
 
   return(p)
 }
@@ -137,7 +139,7 @@ create_combined_logo <- function(dna_sequences,
     combined,
     ncol = 1,
     rel_heights = c(0.1, 1)
-  )
+  ) + theme_manuscript_bg()
 
   return(final_plot)
 }
@@ -206,7 +208,7 @@ plot_conservation <- function(sequences, title = "Sequence Conservation") {
       x = "Position",
       y = "Conservation (bits)"
     ) +
-    theme_cowplot() +
+    theme_manuscript() +
     theme(
       plot.title = element_text(size = 14, face = "bold", hjust = 0.5)
     )
@@ -298,7 +300,8 @@ create_combined_logos <- function(dna_sequences, protein_sequences,
   p_protein <- create_protein_logo(protein_sequences,
     title = paste0(title_prefix, " - Protein Sequence Logo")
   )
-  cowplot::plot_grid(p_dna, p_protein, ncol = 1, rel_heights = c(1, 1))
+  cowplot::plot_grid(p_dna, p_protein, ncol = 1, rel_heights = c(1, 1)) +
+    theme_manuscript_bg()
 }
 
 #' Host-specific sequence logos (monocot vs dicot)
@@ -328,7 +331,8 @@ create_host_specific_logos <- function(sequences, host_classification,
     p1 <- create_protein_logo(seqs_char[mono_idx], title = "Monocot-infecting Isolates (Protein)")
     p2 <- create_protein_logo(seqs_char[dict_idx], title = "Dicot-infecting Isolates (Protein)")
   }
-  cowplot::plot_grid(p1, p2, ncol = 1, labels = c("A", "B"))
+  cowplot::plot_grid(p1, p2, ncol = 1, labels = c("A", "B")) +
+    theme_manuscript_bg()
 }
 
 #' Information content per position
@@ -384,7 +388,7 @@ plot_information_content <- function(sequences, title = "Information Content",
     ggplot2::geom_bar(stat = "identity", fill = "#2E86AB", alpha = 0.7) +
     ggplot2::geom_line(color = "#D62828", linewidth = 1) +
     ggplot2::labs(title = title, x = "Position", y = "Information Content (bits)") +
-    cowplot::theme_cowplot()
+    theme_manuscript()
   if (seq_type == "DNA" && nchar(sequences[1]) == 18) {
     p <- p + ggplot2::geom_vline(
       xintercept = seq(3.5, 18, by = 3),
@@ -447,7 +451,7 @@ plot_pssm_heatmap <- function(pssm, title = "Position-Specific Scoring Matrix") 
       midpoint = 0, name = "Log2\nOdds"
     ) +
     ggplot2::labs(title = title, x = "Position", y = "Letter") +
-    ggplot2::theme_minimal() +
+    theme_manuscript() +
     ggplot2::theme(
       plot.title = ggplot2::element_text(hjust = 0.5, face = "bold"),
       axis.text.x = ggplot2::element_text(angle = 45, hjust = 1),

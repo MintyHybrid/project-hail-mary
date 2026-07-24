@@ -1,0 +1,95 @@
+---
+number-sections: false
+---
+
+<!-- Title as an .unnumbered H1, not a YAML `title:` -- these are standalone
+     reference pages reached from the site header, not numbered chapters.
+     Note: do NOT add a YAML `subtitle:` here. With a subtitle but no title,
+     Quarto fails to infer a nav label and renders an EMPTY sidebar link. -->
+
+# Data & Code {.unnumbered}
+
+*The reproducibility layer.*
+
+Every package this book leans on, grouped by what it does, coloured by
+language, and wired back to the chapters that call it. Drag a node to
+rearrange; hover a package for what it's used for.
+
+```{=html}
+<div class="hm-pkg-legend" style="margin-bottom:14px;">
+  <div class="item"><span class="dot r"></span>R</div>
+  <div class="item"><span class="dot python"></span>Python</div>
+  <div class="item"><span class="dot chapter"></span>chapter</div>
+</div>
+
+<div class="hm-pkg-canvas column-page" data-hm-packages></div>
+```
+
+::: {.callout-note appearance="simple"}
+The graph is built from `assets/hail-mary-data.js`, which lists the packages
+actually loaded across `notebooks/`, `scripts/` and `shiny/`. It is maintained
+by hand — if you add or drop a dependency, update that file so the map stays
+honest. The authoritative, machine-checkable records are `renv.lock` (exact
+pinned versions for the whole compendium) and
+`packages/potytools/DESCRIPTION` (the package's own declared dependencies).
+:::
+
+## Reproducing the analysis
+
+All computationally intensive steps — NCBI retrieval, MAFFT alignment, IQ-TREE
+inference — are orchestrated by a `targets` pipeline, so nothing here depends
+on remembering which script to run in which order.
+
+```r
+# Install the pipeline dependencies once
+install.packages(c("targets", "tarchetypes"))
+remotes::install_local("packages/potytools")
+
+renv::restore()     # exact package versions used for the rendered book
+
+targets::tar_make()        # runs the pipeline, skipping up-to-date steps
+targets::tar_visnetwork()  # inspect the dependency graph
+```
+
+External tools required on `PATH` for a full pipeline run: `mafft`, `iqtree2`,
+`hmmscan`.
+
+Not everything flows through the pipeline: the ELM short-linear-motif search
+runs via a separate `gget`-based path
+(`scripts/prep_elm_regions.R` → `scripts/gget_elm_run.py`), described in
+[Chapter 4](notebooks/04_protein_motifs.qmd).
+
+## potytools
+
+The reusable analysis functions — GenBank parsing, codon usage bias
+(RSCU/ENC/CAI/GC), host mono/dicot classification, motif-flank extraction,
+phylogenetics helpers, sequence logos — live in an installable, tested R
+package rather than being redefined chapter by chapter.
+
+```r
+remotes::install_local("packages/potytools")
+library(potytools)
+```
+
+It targets rOpenSci standards: documented with roxygen2, tested with testthat,
+lint-clean and `R CMD check`-clean, and is being prepared for peer review.
+
+## Where the data lives
+
+`data/` and `embeds/` are **not** tracked in git — they're large, regenerable,
+or carry third-party licensing that isn't ours to redistribute. Regenerate them
+with the pipeline above. Provenance for every external input is documented in
+the [data sources appendix](notebooks/A1_data_sources.qmd).
+
+```{=html}
+<div class="hm-downloads" style="margin-top:2rem;">
+  <a class="hm-btn accent" href="https://github.com/MintyHybrid/project-hail-mary" rel="noopener">↗ view the repository on GitHub</a>
+  <a class="hm-btn" href="https://github.com/MintyHybrid/project-hail-mary/archive/refs/heads/main.zip" rel="noopener">⭳ download the code (.zip)</a>
+</div>
+```
+
+## Package citations
+
+If you use this work, please cite the underlying packages as well as the book.
+In R, `citation("packagename")` gives the canonical reference for any of them;
+the full set used here is collected in `packages.bib`.

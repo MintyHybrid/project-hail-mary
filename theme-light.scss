@@ -1,0 +1,137 @@
+/*-- scss:defaults --*/
+
+// ===========================================================================
+// Project Hail Mary — light theme
+//
+// The light counterpart to theme-dark.scss, in the same design language:
+// warm paper ground, the same sage "spark" and gold "hypothesis" accents,
+// darkened so they hold WCAG AA contrast against paper rather than against
+// the dark olive ground.
+//
+// Token names are IDENTICAL to theme-dark.scss on purpose — every component
+// rule lives once in assets/hail-mary.css and reads these custom properties,
+// so switching themes swaps values only, never structure.
+//
+// (This replaces the previous "Cyanotype" palette; the components it styled —
+// the reasoning map, preprint badge, callouts, margin notes — now live in
+// assets/hail-mary.css and are themed through these tokens.)
+// ===========================================================================
+
+// ground
+$bg-page:    #f4f2e9;
+$bg-deep:    #eae7db;
+$bg-card:    #fffefa;
+$bg-panel:   #edeae0;
+$bg-node:    #ffffff;
+$bg-active:  #e2e4d6;
+
+// ink
+$fg-bright:  #1e2219;
+$fg-body:    #2f3529;
+$fg-muted:   #4b5244;
+$fg-dim:     #6a7060;
+$fg-faint:   #8b9080;
+
+// accents — darkened from the dark theme's values to hold contrast on paper
+$spark:      #4f6b42;
+$spark-dim:  #7d9470;
+$gold:       #8a6432;
+$gold-hover: #6f4f26;
+$gold-dim:   #b08a5e;
+$steel:      #45607a;
+$steel-soft: #2c4155;
+$steel-bg:   #e3eaf0;
+
+// lines
+$line:       #d8d5c6;
+$line-soft:  #cbc8b8;
+$line-strong:#b6b3a2;
+$edge:       #c3c8b4;
+
+// type
+$mono-stack:    'IBM Plex Mono', Consolas, SFMono-Regular, monospace;
+$sans-stack:    'Spline Sans', system-ui, 'Segoe UI', sans-serif;
+$serif-stack:   'Spectral', Georgia, serif;
+$display-stack: 'Michroma', 'Spline Sans', sans-serif;
+
+// --- Bootstrap / Quarto overrides ------------------------------------------
+$body-bg:    $bg-page;
+$body-color: $fg-body;
+
+$link-color:       $gold;
+$link-hover-color: $gold-hover;
+
+$font-family-sans-serif: $sans-stack;
+$font-family-monospace:  $mono-stack;
+$headings-font-family:   $serif-stack;
+$headings-color:         $fg-bright;
+$headings-font-weight:   500;
+
+$border-color:       $line;
+$table-border-color: $line;
+
+$code-color: $gold;
+$code-bg:    $bg-deep;
+$pre-bg:     $bg-deep;
+
+// Quarto chrome
+$sidebar-bg:  $bg-page;
+$sidebar-fg:  $fg-dim;
+$navbar-bg:   $bg-page;
+$navbar-fg:   $fg-muted;
+$toc-color:   $fg-dim;
+$toc-font-size: .82rem;
+
+/*-- scss:rules --*/
+
+:root {
+  --hm-bg-page:   #{$bg-page};
+  --hm-bg-deep:   #{$bg-deep};
+  --hm-bg-card:   #{$bg-card};
+  --hm-bg-panel:  #{$bg-panel};
+  --hm-bg-node:   #{$bg-node};
+  --hm-bg-active: #{$bg-active};
+
+  --hm-fg-bright: #{$fg-bright};
+  --hm-fg-body:   #{$fg-body};
+  --hm-fg-muted:  #{$fg-muted};
+  --hm-fg-dim:    #{$fg-dim};
+  --hm-fg-faint:  #{$fg-faint};
+
+  --hm-spark:      #{$spark};
+  --hm-spark-dim:  #{$spark-dim};
+  --hm-gold:       #{$gold};
+  --hm-gold-hover: #{$gold-hover};
+  --hm-gold-dim:   #{$gold-dim};
+  --hm-steel:      #{$steel};
+  --hm-steel-soft: #{$steel-soft};
+  --hm-steel-bg:   #{$steel-bg};
+
+  --hm-line:        #{$line};
+  --hm-line-soft:   #{$line-soft};
+  --hm-line-strong: #{$line-strong};
+  --hm-edge:        #{$edge};
+
+  --hm-mono:    #{$mono-stack};
+  --hm-sans:    #{$sans-stack};
+  --hm-serif:   #{$serif-stack};
+  --hm-display: #{$display-stack};
+
+  --hm-label-plate: rgba(244, 242, 233, .8);
+  --hm-card-shadow: 0 14px 40px rgba(30, 34, 25, .14);
+  --hm-scheme: light;
+
+  color-scheme: light;
+}
+
+// Legacy aliases — see the note in theme-dark.scss.
+:root {
+  --paper:  #{$bg-page};
+  --ink:    #{$fg-bright};
+  --soft:   #{$fg-dim};
+  --accent: #{$spark};
+  --flag:   #{$gold};
+  --line:   #{$line};
+  --mono:   #{$mono-stack};
+  --sans:   #{$sans-stack};
+}

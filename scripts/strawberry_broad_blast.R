@@ -19,7 +19,7 @@ suppressPackageStartupMessages({
   library(xml2)
 })
 
-root    <- "C:/Users/chris/R_projects/project-hail-mary"
+root    <- here::here()
 out_tsv <- file.path(root, "data", "strawberry_broad_blast_hsps.tsv")
 
 straw     <- readDNAStringSet(file.path(root, "data", "strawberryseqs.fasta"))
