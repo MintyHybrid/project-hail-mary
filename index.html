@@ -2,12 +2,12 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.15">
+<meta name="generator" content="quarto-1.9.38">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 <meta name="author" content="Christina Muedsam">
-<meta name="dcterms.date" content="2026-07-17">
+<meta name="dcterms.date" content="2026-07-24">
 
 <title>DNAzyme-like Motifs, Horizontal Gene Transfer, and Short Linear Motif Conservation in Potyviridae</title>
 <style>
@@ -77,14 +77,12 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <script src="site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="site_libs/quarto-html/anchor.min.js"></script>
 <link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-11336406cf8fb0fbd1564e93963cbc50.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-47611d5b405515063748fbb02ca7b37d.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
-<link href="site_libs/quarto-html/quarto-syntax-highlighting-11336406cf8fb0fbd1564e93963cbc50.css" rel="stylesheet" class="quarto-color-scheme-extra" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-20302214ceb66be6255b72c374eecac6.css" rel="stylesheet" class="quarto-color-scheme" id="quarto-text-highlighting-styles">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-dark-25406944a1be663afaf51d7376770714.css" rel="stylesheet" class="quarto-color-scheme quarto-color-alternate" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-82cb5808e81da3454e8042d903791e03.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
-<link href="site_libs/bootstrap/bootstrap-dark-9c42ed6baed5871d395e4db15611d42f.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
-<link href="site_libs/bootstrap/bootstrap-82cb5808e81da3454e8042d903791e03.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme-extra" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-b8c08316f8ad89e91ec32fd734f779d4.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-dark-233009d03d89b6d5608c02aab5ce30bc.min.css" rel="stylesheet" append-hash="true" class="quarto-color-scheme quarto-color-alternate" id="quarto-bootstrap" data-mode="dark">
 <script id="quarto-search-options" type="application/json">{
   "location": "sidebar",
   "copy-button": false,
@@ -114,9 +112,11 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 }</script>
 
 
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/hail-mary.css">
 </head>
 
-<body class="nav-sidebar floating quarto-light"><script id="quarto-html-before-body" type="application/javascript">
+<body class="nav-sidebar floating slimcontent quarto-dark"><script id="quarto-html-before-body" type="application/javascript">
     const toggleBodyColorMode = (bsSheetEl) => {
       const mode = bsSheetEl.getAttribute("data-mode");
       const bodyEl = window.document.querySelector("body");
@@ -258,10 +258,8 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
         changeGiscusTheme();
       }
     };
-    const authorPrefersDark = false;
+    const authorPrefersDark = true;
     const darkModeDefault = authorPrefersDark;
-      document.querySelector('link#quarto-text-highlighting-styles.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
-      document.querySelector('link#quarto-bootstrap.quarto-color-scheme-extra').rel = 'disabled-stylesheet';
     let localAlternateSentinel = darkModeDefault ? 'alternate' : 'default';
     // Dark / light mode switch
     window.quartoToggleColorScheme = () => {
@@ -437,6 +435,18 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </li>
           <li class="sidebar-item">
   <div class="sidebar-item-container"> 
+  <a href="./data-code.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Data &amp; Code</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./about.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">About</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
   <a href="./references.html" class="sidebar-item-text sidebar-link">
  <span class="menu-text"><span class="chapter-number">11</span>&nbsp; <span class="chapter-title">Complete Bibliography</span></span></a>
   </div>
@@ -455,20 +465,25 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
   <ul>
   <li><a href="#project-hail-mary" id="toc-project-hail-mary" class="nav-link active" data-scroll-target="#project-hail-mary">Project Hail Mary</a>
   <ul class="collapse">
-  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a>
+  <li><a href="#explore-by-thread" id="toc-explore-by-thread" class="nav-link" data-scroll-target="#explore-by-thread">Explore by thread</a></li>
+  <li><a href="#lessons-learned" id="toc-lessons-learned" class="nav-link" data-scroll-target="#lessons-learned">Lessons learned</a>
   <ul class="collapse">
-  <li><a href="#key-findings-at-a-glance" id="toc-key-findings-at-a-glance" class="nav-link" data-scroll-target="#key-findings-at-a-glance">Key findings at a glance</a></li>
-  </ul></li>
   <li><a href="#reproducibility" id="toc-reproducibility" class="nav-link" data-scroll-target="#reproducibility">Reproducibility</a></li>
+  </ul></li>
   <li><a href="#interactive-companion-app" id="toc-interactive-companion-app" class="nav-link" data-scroll-target="#interactive-companion-app">Interactive Companion App</a></li>
   <li><a href="#package" id="toc-package" class="nav-link" data-scroll-target="#package">Package</a></li>
   <li><a href="#project-history" id="toc-project-history" class="nav-link" data-scroll-target="#project-history">Project History</a></li>
+  <li><a href="#overview" id="toc-overview" class="nav-link" data-scroll-target="#overview">Overview</a>
+  <ul class="collapse">
+  <li><a href="#long-shot-hypothesis" id="toc-long-shot-hypothesis" class="nav-link" data-scroll-target="#long-shot-hypothesis">Long-shot hypothesis</a></li>
+  <li><a href="#the-reasoning-chain" id="toc-the-reasoning-chain" class="nav-link" data-scroll-target="#the-reasoning-chain">The reasoning chain</a></li>
+  </ul></li>
   </ul></li>
   </ul>
 <div class="toc-actions"><ul><li><a href="https://github.com/MintyHybrid/project-hail-mary/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/MintyHybrid/project-hail-mary/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
     </div>
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content page-columns page-full" id="quarto-document-content">
 
 
 <header id="title-block-header" class="quarto-title-block default">
@@ -490,7 +505,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
     <div>
     <div class="quarto-title-meta-heading">Published</div>
     <div class="quarto-title-meta-contents">
-      <p class="date">July 17, 2026</p>
+      <p class="date">July 24, 2026</p>
     </div>
   </div>
   
@@ -502,33 +517,74 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </header>
 
 
-<section id="project-hail-mary" class="level1 unnumbered">
+<!-- Kept as an .unnumbered H1 rather than a YAML `title:` -- a YAML title makes
+     Quarto count index.qmd as a numbered chapter, which shifts every
+     subsequent chapter number by one. Quarto promotes this heading into
+     #title-block-header, which the landing page hides in CSS (the hero below
+     carries the title visually). -->
+<section id="project-hail-mary" class="level1 unnumbered page-columns page-full">
 <h1 class="unnumbered">Project Hail Mary</h1>
-<p><em>DNAzyme-like motifs, horizontal gene transfer, and short linear motif conservation in Potyviridae</em></p>
-<div class="callout callout-style-default callout-warning callout-titled">
-<div class="callout-header d-flex align-content-center">
-<div class="callout-icon-container">
-<i class="callout-icon"></i>
+<!-- ===================================================================
+     Landing hero: the reasoning graph IS the navigation. Nodes and edges
+     are built by assets/network-nav.js from assets/hail-mary-data.js;
+     everything below the fold is the written overview.
+     Under 820px the graph is swapped for .hm-fallback-list (see the CSS).
+     =================================================================== -->
+<div class="hm-hero" data-hm-hero="">
+
+  <div class="hm-graph"></div>
+
+  <header class="hm-header">
+    <div class="hm-wordmark">
+      <span class="hm-mark">POTYVIRUS</span>
+      <span class="sub">· PROJECT HAIL MARY</span>
+      <a href="about.html">ABOUT</a>
+      <a href="data-code.html">DATA &amp; CODE</a>
+    </div>
+    <div class="hm-controls">
+      <div class="hm-segmented" role="group" aria-label="Reading level">
+        <button type="button" data-hm-audience="expert" aria-pressed="true">expert</button>
+        <button type="button" data-hm-audience="plain" aria-pressed="false">plain</button>
+      </div>
+      <button type="button" class="hm-switch" data-hm-expand-all="" aria-pressed="false">
+        <span class="track"><span class="knob"></span></span>
+        EXPAND ALL
+      </button>
+    </div>
+  </header>
+
+  <div class="hm-title-card">
+    <div class="hm-eyebrow">SEQUENCE · ECOLOGY · PROTEIN SORTING</div>
+    <h1>Project Hail<br><span class="accent">Mary</span></h1>
+    <p class="hm-tagline">a chain of <span class="accent">(deep)</span> thought</p>
+    <p class="hm-standfirst">
+      Following one 15-nucleotide coincidence all the way to a hypothesis about
+      how a plant virus hijacks a cell's sorting machinery.
+    </p>
+    <p class="hm-explain">
+      Each node is a chapter; each edge is a step in the reasoning —
+      <em>what led to what</em>. Start at the spark, end at the synthesis.
+    </p>
+    <div class="hm-legend">
+      <div class="item"><span class="dot spark"></span><span>the spark</span></div>
+      <div class="item"><span class="dot gold"></span><span>the hypothesis</span></div>
+    </div>
+    <div class="hm-hint">
+      click a node to expand<br>drag to rearrange · toggle to reveal all
+    </div>
+  </div>
+
+  <div class="hm-fallback-list" aria-label="Chapters"></div>
+  <div class="hm-scroll-cue">scroll for the written overview</div>
 </div>
-<div class="callout-title-container flex-fill">
-<span class="screen-reader-only">Warning</span>Preprint / work in progress — not peer reviewed
-</div>
-</div>
-<div class="callout-body-container callout-body">
-<p>This compendium is <strong>under active development and has not been peer reviewed</strong>. Much of it is <strong>exploratory</strong>, and several of the central ideas (in particular the DNAzyme-activity, horizontal-gene-transfer, and AP-4 / tyrosine-motif immune hypotheses) are presented as <strong>explicit, testable hypotheses rather than established results</strong> — they are flagged as such throughout. Analyses, figures, interpretations and conclusions may change; please treat everything here as a living draft and cite with that caveat.</p>
-</div>
-</div>
-<section id="overview" class="level2">
-<h2 class="anchored" data-anchor-id="overview">Overview</h2>
-<p>This compendium documents the discovery and characterisation of a DNAzyme-like catalytic domain sequence that maps precisely to the genomes of multiple Potyviridae species, with flanking regions matching eukaryotic genes across plant, fungal, and animal kingdoms. Cross-kingdom horizontal gene transfer is the most parsimonious explanation for this pattern. Additionally, the Potyviridae CI helicase - harbouring the DNAzyme-like sequence, corresponds to a conserved protein motif likely involved in viral-host interactions associated with intracellular sorting (potentially via AP-4), viral replication, viral spread and immunity.</p>
-<section id="key-findings-at-a-glance" class="level3">
-<h3 class="anchored" data-anchor-id="key-findings-at-a-glance">Key findings at a glance</h3>
-<ul>
-<li>A DNAzyme catalytic domain sequence matches perfectly to a region in the genomes of several potyviruses (6 species, 16 isolates).</li>
-<li>The flanking regions of those DNAzyme-matching sequences (16 isolates, 9 identical by sequence) are identical to regions in the genomes of several eukaryotes, including plants (potential viral hosts) and insects (potential viral vectors).</li>
-<li>Interactions between those eukaryotic species suggest the homology might reflect cross-kingdom horizontal DNA transfer.</li>
-<li>The eukaryotic genes span diverse functions — DNA repair, transcription regulation, chromatin remodelling, RNA processing, translation, and genes of unknown function — several of them essential for cell survival and development.</li>
-</ul>
+<p><em>DNAzyme-like motifs, horizontal gene transfer, and short linear motif conservation in Potyviridae</em> <span class="preprint-badge">⚑ preprint — not peer reviewed</span></p>
+
+<div class="no-row-height column-margin column-container"><div class="">
+<p><strong>⚑ Preprint — not peer reviewed</strong></p>
+<p>This collection is under active development and has not been peer reviewed. Much of it is exploratory, and several of the central ideas (in particular the DNAzyme-activity, horizontal-gene-transfer, and AP-4 / tyrosine-motif immune hypotheses) are presented as explicit, testable hypotheses rather than established results — they are flagged as such throughout. Analyses, figures, interpretations and conclusions may change; please treat everything here as a living draft and cite with that caveat. Feel free to contribute. Constructive feedback is always welcome (no matter who you are or what your background is!).</p>
+</div></div><section id="explore-by-thread" class="level3">
+<h3 class="anchored" data-anchor-id="explore-by-thread">Explore by thread</h3>
+<p>The graph at the top of this page is the primary map: chapters as nodes, the reasoning that connects them as edges. The table below covers the same ground as a plain list.</p>
 <p>The work spans several interconnected research threads:</p>
 <table class="caption-top table">
 <thead>
@@ -587,9 +643,19 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 </tbody>
 </table>
 </section>
-</section>
-<section id="reproducibility" class="level2">
-<h2 class="anchored" data-anchor-id="reproducibility">Reproducibility</h2>
+<section id="lessons-learned" class="level2">
+<h2 class="anchored" data-anchor-id="lessons-learned">Lessons learned</h2>
+<ul>
+<li>A DNAzyme catalytic domain sequence matches perfectly to a region in the genomes of several potyviruses (6 species, 16 isolates).</li>
+<li>The flanking regions of those DNAzyme-matching sequences (16 isolates, 9 identical by sequence) are identical to regions in the genomes of several eukaryotes, including plants (potential viral hosts) and insects (potential viral vectors).</li>
+<li>Interactions between those eukaryotic species suggest the homology might reflect cross-kingdom horizontal DNA transfer.</li>
+<li>The eukaryotic genes span diverse functions — DNA repair, transcription regulation, chromatin remodelling, RNA processing, translation, and genes of unknown function — several of them essential for cell survival and development.</li>
+<li>The CI protein also carries conserved short linear motifs (ELM) beyond the DNAzyme-matching sequence itself, including an accessible tyrosine-based (YXXΦ) sorting signal alongside an acidic-dileucine AP-2 motif, recurring with genus-specific variation across isolates.</li>
+<li>Those sorting motifs motivate a testable hypothesis that the CI protein co-opts host intracellular trafficking — potentially via the AP-4 adaptor complex — to aid viral replication and spread, and to perturb the same trafficking machinery used in plant immune signalling.</li>
+<li>The motif is conserved across human immune receptors, as well as human pathogens and might a) explain massive expansion of the genus Potyvirus (in comparisons to other Potyviridae) and b) represent the functional link between viral infections to delayed onset of health disorders like autoimmune diseases and cancer.</li>
+</ul>
+<section id="reproducibility" class="level3">
+<h3 class="anchored" data-anchor-id="reproducibility">Reproducibility</h3>
 <p>All computationally intensive steps (alignment, phylogenetic inference, NCBI fetching, ELM queries) are orchestrated by a <code>targets</code> pipeline:</p>
 <div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the pipeline dependencies once</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"targets"</span>, <span class="st">"tarchetypes"</span>))</span>
@@ -601,6 +667,7 @@ pre > code.sourceCode > span > a:first-child::before { text-decoration: underlin
 <span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise dependencies</span></span>
 <span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_visnetwork</span>()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
 <p>External tools required on <code>PATH</code> for running the entire pipeline: <code>mafft</code>, <code>iqtree2</code>, <code>hmmscan</code>.</p>
+</section>
 </section>
 <section id="interactive-companion-app" class="level2">
 <h2 class="anchored" data-anchor-id="interactive-companion-app">Interactive Companion App</h2>
@@ -658,14 +725,210 @@ This material is intended for at least two separate publications:
 </tr>
 </tbody>
 </table>
+</section>
+<section id="overview" class="level2">
+<h2 class="anchored" data-anchor-id="overview">Overview</h2>
+<p>This collection documents the discovery and characterisation of a DNAzyme-like catalytic domain sequence that maps precisely to the genomes of multiple Potyviridae species, with flanking regions matching eukaryotic genes across plant, fungal, and animal kingdoms. Cross-kingdom horizontal gene transfer is a possible explanation and presence-absence analyses of the potentially viral fragment in related plant species support the idea. However, considering that activity-critical positions show substitutions in homologous Potyvirus species, DNAzyme activity due to the presence of the detected sequence, in vivo, and especially DNAzymatic activity of homologous Potyvirus sequences, is still unlikely or a very rare event - and would additionally require conciding reverse transcriptase activity in the host.</p>
+<p>Additionally, the Potyviridae DNAzyme-like sequence, corresponds to a conserved protein motif in the viral CI helicase. Motif homology and the CIs’ subcellular distribution and regulation suggest that the tyrosine-based motif could be involved in viral-host interactions associated with intracellular sorting (potentially via AP-4), viral replication, viral spread and immunity. The motif is conserved across species and kingdoms and known to be involved in and crucial for processes such as autophagy and endosomal processing and correct targeting.</p>
+<section id="long-shot-hypothesis" class="level3">
+<h3 class="anchored" data-anchor-id="long-shot-hypothesis">Long-shot hypothesis</h3>
+<p>I further suspect that i) defects in components orchestrating protein sorting, recycling and degradation, or ii) viral particle overload (e.g.&nbsp;during infections) could result in endosomal jamming, lipid distortions and sporadic reversal of membrane (incl.&nbsp;receptor or transporter) topologies due to insufficient coordination at the late endosome. I also suspect that this mechanism applies not only to the plant system. Motif and pathway conservation instead suggest that it might be conserved in multicellular organisms.</p>
+</section>
+<section id="the-reasoning-chain" class="level3">
+<h3 class="anchored" data-anchor-id="the-reasoning-chain">The reasoning chain</h3>
+<p>The paragraphs above compress a lot of branching logic into prose. Laid out as an actual argument tree instead, it’s easier to see which parts are empirical, which are well-supported inference, and which are still explicitly open hypotheses rather than conclusions:</p>
+<div class="reasoning-map">
+<div class="legend">
+<div class="item">
+<span class="swatch established"></span><span class="label"><b>Established</b> — empirical, cited</span>
+</div>
+<div class="item">
+<span class="swatch supported"></span><span class="label"><b>Well-supported</b> inference</span>
+</div>
+<div class="item">
+<span class="swatch open"></span><span class="label"><b>Open</b> — explicit hypothesis, untested</span>
+</div>
+<div class="item">
+<span class="swatch deprioritized"></span><span class="label"><b>Deprioritized</b>, not rejected</span>
+</div>
+<div class="item">
+<span class="tag-next" style="position:static">→ next step</span><span class="label">concrete path to closing it</span>
+</div>
+</div>
+<div class="tree">
+<div class="node established root">
+<div class="t">
+10–23nt DNAzyme catalytic core → BLAST match
+</div>
+<div class="d">
+16 potyvirus isolates, 6 species — perfect match
+</div>
+</div>
+<div class="stem">
+
+</div>
+<div class="branches">
+<div class="branch">
+<div class="label">
+Is it active?
+</div>
+<div class="node deprioritized">
+<div class="t">
+Activity-critical positions substituted
+</div>
+<div class="d">
+unlikely / rare event
+</div>
+</div>
+<div class="sub">
+<div class="node supported">
+<div class="t">
+Codon-partitioned dN/dS: purifying selection at the protein level
+</div>
+<div class="d">
+family-wide, 13 genera (Ch. 2)
+</div>
+<div class="tag-next">
+→ GARD recombination screen not yet run
+</div>
+</div>
+</div>
+</div>
+<div class="branch">
+<div class="label">
+Is it HGT?
+</div>
+<div class="node open">
+<div class="t">
+Ecological network: sporadic, not continuous
+</div>
+</div>
+<div class="connector">
+
+</div>
+<div class="node supported">
+<div class="t">
+Strawberry insert: lineage-specific, fused to TCP7
+</div>
+<div class="d">
+origin (HGT vs.&nbsp;else) still open
+</div>
+</div>
+</div>
+<div class="branch">
+<div class="label">
+What is the locus?
+</div>
+<div class="node supported">
+<div class="t">
+Maps to CI helicase: YXXΦ + AP-2 sorting motif
+</div>
+</div>
+<div class="connector">
+
+</div>
+<div class="node supported">
+<div class="t">
+CI co-opts host trafficking via AP-4
+</div>
+</div>
+<div class="connector">
+
+</div>
+<div class="node main">
+<div class="t">
+MAIN BRANCH — AP-4 disruption → topology flip
+</div>
+<div class="d">
+AP-4 ↔︎ autophagy · AP-4 ↔︎ BDA1 (Huang et al., plant autoimmunity)
+</div>
+<div class="d" style="color:var(--flag)">
+→ autoimmune disease (Crohn’s) · cancer?
+</div>
+<div class="tag-next">
+→ reassess PhD NRAMP3/4 ap-4 mis-sorting data
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!--
+### Life-lessons learned
+
+- it takes an afternoon to hand-check stuff and a month to automate a systematic approach
+- it takes another month to make the output look nice and a lifetime to make it look nice to everyone
+- annoying questions often turn out to be the most relevant
+- - I think it was march when I had a look at the protein sequence for the first time. My PhD thesis must have turned me into a pattern recognition engine - YxxLMVI caught my eye. As before, knowledge gain a day later without any tool vs knowledge gain a couple of months later without any payment (nor a job, nor as many applications written as I should have and could have if I had not tried to make this look prettier and to allow someone to maybe get the whole point ... or not) at this point of my life seems like the biggest, most pointless and stupid way I ever found to waste time I dont even have.
+- when you are trying to answer a difficult question, you solve at least 3 partially related but sometimes more relevant problems, but not unless you go out for a walk every now and then.
+- biology is nice and being a biologist is also nice, but it does not reach awesomemess until you realize that noone can keep you from using the rest of your brain, too (anymore).
+- Standing on the shoulders of giants with nothing but a 13inch screen and public data allows you to come up with a disruptive hypothesis within a couple of days, but to get funding for all the stuff you need to prove yourself wrong (in case you are wrong) requires you to climb down just to then creep up someone's butt. And whoever ends up testing your hypothesis will act as if you don't exist in case you were right unless you do it yourself, but then your results will be questioned.
+- you don't rant about stuff you don't care about, but when you rant people assume you hate, even when you are passionate, instead.
+
+
+### Side-quests and follow-ups
+
+- if the presence of viral sequences in plants (or insects) indeed turns out to be originating from HGT, it's another evidence that many of such events are still remaining undetected. 
+- DNAzyme activity might not occur on its own in biological systems, but did anyone ever try to turn it around and fight potyviruses with DNAzymes?! One of the limiting factors in medicine might not be limiting in plants (presence of magnesium-ions)
+- one of the annoying but important questions was "ssDNA in a living cell? When is there ssDNA in a cell, at all?!". And the answer to that brings me to one of the few branches of the tree of life that are otherwise excluded in this document: bacteria. Specifically: Agrobacteria which transmit part of their plasmid DNA into plant cells as ssDNA. 
+-->
 
 
 <!-- -->
 
 </section>
 </section>
+</section>
 
 </main> <!-- /main -->
+<script>
+
+/* Load the three navigation scripts with a base path that survives both local
+
+   preview (served from /) and GitHub Pages (served from /project-hail-mary/),
+
+   and both root pages and chapters nested in notebooks/.
+
+
+
+   Quarto rewrites the `css:` entry in _quarto.yml to a correct relative href
+
+   for each page, so we read the prefix back off that <link> rather than trying
+
+   to reconstruct the site root ourselves. `async = false` on a dynamically
+
+   created script preserves execution order, which matters: hail-mary-data.js
+
+   defines window.HailMary for the other two. */
+
+(function () {
+
+  var link = document.querySelector('link[href$="hail-mary.css"]');
+
+  var base = link
+
+    ? link.getAttribute("href").replace(/hail-mary\.css(\?.*)?$/, "")
+
+    : "assets/";
+
+
+
+  ["hail-mary-data.js", "network-nav.js", "workbench.js"].forEach(function (file) {
+
+    var s = document.createElement("script");
+
+    s.src = base + file;
+
+    s.async = false;
+
+    document.head.appendChild(s);
+
+  });
+
+})();
+
+</script>
+
 <script id="quarto-html-after-body" type="application/javascript">
   window.document.addEventListener("DOMContentLoaded", function (event) {
     // Ensure there is a toggle, if there isn't float one in the top right
@@ -1144,108 +1407,283 @@ This material is intended for at least two separate publications:
 <span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="co">  - name: "Christina Muedsam"</span></span>
 <span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a><span class="an">date:</span><span class="co"> last-modified</span></span>
 <span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="an">number-sections:</span><span class="co"> false</span></span>
-<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
-<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># Project Hail Mary {.unnumbered}</span></span>
-<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>*DNAzyme-like motifs, horizontal gene transfer, and short linear motif</span>
-<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>conservation in Potyviridae*</span>
-<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>::: {.callout-warning}</span>
-<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="fu">## Preprint / work in progress — not peer reviewed</span></span>
-<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>This compendium is **under active development and has not been peer reviewed**.</span>
-<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>Much of it is **exploratory**, and several of the central ideas (in particular the</span>
-<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>DNAzyme-activity, horizontal-gene-transfer, and AP-4 / tyrosine-motif immune</span>
-<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>hypotheses) are presented as **explicit, testable hypotheses rather than</span>
-<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>established results** — they are flagged as such throughout. Analyses, figures,</span>
-<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>interpretations and conclusions may change; please treat everything here as a</span>
-<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>living draft and cite with that caveat.</span>
-<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>:::</span>
-<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
-<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>This compendium documents the discovery and characterisation of a DNAzyme-like</span>
-<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>catalytic domain sequence that maps precisely to the genomes of multiple</span>
-<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>Potyviridae species, with flanking regions matching eukaryotic genes across</span>
-<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>plant, fungal, and animal kingdoms. Cross-kingdom horizontal gene transfer is</span>
-<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>the most parsimonious explanation for this pattern.</span>
-<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>Additionally, the Potyviridae CI helicase - harbouring the DNAzyme-like sequence, corresponds to a conserved protein motif likely involved in viral-host interactions associated with intracellular sorting (potentially via AP-4), viral replication, viral spread and immunity.</span>
-<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="fu">### Key findings at a glance</span></span>
-<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A DNAzyme catalytic domain sequence matches perfectly to a region in the genomes of several potyviruses (6 species, 16 isolates).</span>
-<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The flanking regions of those DNAzyme-matching sequences (16 isolates, 9 identical by sequence) are identical to regions in the genomes of several eukaryotes, including plants (potential viral hosts) and insects (potential viral vectors).</span>
-<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Interactions between those eukaryotic species suggest the homology might reflect cross-kingdom horizontal DNA transfer.</span>
-<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The eukaryotic genes span diverse functions — DNA repair, transcription regulation, chromatin remodelling, RNA processing, translation, and genes of unknown function — several of them essential for cell survival and development.</span>
-<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>The work spans several interconnected research threads:</span>
-<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Chapter <span class="pp">|</span> Topic <span class="pp">|</span> Key tools <span class="pp">|</span></span>
-<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
-<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">1 — Discovery</span><span class="co">](notebooks/01_discovery.qmd)</span> <span class="pp">|</span> DNAzyme match + eukaryotic homologs <span class="pp">|</span> BLAST, Biostrings <span class="pp">|</span></span>
-<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">2 — Phylogenetics</span><span class="co">](notebooks/02_phylogenetics.qmd)</span> <span class="pp">|</span> CI protein tree, motif mapping <span class="pp">|</span> MAFFT, IQ-TREE 2, ape <span class="pp">|</span></span>
-<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">3 — Codon Usage</span><span class="co">](notebooks/03_codon_dnazyme.qmd)</span> <span class="pp">|</span> RSCU, ENC, host adaptation, DNAzyme locus <span class="pp">|</span> potytools, seqinr <span class="pp">|</span></span>
-<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">4 — ELM Motifs</span><span class="co">](notebooks/04_protein_motifs.qmd)</span> <span class="pp">|</span> Short linear motif conservation in CI <span class="pp">|</span> ELM REST API, potytools <span class="pp">|</span></span>
-<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">5 — Potyvirus Motifs</span><span class="co">](notebooks/05_potyvirus_motifs.qmd)</span> <span class="pp">|</span> CI 3D structure, motif catalogue, interaction network <span class="pp">|</span> AlphaFold, igraph, visNetwork <span class="pp">|</span></span>
-<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">6 — HGT</span><span class="co">](notebooks/06_hgt.qmd)</span> <span class="pp">|</span> Phylogenetic incongruence, sequence logos <span class="pp">|</span> ggseqlogo, potytools <span class="pp">|</span></span>
-<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">7 — Networks</span><span class="co">](notebooks/07_networks.qmd)</span> <span class="pp">|</span> Host-virus ecological networks <span class="pp">|</span> igraph, BioNexus app <span class="pp">|</span></span>
-<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">8 — Immunity</span><span class="co">](notebooks/08_immu_simmu.qmd)</span> <span class="pp">|</span> PTI/ETI simulation under genetic perturbations <span class="pp">|</span> Observable JS <span class="pp">|</span></span>
-<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">9 — AP-4 Trafficking</span><span class="co">](notebooks/09_ap4_trafficking.qmd)</span> <span class="pp">|</span> AP-4/tyrosine-motif immune-trafficking hypothesis <span class="pp">|</span> — <span class="pp">|</span></span>
-<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="fu">## Reproducibility</span></span>
-<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a>All computationally intensive steps (alignment, phylogenetic inference, NCBI</span>
-<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>fetching, ELM queries) are orchestrated by a <span class="in">`targets`</span> pipeline:</span>
-<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the pipeline dependencies once</span></span>
-<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"targets"</span>, <span class="st">"tarchetypes"</span>))</span>
-<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_local</span>(<span class="st">"packages/potytools"</span>)</span>
-<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the full pipeline (skips up-to-date steps automatically)</span></span>
-<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_make</span>()</span>
-<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise dependencies</span></span>
-<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_visnetwork</span>()</span>
-<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>External tools required on <span class="in">`PATH`</span> for running the entire pipeline: <span class="in">`mafft`</span>, <span class="in">`iqtree2`</span>, <span class="in">`hmmscan`</span>.</span>
-<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interactive Companion App</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="an">execute:</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">  warning: false</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">  message: false</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co">---</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Kept as an .unnumbered H1 rather than a YAML `title:` -- a YAML title makes</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="co">     Quarto count index.qmd as a numbered chapter, which shifts every</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="co">     subsequent chapter number by one. Quarto promotes this heading into</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="co">     #title-block-header, which the landing page hides in CSS (the hero below</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a><span class="co">     carries the title visually). --&gt;</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="fu"># Project Hail Mary {.unnumbered}</span></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a><span class="in">```{=html}</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;!-- ===================================================================</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a><span class="in">     Landing hero: the reasoning graph IS the navigation. Nodes and edges</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a><span class="in">     are built by assets/network-nav.js from assets/hail-mary-data.js;</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a><span class="in">     everything below the fold is the written overview.</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a><span class="in">     Under 820px the graph is swapped for .hm-fallback-list (see the CSS).</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a><span class="in">     =================================================================== --&gt;</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;div class="hm-hero" data-hm-hero&gt;</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="hm-graph"&gt;&lt;/div&gt;</span></span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;header class="hm-header"&gt;</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="hm-wordmark"&gt;</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;span class="hm-mark"&gt;POTYVIRUS&lt;/span&gt;</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;span class="sub"&gt;· PROJECT HAIL MARY&lt;/span&gt;</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;a href="about.html"&gt;ABOUT&lt;/a&gt;</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;a href="data-code.html"&gt;DATA &amp;amp; CODE&lt;/a&gt;</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;/div&gt;</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="hm-controls"&gt;</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;div class="hm-segmented" role="group" aria-label="Reading level"&gt;</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a><span class="in">        &lt;button type="button" data-hm-audience="expert" aria-pressed="true"&gt;expert&lt;/button&gt;</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a><span class="in">        &lt;button type="button" data-hm-audience="plain" aria-pressed="false"&gt;plain&lt;/button&gt;</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;/div&gt;</span></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;button type="button" class="hm-switch" data-hm-expand-all aria-pressed="false"&gt;</span></span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a><span class="in">        &lt;span class="track"&gt;&lt;span class="knob"&gt;&lt;/span&gt;&lt;/span&gt;</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a><span class="in">        EXPAND ALL</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;/button&gt;</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;/div&gt;</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/header&gt;</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="hm-title-card"&gt;</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="hm-eyebrow"&gt;SEQUENCE · ECOLOGY · PROTEIN SORTING&lt;/div&gt;</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;h1&gt;Project Hail&lt;br&gt;&lt;span class="accent"&gt;Mary&lt;/span&gt;&lt;/h1&gt;</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;p class="hm-tagline"&gt;a chain of &lt;span class="accent"&gt;(deep)&lt;/span&gt; thought&lt;/p&gt;</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;p class="hm-standfirst"&gt;</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a><span class="in">      Following one 15-nucleotide coincidence all the way to a hypothesis about</span></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="in">      how a plant virus hijacks a cell's sorting machinery.</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;/p&gt;</span></span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;p class="hm-explain"&gt;</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a><span class="in">      Each node is a chapter; each edge is a step in the reasoning —</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;em&gt;what led to what&lt;/em&gt;. Start at the spark, end at the synthesis.</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;/p&gt;</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="hm-legend"&gt;</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;div class="item"&gt;&lt;span class="dot spark"&gt;&lt;/span&gt;&lt;span&gt;the spark&lt;/span&gt;&lt;/div&gt;</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a><span class="in">      &lt;div class="item"&gt;&lt;span class="dot gold"&gt;&lt;/span&gt;&lt;span&gt;the hypothesis&lt;/span&gt;&lt;/div&gt;</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;/div&gt;</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;div class="hm-hint"&gt;</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a><span class="in">      click a node to expand&lt;br&gt;drag to rearrange · toggle to reveal all</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a><span class="in">    &lt;/div&gt;</span></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;/div&gt;</span></span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="hm-fallback-list" aria-label="Chapters"&gt;&lt;/div&gt;</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a><span class="in">  &lt;div class="hm-scroll-cue"&gt;scroll for the written overview&lt;/div&gt;</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a><span class="in">&lt;/div&gt;</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
 <span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>The **BioNexus** Shiny app provides live GBIF + GLOBI biodiversity network</span>
-<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>exploration relevant to Chapters 7 and 8:</span>
+<span id="cb3-75"><a href="#cb3-75" aria-hidden="true" tabindex="-1"></a>*DNAzyme-like motifs, horizontal gene transfer, and short linear motif</span>
+<span id="cb3-76"><a href="#cb3-76" aria-hidden="true" tabindex="-1"></a>conservation in Potyviridae* <span class="co">[</span><span class="ot">⚑ preprint — not peer reviewed</span><span class="co">]</span>{.preprint-badge}</span>
 <span id="cb3-77"><a href="#cb3-77" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
-<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>shiny<span class="sc">::</span><span class="fu">runApp</span>(<span class="st">"shiny/bionexus/"</span>)</span>
-<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
-<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- </span></span>
-<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a><span class="co">## Publication Plans</span></span>
-<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a><span class="co">This material is intended for at least two separate publications:</span></span>
-<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a><span class="co">1. **Paper 1** — The DNAzyme discovery + HGT evidence (Chapters 1, 2, 6).</span></span>
-<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a><span class="co">   Target: *PNAS* / *eLife* / *PLoS Pathogens*.</span></span>
-<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a><span class="co">2. **Paper 2** — ELM short linear motif conservation in Potyviridae CI proteins</span></span>
-<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a><span class="co">   (Chapters 3, 4, 5). Target: *Virus Evolution* / *Journal of Virology*.</span></span>
-<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="co">3. **Paper 3** (optional) — Ecological host networks and immunity modelling</span></span>
-<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a><span class="co">   (Chapters 7–9). Target: *New Phytologist* / *MPMI*. --&gt;</span></span>
-<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a><span class="fu">## Package</span></span>
-<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a>Analysis functions are collected in the **potytools** R package</span>
-<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a>(<span class="in">`packages/potytools/`</span>), being prepared for rOpenSci peer review.</span>
-<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a><span class="fu">## Project History</span></span>
-<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Date <span class="pp">|</span> Milestone <span class="pp">|</span></span>
-<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
-<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Feb 2026 <span class="pp">|</span> DNAzyme match first identified (<span class="in">`2025_toys/poty.qmd`</span>) <span class="pp">|</span></span>
-<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mar 2026 <span class="pp">|</span> HGT analysis suite <span class="pp">|</span></span>
-<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Apr 2026 <span class="pp">|</span> Codon usage analysis iterations <span class="pp">|</span></span>
-<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> May 2026 <span class="pp">|</span> Cleaned codon + DNAzyme notebook <span class="pp">|</span></span>
-<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> May 2026 <span class="pp">|</span> Final phylogenetic pipeline <span class="pp">|</span></span>
-<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Jun 2026 <span class="pp">|</span> ELM motif &amp; immunity notebooks; this document <span class="pp">|</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
+<span id="cb3-78"><a href="#cb3-78" aria-hidden="true" tabindex="-1"></a>::: {.column-margin}</span>
+<span id="cb3-79"><a href="#cb3-79" aria-hidden="true" tabindex="-1"></a>**⚑ Preprint — not peer reviewed**</span>
+<span id="cb3-80"><a href="#cb3-80" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-81"><a href="#cb3-81" aria-hidden="true" tabindex="-1"></a>This collection is under active development and has not been peer reviewed.</span>
+<span id="cb3-82"><a href="#cb3-82" aria-hidden="true" tabindex="-1"></a>Much of it is exploratory, and several of the central ideas (in particular the</span>
+<span id="cb3-83"><a href="#cb3-83" aria-hidden="true" tabindex="-1"></a>DNAzyme-activity, horizontal-gene-transfer, and AP-4 / tyrosine-motif immune</span>
+<span id="cb3-84"><a href="#cb3-84" aria-hidden="true" tabindex="-1"></a>hypotheses) are presented as explicit, testable hypotheses rather than</span>
+<span id="cb3-85"><a href="#cb3-85" aria-hidden="true" tabindex="-1"></a>established results — they are flagged as such throughout. Analyses, figures,</span>
+<span id="cb3-86"><a href="#cb3-86" aria-hidden="true" tabindex="-1"></a>interpretations and conclusions may change; please treat everything here as a</span>
+<span id="cb3-87"><a href="#cb3-87" aria-hidden="true" tabindex="-1"></a>living draft and cite with that caveat. Feel free to contribute. Constructive feedback is always welcome (no matter who you are or what your background is!).</span>
+<span id="cb3-88"><a href="#cb3-88" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb3-89"><a href="#cb3-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-90"><a href="#cb3-90" aria-hidden="true" tabindex="-1"></a><span class="fu">### Explore by thread</span></span>
+<span id="cb3-91"><a href="#cb3-91" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-92"><a href="#cb3-92" aria-hidden="true" tabindex="-1"></a>The graph at the top of this page is the primary map: chapters as nodes, the</span>
+<span id="cb3-93"><a href="#cb3-93" aria-hidden="true" tabindex="-1"></a>reasoning that connects them as edges. The table below covers the same ground</span>
+<span id="cb3-94"><a href="#cb3-94" aria-hidden="true" tabindex="-1"></a>as a plain list.</span>
+<span id="cb3-95"><a href="#cb3-95" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-96"><a href="#cb3-96" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-97"><a href="#cb3-97" aria-hidden="true" tabindex="-1"></a>The work spans several interconnected research threads:</span>
+<span id="cb3-98"><a href="#cb3-98" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-99"><a href="#cb3-99" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Chapter <span class="pp">|</span> Topic <span class="pp">|</span> Key tools <span class="pp">|</span></span>
+<span id="cb3-100"><a href="#cb3-100" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|---|</span></span>
+<span id="cb3-101"><a href="#cb3-101" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">1 — Discovery</span><span class="co">](notebooks/01_discovery.qmd)</span> <span class="pp">|</span> DNAzyme match + eukaryotic homologs <span class="pp">|</span> BLAST, Biostrings <span class="pp">|</span></span>
+<span id="cb3-102"><a href="#cb3-102" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">2 — Phylogenetics</span><span class="co">](notebooks/02_phylogenetics.qmd)</span> <span class="pp">|</span> CI protein tree, motif mapping <span class="pp">|</span> MAFFT, IQ-TREE 2, ape <span class="pp">|</span></span>
+<span id="cb3-103"><a href="#cb3-103" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">3 — Codon Usage</span><span class="co">](notebooks/03_codon_dnazyme.qmd)</span> <span class="pp">|</span> RSCU, ENC, host adaptation, DNAzyme locus <span class="pp">|</span> potytools, seqinr <span class="pp">|</span></span>
+<span id="cb3-104"><a href="#cb3-104" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">4 — ELM Motifs</span><span class="co">](notebooks/04_protein_motifs.qmd)</span> <span class="pp">|</span> Short linear motif conservation in CI <span class="pp">|</span> ELM REST API, potytools <span class="pp">|</span></span>
+<span id="cb3-105"><a href="#cb3-105" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">5 — Potyvirus Motifs</span><span class="co">](notebooks/05_potyvirus_motifs.qmd)</span> <span class="pp">|</span> CI 3D structure, motif catalogue, interaction network <span class="pp">|</span> AlphaFold, igraph, visNetwork <span class="pp">|</span></span>
+<span id="cb3-106"><a href="#cb3-106" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">6 — HGT</span><span class="co">](notebooks/06_hgt.qmd)</span> <span class="pp">|</span> Phylogenetic incongruence, sequence logos <span class="pp">|</span> ggseqlogo, potytools <span class="pp">|</span></span>
+<span id="cb3-107"><a href="#cb3-107" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">7 — Networks</span><span class="co">](notebooks/07_networks.qmd)</span> <span class="pp">|</span> Host-virus ecological networks <span class="pp">|</span> igraph, BioNexus app <span class="pp">|</span></span>
+<span id="cb3-108"><a href="#cb3-108" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">8 — Immunity</span><span class="co">](notebooks/08_immu_simmu.qmd)</span> <span class="pp">|</span> PTI/ETI simulation under genetic perturbations <span class="pp">|</span> Observable JS <span class="pp">|</span></span>
+<span id="cb3-109"><a href="#cb3-109" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> <span class="co">[</span><span class="ot">9 — AP-4 Trafficking</span><span class="co">](notebooks/09_ap4_trafficking.qmd)</span> <span class="pp">|</span> AP-4/tyrosine-motif immune-trafficking hypothesis <span class="pp">|</span> — <span class="pp">|</span></span>
+<span id="cb3-110"><a href="#cb3-110" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-111"><a href="#cb3-111" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-112"><a href="#cb3-112" aria-hidden="true" tabindex="-1"></a><span class="fu">## Lessons learned</span></span>
+<span id="cb3-113"><a href="#cb3-113" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-114"><a href="#cb3-114" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>A DNAzyme catalytic domain sequence matches perfectly to a region in the genomes of several potyviruses (6 species, 16 isolates).</span>
+<span id="cb3-115"><a href="#cb3-115" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The flanking regions of those DNAzyme-matching sequences (16 isolates, 9 identical by sequence) are identical to regions in the genomes of several eukaryotes, including plants (potential viral hosts) and insects (potential viral vectors).</span>
+<span id="cb3-116"><a href="#cb3-116" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Interactions between those eukaryotic species suggest the homology might reflect cross-kingdom horizontal DNA transfer.</span>
+<span id="cb3-117"><a href="#cb3-117" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The eukaryotic genes span diverse functions — DNA repair, transcription regulation, chromatin remodelling, RNA processing, translation, and genes of unknown function — several of them essential for cell survival and development.</span>
+<span id="cb3-118"><a href="#cb3-118" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The CI protein also carries conserved short linear motifs (ELM) beyond the DNAzyme-matching sequence itself, including an accessible tyrosine-based (YXXΦ) sorting signal alongside an acidic-dileucine AP-2 motif, recurring with genus-specific variation across isolates.</span>
+<span id="cb3-119"><a href="#cb3-119" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>Those sorting motifs motivate a testable hypothesis that the CI protein co-opts host intracellular trafficking — potentially via the AP-4 adaptor complex — to aid viral replication and spread, and to perturb the same trafficking machinery used in plant immune signalling. </span>
+<span id="cb3-120"><a href="#cb3-120" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>The motif is conserved across human immune receptors, as well as human pathogens and might a) explain massive expansion of the genus Potyvirus (in comparisons to other Potyviridae) and b) represent the functional link between viral infections to delayed onset of health disorders like autoimmune diseases and cancer. </span>
+<span id="cb3-121"><a href="#cb3-121" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-122"><a href="#cb3-122" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-123"><a href="#cb3-123" aria-hidden="true" tabindex="-1"></a><span class="fu">### Reproducibility</span></span>
+<span id="cb3-124"><a href="#cb3-124" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-125"><a href="#cb3-125" aria-hidden="true" tabindex="-1"></a>All computationally intensive steps (alignment, phylogenetic inference, NCBI</span>
+<span id="cb3-126"><a href="#cb3-126" aria-hidden="true" tabindex="-1"></a>fetching, ELM queries) are orchestrated by a <span class="in">`targets`</span> pipeline:</span>
+<span id="cb3-127"><a href="#cb3-127" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-128"><a href="#cb3-128" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb3-129"><a href="#cb3-129" aria-hidden="true" tabindex="-1"></a><span class="co"># Install the pipeline dependencies once</span></span>
+<span id="cb3-130"><a href="#cb3-130" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="fu">c</span>(<span class="st">"targets"</span>, <span class="st">"tarchetypes"</span>))</span>
+<span id="cb3-131"><a href="#cb3-131" aria-hidden="true" tabindex="-1"></a>remotes<span class="sc">::</span><span class="fu">install_local</span>(<span class="st">"packages/potytools"</span>)</span>
+<span id="cb3-132"><a href="#cb3-132" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-133"><a href="#cb3-133" aria-hidden="true" tabindex="-1"></a><span class="co"># Run the full pipeline (skips up-to-date steps automatically)</span></span>
+<span id="cb3-134"><a href="#cb3-134" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_make</span>()</span>
+<span id="cb3-135"><a href="#cb3-135" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-136"><a href="#cb3-136" aria-hidden="true" tabindex="-1"></a><span class="co"># Visualise dependencies</span></span>
+<span id="cb3-137"><a href="#cb3-137" aria-hidden="true" tabindex="-1"></a>targets<span class="sc">::</span><span class="fu">tar_visnetwork</span>()</span>
+<span id="cb3-138"><a href="#cb3-138" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-139"><a href="#cb3-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-140"><a href="#cb3-140" aria-hidden="true" tabindex="-1"></a>External tools required on <span class="in">`PATH`</span> for running the entire pipeline: <span class="in">`mafft`</span>, <span class="in">`iqtree2`</span>, <span class="in">`hmmscan`</span>.</span>
+<span id="cb3-141"><a href="#cb3-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-142"><a href="#cb3-142" aria-hidden="true" tabindex="-1"></a><span class="fu">## Interactive Companion App</span></span>
+<span id="cb3-143"><a href="#cb3-143" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-144"><a href="#cb3-144" aria-hidden="true" tabindex="-1"></a>The **BioNexus** Shiny app provides live GBIF + GLOBI biodiversity network</span>
+<span id="cb3-145"><a href="#cb3-145" aria-hidden="true" tabindex="-1"></a>exploration relevant to Chapters 7 and 8:</span>
+<span id="cb3-146"><a href="#cb3-146" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-147"><a href="#cb3-147" aria-hidden="true" tabindex="-1"></a><span class="in">```r</span></span>
+<span id="cb3-148"><a href="#cb3-148" aria-hidden="true" tabindex="-1"></a>shiny<span class="sc">::</span><span class="fu">runApp</span>(<span class="st">"shiny/bionexus/"</span>)</span>
+<span id="cb3-149"><a href="#cb3-149" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span>
+<span id="cb3-150"><a href="#cb3-150" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- </span></span>
+<span id="cb3-151"><a href="#cb3-151" aria-hidden="true" tabindex="-1"></a><span class="co">## Publication Plans</span></span>
+<span id="cb3-152"><a href="#cb3-152" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-153"><a href="#cb3-153" aria-hidden="true" tabindex="-1"></a><span class="co">This material is intended for at least two separate publications:</span></span>
+<span id="cb3-154"><a href="#cb3-154" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-155"><a href="#cb3-155" aria-hidden="true" tabindex="-1"></a><span class="co">1. **Paper 1** — The DNAzyme discovery + HGT evidence (Chapters 1, 2, 6).</span></span>
+<span id="cb3-156"><a href="#cb3-156" aria-hidden="true" tabindex="-1"></a><span class="co">   Target: *PNAS* / *eLife* / *PLoS Pathogens*.</span></span>
+<span id="cb3-157"><a href="#cb3-157" aria-hidden="true" tabindex="-1"></a><span class="co">2. **Paper 2** — ELM short linear motif conservation in Potyviridae CI proteins</span></span>
+<span id="cb3-158"><a href="#cb3-158" aria-hidden="true" tabindex="-1"></a><span class="co">   (Chapters 3, 4, 5). Target: *Virus Evolution* / *Journal of Virology*.</span></span>
+<span id="cb3-159"><a href="#cb3-159" aria-hidden="true" tabindex="-1"></a><span class="co">3. **Paper 3** (optional) — Ecological host networks and immunity modelling</span></span>
+<span id="cb3-160"><a href="#cb3-160" aria-hidden="true" tabindex="-1"></a><span class="co">   (Chapters 7–9). Target: *New Phytologist* / *MPMI*. --&gt;</span></span>
+<span id="cb3-161"><a href="#cb3-161" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-162"><a href="#cb3-162" aria-hidden="true" tabindex="-1"></a><span class="fu">## Package</span></span>
+<span id="cb3-163"><a href="#cb3-163" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-164"><a href="#cb3-164" aria-hidden="true" tabindex="-1"></a>Analysis functions are collected in the **potytools** R package</span>
+<span id="cb3-165"><a href="#cb3-165" aria-hidden="true" tabindex="-1"></a>(<span class="in">`packages/potytools/`</span>), being prepared for rOpenSci peer review.</span>
+<span id="cb3-166"><a href="#cb3-166" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-167"><a href="#cb3-167" aria-hidden="true" tabindex="-1"></a><span class="fu">## Project History</span></span>
+<span id="cb3-168"><a href="#cb3-168" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-169"><a href="#cb3-169" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Date <span class="pp">|</span> Milestone <span class="pp">|</span></span>
+<span id="cb3-170"><a href="#cb3-170" aria-hidden="true" tabindex="-1"></a><span class="pp">|---|---|</span></span>
+<span id="cb3-171"><a href="#cb3-171" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Feb 2026 <span class="pp">|</span> DNAzyme match first identified (<span class="in">`2025_toys/poty.qmd`</span>) <span class="pp">|</span></span>
+<span id="cb3-172"><a href="#cb3-172" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Mar 2026 <span class="pp">|</span> HGT analysis suite <span class="pp">|</span></span>
+<span id="cb3-173"><a href="#cb3-173" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Apr 2026 <span class="pp">|</span> Codon usage analysis iterations <span class="pp">|</span></span>
+<span id="cb3-174"><a href="#cb3-174" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> May 2026 <span class="pp">|</span> Cleaned codon + DNAzyme notebook <span class="pp">|</span></span>
+<span id="cb3-175"><a href="#cb3-175" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> May 2026 <span class="pp">|</span> Final phylogenetic pipeline <span class="pp">|</span></span>
+<span id="cb3-176"><a href="#cb3-176" aria-hidden="true" tabindex="-1"></a><span class="pp">|</span> Jun 2026 <span class="pp">|</span> ELM motif &amp; immunity notebooks; this document <span class="pp">|</span></span>
+<span id="cb3-177"><a href="#cb3-177" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-178"><a href="#cb3-178" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-179"><a href="#cb3-179" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-180"><a href="#cb3-180" aria-hidden="true" tabindex="-1"></a><span class="fu">## Overview</span></span>
+<span id="cb3-181"><a href="#cb3-181" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-182"><a href="#cb3-182" aria-hidden="true" tabindex="-1"></a>This collection documents the discovery and characterisation of a DNAzyme-like</span>
+<span id="cb3-183"><a href="#cb3-183" aria-hidden="true" tabindex="-1"></a>catalytic domain sequence that maps precisely to the genomes of multiple</span>
+<span id="cb3-184"><a href="#cb3-184" aria-hidden="true" tabindex="-1"></a>Potyviridae species, with flanking regions matching eukaryotic genes across</span>
+<span id="cb3-185"><a href="#cb3-185" aria-hidden="true" tabindex="-1"></a>plant, fungal, and animal kingdoms. Cross-kingdom horizontal gene transfer is a possible explanation and presence-absence analyses of the potentially viral fragment in related plant species support the idea. However, considering that activity-critical positions show substitutions in homologous Potyvirus species, DNAzyme activity due to the presence of the detected sequence, in vivo, and especially DNAzymatic activity of homologous Potyvirus sequences, is still unlikely or a very rare event - and would additionally require conciding reverse transcriptase activity in the host. </span>
+<span id="cb3-186"><a href="#cb3-186" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-187"><a href="#cb3-187" aria-hidden="true" tabindex="-1"></a>Additionally, the Potyviridae DNAzyme-like sequence, corresponds to a conserved protein motif in the viral CI helicase. Motif homology and the CIs' subcellular distribution and regulation suggest that the tyrosine-based motif could be involved in viral-host interactions associated with intracellular sorting (potentially via AP-4), viral replication, viral spread and immunity. The motif is conserved across species and kingdoms and known to be involved in and crucial for processes such as autophagy and endosomal processing and correct targeting. </span>
+<span id="cb3-188"><a href="#cb3-188" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-189"><a href="#cb3-189" aria-hidden="true" tabindex="-1"></a><span class="fu">### Long-shot hypothesis</span></span>
+<span id="cb3-190"><a href="#cb3-190" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-191"><a href="#cb3-191" aria-hidden="true" tabindex="-1"></a>I further suspect that i) defects in components orchestrating protein sorting, recycling and degradation, or ii) viral particle overload (e.g. during infections) could result in endosomal jamming, lipid distortions and sporadic reversal of membrane (incl. receptor or transporter) topologies due to insufficient coordination at the late endosome. </span>
+<span id="cb3-192"><a href="#cb3-192" aria-hidden="true" tabindex="-1"></a>I also suspect that this mechanism applies not only to the plant system. Motif and pathway conservation instead suggest that it might be conserved in multicellular organisms.</span>
+<span id="cb3-193"><a href="#cb3-193" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-194"><a href="#cb3-194" aria-hidden="true" tabindex="-1"></a><span class="fu">### The reasoning chain</span></span>
+<span id="cb3-195"><a href="#cb3-195" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-196"><a href="#cb3-196" aria-hidden="true" tabindex="-1"></a>The paragraphs above compress a lot of branching logic into prose. Laid out</span>
+<span id="cb3-197"><a href="#cb3-197" aria-hidden="true" tabindex="-1"></a>as an actual argument tree instead, it's easier to see which parts are</span>
+<span id="cb3-198"><a href="#cb3-198" aria-hidden="true" tabindex="-1"></a>empirical, which are well-supported inference, and which are still</span>
+<span id="cb3-199"><a href="#cb3-199" aria-hidden="true" tabindex="-1"></a>explicitly open hypotheses rather than conclusions:</span>
+<span id="cb3-200"><a href="#cb3-200" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-201"><a href="#cb3-201" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"reasoning-map"</span><span class="dt">&gt;</span></span>
+<span id="cb3-202"><a href="#cb3-202" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"legend"</span><span class="dt">&gt;</span></span>
+<span id="cb3-203"><a href="#cb3-203" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"item"</span><span class="dt">&gt;&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"swatch established"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"label"</span><span class="dt">&gt;&lt;</span><span class="kw">b</span><span class="dt">&gt;</span>Established<span class="dt">&lt;/</span><span class="kw">b</span><span class="dt">&gt;</span> — empirical, cited<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-204"><a href="#cb3-204" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"item"</span><span class="dt">&gt;&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"swatch supported"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"label"</span><span class="dt">&gt;&lt;</span><span class="kw">b</span><span class="dt">&gt;</span>Well-supported<span class="dt">&lt;/</span><span class="kw">b</span><span class="dt">&gt;</span> inference<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-205"><a href="#cb3-205" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"item"</span><span class="dt">&gt;&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"swatch open"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"label"</span><span class="dt">&gt;&lt;</span><span class="kw">b</span><span class="dt">&gt;</span>Open<span class="dt">&lt;/</span><span class="kw">b</span><span class="dt">&gt;</span> — explicit hypothesis, untested<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-206"><a href="#cb3-206" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"item"</span><span class="dt">&gt;&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"swatch deprioritized"</span><span class="dt">&gt;&lt;/</span><span class="kw">span</span><span class="dt">&gt;&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"label"</span><span class="dt">&gt;&lt;</span><span class="kw">b</span><span class="dt">&gt;</span>Deprioritized<span class="dt">&lt;/</span><span class="kw">b</span><span class="dt">&gt;</span>, not rejected<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-207"><a href="#cb3-207" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"item"</span><span class="dt">&gt;&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"tag-next"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"position:static"</span><span class="dt">&gt;</span>→ next step<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;&lt;</span><span class="kw">span</span><span class="ot"> class</span><span class="op">=</span><span class="st">"label"</span><span class="dt">&gt;</span>concrete path to closing it<span class="dt">&lt;/</span><span class="kw">span</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-208"><a href="#cb3-208" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-209"><a href="#cb3-209" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"tree"</span><span class="dt">&gt;</span></span>
+<span id="cb3-210"><a href="#cb3-210" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"node established root"</span><span class="dt">&gt;</span></span>
+<span id="cb3-211"><a href="#cb3-211" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"t"</span><span class="dt">&gt;</span>10–23nt DNAzyme catalytic core → BLAST match<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-212"><a href="#cb3-212" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"d"</span><span class="dt">&gt;</span>16 potyvirus isolates, 6 species — perfect match<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-213"><a href="#cb3-213" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-214"><a href="#cb3-214" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"stem"</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-215"><a href="#cb3-215" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"branches"</span><span class="dt">&gt;</span></span>
+<span id="cb3-216"><a href="#cb3-216" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"branch"</span><span class="dt">&gt;</span></span>
+<span id="cb3-217"><a href="#cb3-217" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"label"</span><span class="dt">&gt;</span>Is it active?<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-218"><a href="#cb3-218" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"node deprioritized"</span><span class="dt">&gt;</span></span>
+<span id="cb3-219"><a href="#cb3-219" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"t"</span><span class="dt">&gt;</span>Activity-critical positions substituted<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-220"><a href="#cb3-220" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"d"</span><span class="dt">&gt;</span>unlikely / rare event<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-221"><a href="#cb3-221" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-222"><a href="#cb3-222" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"sub"</span><span class="dt">&gt;</span></span>
+<span id="cb3-223"><a href="#cb3-223" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"node supported"</span><span class="dt">&gt;</span></span>
+<span id="cb3-224"><a href="#cb3-224" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"t"</span><span class="dt">&gt;</span>Codon-partitioned dN/dS: purifying selection at the protein level<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-225"><a href="#cb3-225" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"d"</span><span class="dt">&gt;</span>family-wide, 13 genera (Ch. 2)<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-226"><a href="#cb3-226" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"tag-next"</span><span class="dt">&gt;</span>→ GARD recombination screen not yet run<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-227"><a href="#cb3-227" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-228"><a href="#cb3-228" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-229"><a href="#cb3-229" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-230"><a href="#cb3-230" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"branch"</span><span class="dt">&gt;</span></span>
+<span id="cb3-231"><a href="#cb3-231" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"label"</span><span class="dt">&gt;</span>Is it HGT?<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-232"><a href="#cb3-232" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"node open"</span><span class="dt">&gt;</span></span>
+<span id="cb3-233"><a href="#cb3-233" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"t"</span><span class="dt">&gt;</span>Ecological network: sporadic, not continuous<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-234"><a href="#cb3-234" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-235"><a href="#cb3-235" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"connector"</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-236"><a href="#cb3-236" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"node supported"</span><span class="dt">&gt;</span></span>
+<span id="cb3-237"><a href="#cb3-237" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"t"</span><span class="dt">&gt;</span>Strawberry insert: lineage-specific, fused to TCP7<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-238"><a href="#cb3-238" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"d"</span><span class="dt">&gt;</span>origin (HGT vs. else) still open<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-239"><a href="#cb3-239" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-240"><a href="#cb3-240" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-241"><a href="#cb3-241" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"branch"</span><span class="dt">&gt;</span></span>
+<span id="cb3-242"><a href="#cb3-242" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"label"</span><span class="dt">&gt;</span>What is the locus?<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-243"><a href="#cb3-243" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"node supported"</span><span class="dt">&gt;</span></span>
+<span id="cb3-244"><a href="#cb3-244" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"t"</span><span class="dt">&gt;</span>Maps to CI helicase: YXXΦ + AP-2 sorting motif<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-245"><a href="#cb3-245" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-246"><a href="#cb3-246" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"connector"</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-247"><a href="#cb3-247" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"node supported"</span><span class="dt">&gt;</span></span>
+<span id="cb3-248"><a href="#cb3-248" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"t"</span><span class="dt">&gt;</span>CI co-opts host trafficking via AP-4<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-249"><a href="#cb3-249" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-250"><a href="#cb3-250" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"connector"</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-251"><a href="#cb3-251" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"node main"</span><span class="dt">&gt;</span></span>
+<span id="cb3-252"><a href="#cb3-252" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"t"</span><span class="dt">&gt;</span>MAIN BRANCH — AP-4 disruption → topology flip<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-253"><a href="#cb3-253" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"d"</span><span class="dt">&gt;</span>AP-4 ↔ autophagy · AP-4 ↔ BDA1 (Huang et al., plant autoimmunity)<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-254"><a href="#cb3-254" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"d"</span><span class="ot"> style</span><span class="op">=</span><span class="st">"color:var(--flag)"</span><span class="dt">&gt;</span>→ autoimmune disease (Crohn's) · cancer?<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-255"><a href="#cb3-255" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"tag-next"</span><span class="dt">&gt;</span>→ reassess PhD NRAMP3/4 ap-4 mis-sorting data<span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-256"><a href="#cb3-256" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-257"><a href="#cb3-257" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-258"><a href="#cb3-258" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-259"><a href="#cb3-259" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-260"><a href="#cb3-260" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-261"><a href="#cb3-261" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-262"><a href="#cb3-262" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-263"><a href="#cb3-263" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-264"><a href="#cb3-264" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!--</span></span>
+<span id="cb3-265"><a href="#cb3-265" aria-hidden="true" tabindex="-1"></a><span class="al">###</span><span class="co"> Life-lessons learned</span></span>
+<span id="cb3-266"><a href="#cb3-266" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-267"><a href="#cb3-267" aria-hidden="true" tabindex="-1"></a><span class="co">- it takes an afternoon to hand-check stuff and a month to automate a systematic approach</span></span>
+<span id="cb3-268"><a href="#cb3-268" aria-hidden="true" tabindex="-1"></a><span class="co">- it takes another month to make the output look nice and a lifetime to make it look nice to everyone</span></span>
+<span id="cb3-269"><a href="#cb3-269" aria-hidden="true" tabindex="-1"></a><span class="co">- annoying questions often turn out to be the most relevant</span></span>
+<span id="cb3-270"><a href="#cb3-270" aria-hidden="true" tabindex="-1"></a><span class="co">- - I think it was march when I had a look at the protein sequence for the first time. My PhD thesis must have turned me into a pattern recognition engine - YxxLMVI caught my eye. As before, knowledge gain a day later without any tool vs knowledge gain a couple of months later without any payment (nor a job, nor as many applications written as I should have and could have if I had not tried to make this look prettier and to allow someone to maybe get the whole point ... or not) at this point of my life seems like the biggest, most pointless and stupid way I ever found to waste time I dont even have.</span></span>
+<span id="cb3-271"><a href="#cb3-271" aria-hidden="true" tabindex="-1"></a><span class="co">- when you are trying to answer a difficult question, you solve at least 3 partially related but sometimes more relevant problems, but not unless you go out for a walk every now and then.</span></span>
+<span id="cb3-272"><a href="#cb3-272" aria-hidden="true" tabindex="-1"></a><span class="co">- biology is nice and being a biologist is also nice, but it does not reach awesomemess until you realize that noone can keep you from using the rest of your brain, too (anymore).</span></span>
+<span id="cb3-273"><a href="#cb3-273" aria-hidden="true" tabindex="-1"></a><span class="co">- Standing on the shoulders of giants with nothing but a 13inch screen and public data allows you to come up with a disruptive hypothesis within a couple of days, but to get funding for all the stuff you need to prove yourself wrong (in case you are wrong) requires you to climb down just to then creep up someone's butt. And whoever ends up testing your hypothesis will act as if you don't exist in case you were right unless you do it yourself, but then your results will be questioned.</span></span>
+<span id="cb3-274"><a href="#cb3-274" aria-hidden="true" tabindex="-1"></a><span class="co">- you don't rant about stuff you don't care about, but when you rant people assume you hate, even when you are passionate, instead.</span></span>
+<span id="cb3-275"><a href="#cb3-275" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-276"><a href="#cb3-276" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-277"><a href="#cb3-277" aria-hidden="true" tabindex="-1"></a><span class="al">###</span><span class="co"> Side-quests and follow-ups</span></span>
+<span id="cb3-278"><a href="#cb3-278" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-279"><a href="#cb3-279" aria-hidden="true" tabindex="-1"></a><span class="co">- if the presence of viral sequences in plants (or insects) indeed turns out to be originating from HGT, it's another evidence that many of such events are still remaining undetected. </span></span>
+<span id="cb3-280"><a href="#cb3-280" aria-hidden="true" tabindex="-1"></a><span class="co">- DNAzyme activity might not occur on its own in biological systems, but did anyone ever try to turn it around and fight potyviruses with DNAzymes?! One of the limiting factors in medicine might not be limiting in plants (presence of magnesium-ions)</span></span>
+<span id="cb3-281"><a href="#cb3-281" aria-hidden="true" tabindex="-1"></a><span class="co">- one of the annoying but important questions was "ssDNA in a living cell? When is there ssDNA in a cell, at all?!". And the answer to that brings me to one of the few branches of the tree of life that are otherwise excluded in this document: bacteria. Specifically: Agrobacteria which transmit part of their plasmid DNA into plant cells as ssDNA. </span></span>
+<span id="cb3-282"><a href="#cb3-282" aria-hidden="true" tabindex="-1"></a><span class="co">--&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button" data-in-quarto-modal=""><i class="bi"></i></button></div>
 </div></div></div></div></div>
 </div> <!-- /content -->
 
