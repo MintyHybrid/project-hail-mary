@@ -165,14 +165,18 @@ pre.sourceCode, div.sourceCode {
    LANDING — full-bleed reasoning graph
    ========================================================================== */
 
-/* the landing page drops the book sidebar entirely: the graph IS the nav */
-html.hm-landing #quarto-sidebar,
-html.hm-landing #quarto-margin-sidebar,
-html.hm-landing #quarto-document-content > header#title-block-header {
+/* The landing page drops the book sidebar entirely: the graph IS the nav.
+   Keyed on :has(.hm-hero) rather than the JS-added html.hm-landing class
+   (still added by network-nav.js, kept for anything else that wants a hook)
+   so the raw title-block-header/sidebar never flash visible before that
+   script has had a chance to run. */
+body:has(.hm-hero) #quarto-sidebar,
+body:has(.hm-hero) #quarto-margin-sidebar,
+body:has(.hm-hero) #quarto-document-content > header#title-block-header {
   display: none !important;
 }
-html.hm-landing #quarto-content { padding-top: 0; }
-html.hm-landing body { overflow-x: hidden; }
+body:has(.hm-hero) #quarto-content { padding-top: 0; }
+body:has(.hm-hero) { overflow-x: hidden; }
 
 /* break out of Quarto's centred column to true viewport width */
 .hm-hero {
