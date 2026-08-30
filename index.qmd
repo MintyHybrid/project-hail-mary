@@ -251,7 +251,7 @@ explicitly open hypotheses rather than conclusions:
 <div class="node main">
 <div class="t">MAIN BRANCH — AP-4 disruption → topology flip</div>
 <div class="d">AP-4 ↔ autophagy · AP-4 ↔ BDA1 (Huang et al., plant autoimmunity)</div>
-<div class="d" style="color:var(--flag)">→ autoimmune disease (Crohn's) · cancer?</div>
+<div class="d" style="color:var(--flag)">→ immune-mediated disease (Crohn's) · cancer?</div>
 <div class="tag-next">→ reassess PhD NRAMP3/4 ap-4 mis-sorting data</div>
 </div>
 </div>
